@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
+using Wordania.Core.Combat;
 using Wordania.Core.Gameplay;
 
 namespace Wordania.Gameplay.Player
@@ -9,8 +11,12 @@ namespace Wordania.Gameplay.Player
     {
         private readonly GameObject _playerPrefab;
         private readonly IObjectResolver _resolver;
-        
+
+        public event Action OnPlayerRegistered;
+        public event Action OnPlayerUnregistered;
+
         public Transform PlayerTransform { get; private set; }
+        public IReadOnlyHealth ReadOnlyHealth { get; private set; }
         public bool IsPlayerSpawned => PlayerTransform != null; 
 
         public PlayerService(GameObject playerPrefab, IObjectResolver resolver)
@@ -25,14 +31,20 @@ namespace Wordania.Gameplay.Player
             playerInstance.name = "Player";
             PlayerTransform = playerInstance.transform;
 
-
             if(playerInstance.TryGetComponent<Player>(out Player player))
             {
                 player.Initialize();
             }
+            ReadOnlyHealth = player.GetComponent<HealthComponent>();
             
             
             Debug.Log($"<color=#4AF626>[GAMEPLAY]:</color> Player spawned at {spawnPosition}");
+
+            OnPlayerRegistered?.Invoke();
+        }
+        public void UnregisterPlayer()
+        {
+            OnPlayerUnregistered?.Invoke();
         }
     }
 }

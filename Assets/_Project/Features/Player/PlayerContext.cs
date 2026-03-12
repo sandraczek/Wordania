@@ -1,4 +1,5 @@
 using UnityEngine;
+using Wordania.Core.Combat;
 using Wordania.Gameplay.Player.States;
 
 namespace Wordania.Gameplay.Player
@@ -7,12 +8,12 @@ namespace Wordania.Gameplay.Player
     {
         public PlayerStateMachine States;
         public PlayerController Controller;
-        public PlayerHealthView Health;
+        public HealthComponent Health;
         public PlayerConfig Config;
         public Transform Transform;
 
         public PlayerContext(){}
-        public void Bind(PlayerStateMachine states, PlayerController controller, PlayerHealthView health, PlayerConfig config, Transform transform)
+        public void Bind(PlayerStateMachine states, PlayerController controller, HealthComponent health, PlayerConfig config, Transform transform)
         {
             States = states;
             Controller = controller;

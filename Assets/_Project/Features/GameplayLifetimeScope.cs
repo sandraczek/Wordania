@@ -11,6 +11,7 @@ using Wordania.Gameplay.Inventory;
 using Wordania.Gameplay.Player.States;
 using Wordania.Gameplay.Services;
 using Wordania.Core;
+using Wordania.Gameplay.UI;
 
 namespace Wordania.Gameplay
 {
@@ -25,6 +26,7 @@ namespace Wordania.Gameplay
         [SerializeField] private ItemDatabase _itemDatabase;
         [SerializeField] private WorldChunksRoot _chunksParent;
         [SerializeField] private LootEvent _lootEvent;
+        [SerializeField] private ProgressBarUI _HealthBarUI;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -56,8 +58,6 @@ namespace Wordania.Gameplay
 
             builder.RegisterInstance(_playerConfig);
             builder.Register<PlayerInventoryService>(Lifetime.Scoped).As<IInventoryService>();
-            builder.Register<PlayerHealthProcessor>(Lifetime.Scoped).As<IPlayerHealth>();
-            builder.Register<PlayerHealthService>(Lifetime.Scoped).As<IHealthService>();
             builder.Register<PlayerContext>(Lifetime.Scoped);
             builder.Register<PlayerService>(Lifetime.Scoped)
             .AsSelf()
@@ -65,6 +65,7 @@ namespace Wordania.Gameplay
             .As<IPlayerSpawner>()
             .WithParameter(_playerPrefab);
 
+            builder.RegisterEntryPoint<HealthBarPresenter>(Lifetime.Scoped).WithParameter(_HealthBarUI);
 
 
             builder.RegisterEntryPoint<GameplayEntryPoint>(Lifetime.Scoped);

@@ -8,6 +8,7 @@ using Wordania.Gameplay.Player;
 using Wordania.Core.Gameplay;
 using Wordania.Core;
 using Wordania.Gameplay.Services;
+using Wordania.Gameplay.UI;
 
 namespace Wordania.Gameplay
 {
@@ -40,6 +41,7 @@ namespace Wordania.Gameplay
             Vector3 spawnPos = _world.GetSpawnPoint(); 
             _playerSpawner.SpawnPlayer(spawnPos);
             _camera.FollowTarget(_playerPrivider.PlayerTransform);
+
 
             Debug.Log("<color=green>[3/3] Gameplay Ready!</color>");
             Time.timeScale = 1f;

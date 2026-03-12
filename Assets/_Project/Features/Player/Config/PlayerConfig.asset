@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c5e966cda25f43bc81e19bb338cdd50, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Player.PlayerConfig
-  MaxHealth: 0
+  MaxHealth: 100
   MoveSpeed: 14
   MoveSpeedAirMult: 0.8
   StoppingSpeed: 0.1

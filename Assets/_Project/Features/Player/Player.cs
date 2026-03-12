@@ -4,6 +4,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using Wordania.Core;
+using Wordania.Core.Combat;
 using Wordania.Core.Gameplay;
 using Wordania.Gameplay.Inventory;
 using Wordania.Gameplay.Player.States;
@@ -12,31 +13,32 @@ namespace Wordania.Gameplay.Player
 {
     [RequireComponent(typeof(PlayerStateMachine))]
     [RequireComponent(typeof(PlayerController))]
-    [RequireComponent(typeof(PlayerHealthView))]
+    [RequireComponent(typeof(HealthComponent))]
     public class Player : MonoBehaviour//, ISaveable
     {
         [Header("Components")]
         private PlayerController _controller;
         public PlayerController Controller =>_controller; // temporary for GameplayState to connect camera
         private PlayerStateMachine _states;
-        private PlayerHealthView _health;
+        private HealthComponent _health;
         [SerializeField] private PlayerVisuals visuals;
 
         [Header("Dependencies")]
         private IInputReader _inputs;
         private PlayerStateFactory _factory;
         private PlayerConfig _config;
+        private PlayerService _playerService;
         //private ISaveService _save;
         
         [Header("Save Data")]
         public string PersistenceId => "Player";  
         [Inject]
-        public void Construct(IInputReader inputs, PlayerConfig config, PlayerContext context, IInventoryService inventory, IPlayerProvider playerService)//, ISaveService save)
+        public void Construct(IInputReader inputs, PlayerConfig config, PlayerContext context, IInventoryService inventory, PlayerService playerService)//, ISaveService save)
         {
             _controller = GetComponent<PlayerController>();
             _states = GetComponent<PlayerStateMachine>();
-            _health = GetComponent<PlayerHealthView>();
-
+            _health = GetComponent<HealthComponent>();
+            _playerService = playerService; // TODO: make interface ?
             
             _inputs = inputs;
             _config = config;
@@ -49,10 +51,13 @@ namespace Wordania.Gameplay.Player
         }
         public void Initialize()
         {
+            if(_factory == null) Debug.LogError("Player: State Factory is null");
             _states.Initialize(_factory.InitialState);
+            _health.Initialize(_config.MaxHealth);
         }
         public void OnDestroy()
         {
+            _playerService.UnregisterPlayer();
             //_save.Unregister(this);
         }
         private void OnEnable()
@@ -60,7 +65,6 @@ namespace Wordania.Gameplay.Player
             _health.OnHurt += HandleHurt;     // to do - make player not a god object
             _health.OnHurt += HandleHurtVisuals;
             _health.OnDeath += HandleDeath;
-            _controller.OnLanded += HandleLanding;
             _inputs.OnToggleInventory += HandleInventoryToggle;
         }
 
@@ -69,16 +73,16 @@ namespace Wordania.Gameplay.Player
             _health.OnHurt -= HandleHurt;
             _health.OnHurt -= HandleHurtVisuals;
             _health.OnDeath -= HandleDeath;
-            _controller.OnLanded -= HandleLanding;
             _inputs.OnToggleInventory -= HandleInventoryToggle;
         }
-        private void HandleHurt()
+        private void HandleHurt(DamagePayload payload)
         {
             _states.SwitchState(_factory.Hurt);
         }
 
         private void HandleDeath()
         {
+            Debug.Log("Player Died");
             //_states.SwitchState(_states.Factory.Dead);
         }
         private void HandleInventoryToggle()
@@ -92,19 +96,7 @@ namespace Wordania.Gameplay.Player
                 _states.SwitchState(_factory.InMenu);
             }
         }
-        private void HandleLanding(float velocity)  // to move
-        {
-            if (velocity > _config.fallDamageThreshold)
-            {
-                float damage = CalculateFallDamage(velocity);
-                if(damage > 0f) _health.TakeDamage(damage);
-            }
-        }
-        private float CalculateFallDamage(float velocity) // to move
-        {
-            return (velocity - _config.fallDamageThreshold) * _config.fallDamageMultiplier;
-        }
-        private void HandleHurtVisuals()
+        private void HandleHurtVisuals(DamagePayload payload)
         {
             visuals.PlayHurtEffect();
         }

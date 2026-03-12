@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 1920603107981299700}
   - component: {fileID: 2783559730655400501}
   - component: {fileID: 2024898440259636543}
-  - component: {fileID: 172130715878715450}
   - component: {fileID: -1011593029321735125}
+  - component: {fileID: 6714544860898951420}
+  - component: {fileID: 4436758731559536367}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -151,18 +152,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Player.PlayerController
   LastJumpTime: -3.4028235e+38
   <IsGrounded>k__BackingField: 0
---- !u!114 &172130715878715450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5377237029528584182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d27be549f1f324aa1ab42f3331f2e324, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Player.PlayerHealthView
 --- !u!114 &-1011593029321735125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,6 +175,35 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 28948730022624828ac5373b290d985d, type: 2}
   - {fileID: 11400000, guid: 2c8c6a670e61a4dbb882e00f461fb8b9, type: 2}
   - {fileID: 11400000, guid: c8d9887c8a618481093519ec5709ed59, type: 2}
+--- !u!114 &6714544860898951420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5377237029528584182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 299285e968ca74972904d6423d2c707d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Wordania.Core::Wordania.Core.Combat.HealthComponent
+  _maxHealth: 100
+  _currentHealth: 0
+--- !u!114 &4436758731559536367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5377237029528584182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25c476fd59d424390baee9a51895aab0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Movement.FallDamageHandler
+  _minVelocityForDamage: 60
+  _damageMultiplier: 2.5
+  _feetPosition: {x: 0, y: 0}
 --- !u!1 &7354028105140276930
 GameObject:
   m_ObjectHideFlags: 0

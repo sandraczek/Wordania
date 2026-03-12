@@ -2,13 +2,14 @@ using System;
 using UnityEngine;
 using VContainer;
 using Wordania.Core;
+using Wordania.Gameplay.Movement;
 using Wordania.Gameplay.World;
 
 namespace Wordania.Gameplay.Player
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(BoxCollider2D))]
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, ICharacterMovement
     {
         [Header("Components")]
         private Rigidbody2D _rb;
