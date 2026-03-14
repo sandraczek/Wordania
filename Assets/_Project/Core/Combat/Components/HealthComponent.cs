@@ -19,12 +19,6 @@ namespace Wordania.Core.Combat
         public event Action<DamagePayload> OnHurt;
         public event Action OnDeath;
 
-        public void Initialize(float maxHealth) //TODO: where should entities take max hp from?
-        {
-            _maxHealth = maxHealth;
-            SetCurrentHealth(_maxHealth);
-        }
-
         public void ApplyDamage(DamagePayload payload)
         {
             if (IsDead) return;
@@ -54,6 +48,38 @@ namespace Wordania.Core.Combat
             OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
 
             CheckDeathCondition();
+        }
+        private void SetMaxHealth(float targetHealth)
+        {
+            Debug.Assert(targetHealth>0f);
+
+            if (Mathf.Approximately(_maxHealth, targetHealth)) return;
+
+            _maxHealth = targetHealth;
+
+            OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+
+            CheckDeathCondition();
+        }
+        private void SetCurrentAndMaxHealth(float targetCurrentHealth, float targetMaxHealth)
+        {
+            Debug.Assert(targetMaxHealth>0f);
+
+            if (
+                Mathf.Approximately(_currentHealth, targetCurrentHealth) &&
+                Mathf.Approximately(_maxHealth, targetMaxHealth)
+            ) return;
+
+            _maxHealth = targetMaxHealth;
+            _currentHealth = Mathf.Clamp(targetCurrentHealth, 0f, _maxHealth);
+
+            OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+
+            CheckDeathCondition();
+        }
+        public void SetInitial(float current, float max)
+        {
+            SetCurrentAndMaxHealth(current,max);
         }
 
         private void CheckDeathCondition()

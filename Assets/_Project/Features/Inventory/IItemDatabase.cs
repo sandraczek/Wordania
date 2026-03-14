@@ -5,6 +5,6 @@ namespace Wordania.Gameplay.Inventory
 {
     public interface IItemDatabase
     {
-        ItemData GetItem(int id);
+        ItemData GetItem(string id);
     }
 }

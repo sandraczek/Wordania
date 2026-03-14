@@ -1,5 +1,8 @@
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Wordania.Gameplay.World
@@ -13,7 +16,7 @@ namespace Wordania.Gameplay.World
             _settings = settings;
             _database = database;
         }
-        public void Execute(WorldData data)
+        public async UniTask Execute(CancellationToken token, WorldData data)
         {
             int airId = 0;
             int grassId = 1;
@@ -22,6 +25,8 @@ namespace Wordania.Gameplay.World
             int dirtWallId = 1002;
             int stoneId = 3;
             int stoneWallId = 1003;
+
+            var stopwatch = Stopwatch.StartNew();
             
             for (int x = 0; x < _settings.Width; x++)
             {
@@ -61,6 +66,14 @@ namespace Wordania.Gameplay.World
                         float stoneChance = Mathf.InverseLerp(stoneHeight + _settings.dirt_stoneTransitionMargin, stoneHeight - _settings.dirt_stoneTransitionMargin, y);
                         data.GetTile(x, y).Background = (Random.value < stoneChance) ? stoneWallId : dirtWallId;
                     }
+                }
+
+                if (stopwatch.ElapsedMilliseconds > 16)
+                {
+                    await UniTask.Yield();
+                    token.ThrowIfCancellationRequested();
+                    
+                    stopwatch.Restart();
                 }
             }
 

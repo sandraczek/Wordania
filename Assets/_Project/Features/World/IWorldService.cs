@@ -2,14 +2,16 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
 using Cysharp.Threading.Tasks;
+using System.Threading;
 
 namespace Wordania.Gameplay.World
 {
     public interface IWorldService
     {
         public event Action<Vector2Int, WorldLayer> OnBlockChanged;
-        public event Action OnWorldGenerated;
-        public UniTask GenerateWorldAsync();
+
+        public void RandomizeSeed();
+        public UniTask GenerateWorldAsync(CancellationToken token);
         public bool TryDamageBlock(Vector3 worldPosition, float damagePower);
         public WorldLayer DamageTile(int x, int y, float damagePower);
         public bool TryDamageCircle(Vector2 worldPos, float radius, float damagePower);

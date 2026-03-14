@@ -13,19 +13,19 @@ namespace Wordania.Gameplay.Inventory
     {
         [SerializeField]
         private List<ItemData> allItems = new();
-        private Dictionary<int, ItemData> _itemMap;
+        private Dictionary<string, ItemData> _itemMap;
 
         public void Initialize() // to do - upgrade like block database
         {
-            _itemMap = new Dictionary<int, ItemData>();
+            _itemMap = new Dictionary<string, ItemData>();
             foreach (var item in allItems)
             {
                 if (item != null) _itemMap.TryAdd(item.Id, item);
             }
         }
-        public ItemData GetItem(int id)
+        public ItemData GetItem(string id)
         {
-            if(id==0) return null;
+            if(id=="") return null;
             if (_itemMap.TryGetValue(id, out var item)) return item;
             else Debug.LogError("No id " + id + "in item database");
             return null;

@@ -11,22 +11,34 @@ using Wordania.Gameplay.Inventory;
 using Wordania.Gameplay.Player.States;
 using Wordania.Gameplay.Services;
 using Wordania.Core;
-using Wordania.Gameplay.UI;
+using Wordania.Gameplay.HUD;
+using Wordania.Gameplay.HUD.Health;
+using Wordania.Gameplay.HUD.Inventory;
 
 namespace Wordania.Gameplay
 {
     public sealed class GameplayLifetimeScope : LifetimeScope
     {
-        [SerializeField] private GameObject _playerPrefab;
-        [SerializeField] private Chunk _chunkPrefab;
+
         [SerializeField] private WorldSettings _worldSettings;
         [SerializeField] private PlayerConfig _playerConfig;
+        [SerializeField] private UIConfig _uiConfig;
+        [SerializeField] private GameObject _playerPrefab;
+        [SerializeField] private Chunk _chunkPrefab;
         [SerializeField] private CameraService _cameraService;
         [SerializeField] private BlockDatabase _blockDatabase;
         [SerializeField] private ItemDatabase _itemDatabase;
         [SerializeField] private WorldChunksRoot _chunksParent;
         [SerializeField] private LootEvent _lootEvent;
-        [SerializeField] private ProgressBarUI _HealthBarUI;
+        [SerializeField] private HealthBarUI _healthBarUI;
+        [SerializeField] private InventoryView _inventoryView;
+        [SerializeField] private InventoryDisplayUI _inventoryDisplayUI;
+        [SerializeField] private InventorySlotUI _inventorySlotPrefab;
+
+        //debug
+        [Header("Save Slot 0 For a New Game")]
+        [Range(0,9)]
+        [SerializeField] private int _saveSlot = 0;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -46,7 +58,7 @@ namespace Wordania.Gameplay
             builder.RegisterComponentInHierarchy<Grid>();
 
             builder.RegisterInstance<LootEvent>(_lootEvent);
-            builder.Register<WorldService>(Lifetime.Scoped).As<IWorldService>();
+            builder.RegisterEntryPoint<WorldService>(Lifetime.Scoped).As<IWorldService>();
 
             builder.RegisterComponent(_chunksParent);
             
@@ -57,18 +69,29 @@ namespace Wordania.Gameplay
             builder.RegisterEntryPoint<WorldRenderer>(Lifetime.Scoped);
 
             builder.RegisterInstance(_playerConfig);
-            builder.Register<PlayerInventoryService>(Lifetime.Scoped).As<IInventoryService>();
-            builder.Register<PlayerContext>(Lifetime.Scoped);
-            builder.Register<PlayerService>(Lifetime.Scoped)
-            .AsSelf()
-            .As<IPlayerProvider>()
-            .As<IPlayerSpawner>()
-            .WithParameter(_playerPrefab);
+            builder.RegisterEntryPoint<PlayerInventoryService>(Lifetime.Scoped).As<IInventoryService>();
+            builder.Register<PlayerContext>(Lifetime.Scoped); //to move to player provider
+            builder.RegisterEntryPoint<PlayerService>(Lifetime.Scoped)
+                .AsSelf()
+                .As<IPlayerProvider>()
+                .As<IPlayerSpawner>()
+                .WithParameter(_playerPrefab);
 
-            builder.RegisterEntryPoint<HealthBarPresenter>(Lifetime.Scoped).WithParameter(_HealthBarUI);
+            //TODO: move to HUD lifetime scope
+            builder.RegisterInstance(_uiConfig);
+            builder.RegisterComponent<HealthBarUI>(_healthBarUI);
+            builder.RegisterEntryPoint<HealthBarPresenter>(Lifetime.Scoped);
 
+            builder.RegisterComponent(_inventoryDisplayUI)
+                .As<IInventoryDisplay>()
+                .WithParameter(_inventorySlotPrefab);
+            builder.RegisterComponent(_inventoryView);
+            //
+            //DEBUG
+            if(TryGetComponent<DebugSaveComponent>(out DebugSaveComponent saveComponent))
+                builder.RegisterComponent<DebugSaveComponent>(saveComponent);
 
-            builder.RegisterEntryPoint<GameplayEntryPoint>(Lifetime.Scoped);
+            builder.RegisterEntryPoint<GameplayEntryPoint>(Lifetime.Scoped).WithParameter(_saveSlot); // TEMPORARY withParameter
         }
     }
 }

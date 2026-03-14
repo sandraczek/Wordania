@@ -1,9 +1,11 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Wordania.Gameplay.World
 {
     public interface IWorldGenerator
     {
-        public WorldData GenerateWorld();
+        public UniTask<WorldData> GenerateWorldAsync(CancellationToken token);
     }
 }

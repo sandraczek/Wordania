@@ -7,6 +7,6 @@ namespace Wordania.Gameplay.Inventory
 {
     public class InventoryData
     {
-        public readonly Dictionary<int, InventoryEntry> _content = new();
+        public readonly Dictionary<string, InventoryEntry> _content = new();
     }
 }

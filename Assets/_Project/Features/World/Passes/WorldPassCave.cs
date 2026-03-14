@@ -1,3 +1,6 @@
+using System.Diagnostics;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Wordania.Gameplay.World
@@ -11,9 +14,10 @@ namespace Wordania.Gameplay.World
             _settings = settings;
             _database = database;
         }
-        public void Execute(WorldData data)
+        public async UniTask Execute(CancellationToken token, WorldData data)
         {
             int airId = 0;
+            var stopwatch = Stopwatch.StartNew();
             
             for (int x = 0; x < _settings.Width; x++)
             {
@@ -36,6 +40,14 @@ namespace Wordania.Gameplay.World
                         }
                     }
                 }
+
+                if (stopwatch.ElapsedMilliseconds > 16)
+            {
+                await UniTask.Yield();
+                token.ThrowIfCancellationRequested();
+                
+                stopwatch.Restart();
+            }
             }
         }
 

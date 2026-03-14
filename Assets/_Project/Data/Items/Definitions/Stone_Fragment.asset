@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fe4a2fd1093248c8b34b4499a40a4b1, type: 3}
   m_Name: Stone_Fragment
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Inventory.ItemData
-  _id: 2
+  _id: stone_fragments
   _displayName: stone fragments
-  _icon: {fileID: 0}
+  _icon: {fileID: -8123387816349118897, guid: 5d6517b6ca68d4fed802c4e5461dcefe, type: 3}
   _maxStackSize: 9999

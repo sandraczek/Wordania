@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Wordania.Gameplay.Player
 {
-    [CreateAssetMenu(fileName = "PlayerConfig", menuName = "Player/PlayerConfig")]
+    [CreateAssetMenu(fileName = "PlayerConfig", menuName = "Player/Config")]
     public class PlayerConfig : ScriptableObject
     {   
         [Header("Stats")]

@@ -5,31 +5,44 @@ using VContainer;
 using VContainer.Unity;
 using Wordania.Gameplay.Inventory;
 using Wordania.Gameplay.Events;
+using Wordania.Core.SaveSystem;
+using Wordania.Core.SaveSystem.Data;
+using System.Linq;
+using Codice.CM.WorkspaceServer.Lock;
 
 namespace Wordania.Gameplay.Player
 {
-    public class PlayerInventoryService : IInventoryService, IDisposable
+    public class PlayerInventoryService : IInventoryService, IDisposable, IStartable, ISaveable
     {
         private readonly InventoryData _data = new();
         private readonly IItemDatabase _database;
         public bool IsOpen { get; private set; }
+
+        public string SaveId => "PlayerInventory";
+
         private readonly LootEvent _lootChannel; // temporary
         public event Action<bool> OnStateChanged;
         public event Action OnInventoryChanged;
+        private ISaveService _saveService;
 
-        public PlayerInventoryService(IItemDatabase database, LootEvent lootEvent)
+        public PlayerInventoryService(IItemDatabase database, LootEvent lootEvent, ISaveService saveService)
         {
             _database = database;
             _lootChannel = lootEvent;
-
+            _saveService = saveService;
+        }
+        public void Start()
+        {
+            _saveService.Register(this);
             _lootChannel.Subscribe(HandleLoot);
         }
         public void Dispose()
         {
+            _saveService?.Unregister(this);
             _lootChannel.Unsubscribe(HandleLoot);
         }
                                                 // TO DO - SWITCH TO List<>
-        public void AddItem(int id, int amount) // to do - convert all to bool
+        public void AddItem(string id, int amount) // to do - convert all to bool
         {       
             var data = _database.GetItem(id);   //to do - and also structural refactor HandleLoot
             if (data == null) return;
@@ -47,7 +60,7 @@ namespace Wordania.Gameplay.Player
             OnInventoryChanged?.Invoke();
         }
 
-        public bool RemoveItem(int id, int amount)
+        public bool RemoveItem(string id, int amount)
         {
             var data = _database.GetItem(id);
             if (data == null || amount <= 0) return false;
@@ -61,7 +74,7 @@ namespace Wordania.Gameplay.Player
 
             return false;
         }
-        public int GetQuantity(int itemId)
+        public int GetQuantity(string itemId)
         {
             return _data._content.TryGetValue(itemId, out InventoryEntry entry) ? entry.Quantity : 0;
         }
@@ -85,6 +98,36 @@ namespace Wordania.Gameplay.Player
             Time.timeScale = isOpen ? 0f : 1f;
             
             OnStateChanged?.Invoke(IsOpen);
+        }
+
+        public void CaptureState(GameSaveData saveData)
+        {
+            IEnumerable<InventoryEntry> allHeldItems = GetAllEntries();
+            int itemsLength = _data._content.Count;
+            Debug.Log($"Saving {itemsLength} unique items");
+            saveData.PlayerInventory.items = new ItemSaveData[itemsLength];
+
+            int slot = 0;
+            foreach (InventoryEntry item in allHeldItems)
+            {
+                ItemSaveData itemSave = new(item.Data.Id, item.Quantity);
+                saveData.PlayerInventory.items[slot++] = itemSave;
+            }
+        }
+
+        public void RestoreState(GameSaveData saveData)
+        {
+            ClearInventory();
+
+            if (saveData.PlayerInventory.items == null) return;
+
+            foreach(ItemSaveData itemSave in saveData.PlayerInventory.items)
+            {
+                if (!string.IsNullOrEmpty(itemSave.Id) && itemSave.Quantity > 0)
+                {
+                    AddItem(itemSave.Id, itemSave.Quantity);
+                }
+            }
         }
     }
 }

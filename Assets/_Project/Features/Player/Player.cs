@@ -6,6 +6,8 @@ using VContainer.Unity;
 using Wordania.Core;
 using Wordania.Core.Combat;
 using Wordania.Core.Gameplay;
+using Wordania.Core.SaveSystem;
+using Wordania.Core.SaveSystem.Data;
 using Wordania.Gameplay.Inventory;
 using Wordania.Gameplay.Player.States;
 
@@ -14,7 +16,7 @@ namespace Wordania.Gameplay.Player
     [RequireComponent(typeof(PlayerStateMachine))]
     [RequireComponent(typeof(PlayerController))]
     [RequireComponent(typeof(HealthComponent))]
-    public class Player : MonoBehaviour//, ISaveable
+    public class Player : MonoBehaviour
     {
         [Header("Components")]
         private PlayerController _controller;
@@ -28,12 +30,9 @@ namespace Wordania.Gameplay.Player
         private PlayerStateFactory _factory;
         private PlayerConfig _config;
         private PlayerService _playerService;
-        //private ISaveService _save;
-        
-        [Header("Save Data")]
-        public string PersistenceId => "Player";  
+
         [Inject]
-        public void Construct(IInputReader inputs, PlayerConfig config, PlayerContext context, IInventoryService inventory, PlayerService playerService)//, ISaveService save)
+        public void Construct(IInputReader inputs, PlayerConfig config, PlayerContext context, IInventoryService inventory, PlayerService playerService)
         {
             _controller = GetComponent<PlayerController>();
             _states = GetComponent<PlayerStateMachine>();
@@ -42,23 +41,23 @@ namespace Wordania.Gameplay.Player
             
             _inputs = inputs;
             _config = config;
-            //_save = save;
-            Debug.Log("Injecting to player");
-            //_save.Register(this);
 
             context.Bind(_states, _controller, _health, config, transform);
             _factory = new(context, inputs, inventory);
         }
-        public void Initialize()
+        public void InitializeNew()
         {
-            if(_factory == null) Debug.LogError("Player: State Factory is null");
             _states.Initialize(_factory.InitialState);
-            _health.Initialize(_config.MaxHealth);
+            _health.SetInitial(_config.MaxHealth, _config.MaxHealth);
+        }
+        public void InitializeLoaded(float currentHealth, float maxHealth)
+        {
+            _states.Initialize(_factory.InitialState);
+            _health.SetInitial(currentHealth, maxHealth);
         }
         public void OnDestroy()
         {
             _playerService.UnregisterPlayer();
-            //_save.Unregister(this);
         }
         private void OnEnable()
         {
@@ -83,7 +82,7 @@ namespace Wordania.Gameplay.Player
         private void HandleDeath()
         {
             Debug.Log("Player Died");
-            //_states.SwitchState(_states.Factory.Dead);
+            //_states.SwitchState(_factory.Dead);
         }
         private void HandleInventoryToggle()
         {
@@ -100,32 +99,15 @@ namespace Wordania.Gameplay.Player
         {
             visuals.PlayHurtEffect();
         }
-
-        // ----- Save -----
-
-        // public object CaptureState()
-        // {
-        //     return new PlayerSaveData(
-        //         _controller.Position
-        //     );
-        // }
-
-        // public void RestoreState(object state)
-        // {
-        //     if (state is Newtonsoft.Json.Linq.JObject jObject)
-        //     {
-        //         var dataJ = jObject.ToObject<PlayerSaveData>();
-        //         ApplyData(dataJ);
-        //     }
-        //     else if (state is PlayerSaveData data)
-        //     {
-        //         ApplyData(data);
-        //     }
-        // }
-        // private void ApplyData(PlayerSaveData data)
-        // {
-        //     if (data == null) return;
-        //     _controller.Position = data.Position;
-        // }
+        public PlayerSaveData GetSaveData()
+        {
+            PlayerSaveData data = new();
+            data.Position[0] = _controller.Position.x;
+            data.Position[1] = _controller.Position.y;
+            data.CurrentHealth = _health.CurrentHealth;
+            data.MaxHealth = _health.MaxHealth;
+            
+            return data;
+        }
     }
 }

@@ -15,8 +15,9 @@ MonoBehaviour:
   TileSize: 1
   Width: 1280
   Height: 640
-  Seed: 675
+  Seed: 1000
   ChunkSize: 32
+  RenderingBatchSize: 10
   HeightMultiplier: 400
   SurfaceOffset: 300
   SurfaceFrequency: 0.001

@@ -5,6 +5,7 @@ using Wordania.Boot.Services;
 using Wordania.Core;
 using System;
 using UnityEngine;
+using Wordania.Core.SaveSystem;
 
 namespace Wordania.Boot
 {
@@ -17,6 +18,8 @@ namespace Wordania.Boot
             builder.Register<DebugService>(Lifetime.Singleton).As<IDebugService>();
             builder.RegisterInstance<IInputReader>(_inputReader);
             _inputReader.Initialize();
+            builder.Register<JsonSaveService>(Lifetime.Scoped).As<ISaveService>();
+
             builder.RegisterEntryPoint<GameBootstrapper>();
         }
     }

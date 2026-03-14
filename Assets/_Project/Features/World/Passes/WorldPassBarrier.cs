@@ -1,3 +1,5 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Wordania.Gameplay.World
@@ -11,7 +13,7 @@ namespace Wordania.Gameplay.World
             _settings = settings;
             _database = database;
         }
-        public void Execute(WorldData data)
+        public async UniTask Execute(CancellationToken token, WorldData data)
         {
             int barrierId = -1;
             
@@ -25,6 +27,9 @@ namespace Wordania.Gameplay.World
                 data.GetTile(0,y).Main = barrierId;
                 data.GetTile(_settings.Width -1, y).Main = barrierId;
             }
+
+            await UniTask.Yield();
+            token.ThrowIfCancellationRequested();
         }
     }   
 }

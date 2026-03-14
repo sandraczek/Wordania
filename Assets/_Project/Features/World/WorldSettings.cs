@@ -11,7 +11,8 @@ namespace Wordania.Gameplay.World
 
         public int Seed;
         public int ChunkSize;
-
+        [Header("Rendering")]
+        public int RenderingBatchSize = 10;
         [Header("Terrain")]
         public float HeightMultiplier; // = 50f;
         public int SurfaceOffset; // = half of height

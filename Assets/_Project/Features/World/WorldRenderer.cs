@@ -4,20 +4,23 @@ using VContainer;
 using VContainer.Unity;
 using System;
 using Wordania.Gameplay.Markers;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Wordania.Gameplay.World
 {
-    public class WorldRenderer : IStartable, IDisposable
+    public class WorldRenderer : IWorldRenderer, IStartable, IDisposable
     {
-        [Header("Dependencies")]
         private readonly IBlockDatabase _blockDatabase;
         private readonly WorldSettings _settings;
         private readonly IWorldService _world;
         private readonly Transform _chunksParent;
         private readonly IChunkFactory _factory;
-
-        [Header("Data")]        
+   
         private Chunk[,] _chunks;
+
+        private readonly CancellationTokenSource _cts = new();
+
         public WorldRenderer(
             IBlockDatabase blockDatabase,
             WorldSettings settings,
@@ -35,16 +38,17 @@ namespace Wordania.Gameplay.World
         public void Start()
         {
             _world.OnBlockChanged += ChunkRefresh;
-            _world.OnWorldGenerated += HandleWorldGenerated;
         }
 
         public void Dispose()
         {
             _world.OnBlockChanged -= ChunkRefresh;
-            _world.OnWorldGenerated -= HandleWorldGenerated;
+
+            _cts.Cancel();
+            _cts.Dispose();
         }
 
-        public void CreateChunks()
+        private async UniTask CreateChunksAsync(CancellationToken token)
         {
             int chunksX = Mathf.CeilToInt((float)_settings.Width / _settings.ChunkSize);
             int chunksY = Mathf.CeilToInt((float)_settings.Height / _settings.ChunkSize);
@@ -54,15 +58,29 @@ namespace Wordania.Gameplay.World
             {
                 for (int y = 0; y < chunksY; y++)
                 {
+                    token.ThrowIfCancellationRequested();
+
                     _chunks[x, y] = _factory.Create(new Vector2Int(x,y), _chunksParent);
                 }
+
+                await UniTask.Yield(); //Yielding after a column is rendered
             }
+            Debug.Log("Chunks Created");
         }
-        private void RenderWorld()
+        private async UniTask RenderWorldAsync(CancellationToken token)
         {
+            int chunksProcessed = 0;
+
             foreach (Chunk chunk in _chunks)
             {
+                token.ThrowIfCancellationRequested();
                 chunk.Refresh(WorldLayer.Main | WorldLayer.Background | WorldLayer.Foreground);
+                chunksProcessed++;
+
+                if (chunksProcessed % _settings.RenderingBatchSize == 0)
+                {
+                    await UniTask.Yield();
+                }
             }
         }
         private void ChunkRefresh(Vector2Int pos, WorldLayer layer)
@@ -70,11 +88,11 @@ namespace Wordania.Gameplay.World
             Chunk chunk = _chunks[pos.x,pos.y];
             chunk.Refresh(layer);
         }
-        
-        private void HandleWorldGenerated()
+    
+        public async UniTask RenderInitialWorldAsync(CancellationToken token)
         {
-            CreateChunks();
-            RenderWorld();
+            await CreateChunksAsync(token);
+            await RenderWorldAsync(token);
         }
     }
 }

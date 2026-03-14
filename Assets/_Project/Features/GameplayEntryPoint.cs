@@ -8,40 +8,65 @@ using Wordania.Gameplay.Player;
 using Wordania.Core.Gameplay;
 using Wordania.Core;
 using Wordania.Gameplay.Services;
-using Wordania.Gameplay.UI;
+using Wordania.Gameplay.HUD;
+using Wordania.Core.SaveSystem;
 
 namespace Wordania.Gameplay
 {
     public class GameplayEntryPoint : IAsyncStartable
     {
+        private readonly ISaveService _save;
         private readonly IWorldService _world;
+        private readonly IWorldRenderer _worldRenderer;
         private readonly IPlayerSpawner _playerSpawner;
         private readonly IPlayerProvider _playerPrivider;
         private readonly IInputReader _inputReader;
         private readonly ICameraService _camera;
-        public GameplayEntryPoint(IWorldService worldService, IPlayerSpawner playerSpawner, IPlayerProvider playerProvider, IInputReader inputReader, ICameraService camera)
+        private readonly int _saveSlot;
+        public GameplayEntryPoint(
+            ISaveService saveService,
+            IWorldService worldService,
+            IWorldRenderer worldRenderer,
+            IPlayerSpawner playerSpawner,
+            IPlayerProvider playerProvider,
+            IInputReader inputReader,
+            ICameraService camera,
+            int loadFile
+            )
         {
+            _save = saveService;
             _world = worldService;
+            _worldRenderer = worldRenderer;
             _playerSpawner = playerSpawner;
             _playerPrivider = playerProvider;
             _inputReader = inputReader;
             _camera = camera;
+            _saveSlot = loadFile;
         }
         public async UniTask StartAsync(System.Threading.CancellationToken cancellation)
         {
             Debug.Log("<color=green>[GAMEPLAY] Start Sequence Initiated...</color>");
-            Debug.Log("[1/3] Generating World...");
+            if(_saveSlot == 0){
+                Debug.Log("[1/3] Generating World...");
+                //_world.RandomizeSeed();
+                await _world.GenerateWorldAsync(cancellation); 
+            }
+            else
+            {
+                Debug.Log("[1/3] Loading Save...");
+                await _save.LoadGameAsync(_save.DefaultPrefix + _saveSlot.ToString());
+            }
             
-            await _world.GenerateWorldAsync(); 
-
+            await _worldRenderer.RenderInitialWorldAsync(cancellation); 
             await UniTask.WaitForFixedUpdate();
+
             Time.timeScale = 0f;
+
             Debug.Log("[2/3] Spawning Player...");
 
             Vector3 spawnPos = _world.GetSpawnPoint(); 
             _playerSpawner.SpawnPlayer(spawnPos);
             _camera.FollowTarget(_playerPrivider.PlayerTransform);
-
 
             Debug.Log("<color=green>[3/3] Gameplay Ready!</color>");
             Time.timeScale = 1f;

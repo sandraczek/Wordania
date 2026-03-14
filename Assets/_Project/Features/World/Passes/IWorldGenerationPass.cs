@@ -1,9 +1,11 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Wordania.Gameplay.World
 {
     public interface IWorldGenerationPass 
     {
-        void Execute(WorldData data);
+        UniTask Execute(CancellationToken token,  WorldData data);
     }
 }

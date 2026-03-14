@@ -8,63 +8,62 @@ using VContainer;
 using Wordania.Gameplay.Events;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
+using VContainer.Unity;
+using Wordania.Core.SaveSystem;
+using Wordania.Core.SaveSystem.Data;
+using System.Threading;
+using System.Security.Cryptography;
 
 namespace Wordania.Gameplay.World
 {
-    public class WorldService :IWorldService, IDisposable//, ISaveable
+    public class WorldService :IWorldService, IStartable, IDisposable, ISaveable
     {
         [Header("References")]
         private readonly IBlockDatabase _blockDatabase;
         private readonly WorldSettings _settings;
         private readonly IWorldGenerator _generator;
-        //private readonly ISaveService _save;
+        private readonly ISaveService _save;
 
         [Header("Data")]
         public WorldData _data {get; private set;}
         private readonly LootEvent _lootEvent; // TO change (Message pipe or signal bus)
 
-        [Header("Save data")]
-        public string PersistenceId => "World";
+        public string SaveId => "World";
 
         public event Action<Vector2Int, WorldLayer> OnBlockChanged;
-        public event Action OnWorldGenerated;
 
         public WorldService(
             IBlockDatabase blockDatabase,
             WorldSettings settings,
             IWorldGenerator generator,
-            //ISaveService saveService,
+            ISaveService saveService,
             LootEvent lootEvent
             )
         {
             _blockDatabase = blockDatabase;
             _settings = settings;
             _generator = generator;
-            //_save = saveService;
+            _save = saveService;
             _lootEvent = lootEvent;
-
-            //_save.Register(this);
         }
-        
+        public void Start()
+        {
+            _save.Register(this);
+        }
         public void Dispose()
         {
-            //_save.Unregister(this);
+            _save.Unregister(this);
         }
-        public async UniTask GenerateWorldAsync() // -------------------- TO DO - ASYNC ------------------
+        public void RandomizeSeed()
+        {
+            _settings.Seed = Guid.NewGuid().GetHashCode(); // to fix
+        }
+        public async UniTask GenerateWorldAsync(CancellationToken token)
         {
             Debug.Assert(_data == null);
             Debug.Assert(_settings.Width % _settings.ChunkSize == 0 && _settings.Height % _settings.ChunkSize == 0);
-            _data = _generator.GenerateWorld();
-            OnWorldGenerated?.Invoke();
-            await UniTask.Yield();
+            _data = await _generator.GenerateWorldAsync(token);
         }
-        // public void LoadWorldData(WorldData data)
-        // {
-        //     Debug.Assert(Data == null);
-        //     Data = data;
-        //     _renderer.CreateChunks();
-        //     _renderer.RenderWorld();
-        // }
         public bool TryDamageBlock(Vector3 worldPosition, float damagePower)
         {
             Vector2Int pos = _settings.WorldToGrid(worldPosition);
@@ -169,6 +168,7 @@ namespace Wordania.Gameplay.World
 
         public TileBase GetTileBase(int x, int y, WorldLayer layer)
         {
+            if(_data == null) Debug.Log("_data is null");
             TileData data = _data.GetTile(x,y);
             int id = 0;
 
@@ -196,32 +196,59 @@ namespace Wordania.Gameplay.World
         }
         public Vector2 GetSpawnPoint()
         {
-            return _data.SpawnPoint;
+            return new Vector2(
+                _data.SpawnPoint.x * _settings.TileSize,
+                _data.SpawnPoint.y * _settings.TileSize
+                );
         }
 
-        public object CaptureState()
+        public void CaptureState(GameSaveData saveData)
         {
-            return _data;
+            saveData.World.Width = _data.Width;
+            saveData.World.Height = _data.Height;
+            int totalTiles = _data.Width * _data.Height;
+            saveData.World.Tiles = new TileSaveData[totalTiles];
+
+            for (int i = 0;i < totalTiles; i++)
+            {
+                saveData.World.Tiles[i] = new(
+                    _data.Tiles[i].Background,
+                    _data.Tiles[i].Main,
+                    _data.Tiles[i].Foreground
+                    );
+            } 
+
+            saveData.World.SpawnPoint = new int[2];
+            saveData.World.SpawnPoint[0] = _data.SpawnPoint.x;
+            saveData.World.SpawnPoint[1] = _data.SpawnPoint.y;
         }
 
-        // public void RestoreState(object state)
-        // {
-        // if (state is Newtonsoft.Json.Linq.JObject jObject)
-        //     {
-        //         var dataJ = jObject.ToObject<WorldData>();
-        //         ApplyData(dataJ);
-        //     }
-        //     else if (state is WorldData data)
-        //     {
-        //         ApplyData(data);
-        //     }
-        // }
-        private void ApplyData(WorldData data)
+        public void RestoreState(GameSaveData saveData)
         {
-            if (data == null) return;
             Debug.Assert(_data == null);
-            _data = data;
-            OnWorldGenerated?.Invoke();
+            Debug.Assert(_settings.Width % _settings.ChunkSize == 0 && _settings.Height % _settings.ChunkSize == 0);
+            if ( saveData.World == null || saveData.World.Tiles == null || saveData.World.Tiles.Length == 0)
+            {
+                Debug.LogWarning("Failed to Load saved world - no saved data. World not loaded");
+                return;
+            }
+            if (saveData.World.Width != _settings.Width || saveData.World.Height != _settings.Height)
+            {
+                Debug.LogError("Saved world size does not match current world settings. World not loaded");
+                return;
+            }
+
+            _data = new(_settings.Width, _settings.Height);
+
+            int totalTiles = _data.Width * _data.Height;
+            for (int i = 0; i < totalTiles; i++)
+            {
+                _data.Tiles[i].Background = saveData.World.Tiles[i].Background;
+                _data.Tiles[i].Main = saveData.World.Tiles[i].Main;
+                _data.Tiles[i].Foreground = saveData.World.Tiles[i].Foreground;
+            }  
+
+            _data.SpawnPoint = new Vector2Int(saveData.World.SpawnPoint[0], saveData.World.SpawnPoint[1]);
         }
     }
 }

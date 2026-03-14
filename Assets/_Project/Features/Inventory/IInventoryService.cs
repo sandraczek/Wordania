@@ -11,9 +11,9 @@ namespace Wordania.Gameplay.Inventory
         event Action OnInventoryChanged;
         event Action<bool> OnStateChanged;
 
-        void AddItem(int itemId, int amount);
-        bool RemoveItem(int slotIndex, int amount);
-        int GetQuantity(int itemId);
+        void AddItem(string itemId, int amount);
+        bool RemoveItem(string itemId, int amount);
+        int GetQuantity(string itemId);
         IEnumerable<InventoryEntry> GetAllEntries();
         void SetVisibility(bool isOpen);
     }

@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Wordania.Gameplay.World
 {
@@ -12,7 +14,7 @@ namespace Wordania.Gameplay.World
             _settings = settings;
             _generationPipeline = pipeline;
         }
-        public WorldData GenerateWorld() // TO DO - ASYNC (i think)
+        public async UniTask<WorldData> GenerateWorldAsync(CancellationToken token)
         {
             Random.InitState(_settings.Seed); // setting seed for Randomness
 
@@ -20,7 +22,7 @@ namespace Wordania.Gameplay.World
 
             foreach (var pass in _generationPipeline) 
             {
-                pass.Execute(worldData);
+                await pass.Execute(token, worldData);
             }
 
             return worldData;
