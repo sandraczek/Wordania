@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Wordania.Gameplay.World
 {
-    public class WorldPassCave : IWorldGenerationPass
+    public sealed class WorldPassCave : IWorldGenerationPass
     {
         private readonly WorldSettings _settings;
         private readonly IBlockDatabase _database;  // for future id refactor

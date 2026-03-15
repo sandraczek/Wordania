@@ -4,7 +4,7 @@ using VContainer;
 
 namespace Wordania.Gameplay.World
 {
-    public class Chunk : MonoBehaviour
+    public sealed class Chunk : MonoBehaviour
     {
         private WorldSettings _settings;
         private IWorldService _world;

@@ -12,7 +12,7 @@ using UnityEditor;
 namespace Wordania.Gameplay.World
 {
     [CreateAssetMenu(fileName = "BlockDatabase", menuName = "World/Block Database")]
-    public class BlockDatabase : ScriptableObject, IBlockDatabase
+    public sealed class BlockDatabase : ScriptableObject, IBlockDatabase
     {
         [SerializeField]
         private List<BlockData> allBlocks = new();
@@ -26,8 +26,6 @@ namespace Wordania.Gameplay.World
             {
                 if (block != null) _blockMap.TryAdd(block.ID, block);
             }
-            Debug.Log(allBlocks.Count);
-            Debug.Log(_blockMap.Keys.Count);
         }
     //     public void Initialize()
     // {

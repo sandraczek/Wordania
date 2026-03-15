@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Wordania.Gameplay.Player
 {
     [CreateAssetMenu(fileName = "PlayerConfig", menuName = "Player/Config")]
-    public class PlayerConfig : ScriptableObject
+    public sealed class PlayerConfig : ScriptableObject
     {   
         [Header("Stats")]
         public float MaxHealth;

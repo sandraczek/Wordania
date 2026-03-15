@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 
 namespace Wordania.Gameplay.World
 {
-    public class WorldGenerator : IWorldGenerator
+    public sealed class WorldGenerator : IWorldGenerator
     {
         private readonly WorldSettings _settings;
         private readonly IEnumerable<IWorldGenerationPass> _generationPipeline;

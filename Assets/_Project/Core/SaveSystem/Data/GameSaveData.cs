@@ -4,7 +4,7 @@ namespace Wordania.Core.SaveSystem.Data
 {
 
     [Serializable]
-    public class GameSaveData
+    public sealed class GameSaveData
     {
         public string Version = "1.0.0";
         public string LastPlayedDate;

@@ -4,7 +4,7 @@ using Wordania.Gameplay.Inventory;
 
 namespace Wordania.Gameplay.Player.States
 {
-    public class PlayerStateFactory
+    public sealed class PlayerStateFactory
     {
         public PlayerBaseState InitialState;
         private readonly PlayerContext _context;

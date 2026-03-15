@@ -9,7 +9,7 @@ namespace Wordania.Gameplay.Player
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(BoxCollider2D))]
-    public class PlayerController : MonoBehaviour, ICharacterMovement
+    public sealed class PlayerController : MonoBehaviour, ICharacterMovement
     {
         [Header("Components")]
         private Rigidbody2D _rb;

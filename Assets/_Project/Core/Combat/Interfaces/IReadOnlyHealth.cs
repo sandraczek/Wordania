@@ -6,6 +6,6 @@ namespace Wordania.Core.Combat
     {
         float CurrentHealth { get; }
         float MaxHealth { get; }
-        event Action<float, float> OnHealthChanged;
+        event Action<HealthChangeData> OnHealthChange;
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine.PlayerLoop;
 namespace Wordania.Gameplay.Player.States
 {
     [RequireComponent(typeof(Player))]
-    public class PlayerStateMachine : MonoBehaviour
+    public sealed class PlayerStateMachine : MonoBehaviour
     {
         public PlayerBaseState CurrentState {get;private set;}
 

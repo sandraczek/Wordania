@@ -5,7 +5,7 @@ using Wordania.Gameplay.Inventory;
 
 namespace Wordania.Gameplay.HUD.Inventory
 {
-    public class InventoryView : MonoBehaviour
+    public sealed class InventoryView : MonoBehaviour
     {
         [Header("Dependencies")]
         private IInventoryDisplay _display;

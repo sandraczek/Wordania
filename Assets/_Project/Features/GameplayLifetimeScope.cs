@@ -14,6 +14,8 @@ using Wordania.Core;
 using Wordania.Gameplay.HUD;
 using Wordania.Gameplay.HUD.Health;
 using Wordania.Gameplay.HUD.Inventory;
+using Wordania.Gameplay.HUD.Loading;
+using Wordania.Gameplay.HUD.Saving;
 
 namespace Wordania.Gameplay
 {
@@ -22,7 +24,7 @@ namespace Wordania.Gameplay
 
         [SerializeField] private WorldSettings _worldSettings;
         [SerializeField] private PlayerConfig _playerConfig;
-        [SerializeField] private UIConfig _uiConfig;
+        [SerializeField] private HUDConfig _uiConfig;
         [SerializeField] private GameObject _playerPrefab;
         [SerializeField] private Chunk _chunkPrefab;
         [SerializeField] private CameraService _cameraService;
@@ -34,6 +36,8 @@ namespace Wordania.Gameplay
         [SerializeField] private InventoryView _inventoryView;
         [SerializeField] private InventoryDisplayUI _inventoryDisplayUI;
         [SerializeField] private InventorySlotUI _inventorySlotPrefab;
+        [SerializeField] private LoadingScreenView _loadingScreen;
+        [SerializeField] private SavingIcon _savingIcon;
 
         //debug
         [Header("Save Slot 0 For a New Game")]
@@ -79,7 +83,13 @@ namespace Wordania.Gameplay
 
             //TODO: move to HUD lifetime scope
             builder.RegisterInstance(_uiConfig);
-            builder.RegisterComponent<HealthBarUI>(_healthBarUI);
+
+            builder.RegisterComponent(_loadingScreen).As<ILoadingScreenService>();
+
+            builder.RegisterComponent(_savingIcon).As<IHUDSavingService>();
+            builder.RegisterEntryPoint<SavingIconPresenter>(Lifetime.Scoped);
+
+            builder.RegisterComponent(_healthBarUI).As<IHUDHealthBarService>();
             builder.RegisterEntryPoint<HealthBarPresenter>(Lifetime.Scoped);
 
             builder.RegisterComponent(_inventoryDisplayUI)
@@ -88,8 +98,8 @@ namespace Wordania.Gameplay
             builder.RegisterComponent(_inventoryView);
             //
             //DEBUG
-            if(TryGetComponent<DebugSaveComponent>(out DebugSaveComponent saveComponent))
-                builder.RegisterComponent<DebugSaveComponent>(saveComponent);
+            if(TryGetComponent(out DebugSaveComponent saveComponent))
+                builder.RegisterComponent(saveComponent).WithParameter(_saveSlot);
 
             builder.RegisterEntryPoint<GameplayEntryPoint>(Lifetime.Scoped).WithParameter(_saveSlot); // TEMPORARY withParameter
         }

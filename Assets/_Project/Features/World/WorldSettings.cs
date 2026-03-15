@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Wordania.Gameplay.World
 {
     [CreateAssetMenu(fileName = "WorldSettings", menuName = "World/WorldSettings")]
-    public class WorldSettings : ScriptableObject
+    public sealed class WorldSettings : ScriptableObject
     {
         public float TileSize = 1f;
         public int Width;

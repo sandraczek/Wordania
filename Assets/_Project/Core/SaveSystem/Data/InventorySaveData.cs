@@ -3,7 +3,7 @@ using System;
 namespace Wordania.Core.SaveSystem.Data
 {
     [Serializable]
-    public class InventorySaveData
+    public sealed class InventorySaveData
     {
         public ItemSaveData[] items;
     }

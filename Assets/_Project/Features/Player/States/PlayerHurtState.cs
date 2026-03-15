@@ -3,7 +3,7 @@ using Wordania.Core;
 
 namespace Wordania.Gameplay.Player.States
 {
-    public class PlayerHurtState : PlayerBaseState
+    public sealed class PlayerHurtState : PlayerBaseState
     {
         public override bool CanSetSlot => true;
         private float _hitstunDuration = 0.2f;

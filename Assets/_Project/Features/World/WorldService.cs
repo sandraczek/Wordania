@@ -16,7 +16,7 @@ using System.Security.Cryptography;
 
 namespace Wordania.Gameplay.World
 {
-    public class WorldService :IWorldService, IStartable, IDisposable, ISaveable
+    public sealed class WorldService :IWorldService, IStartable, IDisposable, ISaveable
     {
         [Header("References")]
         private readonly IBlockDatabase _blockDatabase;
@@ -56,7 +56,7 @@ namespace Wordania.Gameplay.World
         }
         public void RandomizeSeed()
         {
-            _settings.Seed = Guid.NewGuid().GetHashCode(); // to fix
+            _settings.Seed = Mathf.Abs(Guid.NewGuid().GetHashCode()) % 1000000;
         }
         public async UniTask GenerateWorldAsync(CancellationToken token)
         {

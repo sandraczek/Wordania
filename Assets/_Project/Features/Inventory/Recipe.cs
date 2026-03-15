@@ -11,7 +11,7 @@ namespace Wordania.Gameplay.Inventory
     }
 
     [CreateAssetMenu(menuName = "Inventory/Recipe")]
-    public class Recipe : ScriptableObject
+    public sealed class Recipe : ScriptableObject
     {
         [SerializeField] private Ingredient[] _requirements;
 

@@ -9,7 +9,7 @@ using UnityEditor;
 namespace Wordania.Gameplay.Inventory
 {
     [CreateAssetMenu(fileName = "ItemDataBase", menuName = "Inventory/Item Database")]
-    public class ItemDatabase : ScriptableObject, IItemDatabase
+    public sealed class ItemDatabase : ScriptableObject, IItemDatabase
     {
         [SerializeField]
         private List<ItemData> allItems = new();

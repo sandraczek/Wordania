@@ -16,7 +16,7 @@ namespace Wordania.Gameplay.Player
     [RequireComponent(typeof(PlayerStateMachine))]
     [RequireComponent(typeof(PlayerController))]
     [RequireComponent(typeof(HealthComponent))]
-    public class Player : MonoBehaviour
+    public sealed class Player : MonoBehaviour
     {
         [Header("Components")]
         private PlayerController _controller;

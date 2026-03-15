@@ -5,7 +5,7 @@ using Wordania.Gameplay.Inventory;
 namespace Wordania.Gameplay.World
 {
     [CreateAssetMenu(fileName = "NewBlock", menuName = "World/Block")]
-    public class BlockData : ScriptableObject
+    public sealed class BlockData : ScriptableObject
     {
         [Header("Id")]
         public int ID = -1;

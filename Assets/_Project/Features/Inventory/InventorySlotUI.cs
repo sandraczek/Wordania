@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 
 namespace Wordania.Gameplay.Inventory{
-    public class InventorySlotUI : MonoBehaviour
+    public sealed class InventorySlotUI : MonoBehaviour
     {
         [SerializeField] private Image _icon;
         [SerializeField] private TextMeshProUGUI _amountText;

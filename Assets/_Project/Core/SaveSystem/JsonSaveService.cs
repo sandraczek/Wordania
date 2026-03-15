@@ -4,22 +4,26 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Wordania.Core.SaveSystem.Data;
 using Cysharp.Threading.Tasks;
+using System;
 
 namespace Wordania.Core.SaveSystem
 {
-    public class JsonSaveService : ISaveService
+    public sealed class JsonSaveService : ISaveService
     {
         private readonly List<ISaveable> _saveables = new();
+
         public GameSaveData CurrentData { get; private set; } = new();
         public string DefaultPrefix => "Slot_";
 
+        public event Action OnSavingStarted;
+        public event Action OnSavingFinished;
 
         public void Register(ISaveable savable) => _saveables.Add(savable);
         public void Unregister(ISaveable savable) => _saveables.Remove(savable);
 
         public async UniTask SaveGameAsync(string slotName)
         {
-            Debug.Log($"Saving... ");
+            OnSavingStarted?.Invoke();
             CurrentData.LastPlayedDate = System.DateTime.Now.ToString("O");
 
             foreach (var saveable in _saveables)
@@ -28,14 +32,16 @@ namespace Wordania.Core.SaveSystem
             }
             string path = GetSavePath(slotName);
 
-            await UniTask.RunOnThreadPool(async () =>
+            await UniTask.RunOnThreadPool(() =>
             {
                 string json = JsonConvert.SerializeObject(CurrentData, Formatting.None);
                 
-                await File.WriteAllTextAsync(path, json);
+                File.WriteAllText(path, json);
             });
 
-            Debug.Log("Saved!");
+            await UniTask.SwitchToMainThread();
+            
+            OnSavingFinished?.Invoke();
         }
 
         public async UniTask LoadGameAsync(string slotName)

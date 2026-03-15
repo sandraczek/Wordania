@@ -75,7 +75,7 @@ namespace Wordania.Gameplay.Player
             }
             
             
-            Debug.Log($"<color=#4AF626>[GAMEPLAY]:</color> Player spawned at {spawnPosition}");
+            Debug.Log($"<color=#4AF626>[GAMEPLAY]:</color> Player spawned at {position}");
 
             OnPlayerRegistered?.Invoke();
         }

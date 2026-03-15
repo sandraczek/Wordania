@@ -3,7 +3,7 @@ using Unity.Cinemachine;
 
 namespace Wordania.Gameplay.Services{
     [RequireComponent(typeof(CinemachineCamera))]
-    public class CameraService : MonoBehaviour, ICameraService
+    public sealed class CameraService : MonoBehaviour, ICameraService
     {
         private CinemachineCamera _vcam;
         private Transform _target;

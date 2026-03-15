@@ -4,7 +4,7 @@ using VContainer;
 
 namespace Wordania.Core.Combat
 {
-    public class HealthComponent : MonoBehaviour, IDamageable, IReadOnlyHealth
+    public sealed class HealthComponent : MonoBehaviour, IDamageable, IReadOnlyHealth
     {
         [Header("Configuration")]
         [SerializeField] private float _maxHealth ;
@@ -15,7 +15,7 @@ namespace Wordania.Core.Combat
         public float MaxHealth => _maxHealth;
         public bool IsDead => _currentHealth <= 0f;
 
-        public event Action<float, float> OnHealthChanged;
+        public event Action<HealthChangeData> OnHealthChange;
         public event Action<DamagePayload> OnHurt;
         public event Action OnDeath;
 
@@ -43,9 +43,10 @@ namespace Wordania.Core.Combat
         {
             if (Mathf.Approximately(_currentHealth, targetHealth)) return;
 
+            float previous = _currentHealth;
             _currentHealth = Mathf.Clamp(targetHealth, 0f, _maxHealth);
 
-            OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+            OnHealthChange?.Invoke(new(previous, _currentHealth, _maxHealth));
 
             CheckDeathCondition();
         }
@@ -57,7 +58,7 @@ namespace Wordania.Core.Combat
 
             _maxHealth = targetHealth;
 
-            OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+            OnHealthChange?.Invoke(new(_currentHealth, _currentHealth, _maxHealth));
 
             CheckDeathCondition();
         }
@@ -70,16 +71,20 @@ namespace Wordania.Core.Combat
                 Mathf.Approximately(_maxHealth, targetMaxHealth)
             ) return;
 
+            float previous = _currentHealth;
             _maxHealth = targetMaxHealth;
             _currentHealth = Mathf.Clamp(targetCurrentHealth, 0f, _maxHealth);
 
-            OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+            OnHealthChange?.Invoke(new(previous, _currentHealth, _maxHealth));
 
             CheckDeathCondition();
         }
         public void SetInitial(float current, float max)
         {
-            SetCurrentAndMaxHealth(current,max);
+            Debug.Assert(max>0f);
+            _maxHealth = max;
+            _currentHealth = Mathf.Clamp(current, 0f, _maxHealth);
+            CheckDeathCondition();
         }
 
         private void CheckDeathCondition()

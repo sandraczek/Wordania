@@ -6,7 +6,7 @@ namespace Wordania.Core
 {
 
     [CreateAssetMenu(fileName = "InputReader", menuName = "Game/Input Reader")]
-    public class InputReader : ScriptableObject, GameInput.IPlayerActions, GameInput.IDebugActions, IInputReader, IDisposable
+    public sealed class InputReader : ScriptableObject, GameInput.IPlayerActions, GameInput.IDebugActions, IInputReader, IDisposable
     {
         private GameInput _inputActions;
 

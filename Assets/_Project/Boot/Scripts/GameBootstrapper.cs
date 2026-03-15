@@ -6,7 +6,7 @@ using Wordania.Core.Services;
 
 namespace Wordania.Boot
 {
-    public class GameBootstrapper : IStartable
+    public sealed class GameBootstrapper : IStartable
     {
         private readonly ISceneLoaderService _sceneLoader;
 

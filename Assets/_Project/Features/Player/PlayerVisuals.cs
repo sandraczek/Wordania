@@ -4,7 +4,7 @@ using System.Collections;
 namespace Wordania.Gameplay.Player
 {
     [RequireComponent(typeof(SpriteRenderer))]
-    public class PlayerVisuals : MonoBehaviour
+    public sealed class PlayerVisuals : MonoBehaviour
     {
         [Header("Damage Flash Settings")]
         [SerializeField] private Color hurtColor = Color.red;

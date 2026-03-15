@@ -6,7 +6,7 @@ namespace Wordania.Gameplay.Movement
 {
     [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(ICharacterMovement))]
-    public class FallDamageHandler : MonoBehaviour
+    public sealed class FallDamageHandler : MonoBehaviour
     {
         [Header("Dependencies")]
         private ICharacterMovement _movement;
@@ -49,6 +49,7 @@ namespace Wordania.Gameplay.Movement
             var payload = new DamagePayload(
                 amount: damageAmount,
                 type: DamageType.FallDamage,
+                source: HealthChangeSource.Fall,
                 instigator: null,
                 hitPoint: _feetPosition,
                 knockbackForce: 0f

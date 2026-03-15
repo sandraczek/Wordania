@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Wordania.Gameplay.Inventory
 {
     [CreateAssetMenu(fileName = "Item_New", menuName = "Inventory/Item")]
-    public class ItemData : ScriptableObject
+    public sealed class ItemData : ScriptableObject
     {
         [SerializeField] private string _id = "";
         [SerializeField] private string _displayName;

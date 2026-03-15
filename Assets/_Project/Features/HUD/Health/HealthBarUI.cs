@@ -3,64 +3,74 @@ using UnityEngine.UI;
 using System.Collections;
 using VContainer;
 using VContainer.Unity;
+using Wordania.Core.Combat;
 
 namespace Wordania.Gameplay.HUD.Health
 {
-    public class HealthBarUI : MonoBehaviour // can be made abstract when needed
+    public sealed class HealthBarUI : MonoBehaviour, IHUDHealthBarService
     {
         [Header("Visual Elements")]
         [SerializeField] private Image _primaryFillImage;
         [SerializeField] private Image _ghostFillImage;
-        private UIConfig _config;
-        private float _targetNormalizedValue = float.MaxValue;
+        private HUDConfig _config;
         private Coroutine _ghostUpdateCoroutine;
 
         [Inject]
-        public void Construct(UIConfig config)
+        public void Construct(HUDConfig config)
         {
             _config = config;
         }
-        public void UpdateBar(float current, float max)
+        public void UpdateBar(HealthChangeData data)
         {
-            float normalizedValue = Mathf.Clamp01(current / max);
-            bool isDamage = normalizedValue < _targetNormalizedValue;
-
-            _targetNormalizedValue = normalizedValue;
-
-
-            if (isDamage)
+            if(data.PreviousAmount > data.CurrentAmount)
             {
-                UpdatePrimaryFill(normalizedValue);
-                TriggerGhostEffect();
+                UpdateBarWithGhost(data.CurrentAmount, data.MaxAmount);
             }
             else
             {
-                StartCoroutine(SmoothFillRoutine(normalizedValue));
+                UpdateBarSmooth(data.CurrentAmount,data.MaxAmount);
             }
         }
-
-        private void UpdatePrimaryFill(float value) => _primaryFillImage.fillAmount = value;
-
-        private void TriggerGhostEffect()
+        private void UpdateBarWithGhost(float current, float max)
         {
-            if (_ghostUpdateCoroutine != null) StopCoroutine(_ghostUpdateCoroutine);
-            _ghostUpdateCoroutine = StartCoroutine(GhostFillRoutine());
+            float normalizedValue = Mathf.Clamp01(current / max);
+
+            _primaryFillImage.fillAmount = normalizedValue;
+            TriggerGhostEffect(normalizedValue);
+        }
+        private void UpdateBarSmooth(float current, float max)
+        {
+            float normalizedValue = Mathf.Clamp01(current / max);
+            StartCoroutine(SmoothFillRoutine(normalizedValue));
+        }
+        public void UpdateBarInstant(float current, float max)
+        {
+            float normalizedValue = Mathf.Clamp01(current / max);
+
+            _primaryFillImage.fillAmount = normalizedValue;
+            _ghostFillImage.fillAmount = normalizedValue;
         }
 
-        private IEnumerator GhostFillRoutine()
+        private void TriggerGhostEffect(float target)
+        {
+            if (_ghostUpdateCoroutine != null) StopCoroutine(_ghostUpdateCoroutine);
+            _ghostUpdateCoroutine = StartCoroutine(GhostFillRoutine(target));
+        }
+
+        private IEnumerator GhostFillRoutine(float target)
         {
             yield return new WaitForSeconds(_config.healthGhostDelayDuration);
 
-            while (Mathf.Abs(_ghostFillImage.fillAmount - _targetNormalizedValue) > 0.001f)
+            while (Mathf.Abs(_ghostFillImage.fillAmount - target) > 0.001f)
             {
                 _ghostFillImage.fillAmount = Mathf.MoveTowards(
                     _ghostFillImage.fillAmount, 
-                    _targetNormalizedValue, 
+                    target, 
                     _config.healthGhostShrinkSpeed * Time.deltaTime
                 );
                 yield return null;
             }
-            _ghostFillImage.fillAmount = _targetNormalizedValue;
+            _ghostFillImage.fillAmount = target;
         }
 
         private IEnumerator SmoothFillRoutine(float target)

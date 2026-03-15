@@ -9,7 +9,7 @@ using Wordania.Core.SaveSystem;
 
 namespace Wordania.Boot
 {
-    public class ProjectLifetimeScope : LifetimeScope
+    public sealed class ProjectLifetimeScope : LifetimeScope
     {
         [SerializeField] private InputReader _inputReader;
         protected override void Configure(IContainerBuilder builder)

@@ -12,7 +12,7 @@ using Codice.CM.WorkspaceServer.Lock;
 
 namespace Wordania.Gameplay.Player
 {
-    public class PlayerInventoryService : IInventoryService, IDisposable, IStartable, ISaveable
+    public sealed class PlayerInventoryService : IInventoryService, IDisposable, IStartable, ISaveable
     {
         private readonly InventoryData _data = new();
         private readonly IItemDatabase _database;
@@ -104,7 +104,6 @@ namespace Wordania.Gameplay.Player
         {
             IEnumerable<InventoryEntry> allHeldItems = GetAllEntries();
             int itemsLength = _data._content.Count;
-            Debug.Log($"Saving {itemsLength} unique items");
             saveData.PlayerInventory.items = new ItemSaveData[itemsLength];
 
             int slot = 0;

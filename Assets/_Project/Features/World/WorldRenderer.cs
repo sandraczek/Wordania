@@ -9,7 +9,7 @@ using Cysharp.Threading.Tasks;
 
 namespace Wordania.Gameplay.World
 {
-    public class WorldRenderer : IWorldRenderer, IStartable, IDisposable
+    public sealed class WorldRenderer : IWorldRenderer, IStartable, IDisposable
     {
         private readonly IBlockDatabase _blockDatabase;
         private readonly WorldSettings _settings;
@@ -65,7 +65,6 @@ namespace Wordania.Gameplay.World
 
                 await UniTask.Yield(); //Yielding after a column is rendered
             }
-            Debug.Log("Chunks Created");
         }
         private async UniTask RenderWorldAsync(CancellationToken token)
         {

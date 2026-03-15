@@ -12,7 +12,7 @@ namespace Wordania.Gameplay.World
         public float Damage;        // [0f - 1f]
     }
 
-    public class WorldData
+    public sealed class WorldData
     {
         public Vector2Int SpawnPoint;
         public readonly int Width;

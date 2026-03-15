@@ -4,7 +4,7 @@ using System;
 namespace Wordania.Gameplay.Inventory
 {
     [Serializable]
-    public class InventoryEntry
+    public sealed class InventoryEntry
     {
         private readonly ItemData _data;
         private int _quantity;

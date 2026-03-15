@@ -4,7 +4,7 @@ using Wordania.Core;
 
 namespace Wordania.Gameplay.Player.States
 {
-    public class PlayerIdleState : PlayerGroundState
+    public sealed class PlayerIdleState : PlayerGroundState
     {
         public PlayerIdleState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory){}
 

@@ -4,7 +4,7 @@ using Wordania.Core;
 
 namespace Wordania.Gameplay.Player.States
 {
-    public class PlayerRunState : PlayerGroundState
+    public sealed class PlayerRunState : PlayerGroundState
     {
         public PlayerRunState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory){}
 

@@ -8,7 +8,7 @@ using Wordania.Gameplay.World;
 
 namespace Wordania.Gameplay.Player{
     [RequireComponent(typeof(Player))]
-    public class PlayerInteraction : MonoBehaviour
+    public sealed class PlayerInteraction : MonoBehaviour
     {
         [Header("Dependencies")]
         private IInputReader _inputs;

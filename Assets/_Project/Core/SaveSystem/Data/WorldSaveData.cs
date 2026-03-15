@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Wordania.Core.SaveSystem.Data
 {
     [Serializable]
-    public class WorldSaveData
+    public sealed class WorldSaveData
     {
         public int[] SpawnPoint;
         public int Width;

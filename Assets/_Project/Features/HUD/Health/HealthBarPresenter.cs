@@ -8,44 +8,52 @@ using Wordania.Core.Gameplay;
 
 namespace Wordania.Gameplay.HUD.Health
 {
-    public class HealthBarPresenter : IStartable, IDisposable
+    public sealed class HealthBarPresenter : IStartable, IDisposable
     {
         private IPlayerProvider _playerProvider;
-        private HealthBarUI _healthBarView;
+        private IHUDHealthBarService _healthBar;
 
-        public HealthBarPresenter(IPlayerProvider playerPrivder, HealthBarUI healthBar)
+        public HealthBarPresenter(IPlayerProvider playerPrivder, IHUDHealthBarService healthBar)
         {
             _playerProvider = playerPrivder;
-            _healthBarView = healthBar;
+            _healthBar = healthBar;
         }
-        public void Start()                 //TODO: clean..
+        public void Start()
         {
             if(_playerProvider.IsPlayerSpawned)
-                SubscribeToHealthAndRefresh();
+                HandlePlayerRegistered();
 
-            _playerProvider.OnPlayerRegistered += SubscribeToHealthAndRefresh;
+            _playerProvider.OnPlayerRegistered += HandlePlayerRegistered;
             _playerProvider.OnPlayerUnregistered += UnsubscribeFromCurrent;
         }
-        private void SubscribeToHealthAndRefresh() //here
+        private void SubscribeToHealth()
         {
             UnsubscribeFromCurrent();
-            _playerProvider.ReadOnlyHealth.OnHealthChanged += HandleHealthChange;
-            HandleHealthChange(_playerProvider.ReadOnlyHealth.CurrentHealth,_playerProvider.ReadOnlyHealth.MaxHealth); // and here
+            _playerProvider.ReadOnlyHealth.OnHealthChange += HandleHealthChange;
+        }
+        private void HandlePlayerRegistered()
+        {
+            SubscribeToHealth();
+            _healthBar.UpdateBarInstant(
+                _playerProvider.ReadOnlyHealth.CurrentHealth,
+                _playerProvider.ReadOnlyHealth.MaxHealth
+                );
         }
         private void UnsubscribeFromCurrent()
         {
-            _playerProvider.ReadOnlyHealth.OnHealthChanged -= HandleHealthChange;
+            if(_playerProvider != null)
+                _playerProvider.ReadOnlyHealth.OnHealthChange -= HandleHealthChange;
         }
         public void Dispose()
         {
-            _playerProvider.OnPlayerRegistered -= SubscribeToHealthAndRefresh;
+            _playerProvider.OnPlayerRegistered -= HandlePlayerRegistered;
             _playerProvider.OnPlayerUnregistered -= UnsubscribeFromCurrent;
             UnsubscribeFromCurrent();
         }
 
-        private void HandleHealthChange(float current, float max)
+        private void HandleHealthChange(HealthChangeData data)
         {
-            _healthBarView.UpdateBar(current, max);
+            _healthBar.UpdateBar(data);
         }
     }
 }

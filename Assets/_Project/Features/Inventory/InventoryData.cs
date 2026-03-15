@@ -5,7 +5,7 @@ using VContainer;
 
 namespace Wordania.Gameplay.Inventory
 {
-    public class InventoryData
+    public sealed class InventoryData
     {
         public readonly Dictionary<string, InventoryEntry> _content = new();
     }

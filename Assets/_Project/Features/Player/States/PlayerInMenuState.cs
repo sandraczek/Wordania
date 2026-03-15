@@ -4,7 +4,7 @@ using Wordania.Gameplay.Inventory;
 
 namespace Wordania.Gameplay.Player.States
 {
-    public class PlayerInMenuState : PlayerBaseState
+    public sealed class PlayerInMenuState : PlayerBaseState
     {
         private readonly IInventoryService _inventoryService;
         public PlayerInMenuState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory, IInventoryService inventoryService) : base(context, inputs, playerStateFactory)

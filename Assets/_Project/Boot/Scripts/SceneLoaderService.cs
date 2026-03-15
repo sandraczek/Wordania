@@ -4,7 +4,7 @@ using Wordania.Core.Services;
 
 namespace Wordania.Boot.Services
 {
-    public class SceneLoaderService : ISceneLoaderService
+    public sealed class SceneLoaderService : ISceneLoaderService
     {
         private const string SCENE_MENU = "MainMenu";
         private const string SCENE_GAMEPLAY = "Gameplay";
