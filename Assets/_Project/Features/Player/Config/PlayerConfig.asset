@@ -20,6 +20,7 @@ MonoBehaviour:
   AirStoppingSpeed: 0.01
   AccelerationSpeed: 0.2
   JumpForce: 24
+  MaxStepHeight: 1.1
   StepLookDistance: 0.2
   JumpBuffor: 0.1
   CoyoteTime: 0.1
@@ -27,7 +28,14 @@ MonoBehaviour:
   GravityScale: 5
   FallGravityMult: 1.5
   LowJumpGravityMultiplier: 3
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 8
   GroundCheckSize: {x: 2.4, y: 0.1}
   GroundCheckDistance: 0.1
   fallDamageThreshold: 60
   fallDamageMultiplier: 2.5
+  PreventBuildingLayer:
+    serializedVersion: 2
+    m_Bits: 192
+  BuildingPreventCheckSize: {x: 0.9, y: 0.9}

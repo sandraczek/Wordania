@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b49493b7ffcd44c0f8b3d3e295b654f3, type: 3}
+  m_Name: ZombieData
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Enemies.Data.EnemyData
+  Prefab: {fileID: 6478214868119159596, guid: fa29230d75902444887d2f905aa1cf16, type: 3}
+  <EnemyId>k__BackingField: 4300c015-2b87-488f-886d-2984bd9d45f2
+  <DisplayName>k__BackingField: Zombie
+  <Stats>k__BackingField:
+    <MaxHealth>k__BackingField: 100
+    <TouchDamage>k__BackingField: 10
+    <KnockbackResistance>k__BackingField: 0
+  <Movement>k__BackingField:
+    <PatrolSpeed>k__BackingField: 2
+    <ChaseSpeed>k__BackingField: 4.5
+    <JumpForce>k__BackingField: 10
+    <AvoidsLedges>k__BackingField: 1
+  <Combat>k__BackingField:
+    <DetectionRadius>k__BackingField: 10
+    <LoseTargetRadius>k__BackingField: 15
+    <AttackRange>k__BackingField: 1.5
+    <AttackCooldown>k__BackingField: 2
+  <Loot>k__BackingField: {fileID: 11400000, guid: 98d0304250b7249699c37fdd4046cfc2, type: 2}

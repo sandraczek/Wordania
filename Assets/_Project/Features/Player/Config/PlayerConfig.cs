@@ -16,6 +16,7 @@ namespace Wordania.Gameplay.Player
         public float AirStoppingSpeed; // = 0.01f;
         public float AccelerationSpeed; // = 0.2f;
         public float JumpForce; // = 24f;
+        public float MaxStepHeight = 1.1f;
         public float StepLookDistance; // = 0.2f;
 
         [field: Header("Feel Adjustments")]
@@ -29,11 +30,16 @@ namespace Wordania.Gameplay.Player
         public float LowJumpGravityMultiplier; // = 3f;
 
         [field: Header("Ground Check")]
+        public LayerMask GroundLayer;
         public Vector2 GroundCheckSize; // = new(2.4f, 0.1f);
         public float GroundCheckDistance; // = 0.1f;
 
         [Header("Fall Damage")]
         public float fallDamageThreshold; // = 60f;
         public float fallDamageMultiplier; // = 2.5f;
+
+        [Header("Building")]
+        public LayerMask PreventBuildingLayer;
+        public Vector2 BuildingPreventCheckSize = new(0.9f, 0.9f);
     }
 }

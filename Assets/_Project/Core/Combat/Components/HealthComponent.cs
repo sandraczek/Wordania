@@ -19,6 +19,17 @@ namespace Wordania.Core.Combat
         public event Action<DamagePayload> OnHurt;
         public event Action OnDeath;
 
+        public void SetInitial(float current, float max)
+        {
+            Debug.Assert(max>0f);
+            _maxHealth = max;
+            _currentHealth = Mathf.Clamp(current, 0f, _maxHealth);
+            CheckDeathCondition();
+        }
+        public void SetInitial(float max)
+        {
+            SetInitial(max,max);
+        }
         public void ApplyDamage(DamagePayload payload)
         {
             if (IsDead) return;
@@ -77,13 +88,6 @@ namespace Wordania.Core.Combat
 
             OnHealthChange?.Invoke(new(previous, _currentHealth, _maxHealth));
 
-            CheckDeathCondition();
-        }
-        public void SetInitial(float current, float max)
-        {
-            Debug.Assert(max>0f);
-            _maxHealth = max;
-            _currentHealth = Mathf.Clamp(current, 0f, _maxHealth);
             CheckDeathCondition();
         }
 

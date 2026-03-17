@@ -8,7 +8,7 @@ using Wordania.Gameplay.World;
 using Wordania.Gameplay.Markers;
 using Wordania.Gameplay.Events;
 using Wordania.Gameplay.Inventory;
-using Wordania.Gameplay.Player.States;
+using Wordania.Gameplay.Player.FSM;
 using Wordania.Gameplay.Services;
 using Wordania.Core;
 using Wordania.Gameplay.HUD;
@@ -16,6 +16,8 @@ using Wordania.Gameplay.HUD.Health;
 using Wordania.Gameplay.HUD.Inventory;
 using Wordania.Gameplay.HUD.Loading;
 using Wordania.Gameplay.HUD.Saving;
+using Wordania.Gameplay.Enemies.Core;
+using Wordania.Gameplay.Enemies.Data;
 
 namespace Wordania.Gameplay
 {
@@ -43,6 +45,7 @@ namespace Wordania.Gameplay
         [Header("Save Slot 0 For a New Game")]
         [Range(0,9)]
         [SerializeField] private int _saveSlot = 0;
+        [SerializeField] private EnemyTemplate _debugEnemyTemplate;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -96,6 +99,12 @@ namespace Wordania.Gameplay
                 .As<IInventoryDisplay>()
                 .WithParameter(_inventorySlotPrefab);
             builder.RegisterComponent(_inventoryView);
+
+            builder.RegisterEntryPoint<EnemyFactory>(Lifetime.Scoped).As<IEnemyFactory>();
+            builder.Register<EnemyRegistryService>(Lifetime.Scoped).As<IEnemyRegistryService>();
+            builder.RegisterEntryPoint<EnemySpawnManager>(Lifetime.Scoped).WithParameter(_debugEnemyTemplate);
+
+
             //
             //DEBUG
             if(TryGetComponent(out DebugSaveComponent saveComponent))

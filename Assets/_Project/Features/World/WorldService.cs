@@ -151,19 +151,19 @@ namespace Wordania.Gameplay.World
         public bool TryPlaceBlock(Vector3 worldPosition, int blockID)
         {
             Vector2Int pos = _settings.WorldToGrid(worldPosition);
+            
             if (!IsWithinBounds(pos.x, pos.y)) return false;
             if(_blockDatabase.GetBlock(_data.GetTile(pos.x,pos.y).Main) != null) return false;
-            Vector3 cellCenter = _settings.GridToWorld(pos.x,pos.y);
-            Vector2 checkSize = new(0.9f, 0.9f);
-
-            Collider2D hit = Physics2D.OverlapBox(cellCenter, checkSize, 0f, _settings.PreventBuildingLayer);
-
-            if (hit != null) return false;
 
             _data.GetTile(pos.x,pos.y).Main = blockID;
             Vector2Int coord = GetChunkCoord(pos.x, pos.y);
             OnBlockChanged?.Invoke(coord, WorldLayer.Main);
             return true;
+        }
+        public Vector2 GetCellCenter(Vector2 worldPosition)
+        {
+            Vector2Int pos = _settings.WorldToGrid(worldPosition);
+            return _settings.GridToWorld(pos.x, pos.y);
         }
 
         public TileBase GetTileBase(int x, int y, WorldLayer layer)

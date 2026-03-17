@@ -100,6 +100,11 @@ namespace Wordania.Gameplay.Player{
                 if (_inventory.GetQuantity(ingredient.item.Id) < ingredient.amount) return false;
             }
 
+            Vector2 cellCenter = _world.GetCellCenter(targetWorldPos);
+            
+            Collider2D hit = Physics2D.OverlapBox(cellCenter, _player.Config.BuildingPreventCheckSize, 0f, _player.Config.PreventBuildingLayer);
+            if (hit != null) return false;
+
             if(!_world.TryPlaceBlock(targetWorldPos, _buildingBlocks[_currentBlockIndex].ID)) return false;
 
             foreach (Ingredient ingredient in _buildingBlocks[_currentBlockIndex].recipe.Requirements){

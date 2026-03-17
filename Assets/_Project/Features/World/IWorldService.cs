@@ -17,6 +17,7 @@ namespace Wordania.Gameplay.World
         public bool TryDamageCircle(Vector2 worldPos, float radius, float damagePower);
 
         public bool TryPlaceBlock(Vector3 worldPosition, int blockID);
+        public Vector2 GetCellCenter(Vector2 worldPosition);
 
         public TileBase GetTileBase(int x, int y, WorldLayer layer);
         public Vector2 GetSpawnPoint();

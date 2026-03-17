@@ -2,7 +2,9 @@ using System;
 using UnityEngine;
 using VContainer;
 using Wordania.Core;
+using Wordania.Core.SFM;
 using Wordania.Gameplay.Movement;
+using Wordania.Gameplay.Player.FSM;
 using Wordania.Gameplay.World;
 
 namespace Wordania.Gameplay.Player
@@ -16,8 +18,8 @@ namespace Wordania.Gameplay.Player
         private BoxCollider2D _col;
 
         [Header("Dependencies")]
+        private StateMachine<PlayerBaseState> _states;
         private IInputReader _inputs;
-        private WorldSettings _worldSettings;
         private PlayerConfig _config;
         
         [HideInInspector] public float LastJumpTime = float.MinValue;
@@ -57,11 +59,9 @@ namespace Wordania.Gameplay.Player
         [Inject]
         public void Construct(
             IInputReader inputReader,
-            WorldSettings worldSettings, 
             PlayerConfig config)
         {
             _inputs = inputReader;
-            _worldSettings = worldSettings;
             _config = config;
         }
         private void Awake()
@@ -106,11 +106,17 @@ namespace Wordania.Gameplay.Player
             OnPlayerWarped?.Invoke(delta);
         }
 
+        public Vector2 GetWorldAimPosition()
+        {
+            Vector2 worldPos = Camera.main.ScreenToWorldPoint(_inputs.CursorScreenPosition);
+            return new Vector2(worldPos.x, worldPos.y);
+        }
+
         private bool CheckGrounded()
         {
             Vector2 origin = (Vector2)transform.position + new Vector2(0f, -(_config.GroundCheckSize.y / 2) + 0.1f);
 
-            return Physics2D.BoxCast(origin, _config.GroundCheckSize, 0f, Vector2.down, _config.GroundCheckDistance + 0.1f, _worldSettings.GroundLayer);
+            return Physics2D.BoxCast(origin, _config.GroundCheckSize, 0f, Vector2.down, _config.GroundCheckDistance + 0.1f, _config.GroundLayer);
         }
 
         public void CheckForFlip(float direction)
@@ -129,11 +135,6 @@ namespace Wordania.Gameplay.Player
                     transform.rotation = Quaternion.Euler(0, 180, 0);
             }
         }
-        public Vector2 GetWorldAimPosition()
-        {
-            Vector2 worldPos = Camera.main.ScreenToWorldPoint(_inputs.CursorScreenPosition);
-            return new Vector2(worldPos.x, worldPos.y);
-        }
 
         public void TryStepUp(float horizontalInput)
         {
@@ -145,16 +146,16 @@ namespace Wordania.Gameplay.Player
                 _col.bounds.min.y + 0.05f
             );
 
-            RaycastHit2D hitLow = Physics2D.Raycast(rayOrigin, Vector2.right * direction, _config.StepLookDistance, _worldSettings.GroundLayer);
+            RaycastHit2D hitLow = Physics2D.Raycast(rayOrigin, Vector2.right * direction, _config.StepLookDistance, _config.GroundLayer);
             
             if (hitLow.collider != null)
             {
-                RaycastHit2D hitHigh = Physics2D.Raycast(rayOrigin + Vector2.up * _worldSettings.TileSize, Vector2.right * direction, _config.StepLookDistance, _worldSettings.GroundLayer);
+                RaycastHit2D hitHigh = Physics2D.Raycast(rayOrigin + Vector2.up * _config.MaxStepHeight, Vector2.right * direction, _config.StepLookDistance, _config.GroundLayer);
 
                 if (hitHigh.collider == null)
                 {
-                    Vector2 targetPos = _rb.position + new Vector2(direction * 0.1f, _worldSettings.TileSize + 0.05f);
-                    Collider2D overlap = Physics2D.OverlapBox(targetPos + _col.offset, _col.size * 0.95f, 0, _worldSettings.GroundLayer);
+                    Vector2 targetPos = _rb.position + new Vector2(direction * 0.1f, _config.MaxStepHeight + 0.05f);
+                    Collider2D overlap = Physics2D.OverlapBox(targetPos + _col.offset, _col.size * 0.95f, 0, _config.GroundLayer);
 
                     if (overlap == null)
                     {
@@ -166,7 +167,7 @@ namespace Wordania.Gameplay.Player
 
         private void ExecuteStepUp()
         {
-            _rb.MovePosition(_rb.position + Vector2.up * (_worldSettings.TileSize + 0.05f));
+            _rb.MovePosition(_rb.position + Vector2.up * (_config.MaxStepHeight + 0.05f));
             if (_rb.linearVelocityY < 0) _rb.linearVelocityY = 0f;
         }
 

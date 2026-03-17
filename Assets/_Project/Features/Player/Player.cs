@@ -8,12 +8,13 @@ using Wordania.Core.Combat;
 using Wordania.Core.Gameplay;
 using Wordania.Core.SaveSystem;
 using Wordania.Core.SaveSystem.Data;
+using Wordania.Core.SFM;
 using Wordania.Gameplay.Inventory;
-using Wordania.Gameplay.Player.States;
+using Wordania.Gameplay.Player.FSM;
+using Wordania.Gameplay.Player.View;
 
 namespace Wordania.Gameplay.Player
 {
-    [RequireComponent(typeof(PlayerStateMachine))]
     [RequireComponent(typeof(PlayerController))]
     [RequireComponent(typeof(HealthComponent))]
     public sealed class Player : MonoBehaviour
@@ -21,7 +22,7 @@ namespace Wordania.Gameplay.Player
         [Header("Components")]
         private PlayerController _controller;
         public PlayerController Controller =>_controller; // temporary for GameplayState to connect camera
-        private PlayerStateMachine _states;
+        private StateMachine<PlayerBaseState> _states;
         private HealthComponent _health;
         [SerializeField] private PlayerVisuals visuals;
 
@@ -35,12 +36,13 @@ namespace Wordania.Gameplay.Player
         public void Construct(IInputReader inputs, PlayerConfig config, PlayerContext context, IInventoryService inventory, PlayerService playerService)
         {
             _controller = GetComponent<PlayerController>();
-            _states = GetComponent<PlayerStateMachine>();
             _health = GetComponent<HealthComponent>();
             _playerService = playerService; // TODO: make interface ?
             
             _inputs = inputs;
             _config = config;
+
+            _states = new StateMachine<PlayerBaseState>();
 
             context.Bind(_states, _controller, _health, config, transform);
             _factory = new(context, inputs, inventory);
@@ -73,6 +75,14 @@ namespace Wordania.Gameplay.Player
             _health.OnHurt -= HandleHurtVisuals;
             _health.OnDeath -= HandleDeath;
             _inputs.OnToggleInventory -= HandleInventoryToggle;
+        }
+        private void Update()
+        {
+            _states.Update();
+        }
+        private void FixedUpdate()
+        {
+            _states.FixedUpdate();
         }
         private void HandleHurt(DamagePayload payload)
         {

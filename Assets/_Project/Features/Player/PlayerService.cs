@@ -55,7 +55,7 @@ namespace Wordania.Gameplay.Player
                 position = spawnPosition;
             }
 
-            var playerInstance = _resolver.Instantiate(_playerPrefab, position, Quaternion.identity);
+            GameObject playerInstance = _resolver.Instantiate(_playerPrefab, position, Quaternion.identity);
             playerInstance.name = "Player";
             PlayerTransform = playerInstance.transform;
 

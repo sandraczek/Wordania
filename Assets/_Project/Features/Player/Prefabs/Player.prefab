@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6806910858338749035}
   - component: {fileID: 6049481485268605299}
   - component: {fileID: 1920603107981299700}
-  - component: {fileID: 2783559730655400501}
   - component: {fileID: 2024898440259636543}
   - component: {fileID: -1011593029321735125}
   - component: {fileID: 6714544860898951420}
@@ -87,10 +86,10 @@ BoxCollider2D:
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 152
+    m_Bits: 8
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 152
+    m_Bits: 8
   m_ContactCaptureLayers:
     serializedVersion: 2
     m_Bits: 152
@@ -126,18 +125,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Player.Player
   visuals: {fileID: 3272745591650094138}
---- !u!114 &2783559730655400501
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5377237029528584182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24070ad50a2704c55ab48405cfaf2e77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Player.States.PlayerStateMachine
 --- !u!114 &2024898440259636543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,8 +218,8 @@ Transform:
   m_GameObject: {fileID: 7354028105140276930}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 3, z: 1}
+  m_LocalPosition: {x: 0.16, y: 2.65, z: 0}
+  m_LocalScale: {x: 17, y: 17, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 857151325892820961}
@@ -284,7 +271,7 @@ SpriteRenderer:
   m_SortingLayerID: -1448162153
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -7525882869776839469, guid: ffbb56c427bfa5344934e937190ee2e9, type: 3}
+  m_Sprite: {fileID: -6648494525843530367, guid: 7a44f0adc73de4b5d877a1b007fbe3fc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
