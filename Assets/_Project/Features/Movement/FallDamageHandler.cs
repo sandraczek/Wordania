@@ -5,13 +5,13 @@ using Wordania.Core.Gameplay;
 
 namespace Wordania.Gameplay.Movement
 {
-    [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(ICharacterMovement))]
+    [RequireComponent(typeof(IDamageable))]
     public sealed class FallDamageHandler : MonoBehaviour
     {
         [Header("Dependencies")]
         private ICharacterMovement _movement;
-        private HealthComponent _health;
+        private IDamageable _damageable;
         
         [Header("Configuration")]
         private float _minVelocityForDamage = float.MaxValue;
@@ -21,7 +21,7 @@ namespace Wordania.Gameplay.Movement
         private void Awake()
         {
             _movement = GetComponent<ICharacterMovement>();
-            _health = GetComponent<HealthComponent>();
+            _damageable = GetComponent<IDamageable>();
 
             if (_movement == null)
             {
@@ -59,11 +59,11 @@ namespace Wordania.Gameplay.Movement
                 source: HealthChangeSource.Fall,
                 instigator: null,
                 hitPoint: _feetPosition,
-                knockbackForce: 0f
+                knockback: Vector2.zero
             );
 
             Debug.Log($"Applying damage: {payload.Amount}");
-            _health.ApplyDamage(payload);
+            _damageable.ApplyDamage(payload);
         }
     }
 }

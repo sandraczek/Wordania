@@ -9,7 +9,7 @@ namespace Wordania.Core.Combat
         public readonly HealthChangeSource Source;
         public readonly GameObject Instigator; 
         public readonly Vector2 HitPoint;      
-        public readonly float KnockbackForce;  
+        public readonly Vector2 Knockback;  
 
         public DamagePayload(
             float amount, 
@@ -17,7 +17,7 @@ namespace Wordania.Core.Combat
             HealthChangeSource source,
             GameObject instigator, 
             Vector2 hitPoint, 
-            float knockbackForce = 0f)
+            Vector2 knockback)
         {
             Amount = Mathf.Max(0f, amount); 
             
@@ -25,7 +25,7 @@ namespace Wordania.Core.Combat
             Source = source;
             Instigator = instigator;
             HitPoint = hitPoint;
-            KnockbackForce = knockbackForce;
+            Knockback = knockback;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Wordania.Gameplay.Enemies.Core
     [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]
-    public sealed class EnemyController : MonoBehaviour, IEnemy, ICharacterMovement
+    public sealed class EnemyController : MonoBehaviour, IEnemy, ICharacterMovement, IDamageable
     {
         public EnemyTemplate Data;
         private IEnemyRegistryService _registry;
@@ -22,6 +22,7 @@ namespace Wordania.Gameplay.Enemies.Core
         private Collider2D _col;
         private StateMachine<EnemyBaseState> _states;
         private EnemyStateFactory _stateFactory;
+        private readonly DamageMitigator _mitigation = new();
 
         public float VelocityX
         {
@@ -75,11 +76,25 @@ namespace Wordania.Gameplay.Enemies.Core
             SetGravity(Data.Movement.GravityScale);
             _states.Initialize(_stateFactory.InitialState);
 
+            _mitigation.Initialize
+            (
+                Data.Combat.GeneralResistance,
+                Data.Combat.PhysicalResistance,
+                Data.Combat.MagicalResistance,
+                Data.Combat.EnvironmentalResistance,
+                Data.Combat.FallResistance
+            );
+
             //to change
             if(TryGetComponent(out FallDamageHandler fall))
             {
                 fall.Initialize(Data.Movement.FallDamageThreshold,Data.Movement.FallDamageMultiplier);
             }
+            if(TryGetComponent(out ContactDamageDealer damage))
+            {
+                damage.Initialize(Data.Combat.ContactDamage,Data.Combat.Knockback,Data.Combat.DamageType,Data.Combat.DamageSource);
+            }
+
             
         }
         private void OnEnable()
@@ -185,6 +200,19 @@ namespace Wordania.Gameplay.Enemies.Core
         {
             Debug.Log($"{Data.name} died");
             _onDeathAction.Invoke();
+        }
+        
+        //TODO: move ?
+        public void ApplyDamage(DamagePayload payload)
+        {;
+            DamageResult damageResult = _mitigation.ProcessDamage(payload);
+            _health.ApplyDamage(damageResult);
+
+            float direction = Mathf.Sign(transform.position.x - damageResult.Payload.HitPoint.x);
+            VelocityX = direction * damageResult.Payload.Knockback.x;
+            VelocityY = damageResult.Payload.Knockback.y;
+
+            _states.SwitchState(_stateFactory.Hurt);
         }
     }
 }

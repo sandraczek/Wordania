@@ -5,7 +5,7 @@ using Wordania.Core.Gameplay;
 
 namespace Wordania.Core.Combat
 {
-    public sealed class HealthComponent : MonoBehaviour, IDamageable, IReadOnlyHealth
+    public sealed class HealthComponent : MonoBehaviour,  IReadOnlyHealth
     {
         [Header("Configuration")]
         [SerializeField] private float _maxHealth ;
@@ -17,7 +17,7 @@ namespace Wordania.Core.Combat
         public bool IsDead => _currentHealth <= 0f;
 
         public event Action<HealthChangeData> OnHealthChange;
-        public event Action<DamagePayload> OnHurt;
+        public event Action<DamageResult> OnDamageTaken;
         public event Action OnDeath;
 
         public void SetInitial(float current, float max)
@@ -31,16 +31,13 @@ namespace Wordania.Core.Combat
         {
             SetInitial(max,max);
         }
-        public void ApplyDamage(DamagePayload payload)
+        public void ApplyDamage(DamageResult damage)
         {
             if (IsDead) return;
 
-            float mitigatedDamage = CalculateMitigatedDamage(payload);
-            float targetHealth = _currentHealth - mitigatedDamage;
-
-            SetCurrentHealth(targetHealth);
+            SetCurrentHealth(_currentHealth - damage.FinalDamage);
             
-            OnHurt?.Invoke(payload); 
+            OnDamageTaken?.Invoke(damage); 
         }
 
         public void ApplyHealing(float amount)
@@ -96,11 +93,6 @@ namespace Wordania.Core.Combat
         {
             if (!IsDead) return;
             Die();
-        }
-
-        private float CalculateMitigatedDamage(DamagePayload payload)
-        {
-            return payload.Amount;
         }
 
         private void Die()

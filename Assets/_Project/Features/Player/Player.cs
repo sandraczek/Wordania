@@ -9,6 +9,7 @@ using Wordania.Core.Gameplay;
 using Wordania.Core.SaveSystem;
 using Wordania.Core.SaveSystem.Data;
 using Wordania.Core.SFM;
+using Wordania.Gameplay.Combat;
 using Wordania.Gameplay.Inventory;
 using Wordania.Gameplay.Movement;
 using Wordania.Gameplay.Player.FSM;
@@ -18,13 +19,15 @@ namespace Wordania.Gameplay.Player
 {
     [RequireComponent(typeof(PlayerController))]
     [RequireComponent(typeof(HealthComponent))]
-    public sealed class Player : MonoBehaviour
+    public sealed class Player : MonoBehaviour, IDamageable
     {
         [Header("Components")]
         private PlayerController _controller;
-        public PlayerController Controller =>_controller; // temporary for GameplayState to connect camera
+        //public PlayerController Controller =>_controller; // temporary for GameplayState to connect camera
         private StateMachine<PlayerBaseState> _states;
         private HealthComponent _health;
+        private readonly InvincibilityController _invincibility = new();
+        private readonly DamageMitigator _mitigation = new();
         [SerializeField] private PlayerVisuals visuals;
 
         [Header("Dependencies")]
@@ -38,8 +41,8 @@ namespace Wordania.Gameplay.Player
         {
             _controller = GetComponent<PlayerController>();
             _health = GetComponent<HealthComponent>();
+
             _playerService = playerService; // TODO: make interface ?
-            
             _inputs = inputs;
             _config = config;
 
@@ -62,6 +65,14 @@ namespace Wordania.Gameplay.Player
         {
             _states.Initialize(_factory.InitialState);
 
+            _mitigation.Initialize(
+                _config.GeneralResistance,
+                _config.PhysicalResistance,
+                _config.MagicalResistance,
+                _config.EnvironmentalResistance,
+                _config.FallResistance
+                );
+
             //to change
             if(TryGetComponent(out FallDamageHandler fall))
             {
@@ -74,16 +85,15 @@ namespace Wordania.Gameplay.Player
         }
         private void OnEnable()
         {
-            _health.OnHurt += HandleHurt;     // to do - make player not a god object
-            _health.OnHurt += HandleHurtVisuals;
+            // to do - make player not a god object
+            _health.OnDamageTaken += HandleHurtVisuals;
             _health.OnDeath += HandleDeath;
             _inputs.OnToggleInventory += HandleInventoryToggle;
         }
 
         private void OnDisable()
         {
-            _health.OnHurt -= HandleHurt;
-            _health.OnHurt -= HandleHurtVisuals;
+            _health.OnDamageTaken -= HandleHurtVisuals; //TODO: make visuals listen to health
             _health.OnDeath -= HandleDeath;
             _inputs.OnToggleInventory -= HandleInventoryToggle;
         }
@@ -95,8 +105,20 @@ namespace Wordania.Gameplay.Player
         {
             _states.FixedUpdate();
         }
-        private void HandleHurt(DamagePayload payload)
+        public void ApplyDamage(DamagePayload payload)
         {
+            if(_health.IsDead) return;
+            if(_invincibility != null && _invincibility.IsInvincible) return;
+
+            DamageResult damageResult = _mitigation.ProcessDamage(payload);
+            _health.ApplyDamage(damageResult);
+
+            float direction = Mathf.Sign(transform.position.x - damageResult.Payload.HitPoint.x);
+            _controller.VelocityX = direction * damageResult.Payload.Knockback.x;
+            _controller.VelocityY = damageResult.Payload.Knockback.y;
+
+            _invincibility.StartInvincibility(_config.InvincibilityDuration);
+
             _states.SwitchState(_factory.Hurt);
         }
 
@@ -116,7 +138,7 @@ namespace Wordania.Gameplay.Player
                 _states.SwitchState(_factory.InMenu);
             }
         }
-        private void HandleHurtVisuals(DamagePayload payload)
+        private void HandleHurtVisuals(DamageResult payload)
         {
             visuals.PlayHurtEffect();
         }

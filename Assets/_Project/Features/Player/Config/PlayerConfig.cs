@@ -6,8 +6,8 @@ namespace Wordania.Gameplay.Player
     [CreateAssetMenu(fileName = "PlayerConfig", menuName = "Player/Config")]
     public sealed class PlayerConfig : ScriptableObject
     {   
-        [Header("Stats")] // TODO::::::: DIVIDE TO SMALLER CLASSES
-        public float MaxHealth;
+        // TODO::::::: DIVIDE TO SMALLER CLASSES
+        
 
         [field: Header("Movement Stats")]
         public float MoveSpeed; // = 14f;
@@ -38,6 +38,16 @@ namespace Wordania.Gameplay.Player
         [Header("Fall Damage")]
         public float FallDamageThreshold; // = 60f;
         public float FallDamageMultiplier;// = 2.5f;
+
+        [Header("Damage")]
+        public float MaxHealth;
+        public float InvincibilityDuration;
+        public float HitStunDuration = 0.2f;
+        public float GeneralResistance;
+        public float PhysicalResistance;
+        public float MagicalResistance;
+        public float EnvironmentalResistance;
+        public float FallResistance;
 
         [Header("Building")]
         public LayerMask PreventBuildingLayer;

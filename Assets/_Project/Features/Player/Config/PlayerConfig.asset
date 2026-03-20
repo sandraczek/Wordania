@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c5e966cda25f43bc81e19bb338cdd50, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Player.PlayerConfig
-  MaxHealth: 100
   MoveSpeed: 14
   MoveSpeedAirMult: 0.8
   StoppingSpeed: 0.1
@@ -35,6 +34,14 @@ MonoBehaviour:
   GroundCheckDistance: 0.2
   FallDamageThreshold: 60
   FallDamageMultiplier: 2.5
+  MaxHealth: 100
+  InvincibilityDuration: 1.5
+  HitStunDuration: 0.2
+  GeneralResistance: 0
+  PhysicalResistance: 0
+  MagicalResistance: 0
+  EnvironmentalResistance: 0
+  FallResistance: 0
   PreventBuildingLayer:
     serializedVersion: 2
     m_Bits: 192

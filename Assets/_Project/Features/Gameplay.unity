@@ -169,7 +169,7 @@ MonoBehaviour:
   _inventorySlotPrefab: {fileID: 2399641862120486059, guid: 5f14aedb6b60c4d76845e9dc37919ca7, type: 3}
   _loadingScreen: {fileID: 1640699638}
   _savingIcon: {fileID: 579839866}
-  _saveSlot: 4
+  _saveSlot: 3
   _debugEnemyTemplate: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}
 --- !u!4 &109496047
 Transform:
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bbccc3b23932443baed136be9b62e79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _saveSlot: 1
+  _saveSlot: 3
 --- !u!1 &135507458
 GameObject:
   m_ObjectHideFlags: 0

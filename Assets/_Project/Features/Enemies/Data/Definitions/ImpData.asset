@@ -35,8 +35,8 @@ MonoBehaviour:
     MaxStepHeight: 1.1
     StepLookDistance: 0.2
     <AvoidsLedges>k__BackingField: 1
-    FallDamageThreshold: 60
-    FallDamageMultiplier: 2.5
+    FallDamageThreshold: 35
+    FallDamageMultiplier: 3
   <Combat>k__BackingField:
     <DetectionRadius>k__BackingField: 10
     <LoseTargetRadius>k__BackingField: 15

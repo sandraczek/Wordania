@@ -1,18 +1,18 @@
 using UnityEngine;
 using Wordania.Core;
+using Wordania.Core.Combat;
 
 namespace Wordania.Gameplay.Player.FSM
 {
     public sealed class PlayerHurtState : PlayerBaseState
     {
         public override bool CanSetSlot => true;
-        private float _hitstunDuration = 0.2f;
         private float _hitTime;
 
         public PlayerHurtState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory){}
         public override void CheckSwitchStates()
         {
-            if (Time.time >= _hitstunDuration + _hitTime)
+            if (Time.time >= _context.Config.HitStunDuration + _hitTime)
             {
                 DetermineNextState();
             }
@@ -20,8 +20,6 @@ namespace Wordania.Gameplay.Player.FSM
         public override void Enter()
         {
             _hitTime = Time.time;
-            //Knockback
-
         }
 
         public override void Exit()
