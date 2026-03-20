@@ -1,5 +1,0 @@
-﻿<Solution>
-  <Project Path="Wordania.Gameplay.csproj" />
-  <Project Path="Wordania.Core.csproj" />
-  <Project Path="Wordania.Boot.csproj" />
-</Solution>
