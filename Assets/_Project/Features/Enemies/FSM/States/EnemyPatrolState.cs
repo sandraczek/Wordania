@@ -36,8 +36,8 @@ namespace Wordania.Gameplay.Enemies.FSM
 
             ApplyStandardMovement(
                 _direction,
-                _controller.Data.Movement.AccelerationSpeed,
-                _controller.Data.Movement.StoppingSpeed,
+                _controller.Data.Movement.Acceleration,
+                _controller.Data.Movement.Deceleration,
                 _controller.Data.Movement.PatrolSpeed
                 );
 
@@ -61,7 +61,7 @@ namespace Wordania.Gameplay.Enemies.FSM
             float newVelocityX = Mathf.MoveTowards(
                 _controller.VelocityX, 
                 targetSpeed, 
-                currentAccel * speed
+                currentAccel * Time.fixedDeltaTime
             );
 
             _controller.VelocityX = newVelocityX;

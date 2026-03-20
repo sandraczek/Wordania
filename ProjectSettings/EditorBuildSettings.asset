@@ -12,5 +12,5 @@ EditorBuildSettings:
     path: Assets/_Project/Features/Gameplay.unity
     guid: 2d3132bc0e3f64c549450e418c21350f
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: a1dbaa8109bc3457a936d4a12453c5c5, type: 3}
   m_UseUCBPForAssetBundles: 0

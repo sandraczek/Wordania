@@ -155,7 +155,7 @@ namespace Wordania.Gameplay.Player
 
                 if (hitHigh.collider == null)
                 {
-                    Vector2 targetPos = _rb.position + new Vector2(direction * 0.1f, _config.MaxStepHeight + 0.05f);
+                    Vector2 targetPos = Position + new Vector2(direction * 0.1f, _config.MaxStepHeight + 0.05f);
                     Collider2D overlap = Physics2D.OverlapBox(targetPos + _col.offset, _col.size * 0.95f, 0, _config.GroundLayer);
 
                     if (overlap == null)
@@ -168,14 +168,21 @@ namespace Wordania.Gameplay.Player
 
         private void ExecuteStepUp()
         {
-            _rb.MovePosition(_rb.position + Vector2.up * (_config.MaxStepHeight + 0.05f));
-            if (_rb.linearVelocityY < 0) _rb.linearVelocityY = 0f;
+            _rb.MovePosition(Position + Vector2.up * (_config.MaxStepHeight + 0.05f));
+            if (VelocityY < 0) VelocityY = 0f;
         }
 
-        // setters getters
         public void SetGravity(float scale)
         {
             _rb.gravityScale = scale;
+        }
+        public void ToggleCollisions(bool enabled)
+        {
+            gameObject.layer = enabled ? _config.PlayerLayer : _config.SpectatorLayer;
+        }
+        public void SetBodyType(RigidbodyType2D type)
+        {
+            _rb.bodyType = type;
         }
 
         private void OnDrawGizmos()

@@ -1,5 +1,5 @@
 using UnityEngine;
-using Wordania.Gameplay.Movement;
+using Wordania.Core.Attributes;
 
 namespace Wordania.Gameplay.Player
 {
@@ -7,18 +7,26 @@ namespace Wordania.Gameplay.Player
     public sealed class PlayerConfig : ScriptableObject
     {   
         // TODO::::::: DIVIDE TO SMALLER CLASSES
-        
+        [Layer] public int PlayerLayer;
+        [Layer] public int SpectatorLayer;
 
         [field: Header("Movement Stats")]
         public float MoveSpeed; // = 14f;
+        public float Acceleration; // = 0.2f;
+        public float Deceleration; // = 0.1f;
         public float MoveSpeedAirMult; // = 0.8f;
-        public float StoppingSpeed; // = 0.1f;
-        public float AirAccelerationSpeed; // = 0.1f;
-        public float AirStoppingSpeed; // = 0.01f;
-        public float AccelerationSpeed; // = 0.2f;
+        public float AirAccelerationMult; // = 0.1f;
+        public float AirDecelerationMult; // = 0.01f;
+        public float FlySpeed;
+        public float FlyAcceleration;
+        public float FlyDeceleration;
         public float JumpForce; // = 24f;
+        public float MinAccelerationInput = 0.1f;
+
+        [Header("StepUp")]
         public float MaxStepHeight = 1.1f;
-        public float StepLookDistance; // = 0.2f;
+        public float StepMinInput = 0.5f;
+        public float StepLookDistance = 0.2f;
 
         [field: Header("Feel Adjustments")]
         public float JumpBuffor; // = 0.1f;   // jump when pressed before hitting ground

@@ -38,7 +38,7 @@ namespace Wordania.Gameplay.Player.FSM
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            ApplyStandardMovement(_context.Config.AirAccelerationSpeed, _context.Config.AirStoppingSpeed, _context.Config.MoveSpeedAirMult);
+            ApplyStandardMovement(_context.Config.AirAccelerationMult, _context.Config.AirDecelerationMult, _context.Config.MoveSpeedAirMult);
         }
 
         public override void Update()

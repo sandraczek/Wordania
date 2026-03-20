@@ -12,14 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c5e966cda25f43bc81e19bb338cdd50, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Player.PlayerConfig
+  PlayerLayer: 6
+  SpectatorLayer: 8
   MoveSpeed: 14
+  Acceleration: 50
+  Deceleration: 40
   MoveSpeedAirMult: 0.8
-  StoppingSpeed: 0.1
-  AirAccelerationSpeed: 0.1
-  AirStoppingSpeed: 0.01
-  AccelerationSpeed: 0.2
+  AirAccelerationMult: 0.8
+  AirDecelerationMult: 0.3
+  FlySpeed: 20
+  FlyAcceleration: 100
+  FlyDeceleration: 20
   JumpForce: 24
+  MinAccelerationInput: 0.1
   MaxStepHeight: 1.1
+  StepMinInput: 0.5
   StepLookDistance: 0.2
   JumpBuffor: 0.1
   CoyoteTime: 0.1

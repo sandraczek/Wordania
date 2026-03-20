@@ -158,11 +158,8 @@ namespace Wordania.Gameplay.Enemies.Core
             }
         }
 
-        public void TryStepUp(float horizontalInput)
+        public void TryStepUp(float direction)
         {
-            if (Mathf.Abs(horizontalInput) < 0.01f) return;
-
-            float direction = Mathf.Sign(horizontalInput);
             Vector2 rayOrigin = new(
                 _col.bounds.center.x + (direction * _col.bounds.extents.x), 
                 _col.bounds.min.y + 0.05f
@@ -176,7 +173,7 @@ namespace Wordania.Gameplay.Enemies.Core
 
                 if (hitHigh.collider == null)
                 {
-                    Vector2 targetPos = _rb.position + new Vector2(direction * 0.1f, Data.Movement.MaxStepHeight + 0.05f);
+                    Vector2 targetPos = Position + new Vector2(direction * 0.1f, Data.Movement.MaxStepHeight + 0.05f);
                     Collider2D overlap = Physics2D.OverlapBox(targetPos + _col.offset, _col.bounds.size * 0.95f, 0, Data.Movement.GroundLayer);
 
                     if (overlap == null)
@@ -189,8 +186,8 @@ namespace Wordania.Gameplay.Enemies.Core
 
         private void ExecuteStepUp()
         {
-            _rb.MovePosition(_rb.position + Vector2.up * (Data.Movement.MaxStepHeight + 0.05f));
-            if (_rb.linearVelocityY < 0) _rb.linearVelocityY = 0f;
+            _rb.MovePosition(Position + Vector2.up * (Data.Movement.MaxStepHeight + 0.05f));
+            if (VelocityY < 0) VelocityY = 0f;
         }
         public void SetGravity(float scale)
         {
@@ -198,13 +195,15 @@ namespace Wordania.Gameplay.Enemies.Core
         }
         private void HandleDeath()
         {
-            Debug.Log($"{Data.name} died");
+            Debug.Log($"{Data.DisplayName} died");
             _onDeathAction.Invoke();
         }
         
         //TODO: move ?
         public void ApplyDamage(DamagePayload payload)
         {;
+            if(_health.IsDead) return;
+            
             DamageResult damageResult = _mitigation.ProcessDamage(payload);
             _health.ApplyDamage(damageResult);
 

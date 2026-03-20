@@ -86,6 +86,7 @@ namespace Wordania.Gameplay.Player
         private void OnEnable()
         {
             // to do - make player not a god object
+            _health.OnDamageTaken += Handlehurt;
             _health.OnDamageTaken += HandleHurtVisuals;
             _health.OnDeath += HandleDeath;
             _inputs.OnToggleInventory += HandleInventoryToggle;
@@ -93,6 +94,7 @@ namespace Wordania.Gameplay.Player
 
         private void OnDisable()
         {
+            _health.OnDamageTaken -= Handlehurt;
             _health.OnDamageTaken -= HandleHurtVisuals; //TODO: make visuals listen to health
             _health.OnDeath -= HandleDeath;
             _inputs.OnToggleInventory -= HandleInventoryToggle;
@@ -112,10 +114,15 @@ namespace Wordania.Gameplay.Player
 
             DamageResult damageResult = _mitigation.ProcessDamage(payload);
             _health.ApplyDamage(damageResult);
+        }
+        private void Handlehurt(DamageResult damage)
+        {
+            //Applying knockback even if fatal
+            float direction = Mathf.Sign(transform.position.x - damage.Payload.HitPoint.x);
+            _controller.VelocityX = direction * damage.Payload.Knockback.x;
+            _controller.VelocityY = damage.Payload.Knockback.y;
 
-            float direction = Mathf.Sign(transform.position.x - damageResult.Payload.HitPoint.x);
-            _controller.VelocityX = direction * damageResult.Payload.Knockback.x;
-            _controller.VelocityY = damageResult.Payload.Knockback.y;
+            if(_health.IsDead) return;
 
             _invincibility.StartInvincibility(_config.InvincibilityDuration);
 
@@ -125,9 +132,9 @@ namespace Wordania.Gameplay.Player
         private void HandleDeath()
         {
             Debug.Log("Player Died");
-            //_states.SwitchState(_factory.Dead);
+            _states.SwitchState(_factory.Spectate);
         }
-        private void HandleInventoryToggle()
+        private void HandleInventoryToggle() // todo - change
         {
             if (_states.CurrentState == _factory.InMenu)
             {

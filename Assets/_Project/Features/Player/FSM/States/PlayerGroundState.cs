@@ -35,8 +35,8 @@ namespace Wordania.Gameplay.Player.FSM
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            ApplyStandardMovement(_context.Config.AccelerationSpeed, _context.Config.StoppingSpeed);
-            if(Mathf.Abs(_inputs.MovementInput.x) > 0.1f){
+            ApplyStandardMovement();
+            if(Mathf.Abs(_inputs.MovementInput.x) >= _context.Config.StepMinInput){
                 _context.Controller.TryStepUp(_inputs.MovementInput.x);
             }
         }

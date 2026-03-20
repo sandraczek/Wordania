@@ -7,6 +7,18 @@
         "**/*.userprefs": true,
         "**/Library/": true,
         "**/Temp/": true,
-        "**/obj/": true
+        "**/obj/": true,
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/Logs": true,
+        "**/UserSettings": true
+    },
+    "search.exclude": {
+        "**/Library": true,
+        "**/Temp": true
+    },
+    "files.watcherExclude": {
+        "**/Library/**": true,
+        "**/Temp/**": true
     }
 }

@@ -34,17 +34,19 @@ namespace Wordania.Gameplay.Player.FSM
 
         }
 
-        protected void ApplyStandardMovement(float acceleration, float deceleration, float speedMultiplier = 1f)
+        protected void ApplyStandardMovement(float accelerationMult = 1f, float decelerationMult = 1f, float speedMult = 1f)
         {
             float xInput = _inputs.MovementInput.x;
-            float targetSpeed = xInput * _context.Config.MoveSpeed;
+            float targetSpeed = xInput * _context.Config.MoveSpeed * speedMult;
             
-            float currentAccel = (Mathf.Abs(xInput) > 0.1f) ? acceleration : deceleration;
+            bool isAccelerating = Mathf.Abs(xInput) > _context.Config.MinAccelerationInput;
+            float currentAccel = isAccelerating ? 
+                _context.Config.Acceleration * accelerationMult  : _context.Config.Deceleration * decelerationMult;
 
             float newVelocityX = Mathf.MoveTowards(
                 _context.Controller.VelocityX, 
                 targetSpeed, 
-                currentAccel * _context.Config.MoveSpeed * speedMultiplier
+                currentAccel * Time.fixedDeltaTime
             );
 
             _context.Controller.VelocityX = newVelocityX;
