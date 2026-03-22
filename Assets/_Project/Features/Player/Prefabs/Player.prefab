@@ -188,8 +188,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25c476fd59d424390baee9a51895aab0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Movement.FallDamageHandler
-  _minVelocityForDamage: 60
-  _damageMultiplier: 2.5
   _feetPosition: {x: 0, y: 0}
 --- !u!1 &7354028105140276930
 GameObject:

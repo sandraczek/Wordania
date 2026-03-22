@@ -23,7 +23,7 @@ namespace Wordania.Gameplay.Enemies.FSM
         }
         public override void Update()
         {
-            _controller.CheckForFlip();
+            _controller.CheckForFlip(_direction);
         }
         public override void FixedUpdate()
         {

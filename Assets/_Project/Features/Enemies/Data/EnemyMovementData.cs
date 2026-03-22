@@ -19,7 +19,8 @@ namespace Wordania.Gameplay.Enemies.Data
         [SerializeField] public float GroundCheckSizeY = 0.1f;
         [SerializeField] public float GroundCheckDistance = 0.2f;
         [SerializeField] public float MaxStepHeight = 1.1f;
-        [SerializeField] public float StepLookDistance = 0.2f;
+        [SerializeField] public float StepLookMargin = 0.05f;
+        [SerializeField] public float SkinWidth = 0.02f;
         [field: SerializeField] public bool AvoidsLedges { get; private set; } = true;
         [field: SerializeField] public float FallDamageThreshold = 35f;
         [field: SerializeField] public float FallDamageMultiplier = 3f;

@@ -10,12 +10,12 @@ using Wordania.Gameplay.World;
 namespace Wordania.Gameplay.Player
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    [RequireComponent(typeof(BoxCollider2D))]
+    [RequireComponent(typeof(Collider2D))]
     public sealed class PlayerController : MonoBehaviour, ICharacterMovement
     {
         [Header("Components")]
         private Rigidbody2D _rb;
-        private BoxCollider2D _col;
+        private Collider2D _col;
 
         [Header("Dependencies")]
         private StateMachine<PlayerBaseState> _states;
@@ -52,6 +52,7 @@ namespace Wordania.Gameplay.Player
             }
         }
         private bool _isFacingRight= true;
+        private bool _isSteppingUp = false;
 
         public event Action<Vector3> OnPlayerWarped;
         public event Action<float> OnLanded;
@@ -67,7 +68,7 @@ namespace Wordania.Gameplay.Player
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
-            _col = GetComponent<BoxCollider2D>();
+            _col = GetComponent<Collider2D>();
         }
         public void Start()
         {
@@ -87,6 +88,10 @@ namespace Wordania.Gameplay.Player
                 {
                     OnLanded?.Invoke(Mathf.Abs(Mathf.Max(_maxFallSpeed, VelocityY)));
                     _maxFallSpeed = 0;
+                }
+                if (_isSteppingUp)
+                {
+                    _isSteppingUp = false;
                 }
             }
             else
@@ -139,36 +144,41 @@ namespace Wordania.Gameplay.Player
 
         public void TryStepUp(float horizontalInput)
         {
+            if(_isSteppingUp) return;
             if (Mathf.Abs(horizontalInput) < 0.01f) return;
 
             float direction = Mathf.Sign(horizontalInput);
+
+            float lookDistance = _config.StepLookMargin + Mathf.Abs(VelocityX) * Time.fixedDeltaTime;
+
             Vector2 rayOrigin = new(
                 _col.bounds.center.x + (direction * _col.bounds.extents.x), 
-                _col.bounds.min.y + 0.05f
+                _col.bounds.min.y + _config.StepLookMargin
             );
+            RaycastHit2D hitLow = Physics2D.Raycast(rayOrigin, Vector2.right * direction, lookDistance, _config.GroundLayer);
+            if (hitLow.collider == null) return;
 
-            RaycastHit2D hitLow = Physics2D.Raycast(rayOrigin, Vector2.right * direction, _config.StepLookDistance, _config.GroundLayer);
-            
-            if (hitLow.collider != null)
+            Vector2 highOrigin = rayOrigin + Vector2.up * _config.MaxStepHeight;
+            RaycastHit2D hitHigh = Physics2D.Raycast(highOrigin, Vector2.right * direction, lookDistance, _config.GroundLayer);
+            if (hitHigh.collider != null) return;
+
+            Vector2 downOrigin = highOrigin + direction * lookDistance * Vector2.right;
+            RaycastHit2D hitDown = Physics2D.Raycast(downOrigin, Vector2.down, _config.MaxStepHeight, _config.GroundLayer);
+            if(hitDown.collider == null) return;
+
+            Vector2 targetPos = new(Position.x + direction * lookDistance, hitDown.point.y + _col.bounds.extents.y - _col.offset.y + _config.StepLookMargin);
+            Collider2D overlap = Physics2D.OverlapBox(targetPos + _col.offset, (Vector2)_col.bounds.size - 2f * _config.SkinWidth * new Vector2(1f,1f), 0, _config.GroundLayer);
+
+            if (overlap == null)
             {
-                RaycastHit2D hitHigh = Physics2D.Raycast(rayOrigin + Vector2.up * _config.MaxStepHeight, Vector2.right * direction, _config.StepLookDistance, _config.GroundLayer);
-
-                if (hitHigh.collider == null)
-                {
-                    Vector2 targetPos = Position + new Vector2(direction * 0.1f, _config.MaxStepHeight + 0.05f);
-                    Collider2D overlap = Physics2D.OverlapBox(targetPos + _col.offset, _col.size * 0.95f, 0, _config.GroundLayer);
-
-                    if (overlap == null)
-                    {
-                        ExecuteStepUp();
-                    }
-                }
+                ExecuteStepUp(targetPos.y);
             }
         }
 
-        private void ExecuteStepUp()
+        private void ExecuteStepUp(float targetY)
         {
-            _rb.MovePosition(Position + Vector2.up * (_config.MaxStepHeight + 0.05f));
+            _isSteppingUp = true;
+            _rb.MovePosition(new(Position.x, targetY));
             if (VelocityY < 0) VelocityY = 0f;
         }
 

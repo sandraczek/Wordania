@@ -48,6 +48,7 @@ namespace Wordania.Gameplay.Enemies.Core
         [field: SerializeField] public bool IsGrounded { get; private set; }
         private float _maxFallSpeed;
         private bool _isFacingRight= true;
+        private bool _isSteppingUp = false;
 
         private Action _onDeathAction;
         public event Action<float> OnLanded;
@@ -123,6 +124,11 @@ namespace Wordania.Gameplay.Enemies.Core
                     OnLanded?.Invoke(Mathf.Abs(Mathf.Max(_maxFallSpeed, VelocityY)));
                     _maxFallSpeed = 0;
                 }
+
+                if (_isSteppingUp)
+                {
+                    _isSteppingUp = false;
+                }
             }
             else
             {
@@ -140,9 +146,8 @@ namespace Wordania.Gameplay.Enemies.Core
 
             return Physics2D.BoxCast(origin, new(_col.bounds.size.x, Data.Movement.GroundCheckSizeY), 0f, Vector2.down, Data.Movement.GroundCheckDistance, Data.Movement.GroundLayer);
         }
-        public void CheckForFlip()
+        public void CheckForFlip(float direction)
         {
-            float direction = VelocityX > 0f ? 1f:-1f;
             if (Mathf.Abs(direction) < 0.01f) return;
 
             bool inputRight = direction > 0;
@@ -160,33 +165,38 @@ namespace Wordania.Gameplay.Enemies.Core
 
         public void TryStepUp(float direction)
         {
+            if(_isSteppingUp) return;
+
+            float lookDistance = Data.Movement.StepLookMargin + Mathf.Abs(VelocityX) * Time.fixedDeltaTime;
+
             Vector2 rayOrigin = new(
                 _col.bounds.center.x + (direction * _col.bounds.extents.x), 
-                _col.bounds.min.y + 0.05f
+                _col.bounds.min.y + Data.Movement.StepLookMargin
             );
+            RaycastHit2D hitLow = Physics2D.Raycast(rayOrigin, Vector2.right * direction, lookDistance, Data.Movement.GroundLayer);
+            if (hitLow.collider == null) return;
 
-            RaycastHit2D hitLow = Physics2D.Raycast(rayOrigin, Vector2.right * direction, Data.Movement.StepLookDistance, Data.Movement.GroundLayer);
-            
-            if (hitLow.collider != null)
+            Vector2 highOrigin = rayOrigin + Vector2.up * Data.Movement.MaxStepHeight;
+            RaycastHit2D hitHigh = Physics2D.Raycast(highOrigin, Vector2.right * direction, lookDistance, Data.Movement.GroundLayer);
+            if (hitHigh.collider != null) return;
+
+            Vector2 downOrigin = highOrigin + direction * lookDistance * Vector2.right;
+            RaycastHit2D hitDown = Physics2D.Raycast(downOrigin, Vector2.down, Data.Movement.MaxStepHeight, Data.Movement.GroundLayer);
+            if(hitDown.collider == null) return;
+
+            Vector2 targetPos = new(Position.x + direction * lookDistance, hitDown.point.y + _col.bounds.extents.y - _col.offset.y + Data.Movement.StepLookMargin);
+            Collider2D overlap = Physics2D.OverlapBox(targetPos + _col.offset, (Vector2)_col.bounds.size - 2f * Data.Movement.SkinWidth * new Vector2(1f,1f), 0, Data.Movement.GroundLayer);
+
+            if (overlap == null)
             {
-                RaycastHit2D hitHigh = Physics2D.Raycast(rayOrigin + Vector2.up * Data.Movement.MaxStepHeight, Vector2.right * direction, Data.Movement.StepLookDistance, Data.Movement.GroundLayer);
-
-                if (hitHigh.collider == null)
-                {
-                    Vector2 targetPos = Position + new Vector2(direction * 0.1f, Data.Movement.MaxStepHeight + 0.05f);
-                    Collider2D overlap = Physics2D.OverlapBox(targetPos + _col.offset, _col.bounds.size * 0.95f, 0, Data.Movement.GroundLayer);
-
-                    if (overlap == null)
-                    {
-                        ExecuteStepUp();
-                    }
-                }
+                ExecuteStepUp(targetPos.y);
             }
         }
 
-        private void ExecuteStepUp()
+        private void ExecuteStepUp(float targetY)
         {
-            _rb.MovePosition(Position + Vector2.up * (Data.Movement.MaxStepHeight + 0.05f));
+            _isSteppingUp = true;
+            _rb.MovePosition(new(Position.x, targetY));
             if (VelocityY < 0) VelocityY = 0f;
         }
         public void SetGravity(float scale)

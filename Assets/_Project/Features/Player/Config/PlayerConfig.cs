@@ -26,7 +26,8 @@ namespace Wordania.Gameplay.Player
         [Header("StepUp")]
         public float MaxStepHeight = 1.1f;
         public float StepMinInput = 0.5f;
-        public float StepLookDistance = 0.2f;
+        public float StepLookMargin = 0.05f;
+        public float SkinWidth = 0.02f;
 
         [field: Header("Feel Adjustments")]
         public float JumpBuffor; // = 0.1f;   // jump when pressed before hitting ground
