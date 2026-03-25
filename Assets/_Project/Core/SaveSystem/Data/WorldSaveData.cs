@@ -6,9 +6,10 @@ namespace Wordania.Core.SaveSystem.Data
     [Serializable]
     public sealed class WorldSaveData
     {
-        public int[] SpawnPoint;
         public int Width;
         public int Height;
+        public int Seed;
+        public int[] SpawnPoint;
         public TileSaveData[] Tiles;
     }
 

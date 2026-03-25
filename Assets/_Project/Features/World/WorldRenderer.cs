@@ -6,6 +6,7 @@ using System;
 using Wordania.Gameplay.Markers;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Wordania.Core.Config;
 
 namespace Wordania.Gameplay.World
 {
@@ -37,12 +38,12 @@ namespace Wordania.Gameplay.World
         }
         public void Start()
         {
-            _world.OnBlockChanged += ChunkRefresh;
+            _world.OnChunkChanged += ChunkRefresh;
         }
 
         public void Dispose()
         {
-            _world.OnBlockChanged -= ChunkRefresh;
+            _world.OnChunkChanged -= ChunkRefresh;
 
             _cts.Cancel();
             _cts.Dispose();

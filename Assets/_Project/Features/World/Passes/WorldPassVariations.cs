@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Wordania.Core.Config;
 
 namespace Wordania.Gameplay.World
 {
@@ -31,9 +32,9 @@ namespace Wordania.Gameplay.World
 
                     if (graniteValue < _settings.GraniteThreshold)
                     {
-                        if (data.GetTile(x,y).Main == stoneId)
+                        if (data.GetTile(x,y).M == stoneId)
                         {
-                            data.GetTile(x,y).Main = graniteId;
+                            data.GetTile(x,y).M = graniteId;
                             continue;
                         }
                     }
@@ -42,9 +43,9 @@ namespace Wordania.Gameplay.World
 
                     if (stoneValue > _settings.DirtStoneThreshold)
                     {
-                        if (data.GetTile(x,y).Main == dirtId)
+                        if (data.GetTile(x,y).M == dirtId)
                         {
-                            data.GetTile(x,y).Main = stoneId;
+                            data.GetTile(x,y).M = stoneId;
                             continue;
                         }
                     }

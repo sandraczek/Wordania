@@ -6,6 +6,7 @@ using VContainer.Unity;
 using Wordania.Core;
 using Wordania.Core.Combat;
 using Wordania.Core.Gameplay;
+using Wordania.Core.Inputs;
 using Wordania.Core.SaveSystem;
 using Wordania.Core.SaveSystem.Data;
 using Wordania.Core.SFM;
@@ -23,7 +24,6 @@ namespace Wordania.Gameplay.Player
     {
         [Header("Components")]
         private PlayerController _controller;
-        //public PlayerController Controller =>_controller; // temporary for GameplayState to connect camera
         private StateMachine<PlayerBaseState> _states;
         private HealthComponent _health;
         private readonly InvincibilityController _invincibility = new();
@@ -89,7 +89,6 @@ namespace Wordania.Gameplay.Player
             _health.OnDamageTaken += Handlehurt;
             _health.OnDamageTaken += HandleHurtVisuals;
             _health.OnDeath += HandleDeath;
-            _inputs.OnToggleInventory += HandleInventoryToggle;
         }
 
         private void OnDisable()
@@ -97,7 +96,6 @@ namespace Wordania.Gameplay.Player
             _health.OnDamageTaken -= Handlehurt;
             _health.OnDamageTaken -= HandleHurtVisuals; //TODO: make visuals listen to health
             _health.OnDeath -= HandleDeath;
-            _inputs.OnToggleInventory -= HandleInventoryToggle;
         }
         private void Update()
         {
@@ -133,17 +131,6 @@ namespace Wordania.Gameplay.Player
         {
             Debug.Log("Player Died");
             _states.SwitchState(_factory.Spectate);
-        }
-        private void HandleInventoryToggle() // todo - change
-        {
-            if (_states.CurrentState == _factory.InMenu)
-            {
-                _states.SwitchState(_factory.Idle);
-            }
-            else
-            {
-                _states.SwitchState(_factory.InMenu);
-            }
         }
         private void HandleHurtVisuals(DamageResult payload)
         {

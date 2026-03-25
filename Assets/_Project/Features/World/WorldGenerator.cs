@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Wordania.Core.Config;
 
 namespace Wordania.Gameplay.World
 {

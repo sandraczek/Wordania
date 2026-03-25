@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Wordania.Gameplay.World
+namespace Wordania.Core.Config
 {
     [CreateAssetMenu(fileName = "WorldSettings", menuName = "World/WorldSettings")]
     public sealed class WorldSettings : ScriptableObject

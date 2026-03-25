@@ -5,13 +5,6 @@ using UnityEngine.Tilemaps;
 
 namespace Wordania.Gameplay.World
 {
-    public struct TileData {
-        public int Background;
-        public int Main;
-        public int Foreground;
-        public float Damage;        // [0f - 1f]
-    }
-
     public sealed class WorldData
     {
         public Vector2Int SpawnPoint;

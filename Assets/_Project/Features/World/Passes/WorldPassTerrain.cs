@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Wordania.Core.Config;
 
 namespace Wordania.Gameplay.World
 {
@@ -42,29 +43,29 @@ namespace Wordania.Gameplay.World
                 for (int y = 0; y < _settings.Height; y++)
                 {
                     if (y > terrainHeight) {
-                        data.GetTile(x, y).Main = airId;
+                        data.GetTile(x, y).M = airId;
                     } else if (y >= terrainHeight -1) {
-                        data.GetTile(x, y).Main = grassId;
+                        data.GetTile(x, y).M = grassId;
                     } else if (y < stoneHeight - _settings.dirt_stoneTransitionMargin) {
-                        data.GetTile(x, y).Main = stoneId;
+                        data.GetTile(x, y).M = stoneId;
                     } else if (y > stoneHeight + _settings.dirt_stoneTransitionMargin) {
-                        data.GetTile(x, y).Main = dirtId;
+                        data.GetTile(x, y).M = dirtId;
                     } else {
                         float stoneChance = Mathf.InverseLerp(stoneHeight + _settings.dirt_stoneTransitionMargin, stoneHeight - _settings.dirt_stoneTransitionMargin, y);
-                        data.GetTile(x, y).Main = (Random.value < stoneChance) ? stoneId : dirtId;
+                        data.GetTile(x, y).M = (Random.value < stoneChance) ? stoneId : dirtId;
                     }
 
                     if (y > wallTerrainHeight) {
-                        data.GetTile(x, y).Background = airId;
+                        data.GetTile(x, y).B = airId;
                     } else if (y >= wallTerrainHeight -1 || y > terrainHeight) {
-                        data.GetTile(x,y).Background = grassWallId;
+                        data.GetTile(x,y).B = grassWallId;
                     } else if (y < stoneHeight - _settings.dirt_stoneTransitionMargin) {
-                        data.GetTile(x,y).Background = stoneWallId;
+                        data.GetTile(x,y).B = stoneWallId;
                     } else if (y > stoneHeight + _settings.dirt_stoneTransitionMargin) {
-                        data.GetTile(x,y).Background = dirtWallId;
+                        data.GetTile(x,y).B = dirtWallId;
                     } else {
                         float stoneChance = Mathf.InverseLerp(stoneHeight + _settings.dirt_stoneTransitionMargin, stoneHeight - _settings.dirt_stoneTransitionMargin, y);
-                        data.GetTile(x, y).Background = (Random.value < stoneChance) ? stoneWallId : dirtWallId;
+                        data.GetTile(x, y).B = (Random.value < stoneChance) ? stoneWallId : dirtWallId;
                     }
                 }
 

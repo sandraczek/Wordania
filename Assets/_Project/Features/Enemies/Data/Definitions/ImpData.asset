@@ -21,19 +21,17 @@ MonoBehaviour:
     <KnockbackResistance>k__BackingField: 0
   <Movement>k__BackingField:
     GravityScale: 5
-    AccelerationSpeed: 0.2
-    StoppingSpeed: 0.1
-    <PatrolSpeed>k__BackingField: 2
+    Acceleration: 50
+    Deceleration: 30
     PatrolIntervalTime: 5
-    <ChaseSpeed>k__BackingField: 4.5
-    <JumpForce>k__BackingField: 10
     GroundLayer:
       serializedVersion: 2
       m_Bits: 8
     GroundCheckSizeY: 0.1
     GroundCheckDistance: 0.2
     MaxStepHeight: 1.1
-    StepLookDistance: 0.2
+    StepLookMargin: 0.05
+    SkinWidth: 0.02
     <AvoidsLedges>k__BackingField: 1
     FallDamageThreshold: 35
     FallDamageMultiplier: 3
@@ -42,4 +40,19 @@ MonoBehaviour:
     <LoseTargetRadius>k__BackingField: 15
     <AttackRange>k__BackingField: 1.5
     <AttackCooldown>k__BackingField: 2
+    ContactDamage: 26
+    Knockback: {x: 15, y: 7}
+    DamageType: 0
+    DamageSource: 0
+    HitStunDuration: 0.2
+    GeneralResistance: 0
+    PhysicalResistance: 0
+    MagicalResistance: 0
+    EnvironmentalResistance: 0
+    FallResistance: 0
+  <Spawn>k__BackingField:
+    RequiresGround: 1
+    MaxDistanceToGround: 0.5
+    RequiredClearanceSize: {x: 0, y: 0}
+    ClearancePadding: {x: 0.2, y: 0.2}
   <Loot>k__BackingField: {fileID: 11400000, guid: 98d0304250b7249699c37fdd4046cfc2, type: 2}

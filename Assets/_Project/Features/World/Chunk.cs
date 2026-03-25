@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using VContainer;
+using Wordania.Core.Config;
 
 namespace Wordania.Gameplay.World
 {

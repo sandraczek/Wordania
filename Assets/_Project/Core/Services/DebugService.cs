@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using Wordania.Core.Config;
+using Wordania.Core.Inputs;
 
 namespace Wordania.Core.Services
 {

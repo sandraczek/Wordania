@@ -23,11 +23,12 @@ MonoBehaviour:
   FlySpeed: 20
   FlyAcceleration: 100
   FlyDeceleration: 20
-  JumpForce: 24
+  JumpForce: 30
   MinAccelerationInput: 0.1
   MaxStepHeight: 1.1
   StepMinInput: 0.5
-  StepLookDistance: 0.2
+  StepLookMargin: 0.05
+  SkinWidth: 0.02
   JumpBuffor: 0.1
   CoyoteTime: 0.1
   MinJumpDuration: 0.1

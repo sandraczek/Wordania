@@ -15,7 +15,7 @@ MonoBehaviour:
   TileSize: 1
   Width: 1280
   Height: 640
-  Seed: 1000
+  Seed: 385851
   ChunkSize: 32
   RenderingBatchSize: 10
   HeightMultiplier: 400
@@ -41,12 +41,6 @@ MonoBehaviour:
   GraniteThreshold: 0.01
   DirtStoneScale: 0.06
   DirtStoneThreshold: 0.35
-  PreventBuildingLayer:
-    serializedVersion: 2
-    m_Bits: 192
-  GroundLayer:
-    serializedVersion: 2
-    m_Bits: 8
   MainLayerName: Main
   BackgroundLayerName: Background
   DamageLayerName: Damage

@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Wordania.Core.Config;
 
 namespace Wordania.Gameplay.World
 {
@@ -34,20 +35,20 @@ namespace Wordania.Gameplay.World
 
                     if (combinedNoise > _settings.GlobalCaveDensity)
                     {
-                        if (data.GetTile(x,y).Main != airId)
+                        if (data.GetTile(x,y).M != airId)
                         {
-                            data.GetTile(x,y).Main = airId;
+                            data.GetTile(x,y).M = airId;
                         }
                     }
                 }
 
                 if (stopwatch.ElapsedMilliseconds > 16)
-            {
-                await UniTask.Yield();
-                token.ThrowIfCancellationRequested();
-                
-                stopwatch.Restart();
-            }
+                {
+                    await UniTask.Yield();
+                    token.ThrowIfCancellationRequested();
+                    
+                    stopwatch.Restart();
+                }
             }
         }
 
