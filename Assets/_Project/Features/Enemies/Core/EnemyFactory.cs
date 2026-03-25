@@ -7,6 +7,7 @@ using VContainer;
 using VContainer.Unity;
 using Wordania.Core.Gameplay;
 using Wordania.Gameplay.Enemies.Data;
+using Wordania.Gameplay.Markers;
 
 namespace Wordania.Gameplay.Enemies.Core
 {
@@ -14,14 +15,16 @@ namespace Wordania.Gameplay.Enemies.Core
     {
         private readonly IObjectResolver _resolver;
         private readonly IPlayerProvider _playerProvider;
+        private readonly Transform _parent;
         private readonly Dictionary<string, IObjectPool<EnemyController>> _pools = new();
         private readonly int _defaultPoolSize = 20;
         private readonly int _prewarmBatchSize = 5;
 
-        public EnemyFactory(IObjectResolver resolver, IPlayerProvider playerProvider)
+        public EnemyFactory(IObjectResolver resolver, IPlayerProvider playerProvider, MarkerEntityParent enemiesParent)
         {
             _resolver = resolver;
             _playerProvider = playerProvider;
+            _parent = enemiesParent.transform;
         }
 
         public void Dispose()
@@ -43,15 +46,22 @@ namespace Wordania.Gameplay.Enemies.Core
 
             EnemyController enemy = pool.Get();
             enemy.transform.position = position;
-            enemy.Initialize(template, () => pool.Release(enemy));
+            enemy.Initialize(() => pool.Release(enemy));
 
             return enemy;
         }
 
         private IObjectPool<EnemyController> CreatePool(EnemyController prefab)
         {
+            GameObject poolParent = new($"Pool_{prefab.Data.DisplayName}");
+            poolParent.transform.SetParent(_parent);
+
             return new ObjectPool<EnemyController>(
-                createFunc: () => _resolver.Instantiate(prefab),
+                createFunc: () => {
+                    var enemy = _resolver.Instantiate(prefab,poolParent.transform);
+                    enemy.name = prefab.Data.DisplayName;
+                    return enemy;
+                    },
                 actionOnGet: enemy => enemy.gameObject.SetActive(true),
                 actionOnRelease: enemy => enemy.gameObject.SetActive(false),
                 actionOnDestroy: enemy => {if(enemy!= null) UnityEngine.Object.Destroy(enemy.gameObject);},

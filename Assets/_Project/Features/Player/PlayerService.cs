@@ -6,6 +6,7 @@ using Wordania.Core.Combat;
 using Wordania.Core.Gameplay;
 using Wordania.Core.SaveSystem;
 using Wordania.Core.SaveSystem.Data;
+using Wordania.Gameplay.Markers;
 
 namespace Wordania.Gameplay.Player
 {
@@ -21,15 +22,17 @@ namespace Wordania.Gameplay.Player
         public Transform PlayerTransform { get; private set; }
         private Player _player;
         private PlayerSaveData _cachedSaveData;
+        private readonly Transform _parent;
         public IReadOnlyHealth ReadOnlyHealth { get; private set; }
         public bool IsPlayerSpawned => PlayerTransform != null; 
         public string SaveId => "Player";
 
-        public PlayerService(GameObject playerPrefab, IObjectResolver resolver, ISaveService save)
+        public PlayerService(GameObject playerPrefab, IObjectResolver resolver, ISaveService save, MarkerEntityParent playerParent)
         {
             _playerPrefab = playerPrefab;
             _resolver = resolver;
             _save = save;
+            _parent = playerParent.transform;
         }
         public void Start()
         {
@@ -55,7 +58,7 @@ namespace Wordania.Gameplay.Player
                 position = spawnPosition;
             }
 
-            GameObject playerInstance = _resolver.Instantiate(_playerPrefab, position, Quaternion.identity);
+            GameObject playerInstance = _resolver.Instantiate(_playerPrefab, position, Quaternion.identity, _parent);
             playerInstance.name = "Player";
             PlayerTransform = playerInstance.transform;
 

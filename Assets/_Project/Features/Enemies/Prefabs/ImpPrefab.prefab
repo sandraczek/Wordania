@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9003946618020725383}
   - component: {fileID: 998329296080296553}
   m_Layer: 0
-  m_Name: Triangle
+  m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 672ea8d6cbc7a4946b9619550f0c98ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Enemies.Core.EnemyController
-  Data: {fileID: 0}
+  Data: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}
   <IsGrounded>k__BackingField: 0
 --- !u!114 &7718802555013657188
 MonoBehaviour:

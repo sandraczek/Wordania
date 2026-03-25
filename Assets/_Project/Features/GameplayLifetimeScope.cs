@@ -30,7 +30,9 @@ namespace Wordania.Gameplay
 {
     public sealed class GameplayLifetimeScope : LifetimeScope
     {
-
+        [SerializeField] private MarkerEntityParent _entitiesParent;
+        [SerializeField] private MarkerDynamicParent _dynamicParent;
+        [SerializeField] private MarkerChunkParent _chunksParent;
         [SerializeField] private PlayerConfig _playerConfig;
         [SerializeField] private EnemySpawnSettings _enemySpawnSettings;
         [SerializeField] private HUDConfig _uiConfig;
@@ -39,7 +41,6 @@ namespace Wordania.Gameplay
         [SerializeField] private CameraService _cameraService;
         [SerializeField] private BlockDatabase _blockDatabase;
         [SerializeField] private ItemDatabase _itemDatabase;
-        [SerializeField] private WorldChunksRoot _chunksParent;
         [SerializeField] private LootEvent _lootEvent;
         [SerializeField] private HealthBarUI _healthBarUI;
         [SerializeField] private InventoryView _inventoryView;
@@ -64,6 +65,11 @@ namespace Wordania.Gameplay
             builder.RegisterInstance<IItemDatabase>(_itemDatabase);
             builder.RegisterInstance<ICameraService>(_cameraService);
 
+            //markers
+            builder.RegisterComponent(_entitiesParent);
+            builder.RegisterComponent(_dynamicParent);
+            builder.RegisterComponent(_chunksParent);
+
             //world
             builder.Register<WorldPassTerrain>(Lifetime.Scoped).As<IWorldGenerationPass>();
             builder.Register<WorldPassCave>(Lifetime.Scoped).As<IWorldGenerationPass>();
@@ -76,7 +82,6 @@ namespace Wordania.Gameplay
             builder.RegisterInstance(_lootEvent);
             builder.RegisterEntryPoint<WorldService>(Lifetime.Scoped).As<IWorldService>();
 
-            builder.RegisterComponent(_chunksParent);
             
             builder.Register<ChunkFactory>(Lifetime.Scoped)
                 .As<IChunkFactory>()

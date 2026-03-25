@@ -68,9 +68,9 @@ namespace Wordania.Gameplay.Enemies.Core
             _states = new();
             _stateFactory = new(this, _states);
         }
-        public void Initialize(EnemyTemplate data, Action onDeath)
+        public void Initialize(Action onDeath)
         {
-            Data = data;
+            if(Data == null) Debug.LogError($"{transform.name}: No data was set in prefab");
             _onDeathAction = onDeath;
             _health.SetInitial(Data.Stats.MaxHealth);
             _maxFallSpeed = 0f;
