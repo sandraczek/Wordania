@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cd76602af4874c358f91e821a75a9d2, type: 3}
   m_Name: EnemySpawnSettings
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Enemies.Config.EnemySpawnSettings
-  InnerViewportRadius: 40
-  OuterSpawnRadius: 100
-  DespawnRadius: 150
+  InnerViewportRadius: 8
+  OuterSpawnRadius: 30
+  DespawnRadius: 40
   SpawnAttemptInterval: 1.5
   MaxActiveEnemies: 30
+  CullingInterval: 1

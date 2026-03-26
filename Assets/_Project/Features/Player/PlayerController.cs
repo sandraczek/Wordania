@@ -19,7 +19,6 @@ namespace Wordania.Features.Player
         private Collider2D _col;
 
         [Header("Dependencies")]
-        private StateMachine<PlayerBaseState> _states;
         private IInputReader _inputs;
         private PlayerConfig _config;
         
@@ -87,7 +86,7 @@ namespace Wordania.Features.Player
 
                 if (!wasGrounded)
                 {
-                    OnLanded?.Invoke(Mathf.Abs(Mathf.Max(_maxFallSpeed, VelocityY)));
+                    OnLanded?.Invoke(Mathf.Max(Mathf.Abs(_maxFallSpeed), Mathf.Abs(VelocityY)));
                     _maxFallSpeed = 0;
                 }
                 if (_isSteppingUp)

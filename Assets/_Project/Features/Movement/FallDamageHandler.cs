@@ -48,6 +48,8 @@ namespace Wordania.Features.Movement
 
         private void HandleLanding(float absVelocity)
         {
+            if(gameObject.name == "Player")
+                Debug.Log($"{absVelocity} < {_minVelocityForDamage}");
             if (absVelocity < _minVelocityForDamage) return;
 
             float excessSpeed = Mathf.Abs(absVelocity - _minVelocityForDamage);

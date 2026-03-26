@@ -30,11 +30,14 @@ MonoBehaviour:
     GroundCheckSizeY: 0.1
     GroundCheckDistance: 0.2
     MaxStepHeight: 1.1
-    StepLookMargin: 0.05
+    StepLookMargin: 0.01
+    StepPerformMargin: 0.05
     SkinWidth: 0.02
-    <AvoidsLedges>k__BackingField: 1
     FallDamageThreshold: 35
     FallDamageMultiplier: 3
+    EnableCliffAvoidance: 1
+    CliffDetectionOffset: 0.1
+    CliffDetectionDepth: 4
   <Combat>k__BackingField:
     <DetectionRadius>k__BackingField: 10
     <LoseTargetRadius>k__BackingField: 15
@@ -52,7 +55,7 @@ MonoBehaviour:
     FallResistance: 0
   <Spawn>k__BackingField:
     RequiresGround: 1
-    MaxDistanceToGround: 0.5
-    RequiredClearanceSize: {x: 0, y: 0}
-    ClearancePadding: {x: 0.2, y: 0.2}
+    MaxDistanceToGround: 1.5
+    RequiredClearanceSize: {x: 1.973877, y: 4.8129272}
+    RequiredGroundSize: 2
   <Loot>k__BackingField: {fileID: 11400000, guid: 98d0304250b7249699c37fdd4046cfc2, type: 2}

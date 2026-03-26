@@ -173,7 +173,7 @@ MonoBehaviour:
   _savingIcon: {fileID: 579839866}
   _worldMapController: {fileID: 1956776456}
   _worldMapView: {fileID: 278490713}
-  _saveSlot: 0
+  _saveSlot: 1
   _debugEnemyTemplate: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}
 --- !u!4 &109496047
 Transform:
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bbccc3b23932443baed136be9b62e79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _saveSlot: 3
+  _saveSlot: 9
 --- !u!1 &135507458
 GameObject:
   m_ObjectHideFlags: 0

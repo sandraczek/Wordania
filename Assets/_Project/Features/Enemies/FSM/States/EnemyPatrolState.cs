@@ -3,6 +3,8 @@ using UnityEngine;
 using Wordania.Core;
 using Wordania.Core.SFM;
 using Wordania.Features.Enemies.Core;
+using Wordania.Features.Enemies.Data;
+using Wordania.Features.Enemies.Movement;
 
 namespace Wordania.Features.Enemies.FSM
 {
@@ -19,7 +21,8 @@ namespace Wordania.Features.Enemies.FSM
         public override void Enter()
         {
             _timer = 0f;
-            _direction = 1f;
+            _direction = Mathf.Sign(UnityEngine.Random.value);
+            if(_direction == 0f) _direction = 1f;
         }
         public override void Update()
         {
@@ -27,21 +30,30 @@ namespace Wordania.Features.Enemies.FSM
         }
         public override void FixedUpdate()
         {
+            var mov = _controller.Data.Movement;
+
             _timer+= Time.fixedDeltaTime;
-            if(_timer > _controller.Data.Movement.PatrolIntervalTime)
+            if(_timer > mov.PatrolIntervalTime)
             {
-                _timer -= _controller.Data.Movement.PatrolIntervalTime;
-                _direction *=-1f;
+                _timer -= mov.PatrolIntervalTime;
+                _direction *= -1f;
+            }
+
+            if (_controller.ShouldAvoidCliff(_direction))
+            {
+                _direction *= -1f;
+                _timer = 0f;
             }
 
             ApplyStandardMovement(
                 _direction,
-                _controller.Data.Movement.Acceleration,
-                _controller.Data.Movement.Deceleration,
-                _controller.Data.Movement.PatrolSpeed
+                mov.Acceleration,
+                mov.Deceleration,
+                mov.PatrolSpeed
                 );
 
-            _controller.TryStepUp(_direction);
+            if(_controller.IsGrounded)
+                _controller.TryStepUp(_direction);
         }
         public override void Exit()
         {
@@ -51,7 +63,7 @@ namespace Wordania.Features.Enemies.FSM
         {
 
         }
-
+        
         private void ApplyStandardMovement(float direction, float acceleration, float deceleration, float speed)
         {
             float targetSpeed = direction * speed;

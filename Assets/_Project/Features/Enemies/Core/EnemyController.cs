@@ -6,6 +6,7 @@ using Wordania.Core.Gameplay;
 using Wordania.Core.SFM;
 using Wordania.Features.Enemies.Data;
 using Wordania.Features.Enemies.FSM;
+using Wordania.Features.Enemies.Movement;
 using Wordania.Features.Movement;
 
 namespace Wordania.Features.Enemies.Core
@@ -46,7 +47,7 @@ namespace Wordania.Features.Enemies.Core
 
         public bool IsAlive => gameObject.activeSelf && !_health.IsDead;
         [field: SerializeField] public bool IsGrounded { get; private set; }
-        private float _maxFallSpeed;
+        private float _maxFallSpeed = 0f;
         private bool _isFacingRight= true;
         private bool _isSteppingUp = false;
 
@@ -121,7 +122,7 @@ namespace Wordania.Features.Enemies.Core
             {   
                 if (!wasGrounded)
                 {
-                    OnLanded?.Invoke(Mathf.Abs(Mathf.Max(_maxFallSpeed, VelocityY)));
+                    OnLanded?.Invoke(Mathf.Max(Mathf.Abs(_maxFallSpeed), Mathf.Abs(VelocityY)));
                     _maxFallSpeed = 0;
                 }
 
@@ -184,7 +185,7 @@ namespace Wordania.Features.Enemies.Core
             RaycastHit2D hitDown = Physics2D.Raycast(downOrigin, Vector2.down, Data.Movement.MaxStepHeight, Data.Movement.GroundLayer);
             if(hitDown.collider == null) return;
 
-            Vector2 targetPos = new(Position.x + direction * lookDistance, hitDown.point.y + _col.bounds.extents.y - _col.offset.y + Data.Movement.StepLookMargin);
+            Vector2 targetPos = new(Position.x + direction * lookDistance, hitDown.point.y + _col.bounds.extents.y - _col.offset.y + Data.Movement.StepPerformMargin);
             Collider2D overlap = Physics2D.OverlapBox(targetPos + _col.offset, (Vector2)_col.bounds.size - 2f * Data.Movement.SkinWidth * new Vector2(1f,1f), 0, Data.Movement.GroundLayer);
 
             if (overlap == null)
@@ -198,6 +199,23 @@ namespace Wordania.Features.Enemies.Core
             _isSteppingUp = true;
             _rb.MovePosition(new(Position.x, targetY));
             if (VelocityY < 0) VelocityY = 0f;
+        }
+        public bool ShouldAvoidCliff(float direction)
+        {
+            if(!Data.Movement.EnableCliffAvoidance) return false;
+            if(!IsGrounded) return false;
+
+            float cliffDetectionDistance = Mathf.Abs(VelocityX) * Time.fixedDeltaTime + Data.Movement.CliffDetectionOffset;
+
+            return !EnemyMovementSafetyUtility
+            .IsPathSafe
+                (
+                _col.bounds.center,
+                direction,
+                cliffDetectionDistance,
+                _col.bounds.extents.y + Data.Movement.CliffDetectionDepth,
+                Data.Movement.GroundLayer
+                );
         }
         public void SetGravity(float scale)
         {
@@ -226,6 +244,12 @@ namespace Wordania.Features.Enemies.Core
             VelocityY = damageResult.Payload.Knockback.y;
 
             _states.SwitchState(_stateFactory.Hurt);
+        }
+
+        private void DrawPosition()
+        {
+            Debug.DrawRay(Position + Vector2.up * 0.2f, Vector2.down * 0.4f);
+            Debug.DrawRay(Position + Vector2.right * 0.2f, Vector2.left * 0.4f);
         }
     }
 }

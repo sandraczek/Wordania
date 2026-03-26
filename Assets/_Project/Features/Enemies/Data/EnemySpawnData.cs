@@ -7,8 +7,8 @@ namespace Wordania.Features.Enemies.Data
     public class EnemySpawnData
     {
         [SerializeField] public bool RequiresGround = true;
-        [SerializeField] public float MaxDistanceToGround = 0.5f;
+        [SerializeField] public float MaxDistanceToGround = 1.5f;
         [SerializeField] public Vector2 RequiredClearanceSize;
-        [SerializeField] public Vector2 ClearancePadding = new(0.2f,0.2f);
+        [SerializeField] public float RequiredGroundSize = 2f;
     }
 }
