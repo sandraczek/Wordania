@@ -37,7 +37,7 @@ namespace Wordania.Features.Player
         private PlayerService _playerService;
         public Bounds Hitbox => _controller.GetBounds();
         public int InstanceId {get; private set;}
-        public EntityFaction Faction => EntityFaction.Player;
+        public EntityFaction Faction {get; private set;} = EntityFaction.Player;
 
         [Inject]
         public void Construct(PlayerConfig config, IInputReader inputs, PlayerContext context, IInventoryService inventory, PlayerService playerService)
@@ -95,6 +95,8 @@ namespace Wordania.Features.Player
             _health.OnDamageTaken += Handlehurt;
             _health.OnDamageTaken += HandleHurtVisuals;
             _health.OnDeath += HandleDeath;
+            _invincibility.Started += OnInvincibilityStarted;
+            _invincibility.Ended += OnInvincibilityEnded;
         }
 
         private void OnDisable()
@@ -102,6 +104,8 @@ namespace Wordania.Features.Player
             _health.OnDamageTaken -= Handlehurt;
             _health.OnDamageTaken -= HandleHurtVisuals; //TODO: make visuals listen to health
             _health.OnDeath -= HandleDeath;
+            _invincibility.Started -= OnInvincibilityStarted;
+            _invincibility.Ended -= OnInvincibilityEnded;
         }
         private void Update()
         {
@@ -150,6 +154,14 @@ namespace Wordania.Features.Player
             data.MaxHealth = _health.MaxHealth;
             
             return data;
+        }
+        private void OnInvincibilityStarted()
+        {
+            Faction = 0;
+        }
+        private void OnInvincibilityEnded()
+        {
+            Faction = EntityFaction.Player;
         }
     }
 }

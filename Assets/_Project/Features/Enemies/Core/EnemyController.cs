@@ -1,10 +1,12 @@
 using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 using VContainer;
 using Wordania.Core.Combat;
 using Wordania.Core.Gameplay;
 using Wordania.Core.Identifiers;
 using Wordania.Core.SFM;
+using Wordania.Features.Combat;
 using Wordania.Features.Enemies.Data;
 using Wordania.Features.Enemies.FSM;
 using Wordania.Features.Enemies.Movement;
@@ -26,8 +28,9 @@ namespace Wordania.Features.Enemies.Core
         private StateMachine<EnemyBaseState> _states;
         private EnemyStateFactory _stateFactory;
         private readonly DamageMitigator _mitigation = new();
+        private readonly InvincibilityController _invincibility = new();
         public int InstanceId => gameObject.GetInstanceID();
-        public EntityFaction Faction => EntityFaction.Enemy;
+        public EntityFaction Faction {get; private set;} = EntityFaction.Enemy;
 
         public float VelocityX
         {
@@ -104,13 +107,21 @@ namespace Wordania.Features.Enemies.Core
         }
         private void OnEnable()
         {
-            _health.OnDeath += HandleDeath;
             _registry.Register(this);
+            _health.OnDamageTaken += Handlehurt;
+            _health.OnDamageTaken += HandleHurtVisuals;
+            _health.OnDeath += HandleDeath;
+            _invincibility.Started += OnInvincibilityStarted;
+            _invincibility.Ended += OnInvincibilityEnded;
         }
         private void OnDisable()
         {
-            _health.OnDeath -= HandleDeath;
             _registry.Unregister(this);
+            _health.OnDamageTaken -= Handlehurt;
+            _health.OnDamageTaken -= HandleHurtVisuals;
+            _health.OnDeath -= HandleDeath;
+            _invincibility.Started -= OnInvincibilityStarted;
+            _invincibility.Ended -= OnInvincibilityEnded;
         }
         private void Update()
         {
@@ -238,12 +249,20 @@ namespace Wordania.Features.Enemies.Core
         public void ApplyDamage(DamagePayload payload)
         {;
             if(_health.IsDead) return;
+            if(_invincibility != null && _invincibility.IsInvincible) return;
             
             DamageResult damageResult = _mitigation.ProcessDamage(payload);
             _health.ApplyDamage(damageResult);
+        }
+        private void Handlehurt(DamageResult damage)
+        {
+            //Applying knockback even if fatal
+            VelocityX = damage.Payload.Knockback.x;
+            VelocityY = damage.Payload.Knockback.y;
 
-            VelocityX = damageResult.Payload.Knockback.x;
-            VelocityY = damageResult.Payload.Knockback.y;
+            if(_health.IsDead) return;
+
+            _invincibility.StartInvincibility(Data.Combat.InvincibilityDuration);
 
             _states.SwitchState(_stateFactory.Hurt);
         }
@@ -252,6 +271,18 @@ namespace Wordania.Features.Enemies.Core
         {
             Debug.DrawRay(Position + Vector2.up * 0.2f, Vector2.down * 0.4f);
             Debug.DrawRay(Position + Vector2.right * 0.2f, Vector2.left * 0.4f);
+        }
+        private void OnInvincibilityStarted()
+        {
+            Faction = 0;
+        }
+        private void OnInvincibilityEnded()
+        {
+            Faction = EntityFaction.Enemy;
+        }
+        private void HandleHurtVisuals(DamageResult damage)
+        {
+            
         }
     }
 }

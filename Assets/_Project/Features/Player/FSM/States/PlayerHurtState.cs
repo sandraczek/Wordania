@@ -21,11 +21,12 @@ namespace Wordania.Features.Player.FSM
         public override void Enter()
         {
             _hitTime = Time.time;
+
         }
 
         public override void Exit()
         {
-
+            
         }
 
         public override void Update()

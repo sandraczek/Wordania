@@ -22,6 +22,7 @@ namespace Wordania.Features.Enemies.Data
 
         [Header("Damage")]
         [SerializeField] public float HitStunDuration = 0.2f;
+        [SerializeField] public float InvincibilityDuration = 0.2f;
         [SerializeField] public float GeneralResistance = 0f;
         [SerializeField] public float PhysicalResistance = 0f;
         [SerializeField] public float MagicalResistance = 0f;
