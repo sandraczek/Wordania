@@ -28,12 +28,5 @@ namespace Wordania.Features.Enemies.Data
         [SerializeField] public float MagicalResistance = 0f;
         [SerializeField] public float EnvironmentalResistance = 0f;
         [SerializeField] public float FallResistance = 0f;
-
-        #if UNITY_EDITOR
-        public void ForceValidTargetRadius()
-        {
-            LoseTargetRadius = DetectionRadius + 1f;
-        }
-        #endif
     }
 }

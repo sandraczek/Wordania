@@ -32,6 +32,7 @@ namespace Wordania.Features
         private readonly IEnemyFactory _enemyFactory;
         private readonly EnemyTemplate _enemyToPrewarm;
         private readonly IMapUpdateService _map;
+        private readonly IWorldCollisionJobService _worldCollisionJob;
         private readonly int _saveSlot;
         public GameplayEntryPoint(
             ISaveService saveService,
@@ -45,6 +46,7 @@ namespace Wordania.Features
             IEnemyFactory enemyFactory,
             EnemyTemplate enemyTemplate, //DEBUG
             IMapUpdateService mapUpdate, // temporary ?
+            IWorldCollisionJobService worldCollisionJob,
             int loadFile
             )
         {
@@ -60,6 +62,7 @@ namespace Wordania.Features
             _enemyToPrewarm = enemyTemplate;
             _map = mapUpdate;
             _saveSlot = loadFile;
+            _worldCollisionJob = worldCollisionJob;
 
         }
         public async UniTask StartAsync(System.Threading.CancellationToken cancellation)
@@ -87,6 +90,7 @@ namespace Wordania.Features
 
             Time.timeScale = 0f;
 
+            _worldCollisionJob.InitializeCollisionArray();
             await _map.RenderInitialMapAsync(cancellation); 
 
             _loadingScreen.UpdateProgress(0.55f,"Prewarming Pools"); //DEBUG - later biome based prewarm

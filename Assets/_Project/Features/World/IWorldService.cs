@@ -9,6 +9,7 @@ namespace Wordania.Features.World
     public interface IWorldService
     {
         public event Action<Vector2Int, WorldLayer> OnChunkChanged;
+        public WorldData Data {get;}
 
         public void RandomizeSeed();
         public UniTask GenerateWorldAsync(CancellationToken token);

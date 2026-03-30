@@ -39,8 +39,7 @@ namespace Wordania.Features.Enemies.Data
             {
                 if (Combat.LoseTargetRadius < Combat.DetectionRadius)
                 {
-                    Debug.LogWarning($"[{DisplayName}] LoseTargetRadius cannot be lesser than DetectionRadius! Fixing automatically.");
-                    Combat.ForceValidTargetRadius();
+                    Debug.LogWarning($"[{DisplayName}] LoseTargetRadius cannot be lesser than DetectionRadius!");
                 }
             }
         }

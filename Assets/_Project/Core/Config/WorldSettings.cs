@@ -1,4 +1,5 @@
 using UnityEngine;
+using Wordania.Core.Attributes;
 
 namespace Wordania.Core.Config
 {
@@ -11,6 +12,7 @@ namespace Wordania.Core.Config
 
         public int Seed;
         public int ChunkSize;
+        [Layer] public int CollisionLayer;
         [Header("Rendering")]
         public int RenderingBatchSize = 10;
         [Header("Terrain")]

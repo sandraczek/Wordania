@@ -58,7 +58,7 @@ namespace Wordania.Features.World
                 }
             }
             
-            _mainMap.gameObject.layer = LayerMask.NameToLayer("Ground"); 
+            _mainMap.gameObject.layer = _settings.CollisionLayer;
         }
         private void UpdateLayer(Tilemap targetMap, WorldLayer layerType)
         {

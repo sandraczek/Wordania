@@ -13,6 +13,9 @@ namespace Wordania.Features.Combat.Core
     {
         [ReadOnly] public float DeltaTime;
         [ReadOnly] public NativeArray<TargetAABB> Targets;
+        [ReadOnly] public NativeArray<bool> WorldGrid;
+        public int GridWidth;
+        public int GridHeight;
     
         [WriteOnly] public NativeQueue<ProjectileHitEvent>.ParallelWriter HitEventsQueue;
         
@@ -32,12 +35,44 @@ namespace Wordania.Features.Combat.Core
                 Projectiles[index] = data;
                 return;
             }
-
+            
             data.PreviousPosition = data.CurrentPosition;
             data.Velocity.y -= 9.81f * data.GravityMultiplier * DeltaTime;
             data.CurrentPosition += data.Velocity * DeltaTime;
 
-            // 2. Collisions
+            // 2. World Collisions
+            int2 grid = (int2)math.floor(data.CurrentPosition);
+
+            if (grid.x >= 0 && grid.x < GridWidth && grid.y >= 0 && grid.y < GridHeight)
+            {
+                int i = grid.y * GridWidth + grid.x;
+                
+                if (WorldGrid[i]) 
+                {
+                    HitEventsQueue.Enqueue(new ProjectileHitEvent
+                    {
+                        HitEntityId = -1,
+                        ProjectileDataId = data.DataId,
+                        InstigatorId = data.InstigatorId,
+                        HitPosition = data.CurrentPosition,
+                        Direction = math.normalizesafe(data.Velocity),
+                        DamageMultiplier = data.DamageMultiplier
+                    });
+
+                    data.IsActive = false;
+                    
+                    Projectiles[index] = data;
+                    return; 
+                }
+            }
+            else
+            {
+                data.IsActive = false; 
+                Projectiles[index] = data;
+                return;
+            }
+
+            // 3. Enemy Collisions
             bool hasHit = false;
 
             for (int i = 0; i < Targets.Length; i++)
@@ -64,7 +99,7 @@ namespace Wordania.Features.Combat.Core
                 }
             }
 
-            // 3. Resolution
+            // 4. Resolution
             if (hasHit)
             {
                 data.RemainingPierces--;

@@ -89,6 +89,7 @@ namespace Wordania.Features
 
             builder.RegisterInstance(_lootEvent);
             builder.RegisterEntryPoint<WorldService>(Lifetime.Scoped).As<IWorldService>();
+            builder.RegisterEntryPoint<WorldCollisionJobService>(Lifetime.Scoped).As<IWorldCollisionJobService>();
 
             
             builder.Register<ChunkFactory>(Lifetime.Scoped)

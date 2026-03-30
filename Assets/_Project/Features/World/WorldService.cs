@@ -26,7 +26,7 @@ namespace Wordania.Features.World
         private readonly ISaveService _save;
 
         [Header("Data")]
-        public WorldData _data {get; private set;} // cant be public
+        public WorldData Data {get; private set;}
         private readonly LootEvent _lootEvent; // TO change (Message pipe or signal bus)
 
         public string SaveId => "World";
@@ -61,9 +61,9 @@ namespace Wordania.Features.World
         }
         public async UniTask GenerateWorldAsync(CancellationToken token)
         {
-            Debug.Assert(_data == null);
+            Debug.Assert(Data == null);
             Debug.Assert(_settings.Width % _settings.ChunkSize == 0 && _settings.Height % _settings.ChunkSize == 0);
-            _data = await _generator.GenerateWorldAsync(token);
+            Data = await _generator.GenerateWorldAsync(token);
         }
         public bool TryDamageBlock(Vector3 worldPosition, float damagePower)
         {
@@ -79,13 +79,13 @@ namespace Wordania.Features.World
         public WorldLayer DamageTile(int x, int y, float damagePower)
         {
             if(!IsWithinBounds(x,y)) return WorldLayer.None;
-            BlockData data = _blockDatabase.GetBlock(_data.GetTile(x,y).M);
+            BlockData data = _blockDatabase.GetBlock(Data.GetTile(x,y).M);
             if(data == null) return WorldLayer.None;
-            _data.GetTile(x,y).Damage += damagePower / data.Hardness;
+            Data.GetTile(x,y).Damage += damagePower / data.Hardness;
             WorldLayer changedLayers;
-            if(_data.GetTile(x,y).Damage >= 1f){
-                _data.GetTile(x,y).M = 0;
-                _data.GetTile(x,y).Damage = 0f; 
+            if(Data.GetTile(x,y).Damage >= 1f){
+                Data.GetTile(x,y).M = 0;
+                Data.GetTile(x,y).Damage = 0f; 
 
                 //DROPPING LOOT
                 _lootEvent.Raise(data.loot, data.lootAmount);
@@ -154,9 +154,9 @@ namespace Wordania.Features.World
             Vector2Int pos = _settings.WorldToGrid(worldPosition);
             
             if (!IsWithinBounds(pos.x, pos.y)) return false;
-            if(_blockDatabase.GetBlock(_data.GetTile(pos.x,pos.y).M) != null) return false;
+            if(_blockDatabase.GetBlock(Data.GetTile(pos.x,pos.y).M) != null) return false;
 
-            _data.GetTile(pos.x,pos.y).M = blockID;
+            Data.GetTile(pos.x,pos.y).M = blockID;
             Vector2Int coord = GetChunkCoord(pos.x, pos.y);
             OnChunkChanged?.Invoke(coord, WorldLayer.Main);
             return true;
@@ -169,8 +169,8 @@ namespace Wordania.Features.World
 
         public TileBase GetTileBase(int x, int y, WorldLayer layer)
         {
-            if(_data == null) Debug.Log("_data is null");
-            TileData data = _data.GetTile(x,y);
+            if(Data == null) Debug.Log("_data is null");
+            TileData data = Data.GetTile(x,y);
             int id = 0;
 
             if (layer == WorldLayer.Main) id = data.M;
@@ -187,8 +187,8 @@ namespace Wordania.Features.World
         }
         public Color32? GetTileColor(int x, int y, WorldLayer layer)
         {
-            if(_data == null) Debug.Log("_data is null");
-            TileData data = _data.GetTile(x,y);
+            if(Data == null) Debug.Log("_data is null");
+            TileData data = Data.GetTile(x,y);
             int id = 0;
 
             if (layer == WorldLayer.Main) id = data.M;
@@ -215,35 +215,35 @@ namespace Wordania.Features.World
         public Vector2 GetSpawnPoint()
         {
             return new Vector2(
-                _data.SpawnPoint.x * _settings.TileSize,
-                _data.SpawnPoint.y * _settings.TileSize
+                Data.SpawnPoint.x * _settings.TileSize,
+                Data.SpawnPoint.y * _settings.TileSize
                 );
         }
 
         public void CaptureState(GameSaveData saveData)
         {
-            saveData.World.Width = _data.Width;
-            saveData.World.Height = _data.Height;
-            int totalTiles = _data.Width * _data.Height;
+            saveData.World.Width = Data.Width;
+            saveData.World.Height = Data.Height;
+            int totalTiles = Data.Width * Data.Height;
             saveData.World.Tiles = new TileSaveData[totalTiles];
 
             for (int i = 0;i < totalTiles; i++)
             {
                 saveData.World.Tiles[i] = new(
-                    _data.Tiles[i].B,
-                    _data.Tiles[i].M,
-                    _data.Tiles[i].F
+                    Data.Tiles[i].B,
+                    Data.Tiles[i].M,
+                    Data.Tiles[i].F
                     );
             } 
 
             saveData.World.SpawnPoint = new int[2];
-            saveData.World.SpawnPoint[0] = _data.SpawnPoint.x;
-            saveData.World.SpawnPoint[1] = _data.SpawnPoint.y;
+            saveData.World.SpawnPoint[0] = Data.SpawnPoint.x;
+            saveData.World.SpawnPoint[1] = Data.SpawnPoint.y;
         }
 
         public void RestoreState(GameSaveData saveData)
         {
-            Debug.Assert(_data == null);
+            Debug.Assert(Data == null);
 
             _settings.Width = saveData.World.Width;
             _settings.Height = saveData.World.Height;
@@ -261,17 +261,17 @@ namespace Wordania.Features.World
                 return;
             }
 
-            _data = new(_settings.Width, _settings.Height);
+            Data = new(_settings.Width, _settings.Height);
 
-            int totalTiles = _data.Width * _data.Height;
+            int totalTiles = Data.Width * Data.Height;
             for (int i = 0; i < totalTiles; i++)
             {
-                _data.Tiles[i].B = saveData.World.Tiles[i].Background;
-                _data.Tiles[i].M = saveData.World.Tiles[i].Main;
-                _data.Tiles[i].F = saveData.World.Tiles[i].Foreground;
+                Data.Tiles[i].B = saveData.World.Tiles[i].Background;
+                Data.Tiles[i].M = saveData.World.Tiles[i].Main;
+                Data.Tiles[i].F = saveData.World.Tiles[i].Foreground;
             }  
 
-            _data.SpawnPoint = new Vector2Int(saveData.World.SpawnPoint[0], saveData.World.SpawnPoint[1]);
+            Data.SpawnPoint = new Vector2Int(saveData.World.SpawnPoint[0], saveData.World.SpawnPoint[1]);
         }
     }
 }

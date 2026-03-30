@@ -12,6 +12,7 @@ using Wordania.Features.Enemies.Core;
 using Wordania.Features.Services;
 using Wordania.Core.Gameplay;
 using Wordania.Core.Services;
+using Wordania.Features.World;
 namespace Wordania.Features.Combat.Core
 {
     public sealed class ProjectileSimulationService : IProjectileSimulationService, IDisposable, ITickable, ILateTickable
@@ -24,16 +25,25 @@ namespace Wordania.Features.Combat.Core
         private NativeList<ProjectileRuntimeData> _projectilesData = new(1000, Allocator.Persistent);
         private NativeQueue<ProjectileHitEvent> _hitEventsQueue = new(Allocator.Persistent);
         private NativeArray<TargetAABB> _currentTargets;
+        private IWorldCollisionJobService _world;
         private JobHandle _jobHandle;
         private readonly List<ProjectileView> _projectileViews = new();
         public event Action<ProjectileView> OnProjectileDeath;
 
-        public ProjectileSimulationService(IEntityRegistryService entityRegistry, IEntityTrackerService trackables, IProjectileDatabase projectileDatabase, HitRegisteredSignal hitSignal)
+        public ProjectileSimulationService
+            (
+            IEntityRegistryService entityRegistry,
+            IEntityTrackerService trackables,
+            IProjectileDatabase projectileDatabase,
+            HitRegisteredSignal hitSignal,
+            IWorldCollisionJobService world
+            )
         {
             _entities = entityRegistry;
             _trackables = trackables;
             _projectileDatabase = projectileDatabase;
             _hitSignal = hitSignal;
+            _world = world;
         }
         public void Dispose()
         {
@@ -60,7 +70,10 @@ namespace Wordania.Features.Combat.Core
                 DeltaTime = Time.deltaTime,
                 Targets = _currentTargets,
                 HitEventsQueue = _hitEventsQueue.AsParallelWriter(),
-                Projectiles = _projectilesData.AsArray()
+                Projectiles = _projectilesData.AsArray(),
+                WorldGrid = _world.GetGridForJob(),
+                GridWidth = _world.Width,
+                GridHeight = _world.Height,
             };
 
             _jobHandle = job.Schedule(_projectilesData.Length, 64);
