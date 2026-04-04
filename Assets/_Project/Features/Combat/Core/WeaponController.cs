@@ -9,8 +9,9 @@ using Wordania.Features.Combat.Signals;
 
 namespace Wordania.Features.Combat.Core
 {
-    public class WeaponController : MonoBehaviour // TEMPORARY ON PLAYER - LATER ON WEAPON PREFAB
+    public class WeaponController : MonoBehaviour
     {
+        [HideInInspector] public WeaponData Data;
         private IWeaponFireStrategy _strategy;
         private ProjectileFiredSignal _firedSignal;
 
@@ -22,16 +23,21 @@ namespace Wordania.Features.Combat.Core
         public void Construct(ProjectileFiredSignal firedSignal)
         {
             _firedSignal = firedSignal;
-            _strategy = new StraightFireStrategy(); // DEBUG
+        }
+        public void Initialize(WeaponData data, IWeaponFireStrategy strategy)
+        {
+            Data = data;
+            _strategy = strategy;
         }
         public bool Fire(WeaponFireContext context)
         {
-            if(Time.time < _lastFiredTime + context.weaponData.FireRate) return false;
+            if(Time.time < _lastFiredTime + Data.FireRate) return false;
             
             _lastFiredTime = Time.time;
             _spawnBuffer.Clear();
 
-            int projectilesToSpawn = _strategy.CalculateFireData(context, _spawnBuffer);
+
+            int projectilesToSpawn = _strategy.CalculateFireData(context, Data.Projectile, _spawnBuffer);
 
             for (int i = 0; i < projectilesToSpawn; i++)
             {

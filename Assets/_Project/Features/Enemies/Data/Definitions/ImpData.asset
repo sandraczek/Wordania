@@ -48,6 +48,7 @@ MonoBehaviour:
     DamageType: 0
     DamageSource: 0
     HitStunDuration: 0.2
+    InvincibilityDuration: 0.2
     GeneralResistance: 0
     PhysicalResistance: 0
     MagicalResistance: 0

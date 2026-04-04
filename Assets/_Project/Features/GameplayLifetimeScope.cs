@@ -28,6 +28,7 @@ using Wordania.Features.Combat.Core;
 using Wordania.Features.Combat.Signals;
 using Wordania.Core.Services;
 using Wordania.Features.Combat.Data;
+using Wordania.Features.Combat.FireStrategies;
 
 namespace Wordania.Features
 {
@@ -103,9 +104,12 @@ namespace Wordania.Features
             builder.RegisterEntryPoint<EntityTrackerService>(Lifetime.Scoped).As<IEntityTrackerService>();
             builder.Register<EnemyRegistryService>(Lifetime.Scoped).As<IEnemyRegistryService>();
 
-            //projectiles
+            //combat
+            builder.Register<StraightFireStrategy>(Lifetime.Singleton).As<IWeaponFireStrategy>();
+
             builder.RegisterInstance(_projectileFiredSignal);
             builder.RegisterInstance(_hitRegisteredSignal);
+            builder.Register<WeaponFactory>(Lifetime.Scoped).As<IWeaponFactory>();
             builder.RegisterEntryPoint<ProjectileSimulationService>(Lifetime.Scoped).As<IProjectileSimulationService>();
             builder.RegisterEntryPoint<ProjectileFactory>(Lifetime.Scoped).As<IProjectileFactory>();
 

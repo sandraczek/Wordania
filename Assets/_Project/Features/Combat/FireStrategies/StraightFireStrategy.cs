@@ -7,13 +7,14 @@ namespace Wordania.Features.Combat.FireStrategies
 {
     public sealed class StraightFireStrategy : IWeaponFireStrategy
     {
-        public int CalculateFireData(WeaponFireContext context, List<ProjectileSpawnData> resultsBuffer)
+        public WeaponType Type => WeaponType.Single;
+        public int CalculateFireData(WeaponFireContext context, ProjectileData data, List<ProjectileSpawnData> resultsBuffer)
         {
             resultsBuffer.Add(new ProjectileSpawnData
             {
                 Position = context.position,
                 Direction = context.direction,
-                Data = context.weaponData.Projectile,
+                Data = data,
                 DamageMultiplier = context.damageMultiplier,
                 InstigatorId = context.instigatorId,
                 TargetFactionMask = context.TargetFactionMask

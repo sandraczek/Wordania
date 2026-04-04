@@ -9,7 +9,7 @@ namespace Wordania.Features.Combat.Core
 {
     public interface IProjectileFactory
     {
-        void CreateProjectile(ProjectileSpawnData spawnData);
+        void Get(ProjectileSpawnData spawnData);
         UniTask PrewarmPoolAsync(ProjectileData data);
     }
 }

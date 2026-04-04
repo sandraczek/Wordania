@@ -6,6 +6,7 @@ namespace Wordania.Features.Combat.FireStrategies
 {
     public interface IWeaponFireStrategy
     {
-        public int CalculateFireData(WeaponFireContext context, List<ProjectileSpawnData> resultsBuffer);
+        WeaponType Type { get; }
+        public int CalculateFireData(WeaponFireContext context, ProjectileData projectileData, List<ProjectileSpawnData> resultsBuffer);
     }
 }

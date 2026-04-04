@@ -37,7 +37,7 @@ namespace Wordania.Features.Combat.Core
         
         public void Start()
         {
-            _signal.Subscribe(CreateProjectile);
+            _signal.Subscribe(Get);
             _simulationService.OnProjectileDeath += RemoveProjectile;
         }
         public void Dispose()
@@ -49,13 +49,13 @@ namespace Wordania.Features.Combat.Core
             _pools.Clear();
 
             if(_signal != null)
-                _signal.Unsubscribe(CreateProjectile);
+                _signal.Unsubscribe(Get);
 
             if(_simulationService != null)
                 _simulationService.OnProjectileDeath -= RemoveProjectile;
         }
 
-        public void CreateProjectile(ProjectileSpawnData spawnData)
+        public void Get(ProjectileSpawnData spawnData)
         {
             if (!_pools.TryGetValue(spawnData.Data.Id, out IObjectPool<ProjectileView> pool))
             {

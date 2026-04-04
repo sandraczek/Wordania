@@ -16,6 +16,7 @@ namespace Wordania.Core.Inputs
     // --- Events ---
     event Action<int> OnHotbarSlotPressed;
     event Action<bool> OnPrimaryActionHeld;
+    event Action<bool> OnSecondaryActionHeld;
     event Action OnCycleActionSettings;
     event Action OnToggleInventory;
     event Action OnToggleMap;

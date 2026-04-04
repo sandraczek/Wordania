@@ -16,10 +16,10 @@ MonoBehaviour:
     _editorId: test_projectile
     _hash: 1375304909
   BaseDamage: 10
-  Knockback: {x: 15, y: 7}
+  Knockback: {x: 5, y: 6}
   Speed: 50
   Lifetime: 4
   Piercing: 1
-  GravityScale: 0
+  GravityScale: 3
   damageType: 0
   Prefab: {fileID: 790785413992721850, guid: 0acbba31dea22434fb7eea9d850c6648, type: 3}

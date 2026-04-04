@@ -25,6 +25,7 @@ namespace Wordania.Core.Inputs
         // --- Events ---
         public event Action<int> OnHotbarSlotPressed;
         public event Action<bool> OnPrimaryActionHeld;
+        public event Action<bool> OnSecondaryActionHeld;
         public event Action OnCycleActionSettings;
         public event Action OnToggleInventory;
         public event Action OnToggleMap;
@@ -69,6 +70,11 @@ namespace Wordania.Core.Inputs
         {
             if (context.performed) OnPrimaryActionHeld?.Invoke(true);
             if (context.canceled) OnPrimaryActionHeld?.Invoke(false);
+        }
+        public void OnSecondaryAction(InputAction.CallbackContext context)
+        {
+            if (context.performed) OnSecondaryActionHeld?.Invoke(true);
+            if (context.canceled) OnSecondaryActionHeld?.Invoke(false);
         }
 
         public void OnPoint(InputAction.CallbackContext context)

@@ -95,6 +95,7 @@ namespace Wordania.Features
 
             _loadingScreen.UpdateProgress(0.55f,"Prewarming Pools"); //DEBUG - later biome based prewarm
             await _enemyFactory.PrewarmPoolAsync(_enemyToPrewarm);
+            //not prewarming projectiles and weapons
             
             _loadingScreen.UpdateProgress(0.7f,"Spawning Player");
             Vector3 spawnPos = _world.GetSpawnPoint(); 

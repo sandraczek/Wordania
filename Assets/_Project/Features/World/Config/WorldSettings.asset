@@ -15,8 +15,9 @@ MonoBehaviour:
   TileSize: 1
   Width: 1280
   Height: 704
-  Seed: 484940
+  Seed: 956995
   ChunkSize: 32
+  CollisionLayer: 3
   RenderingBatchSize: 10
   HeightMultiplier: 400
   SurfaceOffset: 300
