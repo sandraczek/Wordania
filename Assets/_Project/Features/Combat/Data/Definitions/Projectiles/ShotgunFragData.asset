@@ -16,11 +16,11 @@ MonoBehaviour:
     _editorId: shotgun_frag
     _hash: 2111780526
   Name: shotgun frag
-  BaseDamage: 8
+  BaseDamage: 12
   Knockback: {x: 5, y: 8}
-  Speed: 60
-  Lifetime: 0.3
+  Speed: 70
+  Lifetime: 0.24
   Piercing: 0
   GravityScale: 0
   damageType: 0
-  Prefab: {fileID: 790785413992721850, guid: c594138992b484e06b0d1269da0054bc, type: 3}
+  Prefab: {fileID: 790785413992721850, guid: 15e94137cd4f5425d8304124c90bd119, type: 3}

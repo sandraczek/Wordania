@@ -23,5 +23,6 @@ MonoBehaviour:
     Spread: 24
     BarrelWidth: 0.6
     ProjectileCount: 9
-    SpeedMultRange: 0.2
+    SpeedMultRange: 0.4
+    LifetimeMultRange: 1
     Projectile: {fileID: 11400000, guid: f2517745aa14d424fbf71c9c278da671, type: 2}

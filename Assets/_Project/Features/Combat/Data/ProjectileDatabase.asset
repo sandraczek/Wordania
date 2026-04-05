@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: ProjectileDatabase
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Combat.Data.ProjectilekDatabase
   _allProjectiles:
-  - {fileID: 11400000, guid: f5b0facbdc5da4ef5adba5a956b4fa22, type: 2}
   - {fileID: 11400000, guid: 1a2cd5bf481a04438a0f05f1244fb3f4, type: 2}
+  - {fileID: 11400000, guid: f2517745aa14d424fbf71c9c278da671, type: 2}
+  - {fileID: 11400000, guid: f5b0facbdc5da4ef5adba5a956b4fa22, type: 2}

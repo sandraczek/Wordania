@@ -16,10 +16,10 @@ MonoBehaviour:
     _editorId: small_bullet
     _hash: -1973571003
   Name: small bullet
-  BaseDamage: 2
+  BaseDamage: 3
   Knockback: {x: 3, y: 4}
   Speed: 60
-  Lifetime: 1.5
+  Lifetime: 1
   Piercing: 0
   GravityScale: 0
   damageType: 0
