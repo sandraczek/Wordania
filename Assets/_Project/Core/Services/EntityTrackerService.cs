@@ -9,9 +9,8 @@ using Wordania.Core.Services;
 
 namespace Wordania.Features.Services
 {
-    public class EntityTrackerService :IEntityTrackerService, IDisposable
+    public class EntityTrackerService :Registry<ITrackable>, IEntityTrackerService, IDisposable
     {
-        private readonly Dictionary<int, ITrackable> _registry = new();
         private NativeList<TargetAABB> _nativeList = new(1000, Allocator.Persistent);
 
         public void Dispose()
@@ -20,15 +19,6 @@ namespace Wordania.Features.Services
                 _nativeList.Dispose();
                 _nativeList = default;
             }
-        }
-        public void Register(ITrackable trackable)
-        {
-            _registry[trackable.InstanceId] = trackable;
-        }
-
-        public void Unregister(int entityId)
-        {
-            _registry.Remove(entityId);
         }
         public NativeArray<TargetAABB> GetTargetsForJob(Allocator allocator)
         {

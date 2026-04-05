@@ -11,10 +11,9 @@ namespace Wordania.Core.Gameplay
         public float2 Min;           // Bottom-Left corner of the hitbox
         public float2 Max;           // Top-Right corner of the hitbox
     }
-    public interface ITrackable
+    public interface ITrackable : IEntity
     {
         Bounds Hitbox { get; }
-        int InstanceId {get;}
         EntityFaction Faction {get;}
     }
 }
