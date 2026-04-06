@@ -16,6 +16,9 @@ using Wordania.Features.Enemies.Data;
 using Wordania.Features.Enemies.Core;
 using Wordania.Features.Mapping;
 using Wordania.Core.Inputs;
+using Wordania.Features.Bosses.Core;
+using Wordania.Features.Bosses.Data;
+using Wordania.Core.Identifiers;
 
 namespace Wordania.Features
 {
@@ -33,6 +36,8 @@ namespace Wordania.Features
         private readonly EnemyTemplate _enemyToPrewarm;
         private readonly IMapUpdateService _map;
         private readonly IWorldCollisionJobService _worldCollisionJob;
+        private readonly IBossSpawnerService _bossSpawner; // for testing
+        private readonly AssetId _bossToSpawn; // for testing
         private readonly int _saveSlot;
         public GameplayEntryPoint(
             ISaveService saveService,
@@ -47,6 +52,8 @@ namespace Wordania.Features
             EnemyTemplate enemyTemplate, //DEBUG
             IMapUpdateService mapUpdate, // temporary ?
             IWorldCollisionJobService worldCollisionJob,
+            IBossSpawnerService bossSpawner, // for testing
+            BossTemplate bossToSpawn, // for testing
             int loadFile
             )
         {
@@ -63,6 +70,8 @@ namespace Wordania.Features
             _map = mapUpdate;
             _saveSlot = loadFile;
             _worldCollisionJob = worldCollisionJob;
+            _bossSpawner = bossSpawner;
+            _bossToSpawn = bossToSpawn.Id;
 
         }
         public async UniTask StartAsync(System.Threading.CancellationToken cancellation)
@@ -108,6 +117,10 @@ namespace Wordania.Features
             await _loadingScreen.Hide();
 
             _inputReader.SetGameplayMode();
+
+            await UniTask.WaitForSeconds(5);
+
+            _bossSpawner.SpawnBoss(_bossToSpawn, _playerPrivider.PlayerTransform.position + new Vector3(5f,5f));
         }
     }
 }

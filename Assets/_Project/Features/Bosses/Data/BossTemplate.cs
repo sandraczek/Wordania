@@ -8,7 +8,7 @@ namespace Wordania.Features.Bosses.Data
 {
     public abstract class BossTemplate : DataAsset
     {
-        [field: SerializeField] public string Name {get; private set; }
+        [field: SerializeField] public string DisplayName {get; private set; }
         [field: SerializeField] public BossController Prefab { get; private set; }
 
 #if UNITY_EDITOR

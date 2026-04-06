@@ -19,6 +19,7 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         }
         public void Enter()
         {
+            _manager.IsAlive = false;
             _manager.OnDeathSequenceComplete();
         }
 

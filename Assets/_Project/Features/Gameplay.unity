@@ -176,8 +176,12 @@ MonoBehaviour:
   _savingIcon: {fileID: 579839866}
   _worldMapController: {fileID: 1956776456}
   _worldMapView: {fileID: 278490713}
-  _saveSlot: 9
-  _debugEnemyTemplate: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}
+  _bossRegistry: {fileID: 11400000, guid: 8a912eca5f4cf4419b77e99386ce5152, type: 2}
+  _bossDefeatedSignal: {fileID: 11400000, guid: ffeb1333a39ad4570b9da957a0ebfa49, type: 2}
+  _bossSpawnedSignal: {fileID: 11400000, guid: daa7150353f7b437d89737f3d2959a88, type: 2}
+  _saveSlot: 0
+  _enemyToPrewarm: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}
+  _bossToSpawn: {fileID: 11400000, guid: d58728627ae204fcda8e9a698aabdb95, type: 2}
 --- !u!4 &109496047
 Transform:
   m_ObjectHideFlags: 0

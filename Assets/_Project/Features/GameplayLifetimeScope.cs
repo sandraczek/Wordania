@@ -30,6 +30,9 @@ using Wordania.Features.Combat.Data;
 using Wordania.Features.Combat.FireStrategies;
 using Wordania.Features.Inventory.Events;
 using Wordania.Core.Data;
+using Wordania.Features.Bosses.Events;
+using Wordania.Features.Bosses.Data;
+using Wordania.Features.Bosses.Core;
 
 namespace Wordania.Features
 {
@@ -58,21 +61,29 @@ namespace Wordania.Features
         [SerializeField] private SavingIcon _savingIcon;
         [SerializeField] private WorldMapController _worldMapController;
         [SerializeField] private WorldMapView _worldMapView;
+        [SerializeField] private BossRegistry _bossRegistry;
+        [SerializeField] private BossDefeatedSignal _bossDefeatedSignal;
+        [SerializeField] private BossSpawnedSignal _bossSpawnedSignal;
 
         //debug
         [Header("Save Slot 0 For a New Game")]
         [Range(0,9)]
         [SerializeField] private int _saveSlot = 0;
-        [SerializeField] private EnemyTemplate _debugEnemyTemplate;
+        [SerializeField] private EnemyTemplate _enemyToPrewarm;
+        [SerializeField] private BossTemplate _bossToSpawn;
 
         protected override void Configure(IContainerBuilder builder)
         {
+            //asset registries
             _blockRegistry.Initialize();
             builder.RegisterInstance<IBlockDatabase>(_blockRegistry);
             _itemRegistry.Initialize();
             builder.RegisterInstance<IAssetRegistry<ItemData>>(_itemRegistry);
             _projectileRegistry.Initialize();
             builder.RegisterInstance<IAssetRegistry<ProjectileData>>(_projectileRegistry);
+            _bossRegistry.Initialize();
+            builder.RegisterInstance<IAssetRegistry<BossTemplate>>(_bossRegistry);
+
             builder.RegisterInstance<ICameraService>(_cameraService);
 
             //markers
@@ -133,8 +144,13 @@ namespace Wordania.Features
             builder.Register<GroundCollisionValidator>(Lifetime.Scoped).As<ISpawnValidator>();
             builder.Register<SpaceClearanceValidator>(Lifetime.Scoped).As<ISpawnValidator>();
             
-            builder.RegisterEntryPoint<EnemySpawnSystem>(Lifetime.Scoped).WithParameter(_debugEnemyTemplate);
+            builder.RegisterEntryPoint<EnemySpawnSystem>(Lifetime.Scoped).WithParameter(_enemyToPrewarm);
             builder.RegisterEntryPoint<EnemyCullingSystem>(Lifetime.Scoped);
+
+            //bosses
+            builder.RegisterInstance(_bossSpawnedSignal);
+            builder.RegisterInstance(_bossDefeatedSignal);
+            builder.Register<BossSpawnerService>(Lifetime.Scoped).As<IBossSpawnerService>();
 
             //TODO: move to HUD lifetime scope
             builder.RegisterInstance(_uiConfig);
@@ -165,14 +181,16 @@ namespace Wordania.Features
 
             builder.RegisterEntryPoint<GameplayEntryPoint>(Lifetime.Scoped)
             .WithParameter(_saveSlot)           // TEMPORARY withParameters
-            .WithParameter(_debugEnemyTemplate); //
+            .WithParameter(_enemyToPrewarm) //
+            .WithParameter(_bossToSpawn);
         }
     }
 }
     /*
     TODOS:
-    
+
     - refactor BlockDatabase
+    - refactor EntityRegistry
 
 
 
