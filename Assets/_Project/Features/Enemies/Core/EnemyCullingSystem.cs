@@ -32,18 +32,18 @@ namespace Wordania.Features.Enemies.Core
 
         private void PerformDespawnCheck()
         {
-            if (_player.PlayerTransform == null) return;
+            if (!_player.IsPlayerSpawned) return;
 
             _enemiesToRemove.Clear();
 
-            Vector2 playerPos = _player.PlayerTransform.position;
+            Vector2 playerPos = _player.Position;
             var activeEnemies = _registry.GetAll();
             float despawnRadiusSqr = _settings.DespawnRadius * _settings.DespawnRadius;
 
             foreach (var enemy in activeEnemies)
             {   
                 if(enemy.IsPersistent) continue;
-                
+
                 float distanceSqr = (enemy.Position - playerPos).sqrMagnitude;
 
                 if (distanceSqr > despawnRadiusSqr)

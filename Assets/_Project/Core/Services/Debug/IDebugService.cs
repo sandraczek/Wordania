@@ -14,5 +14,5 @@ namespace Wordania.Core.Services
         event Action<bool> OnShowChunksChanged;
         event Action<bool> OnGodModeChanged;
         void LogInformation(string message);
-}
+    }
 }

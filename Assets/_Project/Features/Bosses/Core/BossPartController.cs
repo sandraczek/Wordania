@@ -9,6 +9,7 @@ using Wordania.Core.Services;
 using Wordania.Core.Identifiers;
 using System;
 using Wordania.Features.Bosses.Yeinn.Data;
+using UnityEngine.UIElements;
 
 namespace Wordania.Features.Bosses.Yeinn.Parts
 {
@@ -34,6 +35,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         private Transform _dynamicTarget;
         private float _currentSpeed;
         public bool IsMoving {get; private set;}
+        private bool _rotateToTarget = false;
 
         public event Action OnDefeated;
         public bool IsDefeated { get; private set; } = false;
@@ -106,24 +108,53 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
                 return;
             }
 
-            if (!IsMoving) return;
+            if (IsMoving){
 
-            Vector2 currentTargetPos = _dynamicTarget != null 
-                ? (Vector2)_dynamicTarget.position 
-                : _staticTarget;
+                Vector2 currentTargetPos = _dynamicTarget != null 
+                    ? (Vector2)_dynamicTarget.position 
+                    : _staticTarget;
 
-            Vector2 newPos = Vector2.MoveTowards(
-                _rb.position, 
-                currentTargetPos, 
-                _currentSpeed * Time.fixedDeltaTime);
-                
-            _rb.MovePosition(newPos);
+                Vector2 newPos = Vector2.MoveTowards(
+                    _rb.position, 
+                    currentTargetPos, 
+                    _currentSpeed * Time.fixedDeltaTime);
 
-            if ((currentTargetPos - _rb.position).sqrMagnitude < 0.001f)
-            {
-                IsMoving = false;
-                _dynamicTarget = null;
+                _rb.MovePosition(newPos);
+
+                if ((currentTargetPos - newPos).sqrMagnitude < 0.001f)
+                {
+                    StopMovement();
+                }
             }
+
+            if (_rotateToTarget)
+            {
+                RotateToTarget();
+            }
+
+        }
+
+        /// <summary>
+        /// Sets rotation in degrees.
+        /// </summary>
+        public void SetRotation(float rotation)
+        {
+            _rb.rotation = rotation;
+        }
+        /// <summary>
+        /// Sets rotation once to a dynamic target or static target when invoked. 
+        /// </summary>
+        public void RotateToTarget()
+        {
+            Vector2 deltaPos;
+            if(_dynamicTarget != null)
+                deltaPos = (Vector2)_dynamicTarget.position - _rb.position;
+            else if(_staticTarget != null)
+                deltaPos = _staticTarget - _rb.position;
+            else return;
+
+            float direction = Vector2.SignedAngle(Vector2.right,deltaPos);
+            _rb.rotation = direction;
         }
 
         protected void SwitchState(IState newState)
@@ -159,11 +190,15 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         /// </summary>
         public void CommandMoveTo(Vector2 targetPosition, float speed)
         {
-
             StopMovement();
             _staticTarget = targetPosition;
             _currentSpeed = speed;
             IsMoving = true;
+        }
+        public void CommandMoveTo(Vector2 targetPosition, float speed,bool rotateToTarget)
+        {
+            CommandMoveTo(targetPosition,speed);
+            RotateToTarget();
         }
 
         /// <summary>
@@ -176,6 +211,11 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             _currentSpeed = speed;
             IsMoving = true;
         }
+        public void CommandTrack(Transform targetTransform, float speed, bool rotateToTarget)
+        {
+            CommandTrack(targetTransform, speed);
+            _rotateToTarget = rotateToTarget;
+        }
 
         /// <summary>
         /// Instantly snaps the physics body to the target's position every physics frame.
@@ -185,6 +225,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         {
             StopMovement();
             _lockedTarget = target;
+            IsMoving = true;
         }
 
         public void StopMovement()
@@ -193,6 +234,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             _dynamicTarget = null;
             _lockedTarget = null;
             _rb.linearVelocity = Vector2.zero;
+            _rotateToTarget = false;
         }
     }
 }

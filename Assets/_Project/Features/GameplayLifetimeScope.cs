@@ -185,13 +185,22 @@ namespace Wordania.Features
         }
     }
 }
+#if UNITY_EDITOR
+
     /*
     TODOS:
 
     - refactor BlockDatabase
     - refactor EntityRegistry
     - fix conflict with dash invincibility
+    - player visual (change dependency and move data to settings)
+    - consult visual rotation change in boss part controler
+    - somehow make projectiles hitbox not a point
 
+    features:
+    weapon selector
 
 
     */
+
+#endif

@@ -52,7 +52,7 @@ namespace Wordania.Features.Enemies.Spawning
         {
             if(!_playerProvider.IsPlayerSpawned) return false;
 
-            Vector2 origin = _playerProvider.PlayerTransform.position;
+            Vector2 origin = _playerProvider.Position;
             Vector2 candidatePosition = GetRandomPointInAnnulus(origin, _settings.InnerViewportRadius, _settings.OuterSpawnRadius);
 
             foreach (var validator in _validators)

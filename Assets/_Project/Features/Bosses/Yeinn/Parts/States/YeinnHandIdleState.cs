@@ -26,7 +26,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         }
         public void Enter()
         {
-            _hand.CommandTrack(_anchor,_data.returnSpeed);
+            _hand.CommandTrack(_anchor,_data.returnSpeed, true);
         }
 
         public void Update()
@@ -38,6 +38,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             if(_hand.IsMoving) return;
 
             _hand.CommandLockTo(_anchor);
+            _hand.SetRotation(-90f);
         }
         public void Exit()
         {

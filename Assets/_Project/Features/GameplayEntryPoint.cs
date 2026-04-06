@@ -120,7 +120,7 @@ namespace Wordania.Features
 
             await UniTask.WaitForSeconds(5);
 
-            _bossSpawner.SpawnBoss(_bossToSpawn, _playerPrivider.PlayerTransform.position + new Vector3(5f,5f));
+            _bossSpawner.SpawnBoss(_bossToSpawn, _playerPrivider.Position + new Vector2(5f,5f));
         }
     }
 }

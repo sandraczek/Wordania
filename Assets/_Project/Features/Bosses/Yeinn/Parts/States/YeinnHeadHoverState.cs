@@ -44,9 +44,9 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         }
         private void SetTarget()
         {
-            Vector3 overPlayer = _player.PlayerTransform.position + (Vector3)_data.VectorFromPlayer;
+            Vector2 overPlayer = _player.Position + _data.VectorFromPlayer;
             Vector3 distance = _data.MaxDistanceFromPlayer * Random.value * Vector3.right;
-            Vector2 target = overPlayer + Random.rotation * distance;
+            Vector2 target = overPlayer + (Vector2)(Random.rotation * distance);
 
             _head.CommandMoveTo(target, _data.Speed);
         }

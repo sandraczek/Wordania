@@ -18,35 +18,12 @@ MonoBehaviour:
   <DisplayName>k__BackingField: Yeinn the Abhorrent
   <Prefab>k__BackingField: {fileID: 8657881721284743941, guid: a6b3b60a2c78a4899b69b4e289c6c854, type: 3}
   <Head>k__BackingField:
-    MaxHealth: 300
+    MaxHealth: 500
     ContactDamage: 30
     Knockback: {x: 15, y: 7}
     DamageType: 0
     DamageSource: 0
-    GeneralResistance: 0.7
-    PhysicalResistance: 0
-    MagicalResistance: 0
-    EnvironmentalResistance: 0
-    FallResistance: 1
-    <Slam>k__BackingField:
-      TimeToAttack: 0.5
-      LiftHeight: 10
-      SlamSpeed: 50
-      MaxDistanceBelowDynamicPlayer: 20
-      RecoveryDuration: 2.4
-    <Chase>k__BackingField:
-      Speed: 15
-    <Hover>k__BackingField:
-      Speed: 6
-      VectorFromPlayer: {x: 0, y: 5}
-      MaxDistanceFromPlayer: 10
-  <LeftHand>k__BackingField:
-    MaxHealth: 100
-    ContactDamage: 15
-    Knockback: {x: 10, y: 6}
-    DamageType: 0
-    DamageSource: 0
-    GeneralResistance: 0.2
+    GeneralResistance: 0.9
     PhysicalResistance: 0
     MagicalResistance: 0
     EnvironmentalResistance: 0
@@ -55,8 +32,31 @@ MonoBehaviour:
       TimeToAttack: 0.7
       LiftHeight: 10
       SlamSpeed: 50
-      MaxDistanceBelowDynamicPlayer: 20
+      MaxDistanceBelowDynamicPlayer: 12
       RecoveryDuration: 1
+    <Chase>k__BackingField:
+      Speed: 11
+    <Hover>k__BackingField:
+      Speed: 6
+      VectorFromPlayer: {x: 0, y: 15}
+      MaxDistanceFromPlayer: 10
+  <LeftHand>k__BackingField:
+    MaxHealth: 300
+    ContactDamage: 15
+    Knockback: {x: 10, y: 6}
+    DamageType: 0
+    DamageSource: 0
+    GeneralResistance: 0.2
+    PhysicalResistance: 0.5
+    MagicalResistance: 0
+    EnvironmentalResistance: 0
+    FallResistance: 1
+    <Slam>k__BackingField:
+      TimeToAttack: 0.7
+      LiftHeight: 10
+      SlamSpeed: 50
+      MaxDistanceBelowDynamicPlayer: 15
+      RecoveryDuration: 0.2
     <Swipe>k__BackingField:
       TimeToAttack: 1.4
       DistanceFromPlayer: 20
@@ -65,34 +65,34 @@ MonoBehaviour:
     <Idle>k__BackingField:
       returnSpeed: 20
   <RightHand>k__BackingField:
-    MaxHealth: 100
+    MaxHealth: 300
     ContactDamage: 15
     Knockback: {x: 10, y: 6}
     DamageType: 1
     DamageSource: 0
     GeneralResistance: 0.2
     PhysicalResistance: 0
-    MagicalResistance: 0
+    MagicalResistance: 0.5
     EnvironmentalResistance: 0
     FallResistance: 1
     <Slam>k__BackingField:
       TimeToAttack: 0.7
-      LiftHeight: 2
+      LiftHeight: 10
       SlamSpeed: 50
       MaxDistanceBelowDynamicPlayer: 20
-      RecoveryDuration: 1
+      RecoveryDuration: 0.2
     <Swipe>k__BackingField:
-      TimeToAttack: 1.4
-      DistanceFromPlayer: 20
-      AttackDistance: 50
+      TimeToAttack: 0.7
+      DistanceFromPlayer: 6
+      AttackDistance: 15
       SwipeSpeed: 70
     <Idle>k__BackingField:
-      returnSpeed: 15
+      returnSpeed: 20
   <PhaseOneData>k__BackingField:
-    <InitialCooldown>k__BackingField: 6
+    <InitialCooldown>k__BackingField: 7
     <AttackInterval>k__BackingField: 5
     <SwipeAttackProbability>k__BackingField: 0.5
   <PhaseTwoData>k__BackingField:
     <InitialCooldown>k__BackingField: 3
-    <SlamInterval>k__BackingField: 4
+    <SlamInterval>k__BackingField: 7
     <HeadResistance>k__BackingField: 0.3

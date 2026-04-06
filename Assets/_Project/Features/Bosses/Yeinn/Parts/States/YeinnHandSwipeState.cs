@@ -38,7 +38,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             if(_data.TimeToAttack > 0f){
                 speed = (_startingPos - _hand.Position).magnitude / _data.TimeToAttack;
             }
-            _hand.CommandMoveTo(_startingPos, Mathf.Min(_data.SwipeSpeed, speed));
+            _hand.CommandMoveTo(_startingPos, Mathf.Min(_data.SwipeSpeed, speed), true);
 
             _currentStep = AttackStep.Windup;
         }
@@ -64,8 +64,9 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
                 case AttackStep.Windup:
                     _currentStep = AttackStep.Swiping;
 
-                    Vector2 target = _startingPos - _currentDirection * _data.AttackDistance * Vector2.right;
+                    Vector2 target = _startingPos + _currentDirection * _data.AttackDistance * Vector2.right;
                     _hand.CommandMoveTo(target, _data.SwipeSpeed);
+                    _hand.SetRotation(_currentDirection > 0f ? 0f:180f);
                     break;
                 case AttackStep.Swiping:
                     _hand.CommandIdleAttack();
@@ -75,7 +76,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         private Vector2 GetStartingPos()
         {
             _currentDirection = Mathf.Sign(Random.value - 0.5f);
-            return (Vector2)_player.PlayerTransform.position + _data.DistanceFromPlayer * _currentDirection * Vector2.right;
+            return (Vector2)_player.Position - _data.DistanceFromPlayer * _currentDirection * Vector2.right;
         }
     }
 }

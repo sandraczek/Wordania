@@ -10,6 +10,8 @@ namespace Wordania.Core.Gameplay
     {
         Transform PlayerTransform { get; }
         IReadOnlyHealth ReadOnlyHealth { get; }
+        public Vector2 Position {get;}
+        public Bounds Hitbox {get;}
         bool IsPlayerSpawned { get; }
         event Action OnPlayerRegistered;
         event Action OnPlayerUnregistered;

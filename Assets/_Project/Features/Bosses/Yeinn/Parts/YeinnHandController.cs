@@ -31,6 +31,8 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             _slamState = new YeinnHandSlamState(_data.Slam, this, _playerProvider);
 
             SwitchState(_idleState);
+
+            SetRotation(-90f);
         }
 
         public void CommandSwipeAttack() => SwitchState(_swipeState);

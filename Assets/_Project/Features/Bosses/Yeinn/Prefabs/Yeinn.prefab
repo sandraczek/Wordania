@@ -103,6 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35faba091b56f46309387ea9e8626302, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Bosses.Yeinn.Visual.YeinnHeadVisual
+  _settings: {fileID: 11400000, guid: 020f99baf495940219d712533e210f6c, type: 2}
   _head: {fileID: 1213167312700419301}
 --- !u!1 &3170939742736850728
 GameObject:
@@ -130,13 +131,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3170939742736850728}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: 0.9238796, w: -0.38268325}
+  m_LocalRotation: {x: 0, y: 0, z: -0.38268343, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 20, y: 20, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7399947016100298037}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 225}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45}
 --- !u!212 &6182781492100228172
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -207,6 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6dcfc7a3b1004d8ea1f6ee4603482d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Bosses.Yeinn.Visual.YeinnHandVisual
+  _settings: {fileID: 11400000, guid: 381acf4a7df704a2a9e823cf785e0c53, type: 2}
   _hand: {fileID: 4065107932980420365}
 --- !u!1 &5364879974194386506
 GameObject:
@@ -237,14 +239,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5364879974194386506}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.3, y: -3.06, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -5.46, y: 4.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7958585060019977655}
   m_Father: {fileID: 8104158624688390197}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!50 &3333733247353533238
 Rigidbody2D:
   serializedVersion: 5
@@ -437,14 +439,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6246155204138833783}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.48, y: -3.06, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 4.33, y: 4.29, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2318657943717574626}
   m_Father: {fileID: 8104158624688390197}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!50 &2875999764835117307
 Rigidbody2D:
   serializedVersion: 5
@@ -631,6 +633,7 @@ GameObject:
   - component: {fileID: 315116667427209745}
   - component: {fileID: 5084685580024174545}
   - component: {fileID: 1213167312700419301}
+  - component: {fileID: 8110356704037960565}
   m_Layer: 7
   m_Name: Head
   m_TagString: Untagged
@@ -717,7 +720,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.1605835, y: 1.8917084}
+  m_Offset: {x: -0.1605835, y: 2.0523376}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -727,7 +730,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 7.246216, y: 7.1390686}
+  m_Size: {x: 7.246216, y: 4.7476807}
   m_EdgeRadius: 0
 --- !u!114 &5084685580024174545
 MonoBehaviour:
@@ -755,6 +758,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bab9ae230d82411f9fa4b2da2b051f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Bosses.Yeinn.Parts.YeinnHeadController
+--- !u!114 &8110356704037960565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7829507493734343879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46e39ea590899429b82be01f5e4c038a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Wordania.Core::Wordania.Core.Combat.ContactDamageDealer
 --- !u!1 &8010862316154147587
 GameObject:
   m_ObjectHideFlags: 0
@@ -781,13 +796,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8010862316154147587}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: 0.9238796, w: -0.38268325}
+  m_LocalRotation: {x: 0, y: 0, z: -0.38268343, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 20, y: 20, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8002347155921836207}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 225}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45}
 --- !u!212 &1476917487218012006
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -858,4 +873,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6dcfc7a3b1004d8ea1f6ee4603482d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Bosses.Yeinn.Visual.YeinnHandVisual
+  _settings: {fileID: 11400000, guid: 381acf4a7df704a2a9e823cf785e0c53, type: 2}
   _hand: {fileID: 8411053245061246724}

@@ -23,12 +23,14 @@ namespace Wordania.Features.Player
         public event Action OnPlayerRegistered;
         public event Action OnPlayerUnregistered;
 
-        public Transform PlayerTransform { get; private set; }
+        public Transform PlayerTransform {get; private set;}
         private Player _player;
         private PlayerSaveData _cachedSaveData;
         private readonly Transform _parent;
         public IReadOnlyHealth ReadOnlyHealth { get; private set; }
-        public bool IsPlayerSpawned => PlayerTransform != null; 
+        public bool IsPlayerSpawned => _player != null; 
+        public Vector2 Position => _player.Position;
+        public Bounds Hitbox => _player.Hitbox;
         public string SaveId => "Player";
 
         public PlayerService(GameObject playerPrefab, IObjectResolver resolver, ISaveService save, MarkerEntityParent playerParent, IEntityTrackerService entityTracker, IEntityRegistryService entityRegistry)
@@ -66,22 +68,28 @@ namespace Wordania.Features.Player
 
             GameObject playerInstance = _resolver.Instantiate(_playerPrefab, position, Quaternion.identity, _parent);
             playerInstance.name = "Player";
-            PlayerTransform = playerInstance.transform;
 
+            PlayerTransform = playerInstance.transform;
             
-            if(playerInstance.TryGetComponent(out Player player))
+            if(!playerInstance.TryGetComponent(out Player player))
             {
-                if(_cachedSaveData != null)
-                {
-                    player.InitializeLoaded(_cachedSaveData.CurrentHealth,_cachedSaveData.MaxHealth);
-                }
-                else
-                {
-                    player.InitializeNew();
-                }
-                _player = player;
-                ReadOnlyHealth = player.GetComponent<HealthComponent>();
+                Debug.LogError("Tried spawning player with no Player component. Aborting");
+                GameObject.Destroy(playerInstance);
+                return;
             }
+
+            if(_cachedSaveData != null)
+            {
+                player.InitializeLoaded(_cachedSaveData.CurrentHealth,_cachedSaveData.MaxHealth);
+            }
+            else
+            {
+                player.InitializeNew();
+            }
+
+            _player = player;
+            ReadOnlyHealth = player.GetComponent<HealthComponent>();
+            
 
             _entityRegistry.Register(player.InstanceId, player);
             _entityTracker.Register(player);

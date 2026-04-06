@@ -13,6 +13,7 @@ namespace Wordania.Core.Gameplay
     }
     public interface ITrackable : IEntity
     {
+        Vector2 Position {get;}
         Bounds Hitbox { get; }
         EntityFaction Faction {get;}
     }

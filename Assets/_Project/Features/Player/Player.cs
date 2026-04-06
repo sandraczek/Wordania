@@ -36,6 +36,7 @@ namespace Wordania.Features.Player
         private PlayerConfig _config;
         private PlayerService _playerService;
         public Bounds Hitbox => _controller.GetBounds();
+        public Vector2 Position => _controller.GetBounds().center;
         public int InstanceId {get; private set;}
         public EntityFaction Faction {get; private set;} = EntityFaction.Player;
 
