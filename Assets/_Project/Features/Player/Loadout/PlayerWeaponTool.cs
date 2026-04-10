@@ -7,7 +7,7 @@ using Wordania.Core.Identifiers;
 using Wordania.Features.Combat.Core;
 using Wordania.Features.Combat.Data;
 
-namespace Wordania.Features.Player.Interaction
+namespace Wordania.Features.Player.Loadout
 {
     public class PlayerWeaponTool : MonoBehaviour, IToolActionExecutor // on player's hand. Later - POCO?
     {
@@ -22,19 +22,19 @@ namespace Wordania.Features.Player.Interaction
         }
         public bool ExecutePrimaryAction(Vector2 targetWorldPos, int instigatorId)
         {
-            if(_currentWeapon == null) return false;
+            if (_currentWeapon == null) return false;
 
             Vector2 aimDirection = (targetWorldPos - (Vector2)_attachmentPoint.position).normalized;
 
             // ----------------------------- TEMPORARY NO DMG MULTIPLIER
             WeaponFireContext context = new()
-                {
-                    position = _attachmentPoint.position,
-                    direction = aimDirection,
-                    damageMultiplier = 1f,
-                    instigatorId = instigatorId,
-                    TargetFactionMask = EntityFaction.Enemy
-                };
+            {
+                position = _attachmentPoint.position,
+                direction = aimDirection,
+                damageMultiplier = 1f,
+                instigatorId = instigatorId,
+                TargetFactionMask = EntityFaction.Enemy
+            };
             return _currentWeapon.Fire(context);
         }
         public bool ExecuteSecondaryAction(Vector2 targetWorldPos, int instigatorId) => false;
@@ -43,10 +43,10 @@ namespace Wordania.Features.Player.Interaction
 
         public void BindWeapon(WeaponData data)
         {
-            if(data == null) UnbindWeapon();
+            if (data == null) UnbindWeapon();
 
             _currentWeapon = _factory.GetWeapon(data);
-            
+
             Transform weaponTransform = _currentWeapon.transform;
             weaponTransform.SetParent(_attachmentPoint);
             weaponTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
@@ -62,7 +62,7 @@ namespace Wordania.Features.Player.Interaction
         }
         public void OnEquip()
         {
-            
+
         }
         public void OnUnequip()
         {

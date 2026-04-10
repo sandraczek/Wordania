@@ -6,12 +6,12 @@ namespace Wordania.Core.Inputs
 {
 
     [CreateAssetMenu(fileName = "InputReader", menuName = "Game/Input Reader")]
-    public sealed class InputReader : 
+    public sealed class InputReader :
         ScriptableObject,
         GameInput.IPlayerActions,
         GameInput.IDebugActions,
         GameInput.IHUDActions,
-        IInputReader, 
+        IInputReader,
         IDisposable
     {
         private GameInput _inputActions;
@@ -30,7 +30,7 @@ namespace Wordania.Core.Inputs
         public event Action OnToggleInventory;
         public event Action OnToggleMap;
 
-            // debug service
+        // debug service
         public event Action OnToggleChunks;
         public event Action OnToggleGodMode;
 
@@ -38,7 +38,7 @@ namespace Wordania.Core.Inputs
         {
             if (_inputActions != null) return;
             _inputActions = new GameInput();
-            
+
             _inputActions.Player.SetCallbacks(this);
             _inputActions.Debug.SetCallbacks(this);
             _inputActions.HUD.SetCallbacks(this);
@@ -55,13 +55,13 @@ namespace Wordania.Core.Inputs
         public void Dispose()
         {
             DisableAllInput();
-            if(_inputActions == null) return;
+            if (_inputActions == null) return;
             _inputActions?.Dispose();
             _inputActions = null;
         }
         public void DisableAllInput()
         {
-            if(_inputActions == null) return;
+            if (_inputActions == null) return;
             _inputActions.Disable();
         }
 
@@ -107,6 +107,13 @@ namespace Wordania.Core.Inputs
         public void OnSlot1(InputAction.CallbackContext context) { if (context.performed) OnHotbarSlotPressed?.Invoke(1); }
         public void OnSlot2(InputAction.CallbackContext context) { if (context.performed) OnHotbarSlotPressed?.Invoke(2); }
         public void OnSlot3(InputAction.CallbackContext context) { if (context.performed) OnHotbarSlotPressed?.Invoke(3); }
+        public void OnSlot4(InputAction.CallbackContext context) { if (context.performed) OnHotbarSlotPressed?.Invoke(4); }
+        public void OnSlot5(InputAction.CallbackContext context) { if (context.performed) OnHotbarSlotPressed?.Invoke(5); }
+        public void OnSlot6(InputAction.CallbackContext context) { if (context.performed) OnHotbarSlotPressed?.Invoke(6); }
+        public void OnSlot7(InputAction.CallbackContext context) { if (context.performed) OnHotbarSlotPressed?.Invoke(7); }
+        public void OnSlot8(InputAction.CallbackContext context) { if (context.performed) OnHotbarSlotPressed?.Invoke(8); }
+        public void OnSlot9(InputAction.CallbackContext context) { if (context.performed) OnHotbarSlotPressed?.Invoke(9); }
+        public void OnSlot0(InputAction.CallbackContext context) { if (context.performed) OnHotbarSlotPressed?.Invoke(0); }
 
         public void OnShowInventory(InputAction.CallbackContext context)
         {
@@ -124,11 +131,11 @@ namespace Wordania.Core.Inputs
 
         public void OnShowChunks(InputAction.CallbackContext context)
         {
-            if(context.performed) OnToggleChunks?.Invoke();
+            if (context.performed) OnToggleChunks?.Invoke();
         }
         public void OnSetGodMode(InputAction.CallbackContext context)
         {
-            if(context.performed) OnToggleGodMode?.Invoke();
+            if (context.performed) OnToggleGodMode?.Invoke();
         }
 
         public void SetGameplayMode()

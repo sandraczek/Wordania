@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Wordania.Features.Player.Interaction
+namespace Wordania.Features.Player.Loadout
 {
     public interface IToolActionExecutor
     {

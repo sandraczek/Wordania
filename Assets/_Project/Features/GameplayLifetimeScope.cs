@@ -67,7 +67,7 @@ namespace Wordania.Features
 
         //debug
         [Header("Save Slot 0 For a New Game")]
-        [Range(0,9)]
+        [Range(0, 9)]
         [SerializeField] private int _saveSlot = 0;
         [SerializeField] private EnemyTemplate _enemyToPrewarm;
         [SerializeField] private BossTemplate _bossToSpawn;
@@ -103,7 +103,7 @@ namespace Wordania.Features
             builder.RegisterInstance(_lootSignal);
             builder.RegisterEntryPoint<WorldService>(Lifetime.Scoped).As<IWorldService>();
             builder.RegisterEntryPoint<WorldCollisionJobService>(Lifetime.Scoped).As<IWorldCollisionJobService>();
-            
+
             builder.Register<ChunkFactory>(Lifetime.Scoped)
                 .As<IChunkFactory>()
                 .WithParameter(_chunkPrefab);
@@ -142,7 +142,7 @@ namespace Wordania.Features
 
             builder.Register<GroundCollisionValidator>(Lifetime.Scoped).As<ISpawnValidator>();
             builder.Register<SpaceClearanceValidator>(Lifetime.Scoped).As<ISpawnValidator>();
-            
+
             builder.RegisterEntryPoint<EnemySpawnSystem>(Lifetime.Scoped).WithParameter(_enemyToPrewarm);
             builder.RegisterEntryPoint<EnemyCullingSystem>(Lifetime.Scoped);
 
@@ -175,7 +175,7 @@ namespace Wordania.Features
 
             //
             //DEBUG
-            if(TryGetComponent(out DebugSaveComponent saveComponent))
+            if (TryGetComponent(out DebugSaveComponent saveComponent))
                 builder.RegisterComponent(saveComponent).WithParameter(_saveSlot);
 
             builder.RegisterEntryPoint<GameplayEntryPoint>(Lifetime.Scoped)
@@ -187,20 +187,20 @@ namespace Wordania.Features
 }
 #if UNITY_EDITOR
 
-    /*
-    TODOS:
+/*
+TODOS:
 
-    - refactor BlockDatabase
-    - refactor EntityRegistry
-    - fix conflict with dash invincibility
-    - player visual (change dependency and move data to settings)
-    - consult visual rotation change in boss part controler
-    - somehow make projectiles hitbox not a point
+- refactor BlockDatabase
+- refactor EntityRegistry
+- fix conflict with dash invincibility
+- player visual (change dependency and move data to settings)
+- consult visual rotation change in boss part controler
+- somehow make projectiles hitbox not a point
 
-    features:
-    weapon selector
+features:
+weapon selector
 
 
-    */
+*/
 
 #endif

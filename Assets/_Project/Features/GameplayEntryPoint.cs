@@ -77,50 +77,51 @@ namespace Wordania.Features
         public async UniTask StartAsync(System.Threading.CancellationToken cancellation)
         {
             Debug.Log("<color=green>[GAMEPLAY] Start Sequence Initiated...</color>");
-            
+
             _inputReader.DisableAllInput();
 
             _loadingScreen.Show();
             _loadingScreen.UpdateProgress(0f, "Loading");
-            if(_saveSlot == 0){
+            if (_saveSlot == 0)
+            {
                 _loadingScreen.UpdateProgress(0.1f, "Generating World");
                 _world.RandomizeSeed();
-                await _world.GenerateWorldAsync(cancellation); 
+                await _world.GenerateWorldAsync(cancellation);
             }
             else
             {
-                _loadingScreen.UpdateProgress(0.1f,"Loading Save");
+                _loadingScreen.UpdateProgress(0.1f, "Loading Save");
                 await _save.LoadGameAsync(_save.DefaultPrefix + _saveSlot.ToString());
             }
-            
-            _loadingScreen.UpdateProgress(0.4f,"Rendering World");
-            await _worldRenderer.RenderInitialWorldAsync(cancellation); 
+
+            _loadingScreen.UpdateProgress(0.4f, "Rendering World");
+            await _worldRenderer.RenderInitialWorldAsync(cancellation);
             await UniTask.WaitForFixedUpdate();
 
             Time.timeScale = 0f;
 
             _worldCollisionJob.InitializeCollisionArray();
-            await _map.RenderInitialMapAsync(cancellation); 
+            await _map.RenderInitialMapAsync(cancellation);
 
-            _loadingScreen.UpdateProgress(0.55f,"Prewarming Pools"); //DEBUG - later biome based prewarm
+            _loadingScreen.UpdateProgress(0.55f, "Prewarming Pools"); //DEBUG - later biome based prewarm
             await _enemyFactory.PrewarmPoolAsync(_enemyToPrewarm);
             //not prewarming projectiles and weapons
-            
-            _loadingScreen.UpdateProgress(0.7f,"Spawning Player");
-            Vector3 spawnPos = _world.GetSpawnPoint(); 
+
+            _loadingScreen.UpdateProgress(0.7f, "Spawning Player");
+            Vector3 spawnPos = _world.GetSpawnPoint();
             _playerSpawner.SpawnPlayer(spawnPos);
 
-            _loadingScreen.UpdateProgress(0.9f,"Setting Camera");
+            _loadingScreen.UpdateProgress(0.9f, "Setting Camera");
             _camera.FollowTarget(_playerPrivider.PlayerTransform);
 
-            _loadingScreen.UpdateProgress(1f,"Ready");
+            _loadingScreen.UpdateProgress(1f, "Ready");
             await _loadingScreen.Hide();
 
             _inputReader.SetGameplayMode();
 
-            await UniTask.WaitForSeconds(5);
+            await UniTask.WaitForSeconds(50);
 
-            _bossSpawner.SpawnBoss(_bossToSpawn, _playerPrivider.Position + new Vector2(5f,5f));
+            _bossSpawner.SpawnBoss(_bossToSpawn, _playerPrivider.Position + new Vector2(5f, 5f));
         }
     }
 }
