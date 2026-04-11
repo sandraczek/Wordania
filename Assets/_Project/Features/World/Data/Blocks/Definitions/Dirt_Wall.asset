@@ -10,14 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1705e728b662142f2b645fc9163ab4ad, type: 3}
-  m_Name: Grass_Wall_Block
+  m_Name: Dirt_Wall
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.World.BlockData
-  ID: 1001
-  Tile: {fileID: 11400000, guid: 8565882b70f484a298e74058f4ab8fbe, type: 2}
+  _id:
+    _editorId: dirt_wall
+    _hash: -789811427
+  Tile: {fileID: 11400000, guid: 096672c7da87042aeb0b001262d08ae0, type: 2}
   MapColor:
     serializedVersion: 2
-    rgba: 4278204929
-  Hardness: 2
-  recipe: {fileID: 11400000, guid: f02504538b2fa48e28f78880f903ba48, type: 2}
+    rgba: 4279117116
+  Hardness: 3
+  recipe: {fileID: 11400000, guid: 5c96946f895344e01ab9a89b117e98fb, type: 2}
   loot: {fileID: 11400000, guid: cd4759eabb7074d0eb1afed3afc738f5, type: 2}
-  lootAmount: 2
+  lootAmount: 3

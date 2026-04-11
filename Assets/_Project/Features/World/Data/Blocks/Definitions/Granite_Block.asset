@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1705e728b662142f2b645fc9163ab4ad, type: 3}
   m_Name: Granite_Block
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.World.BlockData
-  ID: 4
+  _id:
+    _editorId: granite_block
+    _hash: 388069479
   Tile: {fileID: 11400000, guid: 8e925bb3325854e51a94d50ddfefa1ba, type: 2}
   MapColor:
     serializedVersion: 2

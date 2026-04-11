@@ -19,7 +19,6 @@ using Wordania.Features.Enemies.Core;
 using Wordania.Features.Enemies.Data;
 using Wordania.Features.Enemies.Config;
 using Wordania.Features.Enemies.Spawning;
-using Wordania.Core.Mapping;
 using Wordania.Features.Mapping;
 using Wordania.Features.HUD.Mapping;
 using Wordania.Core.HUD;
@@ -33,6 +32,9 @@ using Wordania.Core.Data;
 using Wordania.Features.Bosses.Events;
 using Wordania.Features.Bosses.Data;
 using Wordania.Features.Bosses.Core;
+using Wordania.Features.World.Config;
+using Wordania.Features.World.Data;
+using Wordania.Features.World.Passes;
 
 namespace Wordania.Features
 {
@@ -41,6 +43,7 @@ namespace Wordania.Features
         [SerializeField] private MarkerEntityParent _entitiesParent;
         [SerializeField] private MarkerDynamicParent _dynamicParent;
         [SerializeField] private MarkerChunkParent _chunksParent;
+        [SerializeField] private WorldSettings _worldSettings;
         [SerializeField] private PlayerConfig _playerConfig;
         [SerializeField] private EnemySystemSettings _enemySpawnSettings;
         [SerializeField] private HUDConfig _uiConfig;
@@ -76,7 +79,7 @@ namespace Wordania.Features
         {
             //asset registries
             _blockRegistry.Initialize();
-            builder.RegisterInstance<IBlockDatabase>(_blockRegistry);
+            builder.RegisterInstance<IBlockRegistry>(_blockRegistry);
             _itemRegistry.Initialize();
             builder.RegisterInstance<IAssetRegistry<ItemData>>(_itemRegistry);
             _projectileRegistry.Initialize();
@@ -92,9 +95,12 @@ namespace Wordania.Features
             builder.RegisterComponent(_chunksParent);
 
             //world
+            builder.RegisterInstance(_worldSettings);
+            builder.Register<WorldPassBiomeMap>(Lifetime.Scoped).As<IWorldGenerationPass>();
             builder.Register<WorldPassTerrain>(Lifetime.Scoped).As<IWorldGenerationPass>();
             builder.Register<WorldPassCave>(Lifetime.Scoped).As<IWorldGenerationPass>();
-            builder.Register<WorldPassVariations>(Lifetime.Scoped).As<IWorldGenerationPass>();
+            builder.Register<WorldPassFeature>(Lifetime.Scoped).As<IWorldGenerationPass>();
+            builder.Register<WorldPassTransition>(Lifetime.Scoped).As<IWorldGenerationPass>();
             builder.Register<WorldPassBarrier>(Lifetime.Scoped).As<IWorldGenerationPass>();
 
             builder.Register<WorldGenerator>(Lifetime.Scoped).As<IWorldGenerator>();
@@ -190,16 +196,10 @@ namespace Wordania.Features
 /*
 TODOS:
 
-- refactor BlockDatabase
-- refactor EntityRegistry
 - fix conflict with dash invincibility
 - player visual (change dependency and move data to settings)
 - consult visual rotation change in boss part controler
 - somehow make projectiles hitbox not a point
-
-features:
-weapon selector
-
 
 */
 

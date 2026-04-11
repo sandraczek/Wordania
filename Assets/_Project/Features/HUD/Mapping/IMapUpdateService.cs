@@ -6,7 +6,6 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using Wordania.Core.Config;
-using Wordania.Core.Mapping;
 using Wordania.Features.World;
 
 namespace Wordania.Features.Mapping

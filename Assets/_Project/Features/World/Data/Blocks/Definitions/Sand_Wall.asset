@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1705e728b662142f2b645fc9163ab4ad, type: 3}
+  m_Name: Sand_Wall
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.World.BlockData
+  _id:
+    _editorId: sand_wall
+    _hash: -1494923264
+  Tile: {fileID: 11400000, guid: 1cef7c5c906004500a5c846509d21f06, type: 2}
+  MapColor:
+    serializedVersion: 2
+    rgba: 4280712344
+  Hardness: 1
+  recipe: {fileID: 0}
+  loot: {fileID: 11400000, guid: 0a66a74d856cb44679704ed76d1af76a, type: 2}
+  lootAmount: 8

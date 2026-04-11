@@ -1,44 +1,55 @@
-using System.Diagnostics;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Wordania.Core.Config;
+using Wordania.Core.Identifiers;
+using Wordania.Features.World.Config;
+using Wordania.Features.World.Data;
 
 namespace Wordania.Features.World
 {
     public sealed class WorldPassCave : IWorldGenerationPass
     {
         private readonly WorldSettings _settings;
-        private readonly IBlockDatabase _database;  // for future id refactor
-        public WorldPassCave(WorldSettings settings, IBlockDatabase database)
+        public WorldPassCave(WorldSettings settings)
         {
             _settings = settings;
-            _database = database;
         }
         public async UniTask Execute(CancellationToken token, WorldData data)
         {
-            int airId = 0;
-            var stopwatch = Stopwatch.StartNew();
-            
-            for (int x = 0; x < _settings.Width; x++)
-            {
-                for (int y = 0; y < _settings.Height; y++)
-                {
-                    float currentDepth = (float)y / _settings.Height;
-                    float depthMask = Mathf.InverseLerp(_settings.CaveStartDepth, _settings.CaveFullDensityDepth, currentDepth);
+            AssetId airId = new(0);
 
-                    float macroNoise = GetNoise(x, y, _settings.Seed, _settings.MacroScale);
-                    float microNoise = GetNoise(x, y, _settings.Seed + 1, _settings.MicroScale);
-                    
-                    float combinedNoise = (macroNoise * _settings.MacroWeight) + (microNoise * _settings.MicroWeight);
+            int width = _settings.Width;
+            int height = _settings.Height;
+            int seed = _settings.Seed;
+            float microScale = _settings.MicroScale;
+            float macroScale = _settings.MacroScale;
+            float microWeight = _settings.MacroWeight;
+            float macroWeight = _settings.MacroWeight;
+            float caveStartDepth = _settings.CaveStartDepth;
+            float caveFullDensityDepth = _settings.CaveFullDensityDepth;
+            float globalCaveDensity = _settings.GlobalCaveDensity;
+
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    if (data.GetTile(x, y).M.Hash == 0) continue;
+
+                    float currentDepth = (float)y / height;
+                    float depthMask = Mathf.InverseLerp(caveStartDepth, caveFullDensityDepth, currentDepth);
+
+                    float macroNoise = GetNoise(x, y, seed, macroScale);
+                    float microNoise = GetNoise(x, y, seed + 1, microScale);
+
+                    float combinedNoise = (macroNoise * macroWeight) + (microNoise * microWeight);
                     combinedNoise *= depthMask;
 
-                    if (combinedNoise > _settings.GlobalCaveDensity)
+                    if (combinedNoise > globalCaveDensity)
                     {
-                        if (data.GetTile(x,y).M != airId)
-                        {
-                            data.GetTile(x,y).M = airId;
-                        }
+                        data.GetTile(x, y).M = airId;
                     }
                 }
 
@@ -46,7 +57,7 @@ namespace Wordania.Features.World
                 {
                     await UniTask.Yield();
                     token.ThrowIfCancellationRequested();
-                    
+
                     stopwatch.Restart();
                 }
             }

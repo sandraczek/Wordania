@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57ff41d865aef416398660426fa0f4c4, type: 3}
+  m_Name: PlainsBiomePalette 1
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.World.Config.BiomePalette
+  <SurfaceBlock>k__BackingField: {fileID: 11400000, guid: 2c8c6a670e61a4dbb882e00f461fb8b9, type: 2}
+  <SurfaceWall>k__BackingField: {fileID: 11400000, guid: 4e5be0d21a36b430aa237d04ae3b75fd, type: 2}
+  <SubSurfaceBlock>k__BackingField: {fileID: 11400000, guid: 5d154869ac4e94c23997e3d3d5cfbe3f, type: 2}
+  <SubSurfaceWall>k__BackingField: {fileID: 11400000, guid: 1ecdcbddd74fc4a418dd65c9462987c2, type: 2}
+  <UndergroundBlock>k__BackingField: {fileID: 11400000, guid: 28948730022624828ac5373b290d985d, type: 2}
+  <UndergroundWall>k__BackingField: {fileID: 11400000, guid: a88a74e71c89c409e9726a50c901820b, type: 2}
+  <BarrierBlock>k__BackingField: {fileID: 11400000, guid: 03949464310c74b2abb9910d4d1e237d, type: 2}

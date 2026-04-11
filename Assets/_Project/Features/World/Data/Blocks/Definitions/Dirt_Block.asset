@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1705e728b662142f2b645fc9163ab4ad, type: 3}
   m_Name: Dirt_Block
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.World.BlockData
-  ID: 2
+  _id:
+    _editorId: dirt_block
+    _hash: 365134506
   Tile: {fileID: 11400000, guid: d7ba9659749144e478b9ca75918efd07, type: 2}
   MapColor:
     serializedVersion: 2

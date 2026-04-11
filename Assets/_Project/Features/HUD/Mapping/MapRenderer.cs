@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-using Wordania.Core.Mapping;
+using Wordania.Features.Mapping;
 
 namespace Wordania.Features.HUD.Mapping
 {
@@ -31,6 +31,6 @@ namespace Wordania.Features.HUD.Mapping
                 _displayImage.texture = _map.MapTexture;
             }
         }
-        
+
     }
 }

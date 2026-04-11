@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using VContainer;
 using Wordania.Core.Config;
 using VContainer.Unity;
+using Wordania.Features.World.Config;
 
-namespace Wordania.Core.Mapping
+namespace Wordania.Features.Mapping
 {
-    public sealed class MapService : IMapService, IStartable, ILateTickable 
+    public sealed class MapService : IMapService, IStartable, ILateTickable
     {
         private readonly WorldSettings _worldSettings;
-        
+
         private Texture2D _mapTexture;
         private Color32[] _buffer;
         private bool _isDirty;

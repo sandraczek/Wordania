@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1705e728b662142f2b645fc9163ab4ad, type: 3}
   m_Name: Grass_Block
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.World.BlockData
-  ID: 1
+  _id:
+    _editorId: grass_block
+    _hash: -820520637
   Tile: {fileID: 11400000, guid: 040415c3f4065412eb9a1d3519d37153, type: 2}
   MapColor:
     serializedVersion: 2

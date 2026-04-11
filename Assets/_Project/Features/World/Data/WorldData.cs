@@ -2,18 +2,21 @@ using System;
 using NUnit.Framework.Constraints;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Wordania.Features.World.Config;
 
-namespace Wordania.Features.World
+namespace Wordania.Features.World.Data
 {
     public sealed class WorldData
     {
         public Vector2Int SpawnPoint;
         public readonly int Width;
         public readonly int Height;
-        public TileData[] Tiles;
+        public readonly BiomePalette[] BiomeMap;
+        public readonly TileData[] Tiles;
         public WorldData(int width, int height)
         {
             Tiles = new TileData[width * height];
+            BiomeMap = new BiomePalette[width * height];
             Width = width;
             Height = height;
 
@@ -30,7 +33,6 @@ namespace Wordania.Features.World
         public ref TileData GetTile(int x, int y)
         {
             Debug.Assert(Width != 0);
-            if(x >= Width || x < 0 || y >= Height || y < 0) Debug.Log(x.ToString() + ", " + y.ToString());
             return ref Tiles[x + y * Width];
         }
     }

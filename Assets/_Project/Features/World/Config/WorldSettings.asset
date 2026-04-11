@@ -15,10 +15,12 @@ MonoBehaviour:
   TileSize: 1
   Width: 1280
   Height: 704
-  Seed: 862792
+  Seed: 833423
   ChunkSize: 32
   CollisionLayer: 3
   RenderingBatchSize: 10
+  BiomeConfig: {fileID: 11400000, guid: 5e6a8626d9243413ba49514ea508d59f, type: 2}
+  BiomeNoiseFrequency: 0.003
   HeightMultiplier: 400
   SurfaceOffset: 300
   SurfaceFrequency: 0.001
@@ -31,15 +33,17 @@ MonoBehaviour:
   dirt_stoneTransitionMargin: 4
   dirt_wall_Terrain_Scale: 0.01
   dirt_wall_Terrain_Amplitude: 16
-  GlobalCaveDensity: 0.52
+  GlobalCaveDensity: 0.6
   MacroScale: 0.04
   MacroWeight: 0.6
   MicroScale: 0.14
   MicroWeight: 0.4
   CaveStartDepth: 0.85
   CaveFullDensityDepth: 0.65
-  GraniteScale: 0.08
-  GraniteThreshold: 0.01
+  FeatureConfig: {fileID: 11400000, guid: 3d3fb0fc6c48642c3bead42605da9b2f, type: 2}
+  _replaceableBlocks:
+  - {fileID: 11400000, guid: 28948730022624828ac5373b290d985d, type: 2}
+  - {fileID: 11400000, guid: ac2e6dc4b81884de1bec820e48ea8cf3, type: 2}
   DirtStoneScale: 0.06
   DirtStoneThreshold: 0.35
   MainLayerName: Main

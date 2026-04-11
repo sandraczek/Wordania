@@ -78,7 +78,7 @@ namespace Wordania.Features.Player.Loadout
             Collider2D hit = Physics2D.OverlapBox(cellCenter, _player.Config.BuildingPreventCheckSize, 0f, _player.Config.PreventBuildingLayer);
             if (hit != null) return false;
 
-            if (!_world.TryPlaceBlock(targetWorldPos, _buildingBlocks[_currentBlockIndex].ID)) return false;
+            if (!_world.TryPlaceBlock(targetWorldPos, _buildingBlocks[_currentBlockIndex].Id)) return false;
 
             foreach (Ingredient ingredient in _buildingBlocks[_currentBlockIndex].recipe.Requirements)
             {

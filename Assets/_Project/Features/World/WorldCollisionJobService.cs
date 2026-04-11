@@ -5,6 +5,7 @@ using Unity.Jobs;
 using UnityEngine;
 using VContainer.Unity;
 using Wordania.Core.Config;
+using Wordania.Features.World.Config;
 
 namespace Wordania.Features.World
 {
@@ -26,7 +27,7 @@ namespace Wordania.Features.World
         }
         public void Start()
         {
-            _world.OnChunkChanged += HandleChunkChanged; 
+            _world.OnChunkChanged += HandleChunkChanged;
         }
         public void Dispose()
         {
@@ -39,18 +40,18 @@ namespace Wordania.Features.World
         }
         private void HandleChunkChanged(Vector2Int chunkPos, WorldLayer layer)
         {
-            if(_collisionGrid == null)
+            if (_collisionGrid == null)
             {
                 Debug.LogError("WorldCollisionJobService: You must initialize Collision Grid first!");
                 return;
             }
-            if((layer & WorldLayer.Main) == 0) return;
+            if ((layer & WorldLayer.Main) == 0) return;
 
             _pendingModifications.Enqueue(chunkPos);
         }
         public void LateTick()
         {
-            if(_job == null) Debug.LogError("Job is Uninitialized");
+            if (_job == null) Debug.LogError("Job is Uninitialized");
 
             if (_pendingModifications.Count > 0)
             {
@@ -72,21 +73,21 @@ namespace Wordania.Features.World
                 for (int x = 0; x < size; x++)
                 {
                     int i = worldChunkI + y * _settings.Width + x;
-                    _collisionGrid[i] = _world.Data.Tiles[i].M > 0;
+                    _collisionGrid[i] = _world.Data.Tiles[i].M.Hash != 0;
                 }
             }
         }
         public void InitializeCollisionArray()
         {
-            if(_world == null) Debug.LogError("WorldService is null");
-            if(_world.Data == null) Debug.LogError("WorldData is null");
-            
+            if (_world == null) Debug.LogError("WorldService is null");
+            if (_world.Data == null) Debug.LogError("WorldData is null");
+
             int length = _world.Data.Width * _world.Data.Height;
             _collisionGrid = new(length, Allocator.Persistent);
 
             for (int i = 0; i < length; i++)
             {
-                _collisionGrid[i] = _world.Data.Tiles[i].M > 0;
+                _collisionGrid[i] = _world.Data.Tiles[i].M.Hash != 0;
             }
         }
 

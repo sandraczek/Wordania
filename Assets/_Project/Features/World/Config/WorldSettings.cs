@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Wordania.Core.Attributes;
+using Wordania.Core.Identifiers;
 
-namespace Wordania.Core.Config
+namespace Wordania.Features.World.Config
 {
     [CreateAssetMenu(fileName = "WorldSettings", menuName = "World/WorldSettings")]
     public sealed class WorldSettings : ScriptableObject
@@ -15,6 +17,11 @@ namespace Wordania.Core.Config
         [Layer] public int CollisionLayer;
         [Header("Rendering")]
         public int RenderingBatchSize = 10;
+
+        [Header("Biomes")]
+        public WorldBiomeConfiguration BiomeConfig;
+        public float BiomeNoiseFrequency; // = 0.01f;
+
         [Header("Terrain")]
         public float HeightMultiplier; // = 50f;
         public int SurfaceOffset; // = half of height
@@ -33,17 +40,18 @@ namespace Wordania.Core.Config
         public float dirt_wall_Terrain_Amplitude;
 
         [Header("Caves")]
-        public float GlobalCaveDensity; // = 0.5f;
-        public float MacroScale; // = 0.02f;
+        public float GlobalCaveDensity; // = 0.6f;
+        public float MacroScale; // = 0.04f;
         public float MacroWeight; // = 0.6f;
-        public float MicroScale; // = 0.12f;
+        public float MicroScale; // = 0.14f;
         public float MicroWeight; // = 0.4f;
-        public float CaveStartDepth; // = 0.8f;
-        public float CaveFullDensityDepth; // = 0.6f;
+        public float CaveStartDepth; // = 0.85f;
+        public float CaveFullDensityDepth; // = 0.65f;
 
-        [Header("Variations")]
-        public float GraniteScale; // = 0.04f;
-        public float GraniteThreshold; // = 0.05f;
+        [Header("Features")]
+        public WorldFeatureConfiguration FeatureConfig;
+        [SerializeField] private List<BlockData> _replaceableBlocks = new();
+        [HideInInspector] public readonly HashSet<AssetId> ReplaceableBlockIds = new();
         public float DirtStoneScale; // = 0.04f;
         public float DirtStoneThreshold; // = 0.05f;
 
@@ -53,7 +61,7 @@ namespace Wordania.Core.Config
         public string DamageLayerName = "Damage";
         public string ForegroundLayerName = "Foreground";
 
-        public Vector2Int WorldToGrid(Vector3 worldPos) 
+        public Vector2Int WorldToGrid(Vector3 worldPos)
         {
             return new Vector2Int(
                 Mathf.FloorToInt(worldPos.x / TileSize),
@@ -61,7 +69,7 @@ namespace Wordania.Core.Config
             );
         }
 
-        public Vector3 GridToWorld(int x, int y) 
+        public Vector3 GridToWorld(int x, int y)
         {
             return new Vector3(
                 (x * TileSize) + (TileSize * 0.5f),
@@ -69,5 +77,16 @@ namespace Wordania.Core.Config
                 0
             );
         }
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ReplaceableBlockIds.Clear();
+            foreach (BlockData block in _replaceableBlocks)
+            {
+                if (block == null) continue;
+                ReplaceableBlockIds.Add(block.Id);
+            }
+        }
+#endif
     }
 }

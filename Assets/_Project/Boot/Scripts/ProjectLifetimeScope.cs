@@ -13,7 +13,6 @@ namespace Wordania.Boot
 {
     public sealed class ProjectLifetimeScope : LifetimeScope
     {
-        [SerializeField] private WorldSettings _worldSettings;
         [SerializeField] private DebugSettings _debugSettings;
         [SerializeField] private InputReader _inputReader;
         protected override void Configure(IContainerBuilder builder)
@@ -25,8 +24,6 @@ namespace Wordania.Boot
             builder.RegisterInstance<IInputReader>(_inputReader);
             _inputReader.Initialize();
             builder.Register<JsonSaveService>(Lifetime.Singleton).As<ISaveService>();
-
-            builder.RegisterInstance(_worldSettings);
 
             builder.RegisterEntryPoint<GameBootstrapper>();
         }

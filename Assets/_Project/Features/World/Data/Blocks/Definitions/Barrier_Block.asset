@@ -12,8 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1705e728b662142f2b645fc9163ab4ad, type: 3}
   m_Name: Barrier_Block
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.World.BlockData
-  ID: -1
+  _id:
+    _editorId: barrier_block
+    _hash: 580181674
   Tile: {fileID: 11400000, guid: 56731479339aa4d068f828a89d2b56b9, type: 2}
+  MapColor:
+    serializedVersion: 2
+    rgba: 0
   Hardness: 1e+9
   recipe: {fileID: 0}
   loot: {fileID: 0}

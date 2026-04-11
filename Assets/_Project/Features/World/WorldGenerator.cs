@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Wordania.Core.Config;
+using Wordania.Features.World.Config;
+using Wordania.Features.World.Data;
 
 namespace Wordania.Features.World
 {
     public sealed class WorldGenerator : IWorldGenerator
     {
         private readonly WorldSettings _settings;
+        public readonly BiomePalette[] BiomeMap;
         private readonly IEnumerable<IWorldGenerationPass> _generationPipeline;
         public WorldGenerator(WorldSettings settings, IEnumerable<IWorldGenerationPass> pipeline)
         {
@@ -21,7 +24,7 @@ namespace Wordania.Features.World
 
             WorldData worldData = new(_settings.Width, _settings.Height);
 
-            foreach (var pass in _generationPipeline) 
+            foreach (var pass in _generationPipeline)
             {
                 await pass.Execute(token, worldData);
             }

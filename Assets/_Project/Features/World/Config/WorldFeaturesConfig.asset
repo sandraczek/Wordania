@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32986b229b7e34c0dacc3ae0141874ec, type: 3}
+  m_Name: WorldFeaturesConfig
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.World.Config.WorldFeatureConfiguration
+  <Ores>k__BackingField: []
+  <StoneVariations>k__BackingField:
+  - FeatureBlock: {fileID: 11400000, guid: c8d9887c8a618481093519ec5709ed59, type: 2}
+    MinClusterSize: 1
+    MaxClusterSize: 10
+    SpawnChance: 0.005
+    MinDepth: 0.12
+    MaxDepth: 1
+  - FeatureBlock: {fileID: 11400000, guid: 5d154869ac4e94c23997e3d3d5cfbe3f, type: 2}
+    MinClusterSize: 150
+    MaxClusterSize: 300
+    SpawnChance: 0.0003
+    MinDepth: 0
+    MaxDepth: 1
+  - FeatureBlock: {fileID: 11400000, guid: a15f13d08cbc44381b286379ca46a9a5, type: 2}
+    MinClusterSize: 150
+    MaxClusterSize: 300
+    SpawnChance: 0.0001
+    MinDepth: 0
+    MaxDepth: 1

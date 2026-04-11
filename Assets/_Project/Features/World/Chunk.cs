@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using VContainer;
 using Wordania.Core.Config;
+using Wordania.Features.World.Config;
 
 namespace Wordania.Features.World
 {
@@ -33,9 +34,9 @@ namespace Wordania.Features.World
 
             float worldX = coord.x * _settings.ChunkSize;
             float worldY = coord.y * _settings.ChunkSize;
-            
+
             transform.position = new Vector3(worldX, worldY, 0);
-            
+
             if (!_isInitialized)
             {
                 PrepareCache();
@@ -57,7 +58,7 @@ namespace Wordania.Features.World
                     index++;
                 }
             }
-            
+
             _mainMap.gameObject.layer = _settings.CollisionLayer;
         }
         private void UpdateLayer(Tilemap targetMap, WorldLayer layerType)
@@ -97,12 +98,13 @@ namespace Wordania.Features.World
     }
 
     [System.Flags]
-    public enum WorldLayer {
+    public enum WorldLayer
+    {
         None = 0,
         Main = 1 << 0,
         Background = 1 << 1,
-        Damage = 1 << 2,     
-        Foreground = 1 << 3,     
-        All = ~0             
+        Damage = 1 << 2,
+        Foreground = 1 << 3,
+        All = ~0
     }
 }

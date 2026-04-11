@@ -3,49 +3,52 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Wordania.Core.Config;
+using Wordania.Core.Identifiers;
+using Wordania.Features.World.Config;
+using Wordania.Features.World.Data;
 
 namespace Wordania.Features.World
 {
-    public sealed class WorldPassVariations : IWorldGenerationPass
+    public sealed class WorldPassTransition : IWorldGenerationPass
     {
         private readonly WorldSettings _settings;
-        private readonly IBlockDatabase _database;  // for future id refactor
-        public WorldPassVariations(WorldSettings settings, IBlockDatabase database)
+        public WorldPassTransition(WorldSettings settings)
         {
             _settings = settings;
-            _database = database;
         }
         public async UniTask Execute(CancellationToken token, WorldData data)
         {
-            int stoneId = 3;
-            int dirtId = 2;
-            int graniteId = 4;
+            BiomePalette currentPalette = _settings.BiomeConfig.DefaultFallbackBiome;
+            AssetId subSurfaceBlockId = currentPalette.SubSurfaceBlock.Id;
+            AssetId subSurfaceWallId = currentPalette.SubSurfaceBlock.Id;
+            AssetId undergroundBlockId = currentPalette.SubSurfaceBlock.Id;
+            AssetId undergroundWallId = currentPalette.SubSurfaceBlock.Id;
+
+            int width = _settings.Width;
 
             var stopwatch = Stopwatch.StartNew();
-            
+
             for (int x = 0; x < _settings.Width; x++)
             {
                 for (int y = 0; y < _settings.Height; y++)
                 {
-                    float graniteNoise = GetNoise(x, y, _settings.Seed + 2, _settings.GraniteScale);
-                    float graniteValue = Mathf.Abs(graniteNoise - 0.5f);
-
-                    if (graniteValue < _settings.GraniteThreshold)
+                    BiomePalette localPalette = data.BiomeMap[x + y * width];
+                    if (localPalette != currentPalette)
                     {
-                        if (data.GetTile(x,y).M == stoneId)
-                        {
-                            data.GetTile(x,y).M = graniteId;
-                            continue;
-                        }
+                        currentPalette = localPalette;
+                        subSurfaceBlockId = currentPalette.SubSurfaceBlock.Id;
+                        subSurfaceWallId = currentPalette.SubSurfaceWall.Id;
+                        undergroundBlockId = currentPalette.UndergroundBlock.Id;
+                        undergroundWallId = currentPalette.UndergroundWall.Id;
                     }
                     float stoneNoise = GetNoise(x, y, _settings.Seed + 2, _settings.DirtStoneScale);
                     float stoneValue = Mathf.Abs(stoneNoise - 0.5f);
 
                     if (stoneValue > _settings.DirtStoneThreshold)
                     {
-                        if (data.GetTile(x,y).M == dirtId)
+                        if (data.GetTile(x, y).M == subSurfaceBlockId)
                         {
-                            data.GetTile(x,y).M = stoneId;
+                            data.GetTile(x, y).M = undergroundBlockId;
                             continue;
                         }
                     }
@@ -55,7 +58,7 @@ namespace Wordania.Features.World
                 {
                     await UniTask.Yield();
                     token.ThrowIfCancellationRequested();
-                    
+
                     stopwatch.Restart();
                 }
             }

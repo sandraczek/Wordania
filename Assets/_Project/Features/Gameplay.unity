@@ -156,6 +156,7 @@ MonoBehaviour:
   _entitiesParent: {fileID: 362334588}
   _dynamicParent: {fileID: 437710529}
   _chunksParent: {fileID: 1027612558}
+  _worldSettings: {fileID: 11400000, guid: e9faa1548b60a48f4b02264a5b5776c8, type: 2}
   _playerConfig: {fileID: 11400000, guid: cc39e62af189f4db39dd7d35481f27a2, type: 2}
   _enemySpawnSettings: {fileID: 11400000, guid: c77d18375950242558a20fdf4b16c6ad, type: 2}
   _uiConfig: {fileID: 11400000, guid: 28c4b285bdee34ff5acd4c12d75b6d74, type: 2}

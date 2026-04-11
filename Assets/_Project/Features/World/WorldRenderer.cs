@@ -7,6 +7,7 @@ using Wordania.Features.Markers;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Wordania.Core.Config;
+using Wordania.Features.World.Config;
 
 namespace Wordania.Features.World
 {
@@ -16,7 +17,7 @@ namespace Wordania.Features.World
         private readonly IWorldService _world;
         private readonly Transform _chunksParent;
         private readonly IChunkFactory _factory;
-   
+
         private Chunk[,] _chunks;
 
         private readonly CancellationTokenSource _cts = new();
@@ -58,7 +59,7 @@ namespace Wordania.Features.World
                 {
                     token.ThrowIfCancellationRequested();
 
-                    _chunks[x, y] = _factory.Create(new Vector2Int(x,y), _chunksParent);
+                    _chunks[x, y] = _factory.Create(new Vector2Int(x, y), _chunksParent);
                 }
 
                 await UniTask.Yield(); //Yielding after a column is rendered
@@ -82,10 +83,10 @@ namespace Wordania.Features.World
         }
         private void ChunkRefresh(Vector2Int pos, WorldLayer layer)
         {
-            Chunk chunk = _chunks[pos.x,pos.y];
+            Chunk chunk = _chunks[pos.x, pos.y];
             chunk.Refresh(layer);
         }
-    
+
         public async UniTask RenderInitialWorldAsync(CancellationToken token)
         {
             await CreateChunksAsync(token);
