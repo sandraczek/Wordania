@@ -157,6 +157,8 @@ MonoBehaviour:
   _dynamicParent: {fileID: 437710529}
   _chunksParent: {fileID: 1027612558}
   _worldSettings: {fileID: 11400000, guid: e9faa1548b60a48f4b02264a5b5776c8, type: 2}
+  _lightChangedSignal: {fileID: 11400000, guid: eb3c0476fa30f49719cdb2432457a730, type: 2}
+  _daySettings: {fileID: 11400000, guid: 008e561bbce3f48258823ff259d5f389, type: 2}
   _playerConfig: {fileID: 11400000, guid: cc39e62af189f4db39dd7d35481f27a2, type: 2}
   _enemySpawnSettings: {fileID: 11400000, guid: c77d18375950242558a20fdf4b16c6ad, type: 2}
   _uiConfig: {fileID: 11400000, guid: 28c4b285bdee34ff5acd4c12d75b6d74, type: 2}
@@ -180,7 +182,7 @@ MonoBehaviour:
   _bossRegistry: {fileID: 11400000, guid: 8a912eca5f4cf4419b77e99386ce5152, type: 2}
   _bossDefeatedSignal: {fileID: 11400000, guid: ffeb1333a39ad4570b9da957a0ebfa49, type: 2}
   _bossSpawnedSignal: {fileID: 11400000, guid: daa7150353f7b437d89737f3d2959a88, type: 2}
-  _saveSlot: 9
+  _saveSlot: 0
   _enemyToPrewarm: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}
   _bossToSpawn: {fileID: 11400000, guid: d58728627ae204fcda8e9a698aabdb95, type: 2}
 --- !u!4 &109496047

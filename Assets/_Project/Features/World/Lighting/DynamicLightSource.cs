@@ -2,7 +2,7 @@
 using UnityEngine;
 using VContainer;
 
-namespace Wordania.World.Lighting
+namespace Wordania.Features.World.Lighting
 {
     public class DynamicLightSource : MonoBehaviour
     {
@@ -22,13 +22,11 @@ namespace Wordania.World.Lighting
         private void OnEnable()
         {
             _lightManager?.RegisterLight(this);
-            Debug.Log("Registering");
         }
 
         private void OnDisable()
         {
             _lightManager?.UnregisterLight(this);
-            Debug.Log("UnRegistering");
         }
     }
 }

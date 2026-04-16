@@ -35,8 +35,9 @@ using Wordania.Features.Bosses.Core;
 using Wordania.Features.World.Config;
 using Wordania.Features.World.Data;
 using Wordania.Features.World.Passes;
-using Wordania.World.Lighting;
 using UnityEngine.UI;
+using Wordania.Features.World.Lighting;
+using Wordania.Features.Day;
 
 namespace Wordania.Features
 {
@@ -46,6 +47,8 @@ namespace Wordania.Features
         [SerializeField] private MarkerDynamicParent _dynamicParent;
         [SerializeField] private MarkerChunkParent _chunksParent;
         [SerializeField] private WorldSettings _worldSettings;
+        [SerializeField] private LightChangedSignal _lightChangedSignal;
+        [SerializeField] private DaySettings _daySettings;
         [SerializeField] private PlayerConfig _playerConfig;
         [SerializeField] private EnemySystemSettings _enemySpawnSettings;
         [SerializeField] private HUDConfig _uiConfig;
@@ -106,10 +109,16 @@ namespace Wordania.Features
             builder.Register<WorldPassBarrier>(Lifetime.Scoped).As<IWorldGenerationPass>();
 
             //lighting
+            builder.RegisterInstance(_lightChangedSignal);
             builder.RegisterEntryPoint<StaticLightingService>(Lifetime.Scoped).As<IStaticLightingService>();
+            builder.RegisterEntryPoint<SkyLightService>(Lifetime.Scoped).As<ISkyLightService>();
             builder.RegisterEntryPoint<GlobalLightmapRenderer>(Lifetime.Scoped).As<ILightmapRenderer>();
             builder.RegisterEntryPoint<DynamicLightingService>(Lifetime.Scoped).As<IDynamicLightingService>();
             builder.RegisterEntryPoint<LightmapPresenter>(Lifetime.Scoped);
+
+            //day
+            builder.RegisterInstance(_daySettings);
+            builder.RegisterEntryPoint<DayNightCycle>(Lifetime.Scoped);
 
             builder.Register<WorldGenerator>(Lifetime.Scoped).As<IWorldGenerator>();
             builder.RegisterComponentInHierarchy<Grid>();
@@ -209,6 +218,7 @@ TODOS:
 - consult visual rotation change in boss part controler
 - somehow make projectiles hitbox not a point
 - make boss stop after player dies
+- fix magic color in light shader graph
 
 features:
 boss spawning

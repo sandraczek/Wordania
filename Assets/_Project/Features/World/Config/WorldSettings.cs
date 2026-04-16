@@ -11,6 +11,7 @@ namespace Wordania.Features.World.Config
         public float TileSize = 1f;
         public int Width;
         public int Height;
+        public int OverworldStartHeight;
 
         public const int MaxSeed = 1000000;
         [Range(0, MaxSeed)] public int Seed;

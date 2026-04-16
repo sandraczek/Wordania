@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer.Unity;
 using Wordania.Features.World;
 using Wordania.Features.World.Config;
 using Wordania.Features.World.Data;
 
-namespace Wordania.World.Lighting
+namespace Wordania.Features.World.Lighting
 {
     /*
         If I ever made textures all white colored (and made sure they all are)
@@ -31,13 +33,14 @@ namespace Wordania.World.Lighting
         private readonly int[] _neighborX = { 1, -1, 0, 0 };
         private readonly int[] _neighborY = { 0, 0, 1, -1 };
 
-        public event Action OnLightingUpdated;
+        private readonly LightChangedSignal _lightChanged;
 
-        public StaticLightingService(IBlockRegistry blockRegistry, IWorldService worldService, WorldSettings settings)
+        public StaticLightingService(IBlockRegistry blockRegistry, IWorldService worldService, WorldSettings settings, LightChangedSignal lightChangedSignal)
         {
             _blockRegistry = blockRegistry;
             _settings = settings;
             _worldService = worldService;
+            _lightChanged = lightChangedSignal;
         }
         public void Start()
         {
@@ -50,6 +53,35 @@ namespace Wordania.World.Lighting
             _worldService.OnBlockChanged -= HandleBlockChanged;
         }
 
+        public async UniTask InitializeLightAsync(CancellationToken token)
+        {
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
+            for (int x = 0; x < _settings.Width; x++)
+            {
+                for (int y = 0; y < _settings.Height; y++)
+                {
+                    BlockData block = _blockRegistry.Get(_worldService.Data.GetTile(x, y).M);
+                    byte emission = block != null ? block.LightEmission : (byte)0;
+
+                    if (emission > 0)
+                    {
+                        _worldService.Data.GetTile(x, y).Light = emission;
+                        _lightBfsQueue.Enqueue(x + _settings.Width * y);
+                    }
+                }
+
+                if (stopwatch.ElapsedMilliseconds > 16)
+                {
+                    await UniTask.Yield();
+                    token.ThrowIfCancellationRequested();
+
+                    stopwatch.Restart();
+                }
+            }
+
+            PropagateLight();
+        }
         public byte GetLightLevel(int x, int y)
         {
             if (!_settings.WithinBoundaries(x, y)) return 0;
@@ -163,7 +195,7 @@ namespace Wordania.World.Lighting
                     }
                 }
             }
-            OnLightingUpdated?.Invoke();
+            _lightChanged.Raise();
         }
         private void HandleBlockChanged(Vector2Int pos, WorldLayer layer)
         {

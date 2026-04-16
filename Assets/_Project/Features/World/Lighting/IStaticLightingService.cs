@@ -1,12 +1,14 @@
 // ILightingService.cs
 using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Wordania.Features.World.Data;
 
-namespace Wordania.World.Lighting
+namespace Wordania.Features.World.Lighting
 {
     public interface IStaticLightingService
     {
-        event Action OnLightingUpdated;
+        UniTask InitializeLightAsync(CancellationToken token);
         byte GetLightLevel(int x, int y);
 
         /// <summary>

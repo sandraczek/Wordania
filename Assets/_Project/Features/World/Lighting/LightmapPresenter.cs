@@ -3,9 +3,8 @@ using System;
 using VContainer.Unity;
 using Wordania.Features.World;
 using Wordania.Features.World.Data;
-using Wordania.World.Lighting;
 
-namespace Wordania.World.Lighting // lub Wordania.World.Presentation
+namespace Wordania.Features.World.Lighting // lub Wordania.World.Presentation
 {
     /// <summary>
     /// Binds the core lighting logic to the GPU rendering system.
@@ -16,21 +15,27 @@ namespace Wordania.World.Lighting // lub Wordania.World.Presentation
         private readonly IStaticLightingService _lightingService;
         private readonly ILightmapRenderer _lightmapRenderer;
 
+        private readonly LightChangedSignal _lightChanged;
+
         private bool _isDirty = false;
 
-        public LightmapPresenter(
+        public LightmapPresenter
+            (
             IWorldService world,
             IStaticLightingService lightingService,
-            ILightmapRenderer lightmapRenderer)
+            ILightmapRenderer lightmapRenderer,
+            LightChangedSignal lightChangedSignal
+            )
         {
             _world = world;
             _lightingService = lightingService;
             _lightmapRenderer = lightmapRenderer;
+            _lightChanged = lightChangedSignal;
         }
 
         public void Start()
         {
-            _lightingService.OnLightingUpdated += MarkAsDirty;
+            _lightChanged.Subscribe(MarkAsDirty);
             MarkAsDirty();
         }
 
@@ -53,7 +58,7 @@ namespace Wordania.World.Lighting // lub Wordania.World.Presentation
         {
             if (_lightingService != null)
             {
-                _lightingService.OnLightingUpdated -= MarkAsDirty;
+                _lightChanged.Unsubscribe(MarkAsDirty);
             }
         }
     }

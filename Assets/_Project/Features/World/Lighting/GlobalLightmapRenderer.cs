@@ -7,7 +7,7 @@ using VContainer.Unity;
 using Wordania.Features.World;
 using Wordania.Features.World.Config;
 
-namespace Wordania.World.Lighting
+namespace Wordania.Features.World.Lighting
 {
     public sealed class GlobalLightmapRenderer : ILightmapRenderer, IStartable, IDisposable
     {
@@ -23,7 +23,7 @@ namespace Wordania.World.Lighting
         }
         public void Start()
         {
-            _lightmapTexture = new Texture2D(_settings.Width, _settings.Height, TextureFormat.R8, false, true)
+            _lightmapTexture = new Texture2D(_settings.Width, _settings.Height, TextureFormat.RGBA32, false, true)
             {
                 filterMode = FilterMode.Bilinear,
                 wrapMode = TextureWrapMode.Clamp
@@ -37,11 +37,14 @@ namespace Wordania.World.Lighting
         {
             if (_lightmapTexture == null) return;
 
-            NativeArray<byte> textureData = _lightmapTexture.GetRawTextureData<byte>();
+            NativeArray<Color32> textureData = _lightmapTexture.GetRawTextureData<Color32>();
 
             for (int i = 0; i < tiles.Length; i++)
             {
-                textureData[i] = (byte)(_settings.MinimumLight + (255 - _settings.MinimumLight) * tiles[i].Light / 31);
+                byte light = (byte)(_settings.MinimumLight + (255 - _settings.MinimumLight) * tiles[i].Light / 31);
+                byte skyLight = (byte)(_settings.MinimumLight + (255 - _settings.MinimumLight) * tiles[i].SkyLight / 31);
+
+                textureData[i] = new Color32(light, skyLight, 0, 255);
             }
 
             _lightmapTexture.Apply(false, false);

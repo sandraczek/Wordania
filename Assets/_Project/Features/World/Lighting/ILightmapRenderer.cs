@@ -2,7 +2,7 @@
 using System;
 using Wordania.Features.World;
 
-namespace Wordania.World.Lighting
+namespace Wordania.Features.World.Lighting
 {
     public interface ILightmapRenderer : IDisposable
     {

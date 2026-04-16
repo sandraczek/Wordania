@@ -19,6 +19,7 @@ using Wordania.Core.Inputs;
 using Wordania.Features.Bosses.Core;
 using Wordania.Features.Bosses.Data;
 using Wordania.Core.Identifiers;
+using Wordania.Features.World.Lighting;
 
 namespace Wordania.Features
 {
@@ -35,6 +36,8 @@ namespace Wordania.Features
         private readonly IEnemyFactory _enemyFactory;
         private readonly EnemyTemplate _enemyToPrewarm;
         private readonly IMapUpdateService _map;
+        private readonly ISkyLightService _skyLightService;
+        private readonly IStaticLightingService _staticLightingService;
         private readonly IWorldCollisionJobService _worldCollisionJob;
         private readonly IBossSpawnerService _bossSpawner; // for testing
         private readonly AssetId _bossToSpawn; // for testing
@@ -54,6 +57,8 @@ namespace Wordania.Features
             IWorldCollisionJobService worldCollisionJob,
             IBossSpawnerService bossSpawner, // for testing
             BossTemplate bossToSpawn, // for testing
+            ISkyLightService skyLightService,
+            IStaticLightingService staticLightingService,
             int loadFile
             )
         {
@@ -72,7 +77,8 @@ namespace Wordania.Features
             _worldCollisionJob = worldCollisionJob;
             _bossSpawner = bossSpawner;
             _bossToSpawn = bossToSpawn.Id;
-
+            _skyLightService = skyLightService;
+            _staticLightingService = staticLightingService;
         }
         public async UniTask StartAsync(System.Threading.CancellationToken cancellation)
         {
@@ -93,6 +99,9 @@ namespace Wordania.Features
                 _loadingScreen.UpdateProgress(0.1f, "Loading Save");
                 await _save.LoadGameAsync(_save.DefaultPrefix + _saveSlot.ToString());
             }
+            _loadingScreen.UpdateProgress(0.3f, "Lighting the World up");
+            await _skyLightService.InitializeSkyLightAsync(cancellation);
+            await _staticLightingService.InitializeLightAsync(cancellation);
 
             _loadingScreen.UpdateProgress(0.4f, "Rendering World");
             await _worldRenderer.RenderInitialWorldAsync(cancellation);
