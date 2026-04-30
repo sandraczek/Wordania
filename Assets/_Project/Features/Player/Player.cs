@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks.Triggers;
 using UnityEngine;
 using VContainer;
@@ -11,6 +12,7 @@ using Wordania.Core.Inputs;
 using Wordania.Core.SaveSystem;
 using Wordania.Core.SaveSystem.Data;
 using Wordania.Core.SFM;
+using Wordania.Core.Stats;
 using Wordania.Features.Combat;
 using Wordania.Features.Inventory;
 using Wordania.Features.Movement;
@@ -21,12 +23,14 @@ namespace Wordania.Features.Player
 {
     [RequireComponent(typeof(PlayerController))]
     [RequireComponent(typeof(HealthComponent))]
+    [RequireComponent(typeof(StatComponent))]
     public sealed class Player : MonoBehaviour, IDamageable, ITrackable
     {
         [Header("Components")]
         private PlayerController _controller;
-        private StateMachine<PlayerBaseState> _states;
+        private StateMachine<PlayerBaseState> _stateMachine;
         private HealthComponent _health;
+        private StatComponent _stats;
         private readonly InvincibilityController _invincibility = new();
         private readonly DamageMitigator _mitigation = new();
         [SerializeField] private PlayerVisuals visuals;
@@ -37,21 +41,22 @@ namespace Wordania.Features.Player
         private PlayerService _playerService;
         public Bounds Hitbox => _controller.GetBounds();
         public Vector2 Position => _controller.GetBounds().center;
-        public int InstanceId {get; private set;}
-        public EntityFaction Faction {get; private set;} = EntityFaction.Player;
+        public int InstanceId { get; private set; }
+        public EntityFaction Faction { get; private set; } = EntityFaction.Player;
 
         [Inject]
         public void Construct(PlayerConfig config, IInputReader inputs, PlayerContext context, IInventoryService inventory, PlayerService playerService)
         {
             _controller = GetComponent<PlayerController>();
             _health = GetComponent<HealthComponent>();
+            _stats = GetComponent<StatComponent>();
 
             _playerService = playerService; // TODO: make interface ?
             _config = config;
 
-            _states = new StateMachine<PlayerBaseState>();
+            _stateMachine = new StateMachine<PlayerBaseState>();
 
-            context.Bind(_states, _controller, _health, config, transform);
+            context.Bind(_stateMachine, _controller, _health, config, transform);
             _factory = new(context, inputs, inventory);
         }
         private void Awake()
@@ -61,16 +66,21 @@ namespace Wordania.Features.Player
         public void InitializeNew()
         {
             Init();
-            _health.SetInitial(_config.MaxHealth, _config.MaxHealth);
+
+            _health.Initialize();
         }
-        public void InitializeLoaded(float currentHealth, float maxHealth)
+        public void InitializeLoaded(float currentHealth)
         {
             Init();
-            _health.SetInitial(currentHealth, maxHealth);
+            _health.SetInitial(currentHealth);
         }
         private void Init()
         {
-            _states.SwitchState(_factory.InitialState);
+            _stateMachine.SwitchState(_factory.InitialState);
+
+            _stats.Stats.Clear();
+            _stats.Stats.Add(StatType.MaxHealth, new(_config.MaxHealth));
+            _stats.Stats.Add(StatType.MovementSpeed, new(_config.MoveSpeed));
 
             _mitigation.Initialize(
                 _config.GeneralResistance,
@@ -81,11 +91,11 @@ namespace Wordania.Features.Player
                 );
 
             //to change
-            if(TryGetComponent(out FallDamageHandler fall))
+            if (TryGetComponent(out FallDamageHandler fall))
             {
-                fall.Initialize(_config.FallDamageThreshold,_config.FallDamageMultiplier);
+                fall.Initialize(_config.FallDamageThreshold, _config.FallDamageMultiplier);
             }
-            if(TryGetComponent(out PlayerDebugHandler debug))
+            if (TryGetComponent(out PlayerDebugHandler debug))
             {
                 debug.Initialize(_invincibility);
             }
@@ -114,16 +124,16 @@ namespace Wordania.Features.Player
         }
         private void Update()
         {
-            _states.Update();
+            _stateMachine.Update();
         }
         private void FixedUpdate()
         {
-            _states.FixedUpdate();
+            _stateMachine.FixedUpdate();
         }
         public void ApplyDamage(DamagePayload payload)
         {
-            if(_health.IsDead) return;
-            if(_invincibility != null && _invincibility.IsInvincible) return;
+            if (_health.IsDead) return;
+            if (_invincibility != null && _invincibility.IsInvincible) return;
 
             DamageResult damageResult = _mitigation.ProcessDamage(payload);
             _health.ApplyDamage(damageResult);
@@ -134,17 +144,17 @@ namespace Wordania.Features.Player
             _controller.VelocityX = damage.Payload.Knockback.x;
             _controller.VelocityY = damage.Payload.Knockback.y;
 
-            if(_health.IsDead) return;
+            if (_health.IsDead) return;
 
             _invincibility.StartInvincibility(_config.InvincibilityDuration);
 
-            _states.SwitchState(_factory.Hurt);
+            _stateMachine.SwitchState(_factory.Hurt);
         }
 
         private void HandleDeath()
         {
             Debug.Log("Player Died");
-            _states.SwitchState(_factory.Spectate);
+            _stateMachine.SwitchState(_factory.Spectate);
         }
         private void HandleHurtVisuals(DamageResult payload)
         {
@@ -156,8 +166,8 @@ namespace Wordania.Features.Player
             data.Position[0] = _controller.Position.x;
             data.Position[1] = _controller.Position.y;
             data.CurrentHealth = _health.CurrentHealth;
-            data.MaxHealth = _health.MaxHealth;
-            
+
+
             return data;
         }
         private void OnInvincibilityStarted()
@@ -172,7 +182,7 @@ namespace Wordania.Features.Player
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            Gizmos.DrawWireCube(transform.position + new Vector3(-2f,1f,0f), new(1f,1f,0f));
+            Gizmos.DrawWireCube(transform.position + new Vector3(-2f, 1f, 0f), new(1f, 1f, 0f));
             Gizmos.DrawWireSphere(transform.position, 0.1f);
         }
 #endif

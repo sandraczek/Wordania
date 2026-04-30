@@ -10,13 +10,14 @@ using Wordania.Core.Identifiers;
 using System;
 using Wordania.Features.Bosses.Yeinn.Data;
 using UnityEngine.UIElements;
+using Wordania.Core.Stats;
 
 namespace Wordania.Features.Bosses.Yeinn.Parts
 {
     [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(Rigidbody2D))]
-    public abstract class BossPartController<T> : MonoBehaviour, IDamageable, ITrackable where T: BossPartData
+    public abstract class BossPartController<T> : MonoBehaviour, IDamageable, ITrackable where T : BossPartData
     {
         [Header("Dependencies")]
         private IEntityTrackerService _entityTracker;
@@ -26,6 +27,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         protected T _data;
         private StateMachine<IState> _stateMachine;
         private HealthComponent _health;
+        private StatComponent _stats;
         private Rigidbody2D _rb;
         private Collider2D _col;
         protected readonly DamageMitigator _mitigation = new();
@@ -34,7 +36,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         private Transform _lockedTarget;
         private Transform _dynamicTarget;
         private float _currentSpeed;
-        public bool IsMoving {get; private set;}
+        public bool IsMoving { get; private set; }
         private bool _rotateToTarget = false;
 
         public event Action OnDefeated;
@@ -54,8 +56,11 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         public virtual void Initialize(T data)
         {
             _data = data;
-            
+
             _stateMachine = new StateMachine<IState>();
+
+            _stats.Stats.Clear();
+            _stats.Stats.Add(StatType.MaxHealth, new(_data.MaxHealth));
 
             _mitigation.Initialize
             (
@@ -70,9 +75,9 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             _entityTracker.Register(this);
             _entityRegistry.Register(this);
 
-            if(TryGetComponent(out ContactDamageDealer damage))
+            if (TryGetComponent(out ContactDamageDealer damage))
             {
-                damage.Initialize(_data.ContactDamage,_data.Knockback,_data.DamageType,_data.DamageSource);
+                damage.Initialize(_data.ContactDamage, _data.Knockback, _data.DamageType, _data.DamageSource);
             }
         }
         private void Awake()
@@ -80,6 +85,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             _health = GetComponent<HealthComponent>();
             _col = GetComponent<Collider2D>();
             _rb = GetComponent<Rigidbody2D>();
+            _stats = GetComponent<StatComponent>();
         }
         private void OnEnable()
         {
@@ -93,7 +99,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         private void Update()
         {
             if (IsDefeated) return;
-            
+
             _stateMachine.Update();
         }
         private void FixedUpdate()
@@ -108,15 +114,16 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
                 return;
             }
 
-            if (IsMoving){
+            if (IsMoving)
+            {
 
-                Vector2 currentTargetPos = _dynamicTarget != null 
-                    ? (Vector2)_dynamicTarget.position 
+                Vector2 currentTargetPos = _dynamicTarget != null
+                    ? (Vector2)_dynamicTarget.position
                     : _staticTarget;
 
                 Vector2 newPos = Vector2.MoveTowards(
-                    _rb.position, 
-                    currentTargetPos, 
+                    _rb.position,
+                    currentTargetPos,
                     _currentSpeed * Time.fixedDeltaTime);
 
                 _rb.MovePosition(newPos);
@@ -147,13 +154,13 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         public void RotateToTarget()
         {
             Vector2 deltaPos;
-            if(_dynamicTarget != null)
+            if (_dynamicTarget != null)
                 deltaPos = (Vector2)_dynamicTarget.position - _rb.position;
-            else if(_staticTarget != null)
+            else if (_staticTarget != null)
                 deltaPos = _staticTarget - _rb.position;
             else return;
 
-            float direction = Vector2.SignedAngle(Vector2.right,deltaPos);
+            float direction = Vector2.SignedAngle(Vector2.right, deltaPos);
             _rb.rotation = direction;
         }
 
@@ -165,15 +172,15 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         }
 
         public void ApplyDamage(DamagePayload payload)
-        { 
-            if(IsDefeated) return;
+        {
+            if (IsDefeated) return;
 
             DamageResult damageResult = _mitigation.ProcessDamage(payload);
             _health.ApplyDamage(damageResult);
-        } 
+        }
         private void HandleDeath()
         {
-            if(IsDefeated) return;
+            if (IsDefeated) return;
 
             IsDefeated = true;
             OnDefeated?.Invoke();
@@ -195,9 +202,9 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             _currentSpeed = speed;
             IsMoving = true;
         }
-        public void CommandMoveTo(Vector2 targetPosition, float speed,bool rotateToTarget)
+        public void CommandMoveTo(Vector2 targetPosition, float speed, bool rotateToTarget)
         {
-            CommandMoveTo(targetPosition,speed);
+            CommandMoveTo(targetPosition, speed);
             RotateToTarget();
         }
 

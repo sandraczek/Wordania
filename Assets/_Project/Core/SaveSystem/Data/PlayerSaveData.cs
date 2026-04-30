@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Wordania.Core.Stats;
 
 namespace Wordania.Core.SaveSystem.Data
 {
@@ -7,6 +9,5 @@ namespace Wordania.Core.SaveSystem.Data
     {
         public float[] Position = new float[2];
         public float CurrentHealth;
-        public float MaxHealth;
     }
 }

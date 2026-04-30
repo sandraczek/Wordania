@@ -39,6 +39,7 @@ using UnityEngine.UI;
 using Wordania.Features.World.Lighting;
 using Wordania.Features.Day;
 using Wordania.Core.SaveSystem;
+using Wordania.Features.Skills;
 
 namespace Wordania.Features
 {
@@ -47,6 +48,11 @@ namespace Wordania.Features
         [SerializeField] private MarkerEntityParent _entitiesParent;
         [SerializeField] private MarkerDynamicParent _dynamicParent;
         [SerializeField] private MarkerChunkParent _chunksParent;
+        [SerializeField] private BlockRegistry _blockRegistry;
+        [SerializeField] private ItemRegistry _itemRegistry;
+        [SerializeField] private ProjectileRegistry _projectileRegistry;
+        [SerializeField] private BossRegistry _bossRegistry;
+        [SerializeField] private SkillRegistry _skillRegistry;
         [SerializeField] private WorldSettings _worldSettings;
         [SerializeField] private LightChangedSignal _lightChangedSignal;
         [SerializeField] private DaySettings _daySettings;
@@ -56,9 +62,6 @@ namespace Wordania.Features
         [SerializeField] private GameObject _playerPrefab;
         [SerializeField] private Chunk _chunkPrefab;
         [SerializeField] private CameraService _cameraService;
-        [SerializeField] private BlockRegistry _blockRegistry;
-        [SerializeField] private ItemRegistry _itemRegistry;
-        [SerializeField] private ProjectileRegistry _projectileRegistry;
         [SerializeField] private LootSignal _lootSignal;
         [SerializeField] private ProjectileFiredSignal _projectileFiredSignal;
         [SerializeField] private HitRegisteredSignal _hitRegisteredSignal;
@@ -70,7 +73,6 @@ namespace Wordania.Features
         [SerializeField] private SavingIcon _savingIcon;
         [SerializeField] private WorldMapController _worldMapController;
         [SerializeField] private WorldMapView _worldMapView;
-        [SerializeField] private BossRegistry _bossRegistry;
         [SerializeField] private BossDefeatedSignal _bossDefeatedSignal;
         [SerializeField] private BossSpawnedSignal _bossSpawnedSignal;
 
@@ -92,6 +94,9 @@ namespace Wordania.Features
             builder.RegisterInstance<IAssetRegistry<ProjectileData>>(_projectileRegistry);
             _bossRegistry.Initialize();
             builder.RegisterInstance<IAssetRegistry<BossTemplate>>(_bossRegistry);
+            _skillRegistry.Initialize();
+            builder.RegisterInstance<IAssetRegistry<SkillData>>(_skillRegistry);
+
 
             builder.RegisterInstance<ICameraService>(_cameraService);
 
@@ -214,8 +219,6 @@ namespace Wordania.Features
 /*
 TODOS:
 
-- divide sky color and light color
-
 - fix conflict with dash invincibility
 - player visual (change dependency and move data to settings)
 - consult visual rotation change in boss part controler
@@ -224,6 +227,9 @@ TODOS:
 - fix magic color in light shader graph
 - change all 1f to WorldSettings.TileSize
 - fix player clipping 
+- remove DS_Store from repository
+- change enemies speed
+- fix player speed (after adding stats)
 
 features:
 boss spawning

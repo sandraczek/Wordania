@@ -6,6 +6,7 @@ using Wordania.Core.Combat;
 using Wordania.Core.Gameplay;
 using Wordania.Core.Identifiers;
 using Wordania.Core.SFM;
+using Wordania.Core.Stats;
 using Wordania.Features.Combat;
 using Wordania.Features.Enemies.Data;
 using Wordania.Features.Enemies.FSM;
@@ -17,21 +18,23 @@ namespace Wordania.Features.Enemies.Core
     [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]
+    [RequireComponent(typeof(StatComponent))]
     public sealed class EnemyController : MonoBehaviour, IEnemy, ICharacterMovement, IDamageable, ITrackable
     {
         public EnemyTemplate Data;
         private IActiveEnemiesRegistryService _registry;
         private HealthComponent _health;
+        private StatComponent _stats;
         private Rigidbody2D _rb;
         private Collider2D _col;
         public Bounds Hitbox => _col.bounds;
-        private StateMachine<EnemyBaseState> _states;
+        private StateMachine<EnemyBaseState> _stateMachine;
         private EnemyStateFactory _stateFactory;
         private readonly DamageMitigator _mitigation = new();
         private readonly InvincibilityController _invincibility = new();
         public int InstanceId => gameObject.GetInstanceID();
         public bool IsPersistent { get; } = false;
-        public EntityFaction Faction {get; private set;} = EntityFaction.Enemy;
+        public EntityFaction Faction { get; private set; } = EntityFaction.Enemy;
 
         public float VelocityX
         {
@@ -55,7 +58,7 @@ namespace Wordania.Features.Enemies.Core
         public bool IsAlive => gameObject.activeSelf && !_health.IsDead;
         [field: SerializeField] public bool IsGrounded { get; private set; }
         private float _maxFallSpeed = 0f;
-        private bool _isFacingRight= true;
+        private bool _isFacingRight = true;
         private bool _isSteppingUp = false;
 
         private Action _onDeathAction;
@@ -71,19 +74,25 @@ namespace Wordania.Features.Enemies.Core
             _health = GetComponent<HealthComponent>();
             _rb = GetComponent<Rigidbody2D>();
             _col = GetComponent<Collider2D>();
-            
+            _stats = GetComponent<StatComponent>();
 
-            _states = new();
-            _stateFactory = new(this, _states);
+
+            _stateMachine = new();
+            _stateFactory = new(this, _stateMachine);
         }
         public void Initialize(Action onDeath)
         {
-            if(Data == null) Debug.LogError($"{transform.name}: No data was set in prefab");
+            if (Data == null) Debug.LogError($"{transform.name}: No data was set in prefab");
             _onDeathAction = onDeath;
-            _health.SetInitial(Data.Stats.MaxHealth);
+
+            _stats.Stats.Clear();
+            _stats.Stats.Add(StatType.MaxHealth, new(Data.Stats.MaxHealth));
+            _stats.Stats.Add(StatType.MovementSpeed, new(Data.Movement.PatrolSpeed)); // to change
+
+            _health.Initialize();
             _maxFallSpeed = 0f;
             SetGravity(Data.Movement.GravityScale);
-            _states.SwitchState(_stateFactory.InitialState);
+            _stateMachine.SwitchState(_stateFactory.InitialState);
 
             _mitigation.Initialize
             (
@@ -95,16 +104,16 @@ namespace Wordania.Features.Enemies.Core
             );
 
             //to change
-            if(TryGetComponent(out FallDamageHandler fall))
+            if (TryGetComponent(out FallDamageHandler fall))
             {
-                fall.Initialize(Data.Movement.FallDamageThreshold,Data.Movement.FallDamageMultiplier);
+                fall.Initialize(Data.Movement.FallDamageThreshold, Data.Movement.FallDamageMultiplier);
             }
-            if(TryGetComponent(out ContactDamageDealer damage))
+            if (TryGetComponent(out ContactDamageDealer damage))
             {
-                damage.Initialize(Data.Combat.ContactDamage,Data.Combat.Knockback,Data.Combat.DamageType,Data.Combat.DamageSource);
+                damage.Initialize(Data.Combat.ContactDamage, Data.Combat.Knockback, Data.Combat.DamageType, Data.Combat.DamageSource);
             }
 
-            
+
         }
         private void OnEnable()
         {
@@ -126,7 +135,7 @@ namespace Wordania.Features.Enemies.Core
         }
         private void Update()
         {
-            _states.Update();
+            _stateMachine.Update();
         }
         private void FixedUpdate()
         {
@@ -134,7 +143,7 @@ namespace Wordania.Features.Enemies.Core
             IsGrounded = CheckGrounded();
 
             if (IsGrounded)
-            {   
+            {
                 if (!wasGrounded)
                 {
                     OnLanded?.Invoke(Mathf.Max(Mathf.Abs(_maxFallSpeed), Mathf.Abs(VelocityY)));
@@ -154,7 +163,7 @@ namespace Wordania.Features.Enemies.Core
                 }
             }
 
-            _states.FixedUpdate();
+            _stateMachine.FixedUpdate();
         }
         private bool CheckGrounded()
         {
@@ -167,7 +176,7 @@ namespace Wordania.Features.Enemies.Core
             if (Mathf.Abs(direction) < 0.01f) return;
 
             bool inputRight = direction > 0;
-            
+
             if (inputRight != _isFacingRight)
             {
                 _isFacingRight = !_isFacingRight;
@@ -181,12 +190,12 @@ namespace Wordania.Features.Enemies.Core
 
         public void TryStepUp(float direction)
         {
-            if(_isSteppingUp) return;
+            if (_isSteppingUp) return;
 
             float lookDistance = Data.Movement.StepLookMargin + Mathf.Abs(VelocityX) * Time.fixedDeltaTime;
 
             Vector2 rayOrigin = new(
-                _col.bounds.center.x + (direction * _col.bounds.extents.x), 
+                _col.bounds.center.x + (direction * _col.bounds.extents.x),
                 _col.bounds.min.y + Data.Movement.StepLookMargin
             );
             RaycastHit2D hitLow = Physics2D.Raycast(rayOrigin, Vector2.right * direction, lookDistance, Data.Movement.GroundLayer);
@@ -198,10 +207,10 @@ namespace Wordania.Features.Enemies.Core
 
             Vector2 downOrigin = highOrigin + direction * lookDistance * Vector2.right;
             RaycastHit2D hitDown = Physics2D.Raycast(downOrigin, Vector2.down, Data.Movement.MaxStepHeight, Data.Movement.GroundLayer);
-            if(hitDown.collider == null) return;
+            if (hitDown.collider == null) return;
 
             Vector2 targetPos = new(Position.x + direction * lookDistance, hitDown.point.y + _col.bounds.extents.y - _col.offset.y + Data.Movement.StepPerformMargin);
-            Collider2D overlap = Physics2D.OverlapBox(targetPos + _col.offset, (Vector2)_col.bounds.size - 2f * Data.Movement.SkinWidth * new Vector2(1f,1f), 0, Data.Movement.GroundLayer);
+            Collider2D overlap = Physics2D.OverlapBox(targetPos + _col.offset, (Vector2)_col.bounds.size - 2f * Data.Movement.SkinWidth * new Vector2(1f, 1f), 0, Data.Movement.GroundLayer);
 
             if (overlap == null)
             {
@@ -217,8 +226,8 @@ namespace Wordania.Features.Enemies.Core
         }
         public bool ShouldAvoidCliff(float direction)
         {
-            if(!Data.Movement.EnableCliffAvoidance) return false;
-            if(!IsGrounded) return false;
+            if (!Data.Movement.EnableCliffAvoidance) return false;
+            if (!IsGrounded) return false;
 
             float cliffDetectionDistance = Mathf.Abs(VelocityX) * Time.fixedDeltaTime + Data.Movement.CliffDetectionOffset;
 
@@ -248,26 +257,27 @@ namespace Wordania.Features.Enemies.Core
         }
         //TODO: move ?
         public void ApplyDamage(DamagePayload payload)
-        {;
-            if(_health.IsDead) return;
-                                        //Applying Damage even if invincible (only knockback affected)
-            
+        {
+            ;
+            if (_health.IsDead) return;
+            //Applying Damage even if invincible (only knockback affected)
+
             DamageResult damageResult = _mitigation.ProcessDamage(payload);
             _health.ApplyDamage(damageResult);
         }
         private void Handlehurt(DamageResult damage)
         {
-            if(_invincibility != null && _invincibility.IsInvincible) return;
+            if (_invincibility != null && _invincibility.IsInvincible) return;
 
             //Applying knockback even if fatal
             VelocityX = damage.Payload.Knockback.x;
             VelocityY = damage.Payload.Knockback.y;
 
-            if(_health.IsDead) return;
+            if (_health.IsDead) return;
 
             _invincibility.StartInvincibility(Data.Combat.InvincibilityDuration);
 
-            _states.SwitchState(_stateFactory.Hurt);
+            _stateMachine.SwitchState(_stateFactory.Hurt);
         }
 
         private void DrawPosition()
@@ -285,7 +295,7 @@ namespace Wordania.Features.Enemies.Core
         }
         private void HandleHurtVisuals(DamageResult damage)
         {
-            
+
         }
     }
 }

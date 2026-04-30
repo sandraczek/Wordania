@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -7,6 +8,7 @@ using Wordania.Core.Gameplay;
 using Wordania.Core.SaveSystem;
 using Wordania.Core.SaveSystem.Data;
 using Wordania.Core.Services;
+using Wordania.Core.Stats;
 using Wordania.Features.Markers;
 using Wordania.Features.Services;
 
@@ -23,12 +25,12 @@ namespace Wordania.Features.Player
         public event Action OnPlayerRegistered;
         public event Action OnPlayerUnregistered;
 
-        public Transform PlayerTransform {get; private set;}
+        public Transform PlayerTransform { get; private set; }
         private Player _player;
         private PlayerSaveData _cachedSaveData;
         private readonly Transform _parent;
         public IReadOnlyHealth ReadOnlyHealth { get; private set; }
-        public bool IsPlayerSpawned => _player != null; 
+        public bool IsPlayerSpawned => _player != null;
         public Vector2 Position => _player.Position;
         public Bounds Hitbox => _player.Hitbox;
         public string SaveId => "Player";
@@ -54,7 +56,7 @@ namespace Wordania.Features.Player
         public void SpawnPlayer(Vector2 spawnPosition) //to do: clean this
         {
             Vector2 position;
-            if(_cachedSaveData != null)
+            if (_cachedSaveData != null)
             {
                 position = new(
                     _cachedSaveData.Position[0],
@@ -70,17 +72,17 @@ namespace Wordania.Features.Player
             playerInstance.name = "Player";
 
             PlayerTransform = playerInstance.transform;
-            
-            if(!playerInstance.TryGetComponent(out Player player))
+
+            if (!playerInstance.TryGetComponent(out Player player))
             {
                 Debug.LogError("Tried spawning player with no Player component. Aborting");
                 GameObject.Destroy(playerInstance);
                 return;
             }
 
-            if(_cachedSaveData != null)
+            if (_cachedSaveData != null)
             {
-                player.InitializeLoaded(_cachedSaveData.CurrentHealth,_cachedSaveData.MaxHealth);
+                player.InitializeLoaded(_cachedSaveData.CurrentHealth);
             }
             else
             {
@@ -89,11 +91,11 @@ namespace Wordania.Features.Player
 
             _player = player;
             ReadOnlyHealth = player.GetComponent<HealthComponent>();
-            
+
 
             _entityRegistry.Register(player);
             _entityTracker.Register(player);
-            
+
             Debug.Log($"<color=#4AF626>[GAMEPLAY]:</color> Player spawned at {position}");
 
             OnPlayerRegistered?.Invoke();
@@ -108,11 +110,11 @@ namespace Wordania.Features.Player
 
         public void CaptureState(GameSaveData saveData)
         {
-            if(_player != null)
+            if (_player != null)
             {
                 saveData.Player = _player.GetSaveData();
             }
-            else if(_cachedSaveData != null)
+            else if (_cachedSaveData != null)
             {
                 saveData.Player = _cachedSaveData;
             }

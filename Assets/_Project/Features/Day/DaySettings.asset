@@ -12,21 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b019609b0a57348a2967a4ef51fc3539, type: 3}
   m_Name: DaySettings
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Day.DaySettings
-  StartingTime: 5
-  TimeSpeed: 0.16
+  StartingTime: 6
+  TimeSpeed: 0.01666667
   SkyColorGradient:
     serializedVersion: 2
     key0: {r: 0.08627451, g: 0.10980392, b: 0.26666668, a: 1}
     key1: {r: 1, g: 0.7322347, b: 0.33490568, a: 1}
-    key2: {r: 1, g: 0.9595312, b: 0.8443396, a: 0}
-    key3: {r: 1, g: 0.9607843, b: 0.84313726, a: 0}
+    key2: {r: 0.2775454, g: 0.56238765, b: 0.764151, a: 0}
+    key3: {r: 0.2784314, g: 0.5647059, b: 0.7647059, a: 0}
     key4: {r: 0.7410708, g: 0.15083174, b: 0.25808632, a: 0}
     key5: {r: 0.7735849, g: 0.29027978, b: 0, a: 0}
     key6: {r: 0.08627451, g: 0.10980392, b: 0.26666668, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 13107
     ctime1: 15806
-    ctime2: 17348
+    ctime2: 17540
     ctime3: 45875
     ctime4: 47609
     ctime5: 48573
@@ -46,18 +46,18 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   LightColorGradient:
     serializedVersion: 2
-    key0: {r: 0.8962264, g: 0.6882989, b: 0.17332679, a: 1}
-    key1: {r: 1, g: 0.9780938, b: 0.6933962, a: 1}
-    key2: {r: 1, g: 0.95711243, b: 0.642019, a: 0}
-    key3: {r: 1, g: 0.70070475, b: 0.0141509175, a: 0}
+    key0: {r: 0.18867922, g: 0.16849409, b: 0.11658952, a: 1}
+    key1: {r: 0.9716981, g: 0.9628837, b: 0.85711104, a: 1}
+    key2: {r: 0.990566, g: 0.97305703, b: 0.8457191, a: 0}
+    key3: {r: 0.19215687, g: 0.16862746, b: 0.11764706, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
     key5: {r: 0, g: 0, b: 0, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 14264
-    ctime1: 15998
-    ctime2: 46838
-    ctime3: 48188
+    ctime0: 12722
+    ctime1: 16962
+    ctime2: 45296
+    ctime3: 50501
     ctime4: 0
     ctime5: 0
     ctime6: 0

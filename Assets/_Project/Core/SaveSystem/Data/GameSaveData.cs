@@ -10,6 +10,7 @@ namespace Wordania.Core.SaveSystem.Data
         public string LastPlayedDate;
         public PlayerSaveData Player = new();
         public InventorySaveData PlayerInventory = new();
+        public SkillSaveData Skills = new();
         public WorldSaveData World = new();
         public TimeSaveData Time = new();
     }
