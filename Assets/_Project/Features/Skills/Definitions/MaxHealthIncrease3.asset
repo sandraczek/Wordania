@@ -18,7 +18,9 @@ MonoBehaviour:
   <SkillName>k__BackingField: Max Health Increase 3
   <Description>k__BackingField: 
   <Icon>k__BackingField: {fileID: 0}
-  <Cost>k__BackingField: 1000
+  <Cost>k__BackingField:
+  - Type: 0
+    Value: 800
   _effects:
   - rid: 5391011761781997645
   <Prerequisites>k__BackingField:

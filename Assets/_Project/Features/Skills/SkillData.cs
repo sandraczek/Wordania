@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Wordania.Core.Attributes;
@@ -13,7 +14,7 @@ namespace Wordania.Features.Skills
         [field: SerializeField] public string SkillName { get; private set; }
         [field: SerializeField] public string Description { get; private set; }
         [field: SerializeField] public Sprite Icon { get; private set; }
-        [field: SerializeField] public int Cost { get; private set; }
+        [field: SerializeField] public List<SkillPoint> Cost { get; private set; }
         [SerializeReference, SubclassSelector] private List<ISkillEffect> _effects = new();
 
         public IReadOnlyList<ISkillEffect> Effects => _effects;

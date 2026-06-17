@@ -6,6 +6,6 @@ namespace Wordania.Core.SaveSystem.Data
     public sealed class SkillSaveData
     {
         public HashSet<AssetId> UnlockedSkills;
-        public int SkillPoints;
+        public List<(int, int)> SkillPoints;
     }
 }

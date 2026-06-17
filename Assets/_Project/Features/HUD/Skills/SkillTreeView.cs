@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Wordania.Features.Skills;
 
 namespace Wordania.Features.HUD.Skills
 {
@@ -18,11 +19,15 @@ namespace Wordania.Features.HUD.Skills
             _nodeViews = _nodesContainer.GetComponentsInChildren<SkillNodeView>(includeInactive: true);
         }
 
-        public void UpdateSkillPoints(int currentPoints)
+        public void UpdateSkillPoints(int[] currentPoints)
         {
             if (_skillPointsText != null)
             {
-                _skillPointsText.text = $"skill points: {currentPoints}";
+                string text = "";
+                for (int i = 0; i < currentPoints.Length; i++)
+                    text += $"{(SkillPointsType)i}: {currentPoints[i]}\n";
+
+                _skillPointsText.text = text;
             }
         }
 

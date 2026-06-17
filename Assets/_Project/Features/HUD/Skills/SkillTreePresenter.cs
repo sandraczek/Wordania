@@ -73,7 +73,7 @@ namespace Wordania.Features.HUD.Skills
             RefreshEntireTree();
         }
 
-        private void HandlePointsChanged(int newPoints)
+        private void HandlePointsChanged(int[] newPoints)
         {
             _view.UpdateSkillPoints(newPoints);
 

@@ -18,11 +18,11 @@ namespace Wordania.Features.Skills
         private readonly IPlayerProvider _player;
 
         private HashSet<AssetId> _unlockedSkills = new();
-        public int SkillPoints { get; private set; } = 1000; // TODO: skill points
+        public int[] SkillPoints { get; private set; } = new int[(int)SkillPointsType.Count];
 
         public string SaveId => "playerSkills";
 
-        public event Action<int> OnPointsChanged;
+        public event Action<int[]> OnPointsChanged;
         public event Action<AssetId> OnSkillUnlocked;
 
         public PlayerSkillService(IAssetRegistry<SkillData> registry, ISaveService save, IPlayerProvider player)
@@ -34,6 +34,10 @@ namespace Wordania.Features.Skills
         public void Start()
         {
             _save.Register(this);
+
+            // TEMPORARY -------------------------------------------------------------------------------------------------
+            for (int i = 0; i < SkillPoints.Length; i++)
+                SkillPoints[i] = 1000;
         }
         public void Dispose()
         {
@@ -47,9 +51,14 @@ namespace Wordania.Features.Skills
 
         public bool CanUnlock(SkillData skill)
         {
-            if (skill == null || IsSkillUnlocked(skill.Id) || SkillPoints < skill.Cost)
+            if (skill == null || IsSkillUnlocked(skill.Id))
             {
                 return false;
+            }
+
+            foreach (SkillPoint sp in skill.Cost)
+            {
+                if (SkillPoints[(int)sp.Type] < sp.Value) return false;
             }
 
             foreach (var reqId in skill.Prerequisites)
@@ -72,7 +81,11 @@ namespace Wordania.Features.Skills
                 throw new InvalidOperationException($"Cannot unlock skill {skillId}. Prerequisites not met or insufficient points.");
             }
 
-            SkillPoints -= skill.Cost;
+            foreach (SkillPoint sp in skill.Cost)
+            {
+                SkillPoints[(int)sp.Type] -= sp.Value;
+            }
+
             _unlockedSkills.Add(skillId);
 
             OnPointsChanged?.Invoke(SkillPoints);
@@ -81,22 +94,27 @@ namespace Wordania.Features.Skills
             ApplySkillEffects(skill);
         }
 
-        public void AddPoints(int points)
+        public void AddPoints(SkillPointsType type, int points)
         {
             if (points <= 0) return;
-            SkillPoints += points;
+
+            SkillPoints[(int)type] += points;
             OnPointsChanged?.Invoke(SkillPoints);
         }
 
         public void CaptureState(GameSaveData saveData)
         {
-            saveData.Skills.SkillPoints = SkillPoints;
+            for (int i = 0; i < SkillPoints.Length; i++)
+                saveData.Skills.SkillPoints.Add((i, SkillPoints[i]));
+
             saveData.Skills.UnlockedSkills = _unlockedSkills;
         }
 
         public void RestoreState(GameSaveData saveData)
         {
-            SkillPoints = saveData.Skills.SkillPoints;
+            SkillPoints = new int[(int)SkillPointsType.Count];
+            foreach (var sp in saveData.Skills.SkillPoints)
+                SkillPoints[sp.Item1] = sp.Item2;
             if (_unlockedSkills != null)
                 _unlockedSkills = saveData.Skills.UnlockedSkills;
         }
