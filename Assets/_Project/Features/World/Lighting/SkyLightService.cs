@@ -5,7 +5,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer.Unity;
-using Wordania.Features.Events;
+using Wordania.Core.Events;
 using Wordania.Features.World.Config;
 using Wordania.Features.World.Data;
 

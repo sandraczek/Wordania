@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using VContainer;
+using Wordania.Core.Events;
 using Wordania.Core.Gameplay;
 using Wordania.Core.Stats;
 
@@ -9,6 +10,8 @@ namespace Wordania.Core.Combat
     [RequireComponent(typeof(StatComponent))]
     public sealed class HealthComponent : MonoBehaviour, IReadOnlyHealth
     {
+        private IEventBusGameplay _eventBus;
+
         [Header("Configuration")]
         public StatComponent _stats;
 
@@ -17,11 +20,16 @@ namespace Wordania.Core.Combat
         public float CurrentHealth => _currentHealth;
         public float MaxHealth => _stats.Stats[StatType.MaxHealth].Value;
         public bool IsDead => _currentHealth <= 0f;
+        public int LastAttackerId;
 
         public event Action<HealthChangeData> OnHealthChange;
         public event Action<DamageResult> OnDamageTaken;
         public event Action OnDeath;
 
+        public void Construct(IEventBusGameplay eventBus)
+        {
+            _eventBus = eventBus;
+        }
         public void Awake()
         {
             _stats = GetComponent<StatComponent>();
@@ -56,6 +64,7 @@ namespace Wordania.Core.Combat
             if (IsDead) return;
 
             SetCurrentHealth(_currentHealth - damage.FinalDamage);
+            LastAttackerId = damage.Payload.InstigatorId;
 
             OnDamageTaken?.Invoke(damage);
         }

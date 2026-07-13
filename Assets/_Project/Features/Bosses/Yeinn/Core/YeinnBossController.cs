@@ -9,7 +9,7 @@ using Wordania.Features.Bosses.Events;
 using Wordania.Features.Bosses.Yeinn.Data;
 using Wordania.Features.Bosses.Yeinn.Parts;
 using Wordania.Features.Enemies.Core;
-using Wordania.Features.Events;
+using Wordania.Core.Events;
 
 namespace Wordania.Features.Bosses.Yeinn.Core
 {
@@ -84,7 +84,7 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         }
         public override void OnDeathSequenceComplete()
         {
-            _eventBus.Publish(new BossDefeatedEvent(_template.Id));
+            base.OnDeathSequenceComplete();
             Remove();
         }
         public void Remove()

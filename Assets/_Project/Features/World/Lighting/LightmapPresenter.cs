@@ -1,7 +1,7 @@
 // LightmapPresenter.cs
 using System;
 using VContainer.Unity;
-using Wordania.Features.Events;
+using Wordania.Core.Events;
 using Wordania.Features.World;
 using Wordania.Features.World.Data;
 

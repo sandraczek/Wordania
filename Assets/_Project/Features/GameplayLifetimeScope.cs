@@ -41,7 +41,8 @@ using Wordania.Features.Day;
 using Wordania.Core.SaveSystem;
 using Wordania.Features.Skills;
 using Wordania.Features.HUD.Skills;
-using Wordania.Features.Events;
+using Wordania.Core.Events;
+using Wordania.Features.Journalism;
 
 namespace Wordania.Features
 {
@@ -176,6 +177,9 @@ namespace Wordania.Features
             //bosses
             builder.Register<BossSpawnerService>(Lifetime.Scoped).As<IBossSpawnerService>();
 
+            //journal
+            builder.RegisterEntryPoint<Journal>(Lifetime.Scoped).As<IJournal>();
+
             //TODO: move to HUD lifetime scope
             builder.RegisterInstance(_uiConfig);
             builder.RegisterEntryPoint<HUDStateManager>(Lifetime.Scoped).As<IHUDStateManager>();
@@ -219,6 +223,8 @@ namespace Wordania.Features
 /*
 TODOS:
 
+- FIX GET INSTANCE ID
+-fix show chunks
 - fix conflict with dash invincibility
 - player visual (change dependency and move data to settings)
 - somehow make projectiles hitbox not a point
@@ -230,6 +236,8 @@ TODOS:
 - fix player speed (after adding stats)
 - refactor inventory display
 - prewarming
+- fix enemies stopping after hit
+- can remove dependency between player and healthbar (move to event bus)
 
 features:
 boss spawning

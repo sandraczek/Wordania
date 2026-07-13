@@ -1,6 +1,9 @@
 using UnityEngine;
+using VContainer;
+using Wordania.Core.Events;
 using Wordania.Core.Gameplay;
 using Wordania.Features.Bosses.Data;
+using Wordania.Features.Bosses.Events;
 
 namespace Wordania.Features.Bosses.Core
 {
@@ -15,7 +18,14 @@ namespace Wordania.Features.Bosses.Core
     public abstract class BossController<TTemplate> : BossController
         where TTemplate : BossTemplate
     {
+        private IEventBusGameplay _eventBus;
         protected TTemplate _template;
+
+        [Inject]
+        public void Construct(IEventBusGameplay eventBus)
+        {
+            _eventBus = eventBus;
+        }
         public override void Initialize(BossTemplate template)
         {
             if (template is TTemplate typedTemplate)
@@ -31,6 +41,9 @@ namespace Wordania.Features.Bosses.Core
         }
 
         protected abstract void OnInitialize(TTemplate template);
-        public abstract void OnDeathSequenceComplete();
+        public virtual void OnDeathSequenceComplete()
+        {
+            _eventBus.Publish(new BossDeathEvent(_template.Id));
+        }
     }
 }

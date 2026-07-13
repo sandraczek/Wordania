@@ -7,7 +7,6 @@ using Wordania.Core.Identifiers;
 using Wordania.Core.Services;
 using Wordania.Features.Bosses.Data;
 using Wordania.Features.Bosses.Events;
-using Wordania.Features.Events;
 using Wordania.Features.Markers;
 
 namespace Wordania.Features.Bosses.Core

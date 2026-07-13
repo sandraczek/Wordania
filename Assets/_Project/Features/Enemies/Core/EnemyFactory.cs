@@ -6,6 +6,7 @@ using UnityEngine.Pool;
 using VContainer;
 using VContainer.Unity;
 using Wordania.Core.Gameplay;
+using Wordania.Core.Identifiers;
 using Wordania.Core.Services;
 using Wordania.Features.Enemies.Data;
 using Wordania.Features.Markers;
@@ -16,19 +17,17 @@ namespace Wordania.Features.Enemies.Core
     public sealed class EnemyFactory : IEnemyFactory, IDisposable
     {
         private readonly IObjectResolver _resolver;
-        private readonly IPlayerProvider _playerProvider;
         private readonly IDamageableEntitiesRegistryService _entityRegistry;
         private readonly IEntityTrackerService _entityTracker;
         private readonly Transform _parent;
-        private readonly Dictionary<string, IObjectPool<EnemyController>> _pools = new();
+        private readonly Dictionary<AssetId, IObjectPool<EnemyController>> _pools = new();
         private readonly int _defaultPoolSize = 20;
         private readonly int _maxPoolSize = 100;
         private readonly int _prewarmBatchSize = 5;
 
-        public EnemyFactory(IObjectResolver resolver, IPlayerProvider playerProvider, MarkerEntityParent enemiesParent, IDamageableEntitiesRegistryService entityRegistry, IEntityTrackerService entityTracker)
+        public EnemyFactory(IObjectResolver resolver, MarkerEntityParent enemiesParent, IDamageableEntitiesRegistryService entityRegistry, IEntityTrackerService entityTracker)
         {
             _resolver = resolver;
-            _playerProvider = playerProvider;
             _parent = enemiesParent.transform;
             _entityRegistry = entityRegistry;
             _entityTracker = entityTracker;
@@ -45,15 +44,15 @@ namespace Wordania.Features.Enemies.Core
 
         public IEnemy CreateEnemy(EnemyTemplate template, Vector3 position)
         {
-            if (!_pools.TryGetValue(template.EnemyId, out IObjectPool<EnemyController> pool))
+            if (!_pools.TryGetValue(template.Id, out IObjectPool<EnemyController> pool))
             {
                 pool = CreatePool(template.Prefab);
-                _pools[template.EnemyId] = pool;
+                _pools[template.Id] = pool;
             }
 
             EnemyController enemy = pool.Get();
             enemy.transform.position = position;
-            enemy.Initialize(() => 
+            enemy.Initialize(() =>
                 {
                     _entityRegistry.Unregister(enemy.InstanceId);
                     _entityTracker.Unregister(enemy.InstanceId);
@@ -72,14 +71,15 @@ namespace Wordania.Features.Enemies.Core
             poolParent.transform.SetParent(_parent);
 
             return new ObjectPool<EnemyController>(
-                createFunc: () => {
-                    var enemy = _resolver.Instantiate(prefab,poolParent.transform);
+                createFunc: () =>
+                {
+                    var enemy = _resolver.Instantiate(prefab, poolParent.transform);
                     enemy.name = prefab.Data.DisplayName;
                     return enemy;
-                    },
+                },
                 actionOnGet: enemy => enemy.gameObject.SetActive(true),
                 actionOnRelease: enemy => enemy.gameObject.SetActive(false),
-                actionOnDestroy: enemy => {if(enemy!= null) UnityEngine.Object.Destroy(enemy.gameObject);},
+                actionOnDestroy: enemy => { if (enemy != null) UnityEngine.Object.Destroy(enemy.gameObject); },
                 defaultCapacity: _defaultPoolSize,
                 maxSize: _maxPoolSize
             );
@@ -89,19 +89,19 @@ namespace Wordania.Features.Enemies.Core
         {
             var prewarmedObjects = new List<EnemyController>(_defaultPoolSize);
 
-            if(!_pools.ContainsKey(template.EnemyId))
-                _pools[template.EnemyId] = CreatePool(template.Prefab);
+            if (!_pools.ContainsKey(template.Id))
+                _pools[template.Id] = CreatePool(template.Prefab);
 
             for (int i = 0; i < _defaultPoolSize; i++)
             {
-                prewarmedObjects.Add(_pools[template.EnemyId].Get());
-                if((i+1) % _prewarmBatchSize == 0)
+                prewarmedObjects.Add(_pools[template.Id].Get());
+                if ((i + 1) % _prewarmBatchSize == 0)
                     await UniTask.Yield();
             }
 
             foreach (var enemy in prewarmedObjects)
             {
-                _pools[template.EnemyId].Release(enemy);
+                _pools[template.Id].Release(enemy);
             }
         }
     }

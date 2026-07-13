@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b49493b7ffcd44c0f8b3d3e295b654f3, type: 3}
   m_Name: ImpData
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Enemies.Data.EnemyData
+  _id:
+    _editorId: imp_enemy
+    _hash: 1550625190
   Prefab: {fileID: 6478214868119159596, guid: fa29230d75902444887d2f905aa1cf16, type: 3}
-  <EnemyId>k__BackingField: 4300c015-2b87-488f-886d-2984bd9d45f2
   <DisplayName>k__BackingField: Imp
   <Stats>k__BackingField:
     <MaxHealth>k__BackingField: 100

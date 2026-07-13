@@ -104,10 +104,14 @@ namespace Wordania.Features.Player
         }
         public void UnregisterPlayer()
         {
-            _entityRegistry.Unregister(_player.InstanceId); // to move to on player destroy ?
+            _entityRegistry.Unregister(_player.InstanceId);
             _entityTracker.Unregister(_player.InstanceId);
             OnPlayerUnregistered?.Invoke();
             _player = null;
+        }
+        public bool IsPlayer(int entityId)
+        {
+            return entityId == _player.InstanceId;
         }
 
         public void CaptureState(GameSaveData saveData)
@@ -126,5 +130,6 @@ namespace Wordania.Features.Player
         {
             _cachedSaveData = saveData.Player;
         }
+
     }
 }

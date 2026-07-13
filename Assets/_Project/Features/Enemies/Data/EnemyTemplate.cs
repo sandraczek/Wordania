@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using Wordania.Core.Data;
+using Wordania.Core.Identifiers;
 using Wordania.Features.Enemies.Core;
 using Wordania.Features.Inventory;
 using Wordania.Features.Movement;
@@ -7,14 +9,11 @@ using Wordania.Features.Movement;
 namespace Wordania.Features.Enemies.Data
 {
     [CreateAssetMenu(fileName = "NewEnemyData", menuName = "Enemies/Data")]
-    public sealed class EnemyTemplate : ScriptableObject
+    public sealed class EnemyTemplate : DataAsset
     {
         [field: Header("Prefab")]
         [field: SerializeField] public EnemyController Prefab;
 
-        [field: Header("Identity")]
-        [field: SerializeField] public string EnemyId { get; private set; } = Guid.NewGuid().ToString();
-        
         [field: SerializeField] public string DisplayName { get; private set; } = "Unknown Enemy";
 
         [field: Space(10)]
@@ -23,16 +22,18 @@ namespace Wordania.Features.Enemies.Data
         [field: SerializeField] public EnemyMovementData Movement { get; private set; }
         [field: SerializeField] public EnemyCombatData Combat { get; private set; }
         [field: SerializeField] public EnemySpawnData Spawn { get; private set; }
-        
+
         [field: SerializeField] public ItemData Loot { get; private set; }
-        
+
         //to change
         public float FallDamageThreshold => Movement.FallDamageThreshold;
         public float FallDamageMultiplier => Movement.FallDamageMultiplier;
 
-        #if UNITY_EDITOR
-        private void OnValidate()
+#if UNITY_EDITOR
+        protected override void OnValidate()
         {
+            base.OnValidate();
+
             CalculateClearanceFromPrefab();
 
             if (Combat != null)
@@ -51,7 +52,7 @@ namespace Wordania.Features.Enemies.Data
                 return;
             }
 
-            if(Spawn == null)
+            if (Spawn == null)
             {
                 Debug.LogWarning($"[{DisplayName}] Spawn property is null", this);
             }
@@ -75,6 +76,6 @@ namespace Wordania.Features.Enemies.Data
             Gizmos.color = Color.magenta;
             Gizmos.DrawWireCube(position, Spawn.RequiredClearanceSize);
         }
-        #endif
+#endif
     }
 }

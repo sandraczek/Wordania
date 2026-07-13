@@ -18,7 +18,7 @@ using Wordania.Features.World.Config;
 using Wordania.Features.World.Data;
 using Wordania.Core.Identifiers;
 using UnityEditor.VersionControl;
-using Wordania.Features.Events;
+using Wordania.Core.Events;
 
 namespace Wordania.Features.World
 {

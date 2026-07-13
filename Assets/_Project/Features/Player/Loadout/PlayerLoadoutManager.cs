@@ -60,7 +60,7 @@ namespace Wordania.Features.Player.Loadout
             if (_activeSlot?.Executor == null || !_player.States.CurrentState.CanPerformActions) return;
 
             Vector2 aimPosition = _player.Controller.GetWorldAimPosition();
-            int entityId = gameObject.GetEntityId();
+            int entityId = _player.InstanceId;
 
             if (_isPrimaryActionHeld) // skipping execute return
             {

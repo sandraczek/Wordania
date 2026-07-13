@@ -55,17 +55,15 @@ namespace Wordania.Features.Player
             _stats = GetComponent<StatComponent>();
             _mechanics = GetComponent<EntityMechanicController>();
 
+            InstanceId = GetInstanceID();
+
             _playerService = playerService; // TODO: make interface ?
             _config = config;
 
             _stateMachine = new StateMachine<PlayerBaseState>();
 
-            context.Bind(_stateMachine, _controller, _health, config, transform);
+            context.Bind(InstanceId, _stateMachine, _controller, _health, config, transform);
             _factory = new(context, inputs, inventory);
-        }
-        private void Awake()
-        {
-            InstanceId = GetInstanceID();
         }
         public void InitializeNew()
         {

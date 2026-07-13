@@ -11,7 +11,6 @@ using Codice.CM.WorkspaceServer.Lock;
 using Wordania.Core.Identifiers;
 using Wordania.Features.Inventory.Events;
 using Wordania.Core.Data;
-using Wordania.Features.Events;
 using Wordania.Core.Events;
 
 namespace Wordania.Features.Player

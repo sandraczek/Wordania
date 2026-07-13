@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using VContainer;
 using Wordania.Core.Combat;
+using Wordania.Core.Combat.Events;
+using Wordania.Core.Events;
 using Wordania.Core.Gameplay;
 using Wordania.Core.Identifiers;
 using Wordania.Core.SFM;
@@ -23,6 +25,7 @@ namespace Wordania.Features.Enemies.Core
     {
         public EnemyTemplate Data;
         private IActiveEnemiesRegistryService _registry;
+        private IEventBusGameplay _eventBus;
         private HealthComponent _health;
         private StatComponent _stats;
         private Rigidbody2D _rb;
@@ -61,13 +64,14 @@ namespace Wordania.Features.Enemies.Core
         private bool _isFacingRight = true;
         private bool _isSteppingUp = false;
 
-        private Action _onDeathAction;
+        private Action _onDeathFactoryAction;
         public event Action<float> OnLanded;
 
         [Inject]
-        public void Construct(IActiveEnemiesRegistryService registry)
+        public void Construct(IActiveEnemiesRegistryService registry, IEventBusGameplay eventBus)
         {
             _registry = registry;
+            _eventBus = eventBus;
         }
         public void Awake()
         {
@@ -83,7 +87,7 @@ namespace Wordania.Features.Enemies.Core
         public void Initialize(Action onDeath)
         {
             if (Data == null) Debug.LogError($"{transform.name}: No data was set in prefab");
-            _onDeathAction = onDeath;
+            _onDeathFactoryAction = onDeath;
 
             _stats.Stats.Clear();
             _stats.Stats.Add(StatType.MaxHealth, new(Data.Stats.MaxHealth));
@@ -248,12 +252,13 @@ namespace Wordania.Features.Enemies.Core
         private void HandleDeath()
         {
             //Debug.Log($"{Data.DisplayName} died");
-            _onDeathAction.Invoke();
+            _eventBus.Publish(new DeathEvent(Data.Id, _health.LastAttackerId));
+            _onDeathFactoryAction.Invoke();
         }
         public void Remove()
         {
             //Debug.Log($"{Data.DisplayName} removed");
-            _onDeathAction.Invoke();
+            _onDeathFactoryAction.Invoke();
         }
         //TODO: move ?
         public void ApplyDamage(DamagePayload payload)

@@ -16,7 +16,6 @@ using Wordania.Features.World;
 using Wordania.Core.Data;
 using Wordania.Core.Identifiers;
 using Wordania.Core.Events;
-using Wordania.Features.Events;
 namespace Wordania.Features.Combat.Core
 {
     public sealed class ProjectileSimulationService : IProjectileSimulationService, IDisposable, ITickable, ILateTickable

@@ -5,9 +5,9 @@ using Wordania.Features.Bosses.Core;
 
 namespace Wordania.Features.Bosses.Events
 {
-    public struct BossDefeatedEvent : IGameEvent
+    public struct BossDeathEvent : IGameEvent
     {
-        public BossDefeatedEvent(AssetId assetId)
+        public BossDeathEvent(AssetId assetId)
         {
             Id = assetId;
         }

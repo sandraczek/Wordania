@@ -16,5 +16,7 @@ namespace Wordania.Core.Gameplay
         bool IsPlayerSpawned { get; }
         event Action OnPlayerRegistered;
         event Action OnPlayerUnregistered;
+
+        bool IsPlayer(int entityId);
     }
 }
