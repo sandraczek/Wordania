@@ -9,6 +9,7 @@ using Wordania.Features.Bosses.Events;
 using Wordania.Features.Bosses.Yeinn.Data;
 using Wordania.Features.Bosses.Yeinn.Parts;
 using Wordania.Features.Enemies.Core;
+using Wordania.Features.Events;
 
 namespace Wordania.Features.Bosses.Yeinn.Core
 {
@@ -17,7 +18,7 @@ namespace Wordania.Features.Bosses.Yeinn.Core
     {
         [Header("Dependencies")]
         private IActiveEnemiesRegistryService _enemyRegistry;
-        private BossDefeatedSignal _defeatedSignal;
+        private IEventBusGameplay _eventBus;
         [Header("Boss Parts")]
         [SerializeField] private YeinnHeadController _head;
         [SerializeField] private YeinnHandController _leftHand;
@@ -27,7 +28,7 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         [SerializeField] private Transform _rightHandAnchor;
 
         private StateMachine<IState> _phaseStateMachine;
-        
+
         // Phases
         private IState _phaseOne;
         private IState _phaseTwo;
@@ -35,14 +36,14 @@ namespace Wordania.Features.Bosses.Yeinn.Core
 
         public bool AreBothHandsDefeated => _leftHand.IsDefeated && _rightHand.IsDefeated;
         public Vector2 Position => transform.position;
-        public bool IsAlive {get;set;} = true;
-        public bool IsPersistent {get;} = true;
+        public bool IsAlive { get; set; } = true;
+        public bool IsPersistent { get; } = true;
         public int InstanceId => GetInstanceID();
 
         [Inject]
-        public void Construct(BossDefeatedSignal defeatedSignal, IActiveEnemiesRegistryService enemyRegistry)
+        public void Construct(IEventBusGameplay eventBus, IActiveEnemiesRegistryService enemyRegistry)
         {
-            _defeatedSignal = defeatedSignal;
+            _eventBus = eventBus;
             _enemyRegistry = enemyRegistry;
         }
         protected override void OnInitialize(YeinnTemplate template)
@@ -79,11 +80,11 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         }
         public void TransitionToDeath()
         {
-            _phaseStateMachine.SwitchState(_death); 
+            _phaseStateMachine.SwitchState(_death);
         }
         public override void OnDeathSequenceComplete()
         {
-            _defeatedSignal.Raise();
+            _eventBus.Publish(new BossDefeatedEvent(_template.Id));
             Remove();
         }
         public void Remove()

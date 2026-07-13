@@ -5,6 +5,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer.Unity;
+using Wordania.Features.Events;
 using Wordania.Features.World.Config;
 using Wordania.Features.World.Data;
 
@@ -27,14 +28,14 @@ namespace Wordania.Features.World.Lighting
         }
         private readonly Queue<LightRemovalNode> _lightRemovalQueue = new(1024);
 
-        private readonly LightChangedSignal _lightChanged;
+        private readonly IEventBusGameplay _eventBus;
 
-        public SkyLightService(WorldSettings settings, IWorldService world, IBlockRegistry blockRegistry, LightChangedSignal lightChangedSignal)
+        public SkyLightService(WorldSettings settings, IWorldService world, IBlockRegistry blockRegistry, IEventBusGameplay eventBus)
         {
             _settings = settings;
             _world = world;
             _registry = blockRegistry;
-            _lightChanged = lightChangedSignal;
+            _eventBus = eventBus;
         }
 
         public void Start()
@@ -131,7 +132,7 @@ namespace Wordania.Features.World.Lighting
         private void PropagateLight()
         {
             ProcessLightQueue();
-            _lightChanged.Raise();
+            _eventBus.Publish(new LightChangedEvent());
         }
         private async UniTask PropagateLightAsync(CancellationToken token, int batchSize)
         {
@@ -140,7 +141,7 @@ namespace Wordania.Features.World.Lighting
                 ProcessLightQueue(batchSize);
                 await UniTask.Yield();
             }
-            _lightChanged.Raise();
+            _eventBus.Publish(new LightChangedEvent());
         }
         public void UpdateLightAt(int x, int y)
         {

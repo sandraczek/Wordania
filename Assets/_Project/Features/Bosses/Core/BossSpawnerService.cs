@@ -2,10 +2,12 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using Wordania.Core.Data;
+using Wordania.Core.Events;
 using Wordania.Core.Identifiers;
 using Wordania.Core.Services;
 using Wordania.Features.Bosses.Data;
 using Wordania.Features.Bosses.Events;
+using Wordania.Features.Events;
 using Wordania.Features.Markers;
 
 namespace Wordania.Features.Bosses.Core
@@ -14,20 +16,20 @@ namespace Wordania.Features.Bosses.Core
     {
         private readonly IAssetRegistry<BossTemplate> _registry;
         private readonly IObjectResolver _resolver;
-        private readonly BossSpawnedSignal _spawnedSignal;
+        private readonly IEventBusGameplay _eventBus;
         private readonly Transform _parent;
 
         // Dependency Injection
         [Inject]
         public BossSpawnerService(
-            IAssetRegistry<BossTemplate> registry, 
+            IAssetRegistry<BossTemplate> registry,
             IObjectResolver resolver,
-            BossSpawnedSignal spawnedSignal,
+            IEventBusGameplay eventBus,
             MarkerEntityParent parent)
         {
             _registry = registry;
             _resolver = resolver;
-            _spawnedSignal = spawnedSignal;
+            _eventBus = eventBus;
             _parent = parent.transform;
         }
 
@@ -45,7 +47,7 @@ namespace Wordania.Features.Bosses.Core
 
             bossInstance.Initialize(template);
 
-            _spawnedSignal.Raise(bossInstance);
+            _eventBus.Publish(new BossSpawnedEvent(bossInstance));
 
             return bossInstance;
         }

@@ -20,7 +20,7 @@ A game made by an AGH Computer Science student in his free time. It features:
 * **Asynchronous Pipeline:** UniTask (Allocation-free async/await task coordination)
 * **Simulation Layer:** C# Job System & Burst Compiler (Data-Oriented Design for high-throughput math)
 * **Data Persistency:** Newtonsoft JSON (Polymorphic graph reconstruction & async I/O)
-* **Custom abstract structures** SFM, Data-Registries, Signals
+* **Custom abstract structures** SFM, Data-Registries, Events
 
 ---
 
@@ -47,4 +47,4 @@ World data transformation operates via a pipeline of discrete generation filters
 ## 🚀 Repository Engineering Guidelines
 
 * **Zero Legacy Lookup Queries:** The use of `GameObject.Find`, `FindWithTag`, and un-cached runtime `GetComponent` operations is strictly banned. Dependencies must be resolved exclusively via VContainer constructor injection or pass-by-context signatures.
-* **Hermetic Slice Boundaries:** Gameplay features are treated as strictly isolated modules. Direct cross-referencing between distinct slices is blocked; communication across feature borders must operate via abstract core interface models or type-safe message dispatches routed through the global `Signal Bus`.
+* **Hermetic Slice Boundaries:** Gameplay features are treated as strictly isolated modules. Direct cross-referencing between distinct slices is blocked; communication across feature borders must operate via abstract core interface models or type-safe message dispatches routed through the global `Event Bus`.

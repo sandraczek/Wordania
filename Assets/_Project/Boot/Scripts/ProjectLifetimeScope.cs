@@ -8,6 +8,7 @@ using UnityEngine;
 using Wordania.Core.SaveSystem;
 using Wordania.Core.Config;
 using Wordania.Core.Inputs;
+using Wordania.Core.Events;
 
 namespace Wordania.Boot
 {
@@ -19,6 +20,7 @@ namespace Wordania.Boot
         {
             builder.Register<SceneLoaderService>(Lifetime.Singleton).As<ISceneLoaderService>();
 
+            builder.Register<ProjectEventBus>(Lifetime.Singleton).As<IEventBusProject>();
             builder.RegisterInstance(_debugSettings);
             builder.RegisterEntryPoint<DebugService>(Lifetime.Singleton).As<IDebugService>();
             builder.RegisterInstance<IInputReader>(_inputReader);

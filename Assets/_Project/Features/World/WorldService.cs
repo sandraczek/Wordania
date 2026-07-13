@@ -18,6 +18,7 @@ using Wordania.Features.World.Config;
 using Wordania.Features.World.Data;
 using Wordania.Core.Identifiers;
 using UnityEditor.VersionControl;
+using Wordania.Features.Events;
 
 namespace Wordania.Features.World
 {
@@ -32,7 +33,7 @@ namespace Wordania.Features.World
 
         [Header("Data")]
         public WorldData Data { get; private set; }
-        private readonly LootSignal _lootSignal; // TO change (Message pipe or signal bus)
+        private readonly IEventBusGameplay _eventBus;
 
         public string SaveId => "World";
 
@@ -44,14 +45,14 @@ namespace Wordania.Features.World
             WorldSettings settings,
             IWorldGenerator generator,
             ISaveService saveService,
-            LootSignal lootEvent
+            IEventBusGameplay eventBus
             )
         {
             _blockDatabase = blockDatabase;
             _settings = settings;
             _generator = generator;
             _save = saveService;
-            _lootSignal = lootEvent;
+            _eventBus = eventBus;
         }
         public void Start()
         {
@@ -97,7 +98,7 @@ namespace Wordania.Features.World
                 OnBlockChanged?.Invoke(new(x, y), WorldLayer.Main);
 
                 //DROPPING LOOT
-                _lootSignal.Raise(new(data.loot, data.lootAmount));
+                _eventBus.Publish(new LootEvent(data.loot, data.lootAmount));
 
                 changedLayers = WorldLayer.Main | WorldLayer.Damage;
             }

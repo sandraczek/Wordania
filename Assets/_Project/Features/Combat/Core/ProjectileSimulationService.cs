@@ -15,17 +15,19 @@ using Wordania.Core.Services;
 using Wordania.Features.World;
 using Wordania.Core.Data;
 using Wordania.Core.Identifiers;
+using Wordania.Core.Events;
+using Wordania.Features.Events;
 namespace Wordania.Features.Combat.Core
 {
     public sealed class ProjectileSimulationService : IProjectileSimulationService, IDisposable, ITickable, ILateTickable
-    {   
+    {
         private readonly IDamageableEntitiesRegistryService _entities;
         private readonly IEntityTrackerService _trackables;
         private readonly IAssetRegistry<ProjectileData> _projectileRegistry;
-        private readonly HitRegisteredSignal _hitSignal;
+        private readonly IEventBusGameplay _eventBus;
         private readonly Queue<(ProjectileRuntimeData data, ProjectileView view)> _spawnQueue = new();
         private NativeList<ProjectileRuntimeData> _projectilesData = new(1000, Allocator.Persistent);
-        private NativeQueue<ProjectileHitEvent> _hitEventsQueue = new(Allocator.Persistent);
+        private NativeQueue<ProjectileHitData> _hitEventsQueue = new(Allocator.Persistent);
         private NativeArray<TargetAABB> _currentTargets;
         private readonly IWorldCollisionJobService _world;
         private JobHandle _jobHandle;
@@ -37,14 +39,14 @@ namespace Wordania.Features.Combat.Core
             IDamageableEntitiesRegistryService entityRegistry,
             IEntityTrackerService trackables,
             IAssetRegistry<ProjectileData> projectileRegistry,
-            HitRegisteredSignal hitSignal,
+            IEventBusGameplay eventBus,
             IWorldCollisionJobService world
             )
         {
             _entities = entityRegistry;
             _trackables = trackables;
             _projectileRegistry = projectileRegistry;
-            _hitSignal = hitSignal;
+            _eventBus = eventBus;
             _world = world;
         }
         public void Dispose()
@@ -98,7 +100,7 @@ namespace Wordania.Features.Combat.Core
             if (_projectilesData.Length == 0) return;
 
             //Debug.Log($"Data Pos: {_projectilesData[0].CurrentPosition} | View Pos: {_projectileViews[0].transform.position} | Velocity: {_projectilesData[0].Velocity}");
-            
+
             ProcessHitEvents();
             SyncViewsAndCleanup();
         }
@@ -119,7 +121,7 @@ namespace Wordania.Features.Combat.Core
                 else
                 {
                     view.transform.position = new Vector3(data.CurrentPosition.x, data.CurrentPosition.y, 0f);
-                    
+
                     UpdateViewRotation(view, data.Velocity);
                 }
             }
@@ -132,7 +134,7 @@ namespace Wordania.Features.Combat.Core
             _projectileViews[index] = _projectileViews[lastIndex];
 
             _projectilesData.RemoveAtSwapBack(index);
-            _projectileViews.RemoveAt(lastIndex); 
+            _projectileViews.RemoveAt(lastIndex);
         }
 
         private void UpdateViewRotation(ProjectileView view, float2 velocity)
@@ -146,18 +148,18 @@ namespace Wordania.Features.Combat.Core
 
         private void ProcessHitEvents()
         {
-            while (_hitEventsQueue.TryDequeue(out ProjectileHitEvent hitEvent))
+            while (_hitEventsQueue.TryDequeue(out ProjectileHitData hitEvent))
             {
-                if(!_entities.TryGet(hitEvent.HitEntityId, out IDamageable damageable)) continue;
-                
+                if (!_entities.TryGet(hitEvent.HitEntityId, out IDamageable damageable)) continue;
+
                 var data = _projectileRegistry.Get(new AssetId(hitEvent.ProjectileDataId));
-                if(data == null) Debug.LogError("Data is null. Try refreshing projectile database");
-                float damage = data.BaseDamage * hitEvent.DamageMultiplier; 
+                if (data == null) Debug.LogError("Data is null. Try refreshing projectile database");
+                float damage = data.BaseDamage * hitEvent.DamageMultiplier;
                 Vector2 knockback = new(data.Knockback.x * Mathf.Sign(hitEvent.Direction.x), data.Knockback.y);
 
                 DamagePayload damagePayload = new
                     (
-                    damage,data.damageType,
+                    damage, data.damageType,
                     HealthChangeSource.Generic,
                     hitEvent.InstigatorId,
                     hitEvent.HitPosition,
@@ -165,7 +167,7 @@ namespace Wordania.Features.Combat.Core
                     );
                 damageable.ApplyDamage(damagePayload);
 
-                _hitSignal.Raise(hitEvent);
+                _eventBus.Publish(new HitRegisteredEvent(hitEvent));
             }
         }
     }

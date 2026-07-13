@@ -41,6 +41,7 @@ using Wordania.Features.Day;
 using Wordania.Core.SaveSystem;
 using Wordania.Features.Skills;
 using Wordania.Features.HUD.Skills;
+using Wordania.Features.Events;
 
 namespace Wordania.Features
 {
@@ -55,7 +56,6 @@ namespace Wordania.Features
         [SerializeField] private BossRegistry _bossRegistry;
         [SerializeField] private SkillRegistry _skillRegistry;
         [SerializeField] private WorldSettings _worldSettings;
-        [SerializeField] private LightChangedSignal _lightChangedSignal;
         [SerializeField] private DaySettings _daySettings;
         [SerializeField] private PlayerConfig _playerConfig;
         [SerializeField] private EnemySystemSettings _enemySpawnSettings;
@@ -63,9 +63,6 @@ namespace Wordania.Features
         [SerializeField] private GameObject _playerPrefab;
         [SerializeField] private Chunk _chunkPrefab;
         [SerializeField] private CameraService _cameraService;
-        [SerializeField] private LootSignal _lootSignal;
-        [SerializeField] private ProjectileFiredSignal _projectileFiredSignal;
-        [SerializeField] private HitRegisteredSignal _hitRegisteredSignal;
         [SerializeField] private HealthBarUI _healthBarUI;
         [SerializeField] private InventoryView _inventoryView;
         [SerializeField] private InventoryDisplayUI _inventoryDisplayUI;
@@ -74,8 +71,6 @@ namespace Wordania.Features
         [SerializeField] private SavingIcon _savingIcon;
         [SerializeField] private WorldMapController _worldMapController;
         [SerializeField] private WorldMapView _worldMapView;
-        [SerializeField] private BossDefeatedSignal _bossDefeatedSignal;
-        [SerializeField] private BossSpawnedSignal _bossSpawnedSignal;
         [SerializeField] private SkillTreeView _skillTreeView;
         [SerializeField] private SkillTreeDisplay _skillTreeDisplay;
 
@@ -101,6 +96,7 @@ namespace Wordania.Features
             builder.RegisterInstance<IAssetRegistry<SkillData>>(_skillRegistry);
 
 
+            builder.Register<GameplayEventBus>(Lifetime.Scoped).As<IEventBusGameplay>();
             builder.RegisterInstance<ICameraService>(_cameraService);
 
             //markers
@@ -120,7 +116,6 @@ namespace Wordania.Features
             builder.Register<WorldGenerator>(Lifetime.Scoped).As<IWorldGenerator>();
             builder.RegisterComponentInHierarchy<Grid>();
 
-            builder.RegisterInstance(_lootSignal);
             builder.RegisterEntryPoint<WorldService>(Lifetime.Scoped).As<IWorldService>();
             builder.RegisterEntryPoint<WorldCollisionJobService>(Lifetime.Scoped).As<IWorldCollisionJobService>();
 
@@ -131,7 +126,6 @@ namespace Wordania.Features
             builder.RegisterEntryPoint<WorldRenderer>(Lifetime.Scoped);
 
             //lighting
-            builder.RegisterInstance(_lightChangedSignal);
             builder.RegisterEntryPoint<StaticLightingService>(Lifetime.Scoped).As<IStaticLightingService>();
             builder.RegisterEntryPoint<SkyLightService>(Lifetime.Scoped).As<ISkyLightService>();
             builder.RegisterEntryPoint<GlobalLightmapRenderer>(Lifetime.Scoped).As<ILightmapRenderer>();
@@ -152,8 +146,6 @@ namespace Wordania.Features
             builder.Register<SingleFireStrategy>(Lifetime.Singleton).As<IWeaponFireStrategy>();
             builder.Register<ConeSpreadFireStrategy>(Lifetime.Singleton).As<IWeaponFireStrategy>();
 
-            builder.RegisterInstance(_projectileFiredSignal);
-            builder.RegisterInstance(_hitRegisteredSignal);
             builder.Register<WeaponFactory>(Lifetime.Scoped).As<IWeaponFactory>();
             builder.RegisterEntryPoint<ProjectileSimulationService>(Lifetime.Scoped).As<IProjectileSimulationService>();
             builder.RegisterEntryPoint<ProjectileFactory>(Lifetime.Scoped).As<IProjectileFactory>();
@@ -182,8 +174,6 @@ namespace Wordania.Features
             builder.RegisterEntryPoint<EnemyCullingSystem>(Lifetime.Scoped);
 
             //bosses
-            builder.RegisterInstance(_bossSpawnedSignal);
-            builder.RegisterInstance(_bossDefeatedSignal);
             builder.Register<BossSpawnerService>(Lifetime.Scoped).As<IBossSpawnerService>();
 
             //TODO: move to HUD lifetime scope
@@ -231,16 +221,15 @@ TODOS:
 
 - fix conflict with dash invincibility
 - player visual (change dependency and move data to settings)
-- consult visual rotation change in boss part controler
 - somehow make projectiles hitbox not a point
 - make boss stop after player dies
 - fix magic color in light shader graph
-- change all 1f to WorldSettings.TileSize
 - fix player clipping 
 - remove DS_Store from repository
 - change enemies speed
 - fix player speed (after adding stats)
 - refactor inventory display
+- prewarming
 
 features:
 boss spawning

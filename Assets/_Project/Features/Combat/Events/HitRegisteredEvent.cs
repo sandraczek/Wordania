@@ -5,19 +5,22 @@ using Wordania.Core.Events;
 
 namespace Wordania.Features.Combat.Events
 {
-    public struct ProjectileHitEvent
+    public struct ProjectileHitData
     {
         public float2 Direction;
         public int ProjectileDataId;
         public int HitEntityId;
         public float2 HitPosition;
-        public float DamageMultiplier; 
+        public float DamageMultiplier;
         public int InstigatorId;
     }
 
-    [CreateAssetMenu(menuName = "Signals/HitRegistered")]
-    public sealed class HitRegisteredSignal : BaseSignal<ProjectileHitEvent>
+    public struct HitRegisteredEvent : IGameEvent
     {
-
+        public HitRegisteredEvent(ProjectileHitData hitData)
+        {
+            HitData = hitData;
+        }
+        public ProjectileHitData HitData;
     }
 }

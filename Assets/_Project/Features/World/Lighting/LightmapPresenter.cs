@@ -1,6 +1,7 @@
 // LightmapPresenter.cs
 using System;
 using VContainer.Unity;
+using Wordania.Features.Events;
 using Wordania.Features.World;
 using Wordania.Features.World.Data;
 
@@ -15,7 +16,7 @@ namespace Wordania.Features.World.Lighting // lub Wordania.World.Presentation
         private readonly IStaticLightingService _lightingService;
         private readonly ILightmapRenderer _lightmapRenderer;
 
-        private readonly LightChangedSignal _lightChanged;
+        private readonly IEventBusGameplay _eventBus;
 
         private bool _isDirty = false;
 
@@ -24,22 +25,22 @@ namespace Wordania.Features.World.Lighting // lub Wordania.World.Presentation
             IWorldService world,
             IStaticLightingService lightingService,
             ILightmapRenderer lightmapRenderer,
-            LightChangedSignal lightChangedSignal
+            IEventBusGameplay eventBus
             )
         {
             _world = world;
             _lightingService = lightingService;
             _lightmapRenderer = lightmapRenderer;
-            _lightChanged = lightChangedSignal;
+            _eventBus = eventBus;
         }
 
         public void Start()
         {
-            _lightChanged.Subscribe(MarkAsDirty);
-            MarkAsDirty();
+            _eventBus.Subscribe<LightChangedEvent>(MarkAsDirty);
+            MarkAsDirty(new());
         }
 
-        private void MarkAsDirty()
+        private void MarkAsDirty(LightChangedEvent _)
         {
             _isDirty = true;
         }
@@ -56,10 +57,7 @@ namespace Wordania.Features.World.Lighting // lub Wordania.World.Presentation
 
         public void Dispose()
         {
-            if (_lightingService != null)
-            {
-                _lightChanged.Unsubscribe(MarkAsDirty);
-            }
+            _eventBus?.Unsubscribe<LightChangedEvent>(MarkAsDirty);
         }
     }
 }

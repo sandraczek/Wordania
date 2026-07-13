@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer.Unity;
+using Wordania.Features.Events;
 using Wordania.Features.World;
 using Wordania.Features.World.Config;
 using Wordania.Features.World.Data;
@@ -33,14 +34,14 @@ namespace Wordania.Features.World.Lighting
         private readonly int[] _neighborX = { 1, -1, 0, 0 };
         private readonly int[] _neighborY = { 0, 0, 1, -1 };
 
-        private readonly LightChangedSignal _lightChanged;
+        private readonly IEventBusGameplay _eventBus;
 
-        public StaticLightingService(IBlockRegistry blockRegistry, IWorldService worldService, WorldSettings settings, LightChangedSignal lightChangedSignal)
+        public StaticLightingService(IBlockRegistry blockRegistry, IWorldService worldService, WorldSettings settings, IEventBusGameplay eventBus)
         {
             _blockRegistry = blockRegistry;
             _settings = settings;
             _worldService = worldService;
-            _lightChanged = lightChangedSignal;
+            _eventBus = eventBus;
         }
         public void Start()
         {
@@ -195,7 +196,7 @@ namespace Wordania.Features.World.Lighting
                     }
                 }
             }
-            _lightChanged.Raise();
+            _eventBus.Publish(new LightChangedEvent());
         }
         private void HandleBlockChanged(Vector2Int pos, WorldLayer layer)
         {

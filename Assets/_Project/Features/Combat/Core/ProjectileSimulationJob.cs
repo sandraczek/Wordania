@@ -16,15 +16,15 @@ namespace Wordania.Features.Combat.Core
         [ReadOnly] public NativeArray<bool> WorldGrid;
         public int GridWidth;
         public int GridHeight;
-    
-        [WriteOnly] public NativeQueue<ProjectileHitEvent>.ParallelWriter HitEventsQueue;
-        
+
+        [WriteOnly] public NativeQueue<ProjectileHitData>.ParallelWriter HitEventsQueue;
+
         public NativeArray<ProjectileRuntimeData> Projectiles;
 
         public void Execute(int index)
         {
             ProjectileRuntimeData data = Projectiles[index];
-            
+
             if (!data.IsActive) return;
 
             // 1. Handle Lifetime
@@ -35,7 +35,7 @@ namespace Wordania.Features.Combat.Core
                 Projectiles[index] = data;
                 return;
             }
-            
+
             data.PreviousPosition = data.CurrentPosition;
             data.Velocity.y -= 9.81f * data.GravityMultiplier * DeltaTime;
             data.CurrentPosition += data.Velocity * DeltaTime;
@@ -46,10 +46,10 @@ namespace Wordania.Features.Combat.Core
             if (grid.x >= 0 && grid.x < GridWidth && grid.y >= 0 && grid.y < GridHeight)
             {
                 int i = grid.y * GridWidth + grid.x;
-                
-                if (WorldGrid[i]) 
+
+                if (WorldGrid[i])
                 {
-                    HitEventsQueue.Enqueue(new ProjectileHitEvent
+                    HitEventsQueue.Enqueue(new ProjectileHitData
                     {
                         HitEntityId = -1,
                         ProjectileDataId = data.DataId,
@@ -60,14 +60,14 @@ namespace Wordania.Features.Combat.Core
                     });
 
                     data.IsActive = false;
-                    
+
                     Projectiles[index] = data;
-                    return; 
+                    return;
                 }
             }
             else
             {
-                data.IsActive = false; 
+                data.IsActive = false;
                 Projectiles[index] = data;
                 return;
             }
@@ -84,7 +84,7 @@ namespace Wordania.Features.Combat.Core
 
                 if (LineIntersectsAABB(data.PreviousPosition, data.CurrentPosition, target.Min, target.Max, out float2 hitpoint))
                 {
-                    HitEventsQueue.Enqueue(new ProjectileHitEvent
+                    HitEventsQueue.Enqueue(new ProjectileHitData
                     {
                         Direction = math.normalizesafe(data.Velocity),
                         ProjectileDataId = data.DataId,
@@ -123,7 +123,7 @@ namespace Wordania.Features.Combat.Core
             hitPoint = float2.zero;
 
             float2 dir = lineEnd - lineStart;
-            float2 invDir = math.rcp(dir); 
+            float2 invDir = math.rcp(dir);
 
             float2 t0 = (aabbMin - lineStart) * invDir;
             float2 t1 = (aabbMax - lineStart) * invDir;
@@ -131,8 +131,8 @@ namespace Wordania.Features.Combat.Core
             float2 tSmall = math.min(t0, t1);
             float2 tBig = math.max(t0, t1);
 
-            float tNear = math.cmax(tSmall); 
-            float tFar = math.cmin(tBig);    
+            float tNear = math.cmax(tSmall);
+            float tFar = math.cmin(tBig);
 
             if (tNear <= tFar && tFar >= 0.0f && tNear <= 1.0f)
             {

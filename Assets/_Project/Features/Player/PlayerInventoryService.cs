@@ -11,6 +11,8 @@ using Codice.CM.WorkspaceServer.Lock;
 using Wordania.Core.Identifiers;
 using Wordania.Features.Inventory.Events;
 using Wordania.Core.Data;
+using Wordania.Features.Events;
+using Wordania.Core.Events;
 
 namespace Wordania.Features.Player
 {
@@ -21,29 +23,29 @@ namespace Wordania.Features.Player
 
         public string SaveId => "PlayerInventory";
 
-        private readonly LootSignal _lootChannel; // temporary
+        private readonly IEventBusGameplay _eventBus;
         public event Action OnInventoryChanged;
         private ISaveService _saveService;
 
-        public PlayerInventoryService(IAssetRegistry<ItemData> database, LootSignal lootEvent, ISaveService saveService)
+        public PlayerInventoryService(IAssetRegistry<ItemData> database, IEventBusGameplay eventBus, ISaveService saveService)
         {
             _database = database;
-            _lootChannel = lootEvent;
+            _eventBus = eventBus;
             _saveService = saveService;
         }
         public void Start()
         {
             _saveService.Register(this);
-            _lootChannel.Subscribe(HandleLoot);
+            _eventBus.Subscribe<LootEvent>(HandleLoot);
         }
         public void Dispose()
         {
             _saveService?.Unregister(this);
-            _lootChannel.Unsubscribe(HandleLoot);
+            _eventBus?.Unsubscribe<LootEvent>(HandleLoot);
         }
-                                                // TO DO - SWITCH TO List<>
+        // TO DO - SWITCH TO List<>
         public void AddItem(AssetId id, int amount) // to do - convert all to bool
-        {       
+        {
             var data = _database.Get(id);   //to do - and also structural refactor HandleLoot
             if (data == null) return;
             if (data == null || amount <= 0) return;
@@ -68,7 +70,7 @@ namespace Wordania.Features.Player
             if (_data._content.TryGetValue(data.Id, out InventoryEntry entry))
             {
                 bool success = entry.TryRemove(amount);
-                if(success) OnInventoryChanged?.Invoke();
+                if (success) OnInventoryChanged?.Invoke();
                 return success;
             }
 
@@ -84,7 +86,7 @@ namespace Wordania.Features.Player
             _data._content.Clear();
         }
 
-        private void HandleLoot(LootData loot)
+        private void HandleLoot(LootEvent loot)
         {
             AddItem(loot.Item.Id, loot.Quantity);
         }
@@ -109,9 +111,9 @@ namespace Wordania.Features.Player
 
             if (saveData.PlayerInventory.items == null) return;
 
-            foreach(ItemSaveData itemSave in saveData.PlayerInventory.items)
+            foreach (ItemSaveData itemSave in saveData.PlayerInventory.items)
             {
-                if (itemSave.Id!= 0 && itemSave.Quantity > 0)
+                if (itemSave.Id != 0 && itemSave.Quantity > 0)
                 {
                     AddItem(new AssetId(itemSave.Id), itemSave.Quantity);
                 }
