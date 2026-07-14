@@ -13,6 +13,7 @@ namespace Wordania.Core.Gameplay
         IPlayerSkillContext SkillContext { get; }
         Vector2 Position { get; }
         Bounds Hitbox { get; }
+        int InstanceId { get; }
         bool IsPlayerSpawned { get; }
         event Action OnPlayerRegistered;
         event Action OnPlayerUnregistered;

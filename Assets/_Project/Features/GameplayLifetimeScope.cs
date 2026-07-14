@@ -42,7 +42,7 @@ using Wordania.Core.SaveSystem;
 using Wordania.Features.Skills;
 using Wordania.Features.HUD.Skills;
 using Wordania.Core.Events;
-using Wordania.Features.Journalism;
+using Wordania.Features.Journal;
 
 namespace Wordania.Features
 {
@@ -178,7 +178,7 @@ namespace Wordania.Features
             builder.Register<BossSpawnerService>(Lifetime.Scoped).As<IBossSpawnerService>();
 
             //journal
-            builder.RegisterEntryPoint<Journal>(Lifetime.Scoped).As<IJournal>();
+            builder.RegisterEntryPoint<JournalService>(Lifetime.Scoped).As<IJournalService>();
 
             //TODO: move to HUD lifetime scope
             builder.RegisterInstance(_uiConfig);

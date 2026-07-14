@@ -34,6 +34,7 @@ namespace Wordania.Features.Player
         public bool IsPlayerSpawned => _player != null;
         public Vector2 Position => _player.Position;
         public Bounds Hitbox => _player.Hitbox;
+        public int InstanceId => _player.InstanceId;
         public string SaveId => "Player";
 
         public PlayerService(GameObject playerPrefab, IObjectResolver resolver, ISaveService save, MarkerEntityParent playerParent, IEntityTrackerService entityTracker, IDamageableEntitiesRegistryService entityRegistry)
