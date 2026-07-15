@@ -62,7 +62,7 @@ namespace Wordania.Features.Player
 
             _stateMachine = new StateMachine<PlayerBaseState>();
 
-            context.Bind(InstanceId, _stateMachine, _controller, _health, config, transform);
+            context.Bind(InstanceId, _stateMachine, _controller, _health, _config, _mechanics, transform);
             _factory = new(context, inputs, inventory);
         }
         public void InitializeNew()
@@ -78,6 +78,10 @@ namespace Wordania.Features.Player
         }
         private void Init()
         {
+            //starting mechanics. to change
+            _mechanics.EnableMechanic(new("mining_mechanic"));
+            _mechanics.EnableMechanic(new("healing_aura_mechanic"));
+            // ---
             _stateMachine.SwitchState(_factory.InitialState);
 
             _stats.Stats.Clear();

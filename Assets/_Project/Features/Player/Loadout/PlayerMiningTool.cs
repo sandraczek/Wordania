@@ -7,6 +7,7 @@ using Wordania.Core.Identifiers;
 using Wordania.Features.Combat.Core;
 using Wordania.Features.Combat.Data;
 using Wordania.Features.Inventory;
+using Wordania.Features.Mechanics.Data;
 using Wordania.Features.World;
 
 namespace Wordania.Features.Player.Loadout
@@ -16,6 +17,7 @@ namespace Wordania.Features.Player.Loadout
         private IWorldService _world;
         private IInventoryService _inventory;
         private PlayerContext _player;
+        private MechanicIds _mechanicIds;
 
         private bool _areaMine = true;
         private float _minePower = 0.5f;
@@ -28,11 +30,12 @@ namespace Wordania.Features.Player.Loadout
         private float _lastActionTime = float.MinValue;
 
         [Inject]
-        void Construct(IWorldService worldService, IInventoryService playerInventory, PlayerContext context)
+        void Construct(IWorldService worldService, IInventoryService playerInventory, PlayerContext context, MechanicIds mechanicIds)
         {
             _world = worldService;
             _inventory = playerInventory;
             _player = context;
+            _mechanicIds = mechanicIds;
         }
         public bool ExecutePrimaryAction(Vector2 targetWorldPos, int instigatorId)
         {
@@ -86,6 +89,8 @@ namespace Wordania.Features.Player.Loadout
 
         private bool TryMine(Vector2 targetWorldPos)
         {
+            if (!_player.Mechanics.HasMechanic(_mechanicIds.Mining)) return false;
+
             if (!_areaMine)
             {
                 if (!_world.TryDamageSingleBlock(targetWorldPos, _minePower)) return false;

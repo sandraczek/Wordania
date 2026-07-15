@@ -20,6 +20,8 @@ GameObject:
   - component: {fileID: 2980194849477195786}
   - component: {fileID: 3826486884661152737}
   - component: {fileID: 7215793108923115953}
+  - component: {fileID: 164336912652386122}
+  - component: {fileID: -699833200805861112}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -156,8 +158,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 299285e968ca74972904d6423d2c707d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Core::Wordania.Core.Combat.HealthComponent
-  _maxHealth: 100
+  _stats: {fileID: 0}
   _currentHealth: 0
+  LastAttackerId: 0
 --- !u!114 &4436758731559536367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,6 +253,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 157c2f12912d541c9878eacd90163f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Player.PlayerDebugHandler
+--- !u!114 &164336912652386122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5377237029528584182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 523327b28f3d04832b919438d8fbe49e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Wordania.Core::Wordania.Core.Stats.StatComponent
+--- !u!114 &-699833200805861112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5377237029528584182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c10e544f7a404a9bb1efd5ed63d4702, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Wordania.Core::Wordania.Core.Gameplay.EntityContext
 --- !u!1 &7354028105140276930
 GameObject:
   m_ObjectHideFlags: 0

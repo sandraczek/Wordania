@@ -367,8 +367,8 @@ MonoBehaviour:
   _projectileRegistry: {fileID: 11400000, guid: 27b90463f24c14661a2c805437eb06b0, type: 2}
   _bossRegistry: {fileID: 11400000, guid: 8a912eca5f4cf4419b77e99386ce5152, type: 2}
   _skillRegistry: {fileID: 11400000, guid: 68ff0a1b1d3f540e79b7f8670caa8af5, type: 2}
+  _mechanicRegistry: {fileID: 11400000, guid: b642ca261bba64180ad9c962e9a49ef2, type: 2}
   _worldSettings: {fileID: 11400000, guid: e9faa1548b60a48f4b02264a5b5776c8, type: 2}
-  _lightChangedSignal: {fileID: 11400000, guid: eb3c0476fa30f49719cdb2432457a730, type: 2}
   _daySettings: {fileID: 11400000, guid: 008e561bbce3f48258823ff259d5f389, type: 2}
   _playerConfig: {fileID: 11400000, guid: cc39e62af189f4db39dd7d35481f27a2, type: 2}
   _enemySpawnSettings: {fileID: 11400000, guid: c77d18375950242558a20fdf4b16c6ad, type: 2}
@@ -376,9 +376,6 @@ MonoBehaviour:
   _playerPrefab: {fileID: 5377237029528584182, guid: 9dd43d0313ec54733bb0b134308ab288, type: 3}
   _chunkPrefab: {fileID: 8679379767168436347, guid: d18dcdfeb9d1d4daeb28cc178971393e, type: 3}
   _cameraService: {fileID: 2046067484}
-  _lootSignal: {fileID: 11400000, guid: 689f400bcd7804a2db5dd1bc5cf8aa88, type: 2}
-  _projectileFiredSignal: {fileID: 11400000, guid: 99493f51036f94aceb3a03d93cf88879, type: 2}
-  _hitRegisteredSignal: {fileID: 11400000, guid: 9dd452d2dba3949daad518d30903cf6a, type: 2}
   _healthBarUI: {fileID: 596826980}
   _inventoryView: {fileID: 1478385141}
   _inventoryDisplayUI: {fileID: 1644110971}
@@ -387,8 +384,6 @@ MonoBehaviour:
   _savingIcon: {fileID: 579839866}
   _worldMapController: {fileID: 1956776456}
   _worldMapView: {fileID: 278490713}
-  _bossDefeatedSignal: {fileID: 11400000, guid: ffeb1333a39ad4570b9da957a0ebfa49, type: 2}
-  _bossSpawnedSignal: {fileID: 11400000, guid: daa7150353f7b437d89737f3d2959a88, type: 2}
   _skillTreeView: {fileID: 1613858581}
   _skillTreeDisplay: {fileID: 1613858582}
   _saveSlot: 0

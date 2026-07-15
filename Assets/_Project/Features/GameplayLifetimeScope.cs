@@ -43,6 +43,8 @@ using Wordania.Features.Skills;
 using Wordania.Features.HUD.Skills;
 using Wordania.Core.Events;
 using Wordania.Features.Journal;
+using Wordania.Features.Mechanics;
+using Wordania.Features.Mechanics.Data;
 
 namespace Wordania.Features
 {
@@ -56,6 +58,7 @@ namespace Wordania.Features
         [SerializeField] private ProjectileRegistry _projectileRegistry;
         [SerializeField] private BossRegistry _bossRegistry;
         [SerializeField] private SkillRegistry _skillRegistry;
+        [SerializeField] private MechanicRegistry _mechanicRegistry;
         [SerializeField] private WorldSettings _worldSettings;
         [SerializeField] private DaySettings _daySettings;
         [SerializeField] private PlayerConfig _playerConfig;
@@ -95,7 +98,9 @@ namespace Wordania.Features
             builder.RegisterInstance<IAssetRegistry<BossTemplate>>(_bossRegistry);
             _skillRegistry.Initialize();
             builder.RegisterInstance<IAssetRegistry<SkillData>>(_skillRegistry);
-
+            _mechanicRegistry.Initialize();
+            builder.RegisterInstance<IAssetRegistry<MechanicData>>(_mechanicRegistry);
+            builder.Register<MechanicIds>(Lifetime.Singleton);
 
             builder.Register<GameplayEventBus>(Lifetime.Scoped).As<IEventBusGameplay>();
             builder.RegisterInstance<ICameraService>(_cameraService);
@@ -162,7 +167,9 @@ namespace Wordania.Features
                 .WithParameter(_playerPrefab);
 
             //skills
+            builder.Register<MechanicFactory>(Lifetime.Scoped).As<IMechanicFactory>();
             builder.RegisterEntryPoint<PlayerSkillService>(Lifetime.Scoped).As<IPlayerSkillService>();
+
 
             //enemies
             builder.RegisterInstance(_enemySpawnSettings);
@@ -224,7 +231,8 @@ namespace Wordania.Features
 TODOS:
 
 - FIX GET INSTANCE ID
--fix show chunks
+- FIX saving skill points
+- fix show chunks
 - fix conflict with dash invincibility
 - player visual (change dependency and move data to settings)
 - somehow make projectiles hitbox not a point

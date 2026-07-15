@@ -17,9 +17,10 @@ namespace Wordania.Core.Data
         private Dictionary<AssetId, T> _lookupTable;
         public IReadOnlyList<T> Assets => _assets;
 
+#if UNITY_EDITOR
         //debug
-        private bool asdasd = true;
-
+        private bool _showAvailableItems = true;
+#endif
         public void Initialize()
         {
             _lookupTable = new Dictionary<AssetId, T>(_assets.Count);
@@ -31,9 +32,12 @@ namespace Wordania.Core.Data
                     Debug.LogWarning($"[{typeof(T).Name}] Duplicated ID: {asset.Id} for asset: {asset.name}.");
                 }
             }
-            asdasd = true;
-        }
 
+#if UNITY_EDITOR
+            //debug
+            _showAvailableItems = false;
+#endif
+        }
         public T Get(AssetId id)
         {
             if (id.Hash == 0) return null;
@@ -55,7 +59,9 @@ namespace Wordania.Core.Data
             }
 
             Debug.LogError($"[{GetType().Name}] Asset with ID {id.Hash} was not found.");
-            if (asdasd) { Debug.Log(dump); asdasd = false; }
+#if UNITY_EDITOR
+            if (_showAvailableItems) Debug.Log(dump);
+#endif
             return null;
         }
 

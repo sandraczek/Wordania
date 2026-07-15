@@ -13,6 +13,7 @@ using Wordania.Features.Combat;
 using Wordania.Features.Enemies.Data;
 using Wordania.Features.Enemies.FSM;
 using Wordania.Features.Enemies.Movement;
+using Wordania.Features.Mechanics;
 using Wordania.Features.Movement;
 
 namespace Wordania.Features.Enemies.Core
@@ -21,6 +22,7 @@ namespace Wordania.Features.Enemies.Core
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(StatComponent))]
+    [RequireComponent(typeof(EntityMechanicController))]
     public sealed class EnemyController : MonoBehaviour, IEnemy, ICharacterMovement, IDamageable, ITrackable
     {
         public EnemyTemplate Data;
@@ -28,6 +30,7 @@ namespace Wordania.Features.Enemies.Core
         private IEventBusGameplay _eventBus;
         private HealthComponent _health;
         private StatComponent _stats;
+        private EntityMechanicController _mechanics;
         private Rigidbody2D _rb;
         private Collider2D _col;
         public Bounds Hitbox => _col.bounds;
@@ -79,6 +82,7 @@ namespace Wordania.Features.Enemies.Core
             _rb = GetComponent<Rigidbody2D>();
             _col = GetComponent<Collider2D>();
             _stats = GetComponent<StatComponent>();
+            _mechanics = GetComponent<EntityMechanicController>();
 
 
             _stateMachine = new();
@@ -94,6 +98,7 @@ namespace Wordania.Features.Enemies.Core
             _stats.Stats.Add(StatType.MovementSpeed, new(Data.Movement.PatrolSpeed)); // to change
 
             _health.Initialize();
+            _mechanics.ClearAllMechanics();
             _maxFallSpeed = 0f;
             SetGravity(Data.Movement.GravityScale);
             _stateMachine.SwitchState(_stateFactory.InitialState);

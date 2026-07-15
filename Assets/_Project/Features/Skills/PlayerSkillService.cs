@@ -78,7 +78,7 @@ namespace Wordania.Features.Skills
 
             if (!CanUnlock(skill))
             {
-                throw new InvalidOperationException($"Cannot unlock skill {skillId}. Prerequisites not met or insufficient points.");
+                throw new InvalidOperationException($"Tried unlocking skill {skillId} but prerequisites were not met or insufficient points.");
             }
 
             foreach (SkillPoint sp in skill.Cost)

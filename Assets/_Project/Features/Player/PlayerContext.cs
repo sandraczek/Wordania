@@ -1,6 +1,7 @@
 using UnityEngine;
 using Wordania.Core.Combat;
 using Wordania.Core.SFM;
+using Wordania.Features.Mechanics;
 using Wordania.Features.Player.FSM;
 
 namespace Wordania.Features.Player
@@ -12,16 +13,25 @@ namespace Wordania.Features.Player
         public PlayerController Controller;
         public HealthComponent Health;
         public PlayerConfig Config;
+        public EntityMechanicController Mechanics;
         public Transform Transform;
 
         public PlayerContext() { }
-        public void Bind(int instanceId, StateMachine<PlayerBaseState> states, PlayerController controller, HealthComponent health, PlayerConfig config, Transform transform)
+        public void Bind(
+            int instanceId,
+            StateMachine<PlayerBaseState> states,
+            PlayerController controller,
+            HealthComponent health,
+            PlayerConfig config,
+            EntityMechanicController mechanics,
+            Transform transform)
         {
             InstanceId = instanceId;
             States = states;
             Controller = controller;
             Health = health;
             Config = config;
+            Mechanics = mechanics;
             Transform = transform;
         }
     }

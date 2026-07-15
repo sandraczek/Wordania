@@ -24,12 +24,19 @@ namespace Wordania.Features.Journal
 
         public void Start()
         {
+            _player.OnPlayerRegistered += CreateJournalForPlayer;
+            _player.OnPlayerUnregistered += DeleteJournalOfPlayer;
             _eventBus.Subscribe<DeathEvent>(HandleDeathEvent);
             _eventBus.Subscribe<BossDeathEvent>(HandleBossDeathEvent);
         }
 
         public void Dispose()
         {
+            if (_player != null)
+            {
+                _player.OnPlayerRegistered -= CreateJournalForPlayer;
+                _player.OnPlayerUnregistered -= DeleteJournalOfPlayer;
+            }
             _eventBus?.Unsubscribe<DeathEvent>(HandleDeathEvent);
             _eventBus?.Unsubscribe<BossDeathEvent>(HandleBossDeathEvent);
         }
@@ -63,15 +70,27 @@ namespace Wordania.Features.Journal
 
             journal.IncrementBoss(death.Id);
         }
-        public void CreateJournalForPlayer(int id)
+        private void CreateJournalForPlayer()
         {
+            int id = _player.InstanceId;
             if (_journals.ContainsKey(id))
             {
-                Debug.LogWarning("Tried creating journal for a player thay already has a journal");
+                Debug.LogWarning("Tried creating journal for a player that already has a journal");
                 return;
             }
 
-            _journals.Add(id, new PlayerJournal());
+            _journals.Add(id, new PlayerJournal(id));
+        }
+        private void DeleteJournalOfPlayer()
+        {
+            int id = _player.InstanceId;
+            if (!_journals.ContainsKey(id))
+            {
+                Debug.LogWarning("Tried to remove journal of a player that does not have one");
+                return;
+            }
+
+            _journals.Remove(id);
         }
     }
 }
