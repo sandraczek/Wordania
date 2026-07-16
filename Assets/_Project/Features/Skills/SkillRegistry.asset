@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SkillRegistry
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Skills.SkillRegistry
   _assets:
+  - {fileID: 11400000, guid: 3d83c7bf949904ae2a32d3899255cfea, type: 2}
   - {fileID: 11400000, guid: c1c8d368af0424d4fb2caa9f3478b3b7, type: 2}
   - {fileID: 11400000, guid: 709b9200db7844b2e924fb36866afc05, type: 2}
   - {fileID: 11400000, guid: 82fea94a259804775a7d742868eb9d5c, type: 2}

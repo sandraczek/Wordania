@@ -8,12 +8,12 @@ namespace Wordania.Features.Mechanics.Data
 {
     public class MechanicIds
     {
-
         public readonly AssetId Mining;
-
+        public readonly AssetId Building;
         public MechanicIds(IAssetRegistry<MechanicData> registry)
         {
             Mining = GetMechanicId<MiningMechanicData>(registry);
+            Building = GetMechanicId<BuildingMechanicData>(registry);
         }
 
         private AssetId GetMechanicId<T>(IAssetRegistry<MechanicData> registry) where T : MechanicData

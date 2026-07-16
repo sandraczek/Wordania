@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Wordania.Core.Gameplay;
 using Wordania.Core.Identifiers;
+using Wordania.Features.Mechanics.Data;
 using Wordania.Features.Player;
 
 namespace Wordania.Features.Skills.Effects
@@ -9,16 +10,16 @@ namespace Wordania.Features.Skills.Effects
     [Serializable]
     public class UnlockMechanicSkillEffect : ISkillEffect
     {
-        [field: SerializeField] public AssetId MechanicId { get; private set; }
+        [field: SerializeField] public MechanicData Mechanic { get; private set; }
 
         public void Apply(IPlayerSkillContext context, AssetId source)
         {
-            context.UnlockMechanic(MechanicId);
+            context.UnlockMechanic(Mechanic.Id);
         }
 
         public void Revert(IPlayerSkillContext context, AssetId source)
         {
-            context.LockMechanic(MechanicId);
+            context.LockMechanic(Mechanic.Id);
         }
     }
 }

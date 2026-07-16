@@ -8,6 +8,7 @@ namespace Wordania.Features.Journal
         private readonly int _playerId;
         private readonly Dictionary<AssetId, int> _enemies = new();
         private readonly Dictionary<AssetId, int> _bosses = new();
+        private readonly Dictionary<AssetId, int> _blocks = new();
 
         public PlayerJournal(int playerId)
         {
@@ -35,6 +36,18 @@ namespace Wordania.Features.Journal
             else
             {
                 _bosses.Add(id, 1);
+            }
+
+        }
+        public void IncrementBlock(AssetId id)
+        {
+            if (_blocks.ContainsKey(id))
+            {
+                _blocks[id]++;
+            }
+            else
+            {
+                _blocks.Add(id, 1);
             }
 
         }

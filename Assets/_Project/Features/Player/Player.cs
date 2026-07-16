@@ -80,7 +80,7 @@ namespace Wordania.Features.Player
         {
             //starting mechanics. to change
             _mechanics.EnableMechanic(new("mining_mechanic"));
-            _mechanics.EnableMechanic(new("healing_aura_mechanic"));
+            _mechanics.EnableMechanic(new("building_mechanic"));
             // ---
             _stateMachine.SwitchState(_factory.InitialState);
 

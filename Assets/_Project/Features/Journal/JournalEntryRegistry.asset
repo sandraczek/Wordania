@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13b1c0385480c4cb699bdc7d2d3c43b8, type: 3}
+  m_Name: JournalEntryRegistry
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Journal.Entries.JournalEntryRegistry
+  _assets:
+  - {fileID: 11400000, guid: 58d5f93b80eb74b94a81c52e3c60f044, type: 2}
+  - {fileID: 11400000, guid: 454ab55b4f1974dbd9ac3dd0e40ae190, type: 2}
