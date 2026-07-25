@@ -233,7 +233,6 @@ TODOS:
 
 - somehow make projectiles hitbox not a point
 - fix magic color in light shader graph
-- remove DS_Store from repository
 - prewarming
 - fix enemies stopping after hit
 - can remove dependency between player and healthbar (move to event bus)
