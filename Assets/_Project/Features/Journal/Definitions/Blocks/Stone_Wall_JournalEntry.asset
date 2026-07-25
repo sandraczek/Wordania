@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1a95f845561e499ca4aa05216a850a4, type: 3}
+  m_Name: Stone_Wall_JournalEntry
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Journal.Entries.JournalBlockEntry
+  _id:
+    _editorId: stone_wall_journal_entry
+    _hash: -797879888
+  Milestones: []
+  _block: {fileID: 11400000, guid: 415dd3c6a0d774725b9cadcddcb9a2f5, type: 2}

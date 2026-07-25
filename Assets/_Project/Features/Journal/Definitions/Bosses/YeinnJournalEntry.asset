@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: YeinnJournalEntry
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Journal.Entries.JournalBossEntry
   _id:
-    _editorId: yeinn_boss_entry
-    _hash: 966086853
+    _editorId: boss_yeinn_journal_entry
+    _hash: -849440351
   Milestones: []
   _boss: {fileID: 11400000, guid: d58728627ae204fcda8e9a698aabdb95, type: 2}
