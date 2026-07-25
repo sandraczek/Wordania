@@ -7,14 +7,14 @@ namespace Wordania.Features.Player.FSM
 {
     public sealed class PlayerRunState : PlayerGroundState
     {
-        public PlayerRunState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory){}
+        public PlayerRunState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory) { }
 
         public override void CheckSwitchStates()
         {
             base.CheckSwitchStates();
-            if(_inputs.MovementInput.x == 0f)
+            if (_inputs.MovementInput.x == 0f)
             {
-                _context.States.SwitchState(_factory.Idle);
+                _context.StateMachine.SwitchState(_factory.Idle);
                 return;
             }
         }
@@ -32,7 +32,7 @@ namespace Wordania.Features.Player.FSM
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            
+
         }
 
         public override void Update()

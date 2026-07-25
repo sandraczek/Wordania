@@ -7,7 +7,7 @@ using Wordania.Features.Inventory;
 
 namespace Wordania.Features.HUD.Inventory
 {
-    public sealed class InventoryView : MonoBehaviour
+    public sealed class InventoryView : MonoBehaviour, IHUDWindow
     {
         [Header("Dependencies")]
         private IInventoryDisplay _display;
@@ -26,34 +26,40 @@ namespace Wordania.Features.HUD.Inventory
         void Start()
         {
             _isOpen = false;
-            SetVisibility(false);
+            ApplyVisibility(false);
         }
         private void OnEnable()
         {
             _inputs.OnToggleInventory += HandleToggleInventory;
         }
 
-        private void OnDisable(){
-            if(_inputs == null) return;
+        private void OnDisable()
+        {
+            if (_inputs == null) return;
 
             _inputs.OnToggleInventory -= HandleToggleInventory;
         }
 
         private void HandleToggleInventory()
-        {   
-            _isOpen = !_isOpen;
-            SetVisibility(_isOpen);
-        }
-        public void SetVisibility(bool open)
         {
-            if(open){
-                _display.Show();
-                _hud.RegisterOpenWindow(this);
-            }
-            else{
-                _display.Hide();
-                _hud.UnregisterOpenWindow(this);
-            }
+            _isOpen = !_isOpen;
+
+            if (_isOpen) _hud.RegisterOpenWindow(this);
+            else _hud.UnregisterOpenWindow(this);
+
+            ApplyVisibility(_isOpen);
+        }
+        public void Close()
+        {
+            if (!_isOpen) return;
+
+            _isOpen = false;
+            ApplyVisibility(false);
+        }
+        private void ApplyVisibility(bool open)
+        {
+            if (open) _display.Show();
+            else _display.Hide();
         }
     }
 }

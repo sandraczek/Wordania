@@ -11,6 +11,7 @@ namespace Wordania.Core.Services
         bool IsGodModeActive { get; }
         void ToggleGodMode();
 
+        bool IsShowChunksActive { get; }
         event Action<bool> OnShowChunksChanged;
         event Action<bool> OnGodModeChanged;
         void LogInformation(string message);

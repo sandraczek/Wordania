@@ -13,7 +13,7 @@ namespace Wordania.Core.Combat
         private IEventBusGameplay _eventBus;
 
         [Header("Configuration")]
-        public StatComponent _stats;
+        private StatComponent _stats;
 
         [SerializeField] private float _currentHealth;
 
@@ -52,7 +52,7 @@ namespace Wordania.Core.Combat
             _currentHealth = Mathf.Clamp(current, 0f, MaxHealth);
             CheckDeathCondition();
 
-            _stats.Stats[StatType.MaxHealth].OnStatChanged -= HandleMaxHealthChange; // here subscribing
+            _stats.Stats[StatType.MaxHealth].OnStatChanged -= HandleMaxHealthChange;
             _stats.Stats[StatType.MaxHealth].OnStatChanged += HandleMaxHealthChange;
         }
         public void Initialize()

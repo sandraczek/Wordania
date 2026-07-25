@@ -28,6 +28,7 @@ namespace Wordania.Core.Inputs
         public event Action<bool> OnSecondaryActionHeld;
         public event Action OnCycleActionSettings;
         public event Action OnToggleInventory;
+        public event Action OnExitPerformed;
         public event Action OnToggleMap;
         public event Action OnToggleSkillTree;
 
@@ -119,6 +120,10 @@ namespace Wordania.Core.Inputs
         public void OnShowInventory(InputAction.CallbackContext context)
         {
             if (context.performed) OnToggleInventory?.Invoke();
+        }
+        public void OnExit(InputAction.CallbackContext context)
+        {
+            if (context.performed) OnExitPerformed?.Invoke();
         }
         public void OnShowMap(InputAction.CallbackContext context)
         {

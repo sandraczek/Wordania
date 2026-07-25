@@ -7,20 +7,21 @@ namespace Wordania.Features.Player.FSM
 {
     public class PlayerAirState : PlayerActiveState
     {
-        public PlayerAirState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory){}
+        public PlayerAirState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory) { }
 
         public override void CheckSwitchStates()
         {
             base.CheckSwitchStates();
             if (Time.time >= _context.Controller.LastJumpTime + _context.Config.MinJumpDuration && _context.Controller.IsGrounded)
             {
-                if(Math.Abs(_inputs.MovementInput.x) > 0.1f)
+                if (Math.Abs(_inputs.MovementInput.x) > 0.1f)
                 {
-                    _context.States.SwitchState(_factory.Run);
+                    _context.StateMachine.SwitchState(_factory.Run);
                     return;
                 }
-                else{
-                    _context.States.SwitchState(_factory.Idle);
+                else
+                {
+                    _context.StateMachine.SwitchState(_factory.Idle);
                     return;
                 }
             }

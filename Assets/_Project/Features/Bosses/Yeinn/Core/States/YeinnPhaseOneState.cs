@@ -21,9 +21,9 @@ namespace Wordania.Features.Bosses.Yeinn.Core
 
         public YeinnPhaseOneState(
             YeinnPhaseOneData data,
-            YeinnBossController controller, 
-            YeinnHeadController head, 
-            YeinnHandController leftHand, 
+            YeinnBossController controller,
+            YeinnHeadController head,
+            YeinnHandController leftHand,
             YeinnHandController rightHand)
         {
             _data = data;
@@ -65,7 +65,7 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         }
         public void FixedUpdate()
         {
-            
+
         }
         public void Exit()
         {
@@ -75,13 +75,13 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         private void TriggerHandAttack()
         {
             var activeHand = _isLeftHandTurn ? _leftHand : _rightHand;
-            
+
             if (!activeHand.IsDefeated)
             {
-                if(Random.value <= _data.SwipeAttackProbability)
-                    activeHand.CommandSwipeAttack(); 
+                if (Random.value <= _data.SwipeAttackProbability)
+                    activeHand.CommandSwipeAttack();
                 else
-                    activeHand.CommandSlamAttack(); 
+                    activeHand.CommandSlamAttack();
             }
 
             _isLeftHandTurn = !_isLeftHandTurn;

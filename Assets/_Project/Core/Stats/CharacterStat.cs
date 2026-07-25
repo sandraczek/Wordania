@@ -26,6 +26,10 @@ namespace Wordania.Core.Stats
                 return _lastCalculatedValue;
             }
         }
+        public static implicit operator float(CharacterStat stats)
+        {
+            return stats?.Value ?? 0f;
+        }
 
         public CharacterStat(float baseValue)
         {

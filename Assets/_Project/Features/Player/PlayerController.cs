@@ -22,7 +22,7 @@ namespace Wordania.Features.Player
         [Header("Dependencies")]
         private IInputReader _inputs;
         private PlayerConfig _config;
-        
+
         [HideInInspector] public float LastJumpTime = float.MinValue;
         [HideInInspector] public float LastGroundedTime { get; private set; } = 0f;
         [field: SerializeField] public bool IsGrounded { get; private set; }
@@ -51,7 +51,7 @@ namespace Wordania.Features.Player
                 Warp(value);
             }
         }
-        private bool _isFacingRight= true;
+        private bool _isFacingRight = true;
         private bool _isSteppingUp = false;
 
         public event Action<Vector3> OnPlayerWarped;
@@ -80,7 +80,7 @@ namespace Wordania.Features.Player
             IsGrounded = CheckGrounded();
 
             if (IsGrounded)
-            {   
+            {
 
                 LastGroundedTime = Time.time;
 
@@ -102,7 +102,7 @@ namespace Wordania.Features.Player
                 }
             }
         }
-        private void Warp(Vector2 targetPosition) 
+        private void Warp(Vector2 targetPosition)
         {
             Vector2 delta = targetPosition - _rb.position;
 
@@ -114,8 +114,7 @@ namespace Wordania.Features.Player
 
         public Vector2 GetWorldAimPosition()
         {
-            Vector2 worldPos = Camera.main.ScreenToWorldPoint(_inputs.CursorScreenPosition);
-            return new Vector2(worldPos.x, worldPos.y);
+            return Camera.main.ScreenToWorldPoint(_inputs.CursorScreenPosition);
         }
 
         private bool CheckGrounded()
@@ -130,7 +129,7 @@ namespace Wordania.Features.Player
             if (Mathf.Abs(direction) < 0.01f) return;
 
             bool inputRight = direction > 0;
-            
+
             if (inputRight != _isFacingRight)
             {
                 _isFacingRight = !_isFacingRight;
@@ -144,7 +143,7 @@ namespace Wordania.Features.Player
 
         public void TryStepUp(float horizontalInput)
         {
-            if(_isSteppingUp) return;
+            if (_isSteppingUp) return;
             if (Mathf.Abs(horizontalInput) < 0.01f) return;
 
             float direction = Mathf.Sign(horizontalInput);
@@ -152,7 +151,7 @@ namespace Wordania.Features.Player
             float lookDistance = _config.StepLookMargin + Mathf.Abs(VelocityX) * Time.fixedDeltaTime;
 
             Vector2 rayOrigin = new(
-                _col.bounds.center.x + (direction * _col.bounds.extents.x), 
+                _col.bounds.center.x + (direction * _col.bounds.extents.x),
                 _col.bounds.min.y + _config.StepLookMargin
             );
             RaycastHit2D hitLow = Physics2D.Raycast(rayOrigin, Vector2.right * direction, lookDistance, _config.GroundLayer);
@@ -164,10 +163,10 @@ namespace Wordania.Features.Player
 
             Vector2 downOrigin = highOrigin + direction * lookDistance * Vector2.right;
             RaycastHit2D hitDown = Physics2D.Raycast(downOrigin, Vector2.down, _config.MaxStepHeight, _config.GroundLayer);
-            if(hitDown.collider == null) return;
+            if (hitDown.collider == null) return;
 
             Vector2 targetPos = new(Position.x + direction * lookDistance, hitDown.point.y + _col.bounds.extents.y - _col.offset.y + _config.StepLookMargin);
-            Collider2D overlap = Physics2D.OverlapBox(targetPos + _col.offset, (Vector2)_col.bounds.size - 2f * _config.SkinWidth * new Vector2(1f,1f), 0, _config.GroundLayer);
+            Collider2D overlap = Physics2D.OverlapBox(targetPos + _col.offset, (Vector2)_col.bounds.size - 2f * _config.SkinWidth * new Vector2(1f, 1f), 0, _config.GroundLayer);
 
             if (overlap == null)
             {

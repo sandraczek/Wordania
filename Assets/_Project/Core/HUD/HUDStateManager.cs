@@ -1,14 +1,14 @@
-using System.Collections.Generic;
-using Codice.Client.Common;
+using System;
 using VContainer;
+using VContainer.Unity;
 using Wordania.Core.Inputs;
 
 namespace Wordania.Core.HUD
 {
-    public class HUDStateManager : IHUDStateManager
+    public class HUDStateManager : IHUDStateManager, IStartable, IDisposable
     {
         private readonly IInputReader _inputs;
-        private readonly HashSet<object> _activeWindows = new();
+        private IHUDWindow _activeWindow;
 
         [Inject]
         public HUDStateManager(IInputReader inputs)
@@ -16,24 +16,50 @@ namespace Wordania.Core.HUD
             _inputs = inputs;
         }
 
-        public void RegisterOpenWindow(object windowToken)
+        public void Start()
         {
-            bool wasEmpty = _activeWindows.Count == 0;
-            _activeWindows.Add(windowToken);
+            _inputs.OnExitPerformed += HandleExit;
+        }
+        public void Dispose()
+        {
+            if (_inputs != null)
+                _inputs.OnExitPerformed -= HandleExit;
 
-            if (wasEmpty && _activeWindows.Count > 0)
+        }
+
+        public void RegisterOpenWindow(IHUDWindow window)
+        {
+            if (_activeWindow == window) return;
+
+            // Only one window may be open at a time; close whatever was open before.
+            bool wasEmpty = _activeWindow == null;
+            _activeWindow?.Close();
+            _activeWindow = window;
+
+            if (wasEmpty)
             {
                 _inputs.SetHUDMode();
             }
         }
 
-        public void UnregisterOpenWindow(object windowToken)
+        public void UnregisterOpenWindow(IHUDWindow window)
         {
-            _activeWindows.Remove(windowToken);
+            if (_activeWindow != window) return;
 
-            if (_activeWindows.Count == 0)
+            _activeWindow = null;
+            _inputs.SetGameplayMode();
+        }
+
+        private void HandleExit()
+        {
+            if (_activeWindow == null)
             {
-                _inputs.SetGameplayMode();
+                // OPEN SETTINGS
+            }
+            else
+            {
+                _activeWindow.Close();
+                UnregisterOpenWindow(_activeWindow);
             }
         }
     }

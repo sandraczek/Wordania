@@ -11,6 +11,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         private readonly HoverOverPlayerAttack _data;
         private readonly YeinnHeadController _head;
         private readonly IPlayerProvider _player;
+        private Vector2 _lastPlayerPos;
 
         public YeinnHeadHoverState(HoverOverPlayerAttack hover, YeinnHeadController head, IPlayerProvider player)
         {
@@ -25,7 +26,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         }
         public void Enter()
         {
-            
+
         }
 
         public void Update()
@@ -34,8 +35,8 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         }
         public void FixedUpdate()
         {
-            if(_head.IsMoving) return;
-            
+            if (_head.IsMoving) return;
+
             SetTarget();
         }
         public void Exit()
@@ -44,7 +45,8 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         }
         private void SetTarget()
         {
-            Vector2 overPlayer = _player.Position + _data.VectorFromPlayer;
+            if (!(_player?.ReadOnlyHealth?.IsDead ?? true)) _lastPlayerPos = _player.Position;
+            Vector2 overPlayer = _lastPlayerPos + _data.VectorFromPlayer;
             Vector3 distance = _data.MaxDistanceFromPlayer * Random.value * Vector3.right;
             Vector2 target = overPlayer + (Vector2)(Random.rotation * distance);
 

@@ -1,49 +1,81 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Wordania.Features.Combat
 {
-    public class InvincibilityController
+    public enum InvincibilitySource
+    {
+        HitRecovery,
+        GodMode,
+        Dash,
+    }
+
+    public class InvincibilityController : MonoBehaviour
     {
         public event Action Started;
         public event Action Ended;
 
-        private float _endTime = -Mathf.Infinity;
-        private bool _isInvincibleRaw;
+        private readonly HashSet<InvincibilitySource> _activeSources = new();
+        private readonly Dictionary<InvincibilitySource, int> _timedTokens = new();
 
-        public bool IsInvincible => _isInvincibleRaw || Time.time < _endTime;
+        public bool IsInvincible => _activeSources.Count > 0;
 
-        public void StartInvincibility(float duration)
+        public bool HasSource(InvincibilitySource source) => _activeSources.Contains(source);
+
+        /// <summary>
+        /// Enables or disables invincibility from a persistent source (e.g. god mode).
+        /// Remains active until explicitly disabled, independent of other sources.
+        /// </summary>
+        public void SetInvincible(InvincibilitySource source, bool isInvincible)
         {
-            _endTime = Time.time + duration;
-            Started?.Invoke();
-
-            InvincibilityRoutineAsync(duration).Forget();
+            if (isInvincible) AddSource(source);
+            else RemoveSource(source);
         }
 
-        public void SetInvincibilityRaw(bool isInvincible)
+        /// <summary>
+        /// Enables invincibility from a source for a fixed duration (e.g. post-hit i-frames).
+        /// Calling this again for the same source before it expires refreshes the duration.
+        /// </summary>
+        public void StartInvincibility(InvincibilitySource source, float duration)
         {
-            bool wasInvincible = IsInvincible; 
-        
-            _isInvincibleRaw = isInvincible;
-            
-            if (wasInvincible && !IsInvincible)
-            {
-                Ended?.Invoke();
-            }
-            else if (!wasInvincible && IsInvincible)
+            AddSource(source);
+
+            int token = _timedTokens.TryGetValue(source, out int current) ? current + 1 : 1;
+            _timedTokens[source] = token;
+
+            InvincibilityRoutineAsync(source, duration, token).Forget();
+        }
+
+        private void AddSource(InvincibilitySource source)
+        {
+            bool wasInvincible = IsInvincible;
+
+            if (_activeSources.Add(source) && !wasInvincible)
             {
                 Started?.Invoke();
             }
         }
-        private async UniTask InvincibilityRoutineAsync(float duration)
+
+        private void RemoveSource(InvincibilitySource source)
+        {
+            bool wasInvincible = IsInvincible;
+
+            if (_activeSources.Remove(source) && wasInvincible && !IsInvincible)
+            {
+                Ended?.Invoke();
+            }
+        }
+
+        private async UniTask InvincibilityRoutineAsync(InvincibilitySource source, float duration, int token)
         {
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
 
-            if (Time.time >= _endTime && !_isInvincibleRaw)
+            // Ignore expiry if a newer StartInvincibility call already refreshed this source.
+            if (_timedTokens.TryGetValue(source, out int current) && current == token)
             {
-                Ended?.Invoke();
+                RemoveSource(source);
             }
         }
     }

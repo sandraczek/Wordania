@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using VContainer;
 using Wordania.Core.Config;
+using Wordania.Core.Services;
 using Wordania.Features.World.Config;
 
 namespace Wordania.Features.World
@@ -10,6 +11,7 @@ namespace Wordania.Features.World
     {
         private WorldSettings _settings;
         private IWorldService _world;
+        private IDebugService _debugService;
 
         [Header("Tilemap Layers")]
         [SerializeField] private Tilemap _backgroundMap;
@@ -17,16 +19,35 @@ namespace Wordania.Features.World
         [SerializeField] private Tilemap _foregroundMap;
         [SerializeField] private Tilemap _damageMap;
 
+        [Header("Debug")]
+        [SerializeField] private ChunkDebugBorder _debugBorder;
+
         private Vector2Int _chunkCoord;
         private Vector3Int[] _positionsCache;
         private TileBase[] _tilesCache;
         private bool _isInitialized;
 
         [Inject]
-        public void Construct(WorldSettings settings, IWorldService world)
+        public void Construct(WorldSettings settings, IWorldService world, IDebugService debugService)
         {
             _settings = settings;
             _world = world;
+            _debugService = debugService;
+
+            HandleShowChunksChanged(_debugService.IsShowChunksActive);
+            _debugService.OnShowChunksChanged += HandleShowChunksChanged;
+        }
+        private void OnDestroy()
+        {
+            if (_debugService != null)
+            {
+                _debugService.OnShowChunksChanged -= HandleShowChunksChanged;
+            }
+        }
+        private void HandleShowChunksChanged(bool isActive)
+        {
+            if (_debugBorder != null)
+                _debugBorder.SetVisible(isActive);
         }
         public void Configure(Vector2Int coord)
         {
@@ -59,6 +80,7 @@ namespace Wordania.Features.World
             }
 
             _mainMap.gameObject.layer = _settings.CollisionLayer;
+            _debugBorder?.SetSize(_settings.ChunkSize);
         }
         private void UpdateLayer(Tilemap targetMap, WorldLayer layerType)
         {

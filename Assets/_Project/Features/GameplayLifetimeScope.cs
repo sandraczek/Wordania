@@ -86,6 +86,7 @@ namespace Wordania.Features
         [SerializeField] private BossTemplate _bossToSpawn;
 
         protected override void Configure(IContainerBuilder builder)
+
         {
             //asset registries
             _blockRegistry.Initialize();
@@ -230,19 +231,9 @@ namespace Wordania.Features
 /*
 TODOS:
 
-- FIX GET INSTANCE ID
-- FIX saving skill points
-- fix show chunks
-- fix conflict with dash invincibility
-- player visual (change dependency and move data to settings)
 - somehow make projectiles hitbox not a point
-- make boss stop after player dies
 - fix magic color in light shader graph
-- fix player clipping 
 - remove DS_Store from repository
-- change enemies speed
-- fix player speed (after adding stats)
-- refactor inventory display
 - prewarming
 - fix enemies stopping after hit
 - can remove dependency between player and healthbar (move to event bus)
@@ -252,6 +243,8 @@ TODOS:
 features:
 boss spawning
 block builder picker soon? later?
+player reviving
+pause menu
 
 */
 

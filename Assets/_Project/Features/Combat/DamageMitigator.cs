@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Wordania.Core.Combat{
+namespace Wordania.Core.Combat
+{
 
-    public class DamageMitigator
+    public class DamageMitigator : MonoBehaviour
     {
         private float _generalResistance;
         private readonly Dictionary<DamageType, float> _typeResistance = new();

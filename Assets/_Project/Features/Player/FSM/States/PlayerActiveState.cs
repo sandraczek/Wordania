@@ -8,7 +8,7 @@ namespace Wordania.Features.Player.FSM
     {
         public override bool CanPerformActions => true;
         public override bool CanSetSlot => true;
-        public PlayerActiveState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory){}
+        public PlayerActiveState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory) { }
 
         public override void CheckSwitchStates()
         {
@@ -17,7 +17,7 @@ namespace Wordania.Features.Player.FSM
 
         public override void Enter()
         {
-            
+
         }
 
         public override void Exit()
@@ -38,15 +38,15 @@ namespace Wordania.Features.Player.FSM
         protected void ApplyStandardMovement(float accelerationMult = 1f, float decelerationMult = 1f, float speedMult = 1f)
         {
             float xInput = _inputs.MovementInput.x;
-            float targetSpeed = xInput * _context.Config.MoveSpeed * speedMult;
-            
+            float targetSpeed = xInput * _context.Stats.Stats[Core.Stats.StatType.MovementSpeed] * speedMult;
+
             bool isAccelerating = Mathf.Abs(xInput) > _context.Config.MinAccelerationInput;
-            float currentAccel = isAccelerating ? 
-                _context.Config.Acceleration * accelerationMult  : _context.Config.Deceleration * decelerationMult;
+            float currentAccel = isAccelerating ?
+                _context.Config.Acceleration * accelerationMult : _context.Config.Deceleration * decelerationMult;
 
             float newVelocityX = Mathf.MoveTowards(
-                _context.Controller.VelocityX, 
-                targetSpeed, 
+                _context.Controller.VelocityX,
+                targetSpeed,
                 currentAccel * Time.fixedDeltaTime
             );
 

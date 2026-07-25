@@ -33,11 +33,11 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         }
         public void FixedUpdate()
         {
-            
+            if (_player?.ReadOnlyHealth?.IsDead ?? true) _head.CommandHoverAttack();
         }
         public void Exit()
         {
-
+            _head.StopMovement();
         }
     }
 }

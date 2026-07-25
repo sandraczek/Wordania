@@ -9,14 +9,14 @@ namespace Wordania.Features.Player.FSM
 {
     public sealed class PlayerIdleState : PlayerGroundState
     {
-        public PlayerIdleState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory){}
+        public PlayerIdleState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory) { }
 
         public override void CheckSwitchStates()
         {
             base.CheckSwitchStates();
-            if(_inputs.MovementInput.x != 0f)
+            if (_inputs.MovementInput.x != 0f)
             {
-                _context.States.SwitchState(_factory.Run);
+                _context.StateMachine.SwitchState(_factory.Run);
                 return;
             }
         }

@@ -57,7 +57,7 @@ namespace Wordania.Features.Player.Loadout
 
         private void Update()
         {
-            if (_activeSlot?.Executor == null || !_player.States.CurrentState.CanPerformActions) return;
+            if (_activeSlot?.Executor == null || !_player.StateMachine.CurrentState.CanPerformActions) return;
 
             Vector2 aimPosition = _player.Controller.GetWorldAimPosition();
             int entityId = _player.InstanceId;
@@ -93,7 +93,7 @@ namespace Wordania.Features.Player.Loadout
 
         private void HandleHotbarSlotPressed(int inputIndex)
         {
-            if (!_player.States.CurrentState.CanSetSlot) return;
+            if (!_player.StateMachine.CurrentState.CanSetSlot) return;
 
             int slotIndex = inputIndex - 1;
 

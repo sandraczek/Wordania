@@ -19,14 +19,15 @@ namespace Wordania.Core.Inputs
         event Action<bool> OnSecondaryActionHeld;
         event Action OnCycleActionSettings;
         event Action OnToggleInventory;
+        event Action OnExitPerformed;
         event Action OnToggleMap;
         event Action OnToggleSkillTree;
         event Action OnToggleChunks;
         event Action OnToggleGodMode;
 
-        public void SetGameplayMode();
-        public void SetHUDMode();
-        public void DisableAllInput();
-        public void ConsumeJump();
+        void SetGameplayMode();
+        void SetHUDMode();
+        void DisableAllInput();
+        void ConsumeJump();
     }
 }

@@ -91,7 +91,7 @@ namespace Wordania.Features
             if (_saveSlot == 0)
             {
                 _loadingScreen.UpdateProgress(0.1f, "Generating World");
-                //_world.RandomizeSeed();
+                _world.RandomizeSeed();
                 await _world.GenerateWorldAsync(cancellation);
             }
             else

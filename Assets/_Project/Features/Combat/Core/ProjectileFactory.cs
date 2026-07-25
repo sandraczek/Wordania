@@ -83,7 +83,7 @@ namespace Wordania.Features.Combat.Core
             var runtimeData = new ProjectileRuntimeData
             {
                 IsActive = true,
-                ViewInstanceId = view.GetInstanceID(),
+                ViewInstanceId = view.gameObject.GetInstanceID(),
                 DataId = spawnData.Data.Id.Hash,
                 InstigatorId = spawnData.InstigatorId,
                 TargetFactionMask = (int)spawnData.TargetFactionMask,

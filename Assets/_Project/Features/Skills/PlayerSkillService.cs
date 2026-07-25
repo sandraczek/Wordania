@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VContainer.Unity;
 using Wordania.Core.Data;
@@ -34,6 +35,7 @@ namespace Wordania.Features.Skills
         public void Start()
         {
             _save.Register(this);
+            _player.OnPlayerRegistered += HandlePlayerRegistered;
 
             // TEMPORARY -------------------------------------------------------------------------------------------------
             for (int i = 0; i < SkillPoints.Length; i++)
@@ -41,7 +43,9 @@ namespace Wordania.Features.Skills
         }
         public void Dispose()
         {
-            _save.Unregister(this);
+            if (_player != null)
+                _player.OnPlayerRegistered -= HandlePlayerRegistered;
+            _save?.Unregister(this);
         }
 
         public bool IsSkillUnlocked(AssetId skillId)
@@ -88,10 +92,10 @@ namespace Wordania.Features.Skills
 
             _unlockedSkills.Add(skillId);
 
+            ApplySkillEffects(skill);
+
             OnPointsChanged?.Invoke(SkillPoints);
             OnSkillUnlocked?.Invoke(skillId);
-
-            ApplySkillEffects(skill);
         }
 
         public void AddPoints(SkillPointsType type, int points)
@@ -107,7 +111,7 @@ namespace Wordania.Features.Skills
             for (int i = 0; i < SkillPoints.Length; i++)
                 saveData.Skills.SkillPoints.Add((i, SkillPoints[i]));
 
-            saveData.Skills.UnlockedSkills = _unlockedSkills;
+            saveData.Skills.UnlockedSkills = _unlockedSkills.Select(s => s.Hash).ToList(); ;
         }
 
         public void RestoreState(GameSaveData saveData)
@@ -115,15 +119,30 @@ namespace Wordania.Features.Skills
             SkillPoints = new int[(int)SkillPointsType.Count];
             foreach (var sp in saveData.Skills.SkillPoints)
                 SkillPoints[sp.Item1] = sp.Item2;
-            if (_unlockedSkills != null)
-                _unlockedSkills = saveData.Skills.UnlockedSkills;
+            OnPointsChanged?.Invoke(SkillPoints);
+
+            if (saveData.Skills.UnlockedSkills != null)
+                _unlockedSkills = saveData.Skills.UnlockedSkills.Select(s => new AssetId(s)).ToHashSet();
         }
 
         public void ApplySkillEffects(SkillData skill)
         {
+            if (skill == null)
+            {
+                Debug.LogWarning("Could not apply skill effects - skill is null");
+                return;
+            }
             foreach (var effect in skill.Effects)
             {
                 effect.Apply(_player.SkillContext, skill.Id);
+            }
+        }
+        private void HandlePlayerRegistered()
+        {
+            foreach (var skillId in _unlockedSkills)
+            {
+                ApplySkillEffects(_registry.Get(skillId));
+                OnSkillUnlocked?.Invoke(skillId);
             }
         }
     }

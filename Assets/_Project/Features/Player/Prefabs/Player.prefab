@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 7215793108923115953}
   - component: {fileID: 164336912652386122}
   - component: {fileID: -699833200805861112}
+  - component: {fileID: 6568903139303736386}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -158,7 +159,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 299285e968ca74972904d6423d2c707d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Core::Wordania.Core.Combat.HealthComponent
-  _stats: {fileID: 0}
   _currentHealth: 0
   LastAttackerId: 0
 --- !u!114 &4436758731559536367
@@ -217,14 +217,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Player.Interaction.PlayerBuildingTool
   _currentBlockIndex: 0
   _buildingBlocks:
-  - {fileID: 11400000, guid: a88a74e71c89c409e9726a50c901820b, type: 2}
   - {fileID: 11400000, guid: 5d154869ac4e94c23997e3d3d5cfbe3f, type: 2}
   - {fileID: 11400000, guid: a15f13d08cbc44381b286379ca46a9a5, type: 2}
   - {fileID: 11400000, guid: 28948730022624828ac5373b290d985d, type: 2}
   - {fileID: 11400000, guid: ac2e6dc4b81884de1bec820e48ea8cf3, type: 2}
   - {fileID: 11400000, guid: 2c8c6a670e61a4dbb882e00f461fb8b9, type: 2}
   - {fileID: 11400000, guid: c8d9887c8a618481093519ec5709ed59, type: 2}
-  - {fileID: 11400000, guid: 415dd3c6a0d774725b9cadcddcb9a2f5, type: 2}
+  - {fileID: 11400000, guid: a88a74e71c89c409e9726a50c901820b, type: 2}
   _actionRange: 8
   _actionRate: 0.05
 --- !u!114 &3826486884661152737
@@ -277,6 +276,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c10e544f7a404a9bb1efd5ed63d4702, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Core::Wordania.Core.Gameplay.EntityContext
+--- !u!114 &6568903139303736386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5377237029528584182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5663b4c40f9d549ad80a4dfcbf3b8707, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Mechanics.EntityMechanicController
 --- !u!1 &7354028105140276930
 GameObject:
   m_ObjectHideFlags: 0

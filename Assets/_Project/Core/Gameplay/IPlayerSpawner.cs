@@ -9,6 +9,6 @@ namespace Wordania.Core.Gameplay
 {
     public interface IPlayerSpawner
     {
-        public void SpawnPlayer(Vector2 spawnPosition);
+        void SpawnPlayer(Vector2 spawnPosition);
     }
 }

@@ -6,10 +6,10 @@ namespace Wordania.Features.Mapping
     using Wordania.Core.Inputs;
 
     [RequireComponent(typeof(CanvasGroup))]
-    public class WorldMapView : MonoBehaviour
+    public class WorldMapView : MonoBehaviour, IHUDWindow
     {
         private CanvasGroup _canvasGroup;
-        
+
         private IInputReader _inputs;
         private IHUDStateManager _hud;
         private bool _isOpen = false;
@@ -28,7 +28,7 @@ namespace Wordania.Features.Mapping
         {
             _inputs.OnToggleMap += HandleMapToggle;
             _isOpen = false;
-            SetMapState(false);
+            ApplyVisibility(false);
         }
         private void OnDestroy()
         {
@@ -41,15 +41,22 @@ namespace Wordania.Features.Mapping
         private void HandleMapToggle()
         {
             _isOpen = !_isOpen;
-            SetMapState(_isOpen);
-        }
 
-        private void SetMapState(bool open)
-        {
-            if (open) _hud.RegisterOpenWindow(this);
+            if (_isOpen) _hud.RegisterOpenWindow(this);
             else _hud.UnregisterOpenWindow(this);
-            
-            _canvasGroup.alpha = open? 1f:0f;
+
+            ApplyVisibility(_isOpen);
+        }
+        public void Close()
+        {
+            if (!_isOpen) return;
+
+            _isOpen = false;
+            ApplyVisibility(false);
+        }
+        private void ApplyVisibility(bool open)
+        {
+            _canvasGroup.alpha = open ? 1f : 0f;
             _canvasGroup.interactable = open;
             _canvasGroup.blocksRaycasts = open;
         }

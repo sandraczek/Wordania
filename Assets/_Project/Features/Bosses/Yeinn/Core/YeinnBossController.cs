@@ -19,6 +19,9 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         [Header("Dependencies")]
         private IActiveEnemiesRegistryService _enemyRegistry;
         private IEventBusGameplay _eventBus;
+        private IPlayerProvider _player;
+
+
         [Header("Boss Parts")]
         [SerializeField] private YeinnHeadController _head;
         [SerializeField] private YeinnHandController _leftHand;
@@ -32,19 +35,22 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         // Phases
         private IState _phaseOne;
         private IState _phaseTwo;
+        private IState _dormant;
+        private IState _stateBackFromDormant;
         private IState _death;
 
         public bool AreBothHandsDefeated => _leftHand.IsDefeated && _rightHand.IsDefeated;
         public Vector2 Position => transform.position;
         public bool IsAlive { get; set; } = true;
         public bool IsPersistent { get; } = true;
-        public int InstanceId => GetInstanceID();
+        public int InstanceId => gameObject.GetInstanceID();
 
         [Inject]
-        public void Construct(IEventBusGameplay eventBus, IActiveEnemiesRegistryService enemyRegistry)
+        public void Construct(IEventBusGameplay eventBus, IActiveEnemiesRegistryService enemyRegistry, IPlayerProvider player)
         {
             _eventBus = eventBus;
             _enemyRegistry = enemyRegistry;
+            _player = player;
         }
         protected override void OnInitialize(YeinnTemplate template)
         {
@@ -58,6 +64,7 @@ namespace Wordania.Features.Bosses.Yeinn.Core
 
             _phaseOne = new YeinnPhaseOneState(template.PhaseOneData, this, _head, _leftHand, _rightHand);
             _phaseTwo = new YeinnPhaseTwoState(template.PhaseTwoData, this, _head);
+            _dormant = new YeinnDormantState(_head, _leftHand, _rightHand);
             _death = new YeinnDeathState(this);
 
             _phaseStateMachine.SwitchState(_phaseOne);
@@ -71,12 +78,33 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         }
         private void FixedUpdate()
         {
+            if (_player?.ReadOnlyHealth?.IsDead ?? true)
+            {
+                TransitionToDormant();
+            }
+            else if (_phaseStateMachine.CurrentState == _dormant)
+            {
+                TransitionBackFromDormant();
+            }
+
             _phaseStateMachine.FixedUpdate();
         }
 
         public void TransitionToPhaseTwo()
         {
+            _stateBackFromDormant = _phaseStateMachine.CurrentState;
             _phaseStateMachine.SwitchState(_phaseTwo);
+        }
+        public void TransitionToDormant()
+        {
+            _phaseStateMachine.SwitchState(_dormant);
+        }
+        public void TransitionBackFromDormant()
+        {
+            if (_phaseStateMachine.CurrentState != _dormant || _stateBackFromDormant == null || _stateBackFromDormant == _death) return;
+
+            _phaseStateMachine.SwitchState(_stateBackFromDormant);
+            _stateBackFromDormant = null;
         }
         public void TransitionToDeath()
         {

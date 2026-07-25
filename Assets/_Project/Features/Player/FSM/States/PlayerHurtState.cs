@@ -10,7 +10,7 @@ namespace Wordania.Features.Player.FSM
         public override bool CanSetSlot => true;
         private float _hitTime;
 
-        public PlayerHurtState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory){}
+        public PlayerHurtState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory) { }
         public override void CheckSwitchStates()
         {
             if (Time.time >= _context.Config.HitStunDuration + _hitTime)
@@ -26,33 +26,33 @@ namespace Wordania.Features.Player.FSM
 
         public override void Exit()
         {
-            
+
         }
 
         public override void Update()
         {
-            
+
         }
 
         public override void FixedUpdate()
         {
-            
+
         }
         private void DetermineNextState()
         {
             if (!_context.Controller.IsGrounded)
             {
-                _context.States.SwitchState(_factory.Fall);
+                _context.StateMachine.SwitchState(_factory.Fall);
                 return;
             }
 
             if (Mathf.Abs(_inputs.MovementInput.x) > 0.1f)
             {
-                _context.States.SwitchState(_factory.Run);
+                _context.StateMachine.SwitchState(_factory.Run);
                 return;
             }
 
-            _context.States.SwitchState(_factory.Idle);
+            _context.StateMachine.SwitchState(_factory.Idle);
         }
     }
 }

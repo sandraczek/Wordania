@@ -16,6 +16,7 @@ using Wordania.Core.Stats;
 using Wordania.Features.Combat;
 using Wordania.Features.Inventory;
 using Wordania.Features.Mechanics;
+using Wordania.Features.Mechanics.Data;
 using Wordania.Features.Movement;
 using Wordania.Features.Player.FSM;
 using Wordania.Features.Player.View;
@@ -26,6 +27,8 @@ namespace Wordania.Features.Player
     [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(StatComponent))]
     [RequireComponent(typeof(EntityMechanicController))]
+    [RequireComponent(typeof(InvincibilityController))]
+    [RequireComponent(typeof(DamageMitigator))]
     public sealed class Player : MonoBehaviour, IDamageable, ITrackable, IPlayerSkillContext
     {
         [Header("Components")]
@@ -34,35 +37,39 @@ namespace Wordania.Features.Player
         private HealthComponent _health;
         private StatComponent _stats;
         private EntityMechanicController _mechanics;
-        private readonly InvincibilityController _invincibility = new();
-        private readonly DamageMitigator _mitigation = new();
+        private InvincibilityController _invincibility;
+        private DamageMitigator _mitigation;
         [SerializeField] private PlayerVisuals visuals;
 
         [Header("Dependencies")]
         private PlayerStateFactory _factory;
         private PlayerConfig _config;
         private PlayerService _playerService;
+        private MechanicIds _mechanicIds;
         public Bounds Hitbox => _controller.GetBounds();
         public Vector2 Position => _controller.GetBounds().center;
         public int InstanceId { get; private set; }
         public EntityFaction Faction { get; private set; } = EntityFaction.Player;
 
         [Inject]
-        public void Construct(PlayerConfig config, IInputReader inputs, PlayerContext context, IInventoryService inventory, PlayerService playerService)
+        public void Construct(PlayerConfig config, IInputReader inputs, PlayerContext context, IInventoryService inventory, PlayerService playerService, MechanicIds mechanicIds)
         {
             _controller = GetComponent<PlayerController>();
             _health = GetComponent<HealthComponent>();
             _stats = GetComponent<StatComponent>();
+            _invincibility = GetComponent<InvincibilityController>();
+            _mitigation = GetComponent<DamageMitigator>();
             _mechanics = GetComponent<EntityMechanicController>();
 
-            InstanceId = GetInstanceID();
+            InstanceId = gameObject.GetInstanceID();
 
             _playerService = playerService; // TODO: make interface ?
             _config = config;
+            _mechanicIds = mechanicIds;
 
             _stateMachine = new StateMachine<PlayerBaseState>();
 
-            context.Bind(InstanceId, _stateMachine, _controller, _health, _config, _mechanics, transform);
+            context.Bind(InstanceId, _stateMachine, _controller, _health, _stats, _config, _mechanics, transform);
             _factory = new(context, inputs, inventory);
         }
         public void InitializeNew()
@@ -78,11 +85,12 @@ namespace Wordania.Features.Player
         }
         private void Init()
         {
-            //starting mechanics. to change
-            _mechanics.EnableMechanic(new("mining_mechanic"));
-            _mechanics.EnableMechanic(new("building_mechanic"));
             // ---
             _stateMachine.SwitchState(_factory.InitialState);
+
+            //starting mechanics
+            _mechanics.EnableMechanic(_mechanicIds.Mining);
+            _mechanics.EnableMechanic(_mechanicIds.Building);
 
             _stats.Stats.Clear();
             _stats.Stats.Add(StatType.MaxHealth, new(_config.MaxHealth));
@@ -100,10 +108,6 @@ namespace Wordania.Features.Player
             if (TryGetComponent(out FallDamageHandler fall))
             {
                 fall.Initialize(_config.FallDamageThreshold, _config.FallDamageMultiplier);
-            }
-            if (TryGetComponent(out PlayerDebugHandler debug))
-            {
-                debug.Initialize(_invincibility);
             }
         }
         public void OnDestroy()
@@ -152,7 +156,7 @@ namespace Wordania.Features.Player
 
             if (_health.IsDead) return;
 
-            _invincibility.StartInvincibility(_config.InvincibilityDuration);
+            _invincibility.StartInvincibility(InvincibilitySource.HitRecovery, _config.InvincibilityDuration);
 
             _stateMachine.SwitchState(_factory.Hurt);
         }

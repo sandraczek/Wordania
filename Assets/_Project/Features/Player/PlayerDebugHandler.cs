@@ -4,38 +4,33 @@ using VContainer;
 using Wordania.Core.Combat;
 using Wordania.Core.Services;
 using Wordania.Features.Combat;
+using Wordania.Features.Mechanics;
+using Wordania.Features.Mechanics.Data;
 
 namespace Wordania.Features.Player
 {
-    [RequireComponent(typeof(HealthComponent))]
+    [RequireComponent(typeof(EntityMechanicController))]
     public class PlayerDebugHandler : MonoBehaviour
     {
         private IDebugService _debugService;
-        private InvincibilityController _invincibilityController;
+        private MechanicIds _mechanicIds;
+        private EntityMechanicController _mechanics;
 
         [Inject]
-        public void Construct(IDebugService debugService)
+        public void Construct(IDebugService debugService, MechanicIds mechanicIds)
         {
             _debugService = debugService;
+            _mechanicIds = mechanicIds;
         }
-        public void Initialize(InvincibilityController invincibility)
+        public void Awake()
         {
-            _invincibilityController = invincibility;
-
-            if (_debugService == null) return;
-
-            _debugService.OnGodModeChanged -= HandleGodModeChanged;
-            _debugService.OnGodModeChanged += HandleGodModeChanged;
-            
-            HandleGodModeChanged(_debugService.IsGodModeActive);
+            _mechanics = GetComponent<EntityMechanicController>();
         }
 
         private void OnEnable()
         {
-            if (_debugService == null) return;
-
             _debugService.OnGodModeChanged += HandleGodModeChanged;
-            
+
             HandleGodModeChanged(_debugService.IsGodModeActive);
         }
 
@@ -49,9 +44,8 @@ namespace Wordania.Features.Player
 
         private void HandleGodModeChanged(bool isGodMode)
         {
-            if(_invincibilityController == null) return;
-
-            _invincibilityController.SetInvincibilityRaw(isGodMode); // TODO: fix conflict with dash invincibility
+            if (isGodMode) _mechanics.EnableMechanic(_mechanicIds.GodMode);
+            else _mechanics.DisableMechanic(_mechanicIds.GodMode);
         }
     }
 }

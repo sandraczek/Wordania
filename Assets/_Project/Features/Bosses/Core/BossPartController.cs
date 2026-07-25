@@ -17,6 +17,8 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
     [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(DamageMitigator))]
+    [RequireComponent(typeof(StatComponent))]
     public abstract class BossPartController<T> : MonoBehaviour, IDamageable, ITrackable where T : BossPartData
     {
         [Header("Dependencies")]
@@ -30,7 +32,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         private StatComponent _stats;
         private Rigidbody2D _rb;
         private Collider2D _col;
-        protected readonly DamageMitigator _mitigation = new();
+        protected DamageMitigator _mitigation;
 
         private Vector2 _staticTarget;
         private Transform _lockedTarget;
@@ -41,7 +43,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
 
         public event Action OnDefeated;
         public bool IsDefeated { get; private set; } = false;
-        public int InstanceId => GetInstanceID();
+        public int InstanceId => gameObject.GetInstanceID();
         public EntityFaction Faction => EntityFaction.Enemy; // enemy or boss ?
         public Bounds Hitbox => _col.bounds;
         public Vector2 Position => _rb.position;
@@ -86,6 +88,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             _col = GetComponent<Collider2D>();
             _rb = GetComponent<Rigidbody2D>();
             _stats = GetComponent<StatComponent>();
+            _mitigation = GetComponent<DamageMitigator>();
         }
         private void OnEnable()
         {

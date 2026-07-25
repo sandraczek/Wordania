@@ -1138,6 +1138,15 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Exit"",
+                    ""type"": ""Button"",
+                    ""id"": ""2fd0abbc-284f-46ac-8376-de46ce6964ea"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1171,6 +1180,17 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ShowSkillTree"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""86ba4474-5230-4341-bbe4-897cb70d905d"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Exit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1345,6 +1365,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         m_HUD_ShowInventory = m_HUD.FindAction("ShowInventory", throwIfNotFound: true);
         m_HUD_ShowMap = m_HUD.FindAction("ShowMap", throwIfNotFound: true);
         m_HUD_ShowSkillTree = m_HUD.FindAction("ShowSkillTree", throwIfNotFound: true);
+        m_HUD_Exit = m_HUD.FindAction("Exit", throwIfNotFound: true);
         // Debug
         m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
         m_Debug_ShowChunks = m_Debug.FindAction("ShowChunks", throwIfNotFound: true);
@@ -1891,6 +1912,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_HUD_ShowInventory;
     private readonly InputAction m_HUD_ShowMap;
     private readonly InputAction m_HUD_ShowSkillTree;
+    private readonly InputAction m_HUD_Exit;
     /// <summary>
     /// Provides access to input actions defined in input action map "HUD".
     /// </summary>
@@ -1914,6 +1936,10 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "HUD/ShowSkillTree".
         /// </summary>
         public InputAction @ShowSkillTree => m_Wrapper.m_HUD_ShowSkillTree;
+        /// <summary>
+        /// Provides access to the underlying input action "HUD/Exit".
+        /// </summary>
+        public InputAction @Exit => m_Wrapper.m_HUD_Exit;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1949,6 +1975,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @ShowSkillTree.started += instance.OnShowSkillTree;
             @ShowSkillTree.performed += instance.OnShowSkillTree;
             @ShowSkillTree.canceled += instance.OnShowSkillTree;
+            @Exit.started += instance.OnExit;
+            @Exit.performed += instance.OnExit;
+            @Exit.canceled += instance.OnExit;
         }
 
         /// <summary>
@@ -1969,6 +1998,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @ShowSkillTree.started -= instance.OnShowSkillTree;
             @ShowSkillTree.performed -= instance.OnShowSkillTree;
             @ShowSkillTree.canceled -= instance.OnShowSkillTree;
+            @Exit.started -= instance.OnExit;
+            @Exit.performed -= instance.OnExit;
+            @Exit.canceled -= instance.OnExit;
         }
 
         /// <summary>
@@ -2400,6 +2432,13 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnShowSkillTree(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Exit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnExit(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Debug" which allows adding and removing callbacks.

@@ -7,14 +7,14 @@ namespace Wordania.Features.Player.FSM
 {
     public sealed class PlayerJumpState : PlayerAirState
     {
-        public PlayerJumpState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory){}
+        public PlayerJumpState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory) { }
 
         public override void CheckSwitchStates()
         {
             base.CheckSwitchStates();
             if (Time.time >= _context.Controller.LastJumpTime + _context.Config.MinJumpDuration && _context.Controller.VelocityY < 0f)
             {
-                _context.States.SwitchState(_factory.Fall);
+                _context.StateMachine.SwitchState(_factory.Fall);
                 return;
             }
         }

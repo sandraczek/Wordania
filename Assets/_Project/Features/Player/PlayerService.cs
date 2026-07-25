@@ -96,6 +96,7 @@ namespace Wordania.Features.Player
             SkillContext = player;
 
 
+
             _entityRegistry.Register(player);
             _entityTracker.Register(player);
 

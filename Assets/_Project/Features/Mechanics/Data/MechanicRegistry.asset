@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Mechanics.MechanicRegistry
   _assets:
   - {fileID: 11400000, guid: 9c82d012474de48efa09dc20be05b2b7, type: 2}
+  - {fileID: 11400000, guid: e463b9f9a99c44a76bb5fcdd3b60b2b3, type: 2}
   - {fileID: 11400000, guid: c8d45ff179a784433867261e3ee6c231, type: 2}
   - {fileID: 11400000, guid: 42f63384184b64c3e954eb428082e434, type: 2}

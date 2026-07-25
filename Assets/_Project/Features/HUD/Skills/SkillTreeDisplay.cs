@@ -6,7 +6,7 @@ using Wordania.Core.Inputs;
 namespace Wordania.Features.HUD.Skills
 {
     [RequireComponent(typeof(CanvasGroup))]
-    public sealed class SkillTreeDisplay : MonoBehaviour
+    public sealed class SkillTreeDisplay : MonoBehaviour, IHUDWindow
     {
         private CanvasGroup _canvasGroup;
 
@@ -28,7 +28,7 @@ namespace Wordania.Features.HUD.Skills
         {
             _inputs.OnToggleSkillTree += HandleSkillTreeToggle;
             _isOpen = false;
-            SetTreeState(false);
+            ApplyVisibility(false);
         }
         private void OnDestroy()
         {
@@ -41,14 +41,21 @@ namespace Wordania.Features.HUD.Skills
         private void HandleSkillTreeToggle()
         {
             _isOpen = !_isOpen;
-            SetTreeState(_isOpen);
-        }
 
-        private void SetTreeState(bool open)
-        {
-            if (open) _hud.RegisterOpenWindow(this);
+            if (_isOpen) _hud.RegisterOpenWindow(this);
             else _hud.UnregisterOpenWindow(this);
 
+            ApplyVisibility(_isOpen);
+        }
+        public void Close()
+        {
+            if (!_isOpen) return;
+
+            _isOpen = false;
+            ApplyVisibility(false);
+        }
+        private void ApplyVisibility(bool open)
+        {
             _canvasGroup.alpha = open ? 1f : 0f;
             _canvasGroup.interactable = open;
             _canvasGroup.blocksRaycasts = open;

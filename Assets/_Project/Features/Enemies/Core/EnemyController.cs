@@ -23,6 +23,8 @@ namespace Wordania.Features.Enemies.Core
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(StatComponent))]
     [RequireComponent(typeof(EntityMechanicController))]
+    [RequireComponent(typeof(DamageMitigator))]
+    [RequireComponent(typeof(InvincibilityController))]
     public sealed class EnemyController : MonoBehaviour, IEnemy, ICharacterMovement, IDamageable, ITrackable
     {
         public EnemyTemplate Data;
@@ -36,8 +38,8 @@ namespace Wordania.Features.Enemies.Core
         public Bounds Hitbox => _col.bounds;
         private StateMachine<EnemyBaseState> _stateMachine;
         private EnemyStateFactory _stateFactory;
-        private readonly DamageMitigator _mitigation = new();
-        private readonly InvincibilityController _invincibility = new();
+        private DamageMitigator _mitigation;
+        private InvincibilityController _invincibility;
         public int InstanceId => gameObject.GetInstanceID();
         public bool IsPersistent { get; } = false;
         public EntityFaction Faction { get; private set; } = EntityFaction.Enemy;
@@ -83,6 +85,8 @@ namespace Wordania.Features.Enemies.Core
             _col = GetComponent<Collider2D>();
             _stats = GetComponent<StatComponent>();
             _mechanics = GetComponent<EntityMechanicController>();
+            _mitigation = GetComponent<DamageMitigator>();
+            _invincibility = GetComponent<InvincibilityController>();
 
 
             _stateMachine = new();
@@ -285,7 +289,7 @@ namespace Wordania.Features.Enemies.Core
 
             if (_health.IsDead) return;
 
-            _invincibility.StartInvincibility(Data.Combat.InvincibilityDuration);
+            _invincibility.StartInvincibility(InvincibilitySource.HitRecovery, Data.Combat.InvincibilityDuration);
 
             _stateMachine.SwitchState(_stateFactory.Hurt);
         }
