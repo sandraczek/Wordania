@@ -237,7 +237,6 @@ TODOS:
 - prewarming
 - fix enemies stopping after hit
 - can remove dependency between player and healthbar (move to event bus)
-- add a guard preventing duplicate AssetId's
 - add a button "Generate journal entry" for enemy templates
 
 features:
@@ -245,6 +244,9 @@ boss spawning
 block builder picker soon? later?
 player reviving
 pause menu
+binary world saving
+nature (trees, water)
+chests
 
 */
 

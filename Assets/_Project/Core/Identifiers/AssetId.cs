@@ -16,6 +16,8 @@ namespace Wordania.Core.Identifiers
 
         public readonly int Hash => _hash;
 
+        public readonly bool IsEmpty => _hash == 0;
+
         public AssetId(string id)
         {
             _editorId = id;
