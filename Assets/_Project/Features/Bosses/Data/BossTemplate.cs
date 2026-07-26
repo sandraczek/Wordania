@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Wordania.Core.Data;
 using Wordania.Core.Identifiers;
 using Wordania.Features.Bosses.Core;
+using Wordania.Features.Skills;
 
 namespace Wordania.Features.Bosses.Data
 {
@@ -10,6 +12,7 @@ namespace Wordania.Features.Bosses.Data
     {
         [field: SerializeField] public string DisplayName { get; private set; }
         [field: SerializeField] public BossController Prefab { get; private set; }
+        [field: SerializeField] public RewardData Reward { get; private set; }
 
 #if UNITY_EDITOR
         override protected void OnValidate()
@@ -20,6 +23,8 @@ namespace Wordania.Features.Bosses.Data
                 Debug.LogError($"[BossTemplate] The assigned prefab '{Prefab.name}' does not contain a BossController script! Rejected.");
                 Prefab = null;
             }
+
+            Reward?.SkillPointsThresholds.OrderBy(s => s.KillsBefore);
         }
 #endif
     }

@@ -15,7 +15,7 @@ namespace Wordania.Features.Journal
             _playerId = playerId;
         }
 
-        public void IncrementEnemy(AssetId id)
+        public int IncrementEnemy(AssetId id)
         {
             if (_enemies.ContainsKey(id))
             {
@@ -25,9 +25,10 @@ namespace Wordania.Features.Journal
             {
                 _enemies.Add(id, 1);
             }
+            return _enemies[id];
 
         }
-        public void IncrementBoss(AssetId id)
+        public int IncrementBoss(AssetId id)
         {
             if (_bosses.ContainsKey(id))
             {
@@ -37,9 +38,9 @@ namespace Wordania.Features.Journal
             {
                 _bosses.Add(id, 1);
             }
-
+            return _bosses[id];
         }
-        public void IncrementBlock(AssetId id)
+        public int IncrementBlock(AssetId id)
         {
             if (_blocks.ContainsKey(id))
             {
@@ -49,7 +50,7 @@ namespace Wordania.Features.Journal
             {
                 _blocks.Add(id, 1);
             }
-
+            return _blocks[id];
         }
     }
 }

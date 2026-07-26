@@ -372,6 +372,7 @@ MonoBehaviour:
   _daySettings: {fileID: 11400000, guid: 008e561bbce3f48258823ff259d5f389, type: 2}
   _playerConfig: {fileID: 11400000, guid: cc39e62af189f4db39dd7d35481f27a2, type: 2}
   _enemySpawnSettings: {fileID: 11400000, guid: c77d18375950242558a20fdf4b16c6ad, type: 2}
+  _enemyRegistry: {fileID: 11400000, guid: 16ef457c17f9b46ea94d3e022ea21977, type: 2}
   _uiConfig: {fileID: 11400000, guid: 28c4b285bdee34ff5acd4c12d75b6d74, type: 2}
   _playerPrefab: {fileID: 5377237029528584182, guid: 9dd43d0313ec54733bb0b134308ab288, type: 3}
   _chunkPrefab: {fileID: 8679379767168436347, guid: d18dcdfeb9d1d4daeb28cc178971393e, type: 3}
@@ -386,6 +387,7 @@ MonoBehaviour:
   _worldMapView: {fileID: 278490713}
   _skillTreeView: {fileID: 1613858581}
   _skillTreeDisplay: {fileID: 1613858582}
+  _journalEntryRegistry: {fileID: 11400000, guid: ef67b2bb24c63427ba56404045a978cb, type: 2}
   _saveSlot: 0
   _enemyToPrewarm: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}
   _bossToSpawn: {fileID: 11400000, guid: d58728627ae204fcda8e9a698aabdb95, type: 2}

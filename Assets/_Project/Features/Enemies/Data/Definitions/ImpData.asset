@@ -61,4 +61,13 @@ MonoBehaviour:
     MaxDistanceToGround: 1.5
     RequiredClearanceSize: {x: 1.973877, y: 4.8129272}
     RequiredGroundSize: 2
+  <Reward>k__BackingField:
+    _skillPoints:
+    - Type: 0
+      Value: 100
+    _skillPointsThresholds:
+    - KillsBefore: 5
+      Multiplier: 0.5
+    - KillsBefore: 10
+      Multiplier: 0.2
   <Loot>k__BackingField: {fileID: 11400000, guid: 98d0304250b7249699c37fdd4046cfc2, type: 2}

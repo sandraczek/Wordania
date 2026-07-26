@@ -4,7 +4,8 @@ namespace Wordania.Features.Journal
 {
     public interface IPlayerJournal
     {
-        void IncrementEnemy(AssetId id);
-        void IncrementBoss(AssetId id);
+        int IncrementEnemy(AssetId id);
+        int IncrementBoss(AssetId id);
+        int IncrementBlock(AssetId id);
     }
 }

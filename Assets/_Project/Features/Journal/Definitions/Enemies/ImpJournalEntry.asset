@@ -15,4 +15,7 @@ MonoBehaviour:
   _id:
     _editorId: imp_journal_entry
     _hash: 1643627790
+  Milestones:
+  - TargetThreshold: 5
+    Mechanic: {fileID: 11400000, guid: c8d45ff179a784433867261e3ee6c231, type: 2}
   _enemy: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}

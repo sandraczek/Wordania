@@ -45,6 +45,7 @@ using Wordania.Core.Events;
 using Wordania.Features.Journal;
 using Wordania.Features.Mechanics;
 using Wordania.Features.Mechanics.Data;
+using Wordania.Features.Journal.Entries;
 
 namespace Wordania.Features
 {
@@ -63,6 +64,7 @@ namespace Wordania.Features
         [SerializeField] private DaySettings _daySettings;
         [SerializeField] private PlayerConfig _playerConfig;
         [SerializeField] private EnemySystemSettings _enemySpawnSettings;
+        [SerializeField] private EnemyRegistry _enemyRegistry;
         [SerializeField] private HUDConfig _uiConfig;
         [SerializeField] private GameObject _playerPrefab;
         [SerializeField] private Chunk _chunkPrefab;
@@ -77,6 +79,7 @@ namespace Wordania.Features
         [SerializeField] private WorldMapView _worldMapView;
         [SerializeField] private SkillTreeView _skillTreeView;
         [SerializeField] private SkillTreeDisplay _skillTreeDisplay;
+        [SerializeField] private JournalEntryRegistry _journalEntryRegistry;
 
         //debug
         [Header("Save Slot 0 For a New Game")]
@@ -101,6 +104,10 @@ namespace Wordania.Features
             builder.RegisterInstance<IAssetRegistry<SkillData>>(_skillRegistry);
             _mechanicRegistry.Initialize();
             builder.RegisterInstance<IAssetRegistry<MechanicData>>(_mechanicRegistry);
+            _enemyRegistry.Initialize();
+            builder.RegisterInstance<IAssetRegistry<EnemyTemplate>>(_enemyRegistry);
+            _journalEntryRegistry.Initialize();
+            builder.RegisterInstance<IAssetRegistry<JournalEntry>>(_journalEntryRegistry);
             builder.Register<MechanicIds>(Lifetime.Singleton);
 
             builder.Register<GameplayEventBus>(Lifetime.Scoped).As<IEventBusGameplay>();
@@ -170,6 +177,7 @@ namespace Wordania.Features
             //skills
             builder.Register<MechanicFactory>(Lifetime.Scoped).As<IMechanicFactory>();
             builder.RegisterEntryPoint<PlayerSkillService>(Lifetime.Scoped).As<IPlayerSkillService>();
+            builder.RegisterEntryPoint<KillSkillPointService>(Lifetime.Scoped);
 
 
             //enemies
@@ -236,6 +244,7 @@ TODOS:
 - prewarming
 - fix enemies stopping after hit
 - can remove dependency between player and healthbar (move to event bus)
+- refactor PlayerSkillService (should not hold data - needed for when there are more players)
 
 features:
 boss spawning

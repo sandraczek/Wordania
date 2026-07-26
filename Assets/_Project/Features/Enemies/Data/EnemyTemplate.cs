@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using Wordania.Core.Data;
 using Wordania.Core.Identifiers;
 using Wordania.Features.Enemies.Core;
 using Wordania.Features.Inventory;
 using Wordania.Features.Movement;
+using Wordania.Features.Skills;
 
 namespace Wordania.Features.Enemies.Data
 {
@@ -22,6 +24,7 @@ namespace Wordania.Features.Enemies.Data
         [field: SerializeField] public EnemyMovementData Movement { get; private set; }
         [field: SerializeField] public EnemyCombatData Combat { get; private set; }
         [field: SerializeField] public EnemySpawnData Spawn { get; private set; }
+        [field: SerializeField] public RewardData Reward { get; private set; }
 
         [field: SerializeField] public ItemData Loot { get; private set; }
 
@@ -43,6 +46,8 @@ namespace Wordania.Features.Enemies.Data
                     Debug.LogWarning($"[{DisplayName}] LoseTargetRadius cannot be lesser than DetectionRadius!");
                 }
             }
+
+            Reward?.SkillPointsThresholds.OrderBy(s => s.KillsBefore);
         }
 
         private void CalculateClearanceFromPrefab()
@@ -68,13 +73,6 @@ namespace Wordania.Features.Enemies.Data
                 CircleCollider2D circle => Vector2.one * (circle.radius * 2f),
                 _ => Vector2.zero
             };
-        }
-        public void DrawSpawnGizmo(Vector2 position)
-        {
-            // Dzięki temu w edytorze zobaczysz różowy prostokąt w miejscu, 
-            // gdzie system "myśli", że wróg się zmieści.
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawWireCube(position, Spawn.RequiredClearanceSize);
         }
 #endif
     }

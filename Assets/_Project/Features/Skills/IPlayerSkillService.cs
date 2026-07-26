@@ -11,6 +11,7 @@ namespace Wordania.Features.Skills
         bool IsSkillUnlocked(AssetId skillId);
         bool CanUnlock(SkillData skill);
         void UnlockSkill(AssetId skillId);
+        void AddPoints(SkillPointsType type, int points);
 
         event Action<int[]> OnPointsChanged;
         event Action<AssetId> OnSkillUnlocked;

@@ -61,14 +61,25 @@ namespace Wordania.Features.Journal
             IPlayerJournal journal = GetPlayerJournal(death.InstigatorEntityId);
             if (journal == null) return;
 
-            journal.IncrementBoss(death.VictimAssetId);
+            int newCount = journal.IncrementEnemy(death.VictimAssetId);
+            _eventBus.Publish(new EnemyKillRecordedEvent
+            {
+                PlayerInstanceId = death.InstigatorEntityId,
+                EnemyId = death.VictimAssetId,
+                KillCount = newCount
+            });
         }
         private void HandleBossDeathEvent(BossDeathEvent death)
         {
-            IPlayerJournal journal = GetPlayerJournal(_player.InstanceId);
+            IPlayerJournal journal = GetPlayerJournal(_player.InstanceId); // giving it all to (every active) player
             if (journal == null) return;
 
-            journal.IncrementBoss(death.Id);
+            int newCount = journal.IncrementBoss(death.Id);
+            _eventBus.Publish(new BossKillRecordedEvent
+            {
+                BossId = death.Id,
+                KillCount = newCount
+            });
         }
         private void CreateJournalForPlayer()
         {

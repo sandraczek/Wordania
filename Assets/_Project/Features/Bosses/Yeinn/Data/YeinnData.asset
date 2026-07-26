@@ -17,6 +17,17 @@ MonoBehaviour:
     _hash: -1348982482
   <DisplayName>k__BackingField: Yeinn the Abhorrent
   <Prefab>k__BackingField: {fileID: 8657881721284743941, guid: a6b3b60a2c78a4899b69b4e289c6c854, type: 3}
+  <Reward>k__BackingField:
+    _skillPoints:
+    - Type: 0
+      Value: 2000
+    - Type: 1
+      Value: 1000
+    _skillPointsThresholds:
+    - KillsBefore: 1
+      Multiplier: 0.5
+    - KillsBefore: 2
+      Multiplier: 0.25
   <Head>k__BackingField:
     MaxHealth: 500
     ContactDamage: 30
