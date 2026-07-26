@@ -20,7 +20,7 @@ namespace Wordania.Features.Bosses.Editor
             if (GUILayout.Button("Create Journal Entry", GUILayout.Height(30)))
             {
                 JournalEntryFactory.CreateOrSelect<JournalBossEntry>(
-                    (BossTemplate)target, "Bosses", "_boss");
+                    (BossTemplate)target, "Bosses");
             }
             GUI.backgroundColor = Color.white;
         }

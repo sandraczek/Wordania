@@ -21,16 +21,16 @@ namespace Wordania.Core.Data
         //debug
         private bool _showAvailableItems = true;
 #endif
+        protected virtual AssetId GetKey(T asset) => asset.Id;
+
         public void Initialize()
         {
             _lookupTable = new Dictionary<AssetId, T>(_assets.Count);
             foreach (var asset in _assets)
             {
                 if (asset == null) continue;
-                if (!_lookupTable.TryAdd(asset.Id, asset))
-                {
-                    Debug.LogWarning($"[{typeof(T).Name}] Duplicated ID: {asset.Id} for asset: {asset.name}.");
-                }
+                if (!_lookupTable.TryAdd(GetKey(asset), asset))   // <- GetKey zamiast asset.Id
+                    Debug.LogWarning($"[{typeof(T).Name}] Duplicated ID: {GetKey(asset)} for asset: {asset.name}.");
             }
 
 #if UNITY_EDITOR

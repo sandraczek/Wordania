@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f0b3ae2e171f24013a2187284f3637bb, type: 3}
-  m_Name: ImpJournalEntry
-  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Journal.JournalEnemyEntry
+  m_Name: ImpData_JournalEntry
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Journal.Entries.JournalEnemyEntry
   _id:
-    _editorId: imp_journal_entry
-    _hash: 1643627790
+    _editorId: imp_enemy_journal_entry
+    _hash: -496106535
   Milestones:
   - TargetThreshold: 5
     Mechanic: {fileID: 11400000, guid: c8d45ff179a784433867261e3ee6c231, type: 2}
-  _enemy: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}
+  _source: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}

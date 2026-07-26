@@ -24,7 +24,7 @@ namespace Wordania.Features.Bosses.Data
                 Prefab = null;
             }
 
-            Reward?.SkillPointsThresholds.OrderBy(s => s.KillsBefore);
+            Reward?.EditorSortThreshold();
         }
 #endif
     }

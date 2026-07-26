@@ -20,5 +20,15 @@ namespace Wordania.Features.Skills
         private List<KillSkillPointThreshold> _skillPointsThresholds = new();
         public IReadOnlyList<KillSkillPointThreshold> SkillPointsThresholds => _skillPointsThresholds;
 
+
+#if UNITY_EDITOR
+        public void EditorSortThreshold()
+        {
+            if (_skillPointsThresholds == null || _skillPointsThresholds.Count <= 1) return;
+
+            _skillPointsThresholds.Sort((a, b) => a.KillsBefore.CompareTo(b.KillsBefore));
+        }
+#endif
+
     }
 }

@@ -4,11 +4,8 @@ using Wordania.Features.World;
 namespace Wordania.Features.Journal.Entries
 {
     [CreateAssetMenu(fileName = "NewBlockEntry", menuName = "Journal/Block")]
-    public sealed class JournalBlockEntry : JournalEntry
+    public sealed class JournalBlockEntry : JournalEntry<BlockData>
     {
-        [SerializeField] private BlockData _block;
-
         public override JournalCategory Category => JournalCategory.Blocks;
-
     }
 }

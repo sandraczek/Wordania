@@ -14,12 +14,12 @@ namespace Wordania.Features.Journal.Editor
     public static class JournalEntryFactory
     {
         private const string BaseFolder = "Assets/_Project/Features/Journal/Definitions";
+        private const string SourceFieldName = "_source";
 
         /// <param name="source">The template the entry describes (enemy/block/boss).</param>
         /// <param name="subFolder">Sub-folder under Definitions, e.g. "Enemies".</param>
-        /// <param name="sourceFieldName">Private serialized field on the entry pointing at the source.</param>
         public static void CreateOrSelect<TEntry>(
-            DataAsset source, string subFolder, string sourceFieldName)
+            DataAsset source, string subFolder)
             where TEntry : JournalEntry
         {
             if (source == null) return;
@@ -34,27 +34,40 @@ namespace Wordania.Features.Journal.Editor
                 return;
             }
 
-            // Prevent duplicates: reuse an existing entry that already points at this source.
-            if (TryFindExisting<TEntry>(sourceFieldName, source, out TEntry existing))
+            string entryEditorId = $"{sourceEditorId}_journal_entry";
+            string entryFileName = $"{source.name}_JournalEntry";
+
+            // Reuse an existing entry that already points at this source OR that already
+            // has the same asset file name (treated as the entry to modify):
+            // refresh its source reference and id, but keep its milestones intact.
+            if (TryFindExisting<TEntry>(source, entryFileName, out TEntry existing))
             {
+                var existingSo = new SerializedObject(existing);
+                existingSo.FindProperty(SourceFieldName).objectReferenceValue = source;
+                existingSo.FindProperty("_id._editorId").stringValue = entryEditorId;
+                existingSo.ApplyModifiedProperties();
+
+                AssetDatabase.SaveAssets();
+
                 EditorGUIUtility.PingObject(existing);
                 Selection.activeObject = existing;
                 Debug.Log(
-                    $"[Journal] '{source.name}' already has a journal entry '{existing.name}'.",
+                    $"[Journal] Refreshed existing entry '{existing.name}' " +
+                    $"(source and id updated, milestones kept) for '{source.name}'.",
                     existing);
                 return;
             }
 
             string folder = EnsureFolder(subFolder);
             string entryPath = AssetDatabase.GenerateUniqueAssetPath(
-                Path.Combine(folder, $"{source.name}_JournalEntry.asset"));
+                Path.Combine(folder, $"{entryFileName}.asset"));
 
             var entry = ScriptableObject.CreateInstance<TEntry>();
             AssetDatabase.CreateAsset(entry, entryPath);
 
             var entrySo = new SerializedObject(entry);
-            entrySo.FindProperty(sourceFieldName).objectReferenceValue = source;
-            entrySo.FindProperty("_id._editorId").stringValue = $"{sourceEditorId}_journal_entry";
+            entrySo.FindProperty(SourceFieldName).objectReferenceValue = source;
+            entrySo.FindProperty("_id._editorId").stringValue = entryEditorId;
             entrySo.ApplyModifiedProperties();
 
             AssetDatabase.SaveAssets();
@@ -64,7 +77,7 @@ namespace Wordania.Features.Journal.Editor
 
             Debug.Log(
                 $"[Journal] Created entry '{entry.name}' with id " +
-                $"'{sourceEditorId}_journal' for '{source.name}'.", entry);
+                $"'{entryEditorId}' for '{source.name}'.", entry);
         }
 
         private static string ReadEditorId(DataAsset source)
@@ -74,10 +87,12 @@ namespace Wordania.Features.Journal.Editor
         }
 
         private static bool TryFindExisting<TEntry>(
-            string sourceFieldName, DataAsset source, out TEntry existing)
+            DataAsset source, string entryFileName, out TEntry existing)
             where TEntry : JournalEntry
         {
             existing = null;
+            TEntry nameMatch = null;
+
             string[] guids = AssetDatabase.FindAssets($"t:{typeof(TEntry).Name}");
             foreach (string guid in guids)
             {
@@ -86,13 +101,21 @@ namespace Wordania.Features.Journal.Editor
                 if (candidate == null) continue;
 
                 var so = new SerializedObject(candidate);
-                if (so.FindProperty(sourceFieldName).objectReferenceValue == source)
+                if (so.FindProperty(SourceFieldName).objectReferenceValue == source)
                 {
+                    // Source-reference match takes priority.
                     existing = candidate;
                     return true;
                 }
+
+                if (nameMatch == null && candidate.name == entryFileName)
+                {
+                    nameMatch = candidate;
+                }
             }
-            return false;
+
+            existing = nameMatch;
+            return existing != null;
         }
 
         private static string EnsureFolder(string subFolder)

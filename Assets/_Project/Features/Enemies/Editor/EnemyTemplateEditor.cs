@@ -20,7 +20,7 @@ namespace Wordania.Features.Enemies.Editor
             if (GUILayout.Button("Create Journal Entry", GUILayout.Height(30)))
             {
                 JournalEntryFactory.CreateOrSelect<JournalEnemyEntry>(
-                    (EnemyTemplate)target, "Enemies", "_enemy");
+                    (EnemyTemplate)target, "Enemies");
             }
             GUI.backgroundColor = Color.white;
         }

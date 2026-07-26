@@ -16,4 +16,4 @@ MonoBehaviour:
     _editorId: sandstone_block_journal_entry
     _hash: -1494914891
   Milestones: []
-  _block: {fileID: 11400000, guid: ac2e6dc4b81884de1bec820e48ea8cf3, type: 2}
+  _source: {fileID: 11400000, guid: ac2e6dc4b81884de1bec820e48ea8cf3, type: 2}

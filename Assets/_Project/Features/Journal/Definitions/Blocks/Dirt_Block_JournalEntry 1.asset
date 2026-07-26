@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1a95f845561e499ca4aa05216a850a4, type: 3}
-  m_Name: Dirt_Block_JournalEntry
+  m_Name: Dirt_Block_JournalEntry 1
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Journal.Entries.JournalBlockEntry
   _id:
     _editorId: dirt_block_journal_entry
     _hash: 756781701
   Milestones: []
-  _block: {fileID: 11400000, guid: 5d154869ac4e94c23997e3d3d5cfbe3f, type: 2}
+  _source: {fileID: 11400000, guid: 5d154869ac4e94c23997e3d3d5cfbe3f, type: 2}

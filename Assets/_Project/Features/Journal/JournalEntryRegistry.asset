@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: JournalEntryRegistry
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Journal.Entries.JournalEntryRegistry
   _assets:
-  - {fileID: 11400000, guid: 807afdc669a77416e9211b3ddf14ef47, type: 2}
+  - {fileID: 11400000, guid: 46988b5452d9e4663898eeee064465b2, type: 2}
   - {fileID: 11400000, guid: 87ac4ba2a80c8450b9cb75f6f5c59ec7, type: 2}
   - {fileID: 11400000, guid: 53fe8598a9d77488892df38523539941, type: 2}
   - {fileID: 11400000, guid: 84e0ad16b52f046c6a977dc509424bea, type: 2}
@@ -25,5 +25,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 31d98881cb8d3495c9420af519bcf0e3, type: 2}
   - {fileID: 11400000, guid: 5d0b2fc80e9ed4592abe13215ac084fa, type: 2}
   - {fileID: 11400000, guid: 8d16867a228d740e490a72760d12ea52, type: 2}
-  - {fileID: 11400000, guid: 58d5f93b80eb74b94a81c52e3c60f044, type: 2}
-  - {fileID: 11400000, guid: 454ab55b4f1974dbd9ac3dd0e40ae190, type: 2}
+  - {fileID: 11400000, guid: ad5503ef4b3bd4abfaf6c10cbe8dac44, type: 2}
+  - {fileID: 11400000, guid: f426cf17107584a819799d4d44cc1f83, type: 2}

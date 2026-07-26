@@ -20,7 +20,7 @@ namespace Wordania.Features.World.Editor
             if (GUILayout.Button("Create Journal Entry", GUILayout.Height(30)))
             {
                 JournalEntryFactory.CreateOrSelect<JournalBlockEntry>(
-                    (BlockData)target, "Blocks", "_block");
+                    (BlockData)target, "Blocks");
             }
             GUI.backgroundColor = Color.white;
         }

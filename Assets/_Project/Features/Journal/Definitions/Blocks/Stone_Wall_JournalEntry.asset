@@ -16,4 +16,4 @@ MonoBehaviour:
     _editorId: stone_wall_journal_entry
     _hash: -797879888
   Milestones: []
-  _block: {fileID: 11400000, guid: 415dd3c6a0d774725b9cadcddcb9a2f5, type: 2}
+  _source: {fileID: 11400000, guid: 415dd3c6a0d774725b9cadcddcb9a2f5, type: 2}

@@ -7,7 +7,7 @@ using Wordania.Core.Identifiers;
 using Wordania.Features.Mechanics.Data;
 using Wordania.Features.Skills.Effects;
 
-namespace Wordania.Features.Journal.Entries
+namespace Wordania.Features.Journal.Milestones
 {
 
     [Serializable]

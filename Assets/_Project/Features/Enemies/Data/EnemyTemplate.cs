@@ -47,7 +47,7 @@ namespace Wordania.Features.Enemies.Data
                 }
             }
 
-            Reward?.SkillPointsThresholds.OrderBy(s => s.KillsBefore);
+            Reward?.EditorSortThreshold();
         }
 
         private void CalculateClearanceFromPrefab()

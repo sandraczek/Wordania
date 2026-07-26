@@ -16,4 +16,4 @@ MonoBehaviour:
     _editorId: stone_block_journal_entry
     _hash: 159822347
   Milestones: []
-  _block: {fileID: 11400000, guid: 28948730022624828ac5373b290d985d, type: 2}
+  _source: {fileID: 11400000, guid: 28948730022624828ac5373b290d985d, type: 2}

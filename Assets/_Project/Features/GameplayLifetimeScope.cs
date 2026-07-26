@@ -46,6 +46,7 @@ using Wordania.Features.Journal;
 using Wordania.Features.Mechanics;
 using Wordania.Features.Mechanics.Data;
 using Wordania.Features.Journal.Entries;
+using Wordania.Features.Journal.Milestones;
 
 namespace Wordania.Features
 {
@@ -195,6 +196,7 @@ namespace Wordania.Features
 
             //journal
             builder.RegisterEntryPoint<JournalService>(Lifetime.Scoped).As<IJournalService>();
+            builder.RegisterEntryPoint<JournalMilestoneService>(Lifetime.Scoped);
 
             //TODO: move to HUD lifetime scope
             builder.RegisterInstance(_uiConfig);

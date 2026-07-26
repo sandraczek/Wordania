@@ -16,4 +16,4 @@ MonoBehaviour:
     _editorId: lamp_block_journal_entry
     _hash: -39842870
   Milestones: []
-  _block: {fileID: 11400000, guid: a88a74e71c89c409e9726a50c901820b, type: 2}
+  _source: {fileID: 11400000, guid: a88a74e71c89c409e9726a50c901820b, type: 2}

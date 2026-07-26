@@ -16,4 +16,4 @@ MonoBehaviour:
     _editorId: dirt_wall_journal_entry
     _hash: -1303805950
   Milestones: []
-  _block: {fileID: 11400000, guid: 1ecdcbddd74fc4a418dd65c9462987c2, type: 2}
+  _source: {fileID: 11400000, guid: 1ecdcbddd74fc4a418dd65c9462987c2, type: 2}

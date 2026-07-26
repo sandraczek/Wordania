@@ -16,4 +16,4 @@ MonoBehaviour:
     _editorId: grass_wall_journal_entry
     _hash: -2132065751
   Milestones: []
-  _block: {fileID: 11400000, guid: 4e5be0d21a36b430aa237d04ae3b75fd, type: 2}
+  _source: {fileID: 11400000, guid: 4e5be0d21a36b430aa237d04ae3b75fd, type: 2}

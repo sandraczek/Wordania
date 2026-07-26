@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b9aaf78dcd9d431db27b79102d12f25, type: 3}
-  m_Name: YeinnJournalEntry
+  m_Name: YeinnData_JournalEntry
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Journal.Entries.JournalBossEntry
   _id:
     _editorId: boss_yeinn_journal_entry
     _hash: -849440351
   Milestones: []
-  _boss: {fileID: 11400000, guid: d58728627ae204fcda8e9a698aabdb95, type: 2}
+  _source: {fileID: 11400000, guid: d58728627ae204fcda8e9a698aabdb95, type: 2}

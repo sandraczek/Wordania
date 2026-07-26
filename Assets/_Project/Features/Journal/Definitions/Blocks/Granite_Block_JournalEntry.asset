@@ -16,4 +16,4 @@ MonoBehaviour:
     _editorId: granite_block_journal_entry
     _hash: -1620709660
   Milestones: []
-  _block: {fileID: 11400000, guid: c8d9887c8a618481093519ec5709ed59, type: 2}
+  _source: {fileID: 11400000, guid: c8d9887c8a618481093519ec5709ed59, type: 2}
