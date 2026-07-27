@@ -5,12 +5,12 @@ namespace Wordania.Features.Journal
 {
     public sealed class PlayerJournal : IPlayerJournal
     {
-        private readonly int _playerId;
+        private readonly InstanceId _playerId;
         private readonly Dictionary<AssetId, int> _enemies = new();
         private readonly Dictionary<AssetId, int> _bosses = new();
         private readonly Dictionary<AssetId, int> _blocks = new();
 
-        public PlayerJournal(int playerId)
+        public PlayerJournal(InstanceId playerId)
         {
             _playerId = playerId;
         }

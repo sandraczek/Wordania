@@ -18,18 +18,12 @@ MonoBehaviour:
   <SkillName>k__BackingField: Max Health Increase 1
   <Description>k__BackingField: 
   <Icon>k__BackingField: {fileID: 0}
+  _mechanics: []
+  _stats:
+  - Stat: 0
+    Value: 0.1
+    ModifierType: 2000
   <Cost>k__BackingField:
   - Type: 0
     Value: 200
-  _effects:
-  - rid: 5391011761781997643
   <Prerequisites>k__BackingField: []
-  references:
-    version: 2
-    RefIds:
-    - rid: 5391011761781997643
-      type: {class: StatSkillEffect, ns: Wordania.Features.Skills.Effects, asm: Wordania.Gameplay}
-      data:
-        <TargetStat>k__BackingField: 0
-        <ModifierType>k__BackingField: 1000
-        <Value>k__BackingField: 30

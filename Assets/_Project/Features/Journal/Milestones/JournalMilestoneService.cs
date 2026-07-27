@@ -4,6 +4,7 @@ using Wordania.Core.Combat.Events;
 using Wordania.Core.Data;
 using Wordania.Core.Events;
 using Wordania.Core.Gameplay;
+using Wordania.Core.Identifiers;
 using Wordania.Features.Bosses.Data;
 using Wordania.Features.Enemies.Data;
 using Wordania.Features.Journal.Entries;
@@ -41,7 +42,7 @@ namespace Wordania.Features.Journal.Milestones
             {
                 if (milestone.TargetThreshold == e.KillCount)
                 {
-                    _player.SkillContext.UnlockMechanic(milestone.Mechanic.Id);
+                    _player.PlayerMechanics.EnableMechanic(milestone.Mechanic.Id, InstanceId.Journal);
                 }
             }
         }
@@ -54,7 +55,7 @@ namespace Wordania.Features.Journal.Milestones
             {
                 if (milestone.TargetThreshold == e.KillCount)
                 {
-                    _player.SkillContext.UnlockMechanic(milestone.Mechanic.Id);
+                    _player.PlayerMechanics.EnableMechanic(milestone.Mechanic.Id, InstanceId.Journal);
                 }
             }
         }

@@ -11,7 +11,7 @@ namespace Wordania.Features.Combat.Data
         public float DamageMultiplier;
         public float SpeedMultiplier;
         public float LifetimeMultiplier;
-        public int InstigatorId;
+        public InstanceId InstigatorId;
         public EntityFaction TargetFactionMask;
     }
 }

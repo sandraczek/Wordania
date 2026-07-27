@@ -1,58 +1,102 @@
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-using VContainer;
-using Wordania.Core.Combat;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-
 namespace Wordania.Features.Mechanics
 {
+    using System.Collections.Generic;
+    using UnityEngine;
+    using VContainer;
+    using Wordania.Core.Combat;
+    using Wordania.Core.Gameplay;
+    using Wordania.Core.Identifiers;
+    using Wordania.Core.Mechanics;
+
     [RequireComponent(typeof(IEntityContext))]
-    public class EntityMechanicController : MonoBehaviour
+    public class EntityMechanicController : MonoBehaviour, IEntityMechanicController
     {
         private IMechanicFactory _factory;
-
         private IEntityContext _context;
-        private readonly Dictionary<AssetId, IMechanic> _activeMechanics = new();
 
+        private readonly Dictionary<AssetId, MechanicTracker> _activeMechanics = new(8);
+
+        private readonly List<ITickableMechanic> _tickableMechanics = new(4);
+
+        private readonly Stack<MechanicTracker> _trackerPool = new(8);
 
         [Inject]
         public void Construct(IMechanicFactory mechanicFactory)
         {
             _factory = mechanicFactory;
         }
+
         private void Awake()
         {
             _context = GetComponent<IEntityContext>();
         }
 
-        public void EnableMechanic(AssetId mechanicId)
+        public void EnableMechanic(AssetId mechanicId, InstanceId source)
         {
-            if (_activeMechanics.ContainsKey(mechanicId)) return;
+            if (!_activeMechanics.TryGetValue(mechanicId, out MechanicTracker tracker))
+            {
+                tracker = GetTrackerFromPool();
 
-            IMechanic mechanic = _factory.CreateMechanic(mechanicId);
+                IMechanic mechanic = _factory.CreateMechanic(mechanicId);
 
-            if (!mechanic.OnActivate(_context)) return;
+                if (!mechanic.OnActivate(_context))
+                {
+                    mechanic.OnDeactivate();
+                    _factory.ReleaseMechanic(mechanicId, mechanic);
 
-            _activeMechanics.Add(mechanicId, mechanic);
+                    ReturnTrackerToPool(tracker);
+                    return;
+                }
+
+                tracker.Mechanic = mechanic;
+                _activeMechanics.Add(mechanicId, tracker);
+
+                if (mechanic is ITickableMechanic tickable)
+                {
+                    _tickableMechanics.Add(tickable);
+                }
+            }
+
+            if (!tracker.Sources.Contains(source))
+            {
+                tracker.Sources.Add(source);
+            }
         }
 
-        public void DisableMechanic(AssetId mechanicId)
+        public void DisableMechanic(AssetId mechanicId, InstanceId source)
         {
-            if (_activeMechanics.TryGetValue(mechanicId, out var mechanic))
+            if (!_activeMechanics.TryGetValue(mechanicId, out MechanicTracker tracker))
             {
-                mechanic.OnDeactivate();
+                return;
+            }
+
+            if (!tracker.Sources.Remove(source))
+            {
+                return;
+            }
+
+            if (tracker.Sources.Count == 0)
+            {
+                tracker.Mechanic.OnDeactivate();
+                _factory.ReleaseMechanic(mechanicId, tracker.Mechanic);
+
+                if (tracker.Mechanic is ITickableMechanic tickable)
+                {
+                    _tickableMechanics.Remove(tickable);
+                }
                 _activeMechanics.Remove(mechanicId);
+
+                ReturnTrackerToPool(tracker);
             }
         }
 
         private void Update()
         {
             float dt = Time.deltaTime;
-            foreach (var mechanic in _activeMechanics.Values)
+
+            for (int i = 0; i < _tickableMechanics.Count; i++)
             {
-                mechanic.OnTick(dt);
+                _tickableMechanics[i].OnTick(dt);
             }
         }
 
@@ -63,12 +107,41 @@ namespace Wordania.Features.Mechanics
 
         public void ClearAllMechanics()
         {
-            var mechanicsToRemove = _activeMechanics.Keys;
-
-            foreach (var mechanicId in mechanicsToRemove)
+            foreach (var pair in _activeMechanics)
             {
-                DisableMechanic(mechanicId);
+                MechanicTracker tracker = pair.Value;
+                tracker.Mechanic.OnDeactivate();
+                _factory.ReleaseMechanic(pair.Key, tracker.Mechanic);
+
+                ReturnTrackerToPool(tracker);
             }
+
+            _activeMechanics.Clear();
+            _tickableMechanics.Clear();
+        }
+
+        private MechanicTracker GetTrackerFromPool()
+        {
+            if (_trackerPool.TryPop(out MechanicTracker tracker))
+            {
+                return tracker;
+            }
+
+            return new MechanicTracker();
+        }
+
+        private void ReturnTrackerToPool(MechanicTracker tracker)
+        {
+            tracker.Mechanic = null;
+            tracker.Sources.Clear();
+            _trackerPool.Push(tracker);
+        }
+
+        private class MechanicTracker
+        {
+            public IMechanic Mechanic;
+
+            public readonly List<InstanceId> Sources = new(1);
         }
     }
 }

@@ -18,16 +18,10 @@ MonoBehaviour:
   <SkillName>k__BackingField: Healing Aura
   <Description>k__BackingField: 
   <Icon>k__BackingField: {fileID: 0}
+  _mechanics:
+  - {fileID: 11400000, guid: c8d45ff179a784433867261e3ee6c231, type: 2}
+  _stats: []
   <Cost>k__BackingField:
   - Type: 0
     Value: 1000
-  _effects:
-  - rid: 312821315209789515
   <Prerequisites>k__BackingField: []
-  references:
-    version: 2
-    RefIds:
-    - rid: 312821315209789515
-      type: {class: UnlockMechanicSkillEffect, ns: Wordania.Features.Skills.Effects, asm: Wordania.Gameplay}
-      data:
-        <Mechanic>k__BackingField: {fileID: 11400000, guid: c8d45ff179a784433867261e3ee6c231, type: 2}

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using Wordania.Core.Identifiers;
 using Wordania.Core.Inputs;
 using Wordania.Features.Combat.Data;
 
@@ -60,7 +61,7 @@ namespace Wordania.Features.Player.Loadout
             if (_activeSlot?.Executor == null || !_player.StateMachine.CurrentState.CanPerformActions) return;
 
             Vector2 aimPosition = _player.Controller.GetWorldAimPosition();
-            int entityId = _player.InstanceId;
+            InstanceId entityId = _player.InstanceId;
 
             if (_isPrimaryActionHeld) // skipping execute return
             {

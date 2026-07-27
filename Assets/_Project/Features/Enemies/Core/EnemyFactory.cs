@@ -19,18 +19,20 @@ namespace Wordania.Features.Enemies.Core
         private readonly IObjectResolver _resolver;
         private readonly IDamageableEntitiesRegistryService _entityRegistry;
         private readonly IEntityTrackerService _entityTracker;
+        private readonly IInstanceIdProvider _idProvider;
         private readonly Transform _parent;
         private readonly Dictionary<AssetId, IObjectPool<EnemyController>> _pools = new();
         private readonly int _defaultPoolSize = 20;
         private readonly int _maxPoolSize = 100;
         private readonly int _prewarmBatchSize = 5;
 
-        public EnemyFactory(IObjectResolver resolver, MarkerEntityParent enemiesParent, IDamageableEntitiesRegistryService entityRegistry, IEntityTrackerService entityTracker)
+        public EnemyFactory(IObjectResolver resolver, MarkerEntityParent enemiesParent, IDamageableEntitiesRegistryService entityRegistry, IEntityTrackerService entityTracker, IInstanceIdProvider idProvider)
         {
             _resolver = resolver;
             _parent = enemiesParent.transform;
             _entityRegistry = entityRegistry;
             _entityTracker = entityTracker;
+            _idProvider = idProvider;
         }
 
         public void Dispose()
@@ -52,7 +54,7 @@ namespace Wordania.Features.Enemies.Core
 
             EnemyController enemy = pool.Get();
             enemy.transform.position = position;
-            enemy.Initialize(() =>
+            enemy.Initialize(_idProvider.Next(), () =>
                 {
                     _entityRegistry.Unregister(enemy.InstanceId);
                     _entityTracker.Unregister(enemy.InstanceId);

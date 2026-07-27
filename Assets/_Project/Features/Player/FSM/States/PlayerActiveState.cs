@@ -38,7 +38,7 @@ namespace Wordania.Features.Player.FSM
         protected void ApplyStandardMovement(float accelerationMult = 1f, float decelerationMult = 1f, float speedMult = 1f)
         {
             float xInput = _inputs.MovementInput.x;
-            float targetSpeed = xInput * _context.Stats.Stats[Core.Stats.StatType.MovementSpeed] * speedMult;
+            float targetSpeed = xInput * _context.Stats.GetStat(Core.Stats.StatType.MoveSpeed).Value * speedMult;
 
             bool isAccelerating = Mathf.Abs(xInput) > _context.Config.MinAccelerationInput;
             float currentAccel = isAccelerating ?

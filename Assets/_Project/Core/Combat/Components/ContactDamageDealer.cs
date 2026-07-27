@@ -1,4 +1,5 @@
 using UnityEngine;
+using Wordania.Core.Identifiers;
 
 namespace Wordania.Core.Combat
 {
@@ -8,9 +9,11 @@ namespace Wordania.Core.Combat
         private Vector2 _knockback;
         private DamageType _damageType;
         private HealthChangeSource _source;
+        private InstanceId _ownerId;
 
-        public void Initialize(float damageAmount, Vector2 knockbackForce, DamageType damageType, HealthChangeSource damageSource)
+        public void Initialize(InstanceId ownerId, float damageAmount, Vector2 knockbackForce, DamageType damageType, HealthChangeSource damageSource)
         {
+            _ownerId = ownerId;
             _damageAmount = damageAmount;
             _knockback = knockbackForce;
             _damageType = damageType;
@@ -32,7 +35,7 @@ namespace Wordania.Core.Combat
             {
                 float direction = Mathf.Sign(target.transform.position.x - contactPoint.x);
                 Vector2 knockback = new(direction * _knockback.x, _knockback.y);
-                var damageData = new DamagePayload(_damageAmount, _damageType, _source, gameObject.GetInstanceID(), contactPoint, knockback);
+                var damageData = new DamagePayload(_damageAmount, _damageType, _source, _ownerId, contactPoint, knockback);
                 damageable.ApplyDamage(damageData);
             }
         }

@@ -16,6 +16,7 @@ namespace Wordania.Features.Bosses.Core
         private readonly IAssetRegistry<BossTemplate> _registry;
         private readonly IObjectResolver _resolver;
         private readonly IEventBusGameplay _eventBus;
+        private readonly IInstanceIdProvider _idProvider;
         private readonly Transform _parent;
 
         // Dependency Injection
@@ -24,11 +25,13 @@ namespace Wordania.Features.Bosses.Core
             IAssetRegistry<BossTemplate> registry,
             IObjectResolver resolver,
             IEventBusGameplay eventBus,
+            IInstanceIdProvider idProvider,
             MarkerEntityParent parent)
         {
             _registry = registry;
             _resolver = resolver;
             _eventBus = eventBus;
+            _idProvider = idProvider;
             _parent = parent.transform;
         }
 
@@ -44,7 +47,7 @@ namespace Wordania.Features.Bosses.Core
 
             BossController bossInstance = _resolver.Instantiate(template.Prefab, position, Quaternion.identity, _parent);
 
-            bossInstance.Initialize(template);
+            bossInstance.Initialize(template, _idProvider.Next());
 
             _eventBus.Publish(new BossSpawnedEvent(bossInstance));
 

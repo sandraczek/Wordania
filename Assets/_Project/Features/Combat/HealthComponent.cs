@@ -1,26 +1,29 @@
 using System;
 using UnityEngine;
 using VContainer;
+using Wordania.Core.Combat;
 using Wordania.Core.Events;
 using Wordania.Core.Gameplay;
+using Wordania.Core.Identifiers;
 using Wordania.Core.Stats;
+using Wordania.Features.Stats;
 
-namespace Wordania.Core.Combat
+namespace Wordania.Features.Combat
 {
-    [RequireComponent(typeof(StatComponent))]
+    [RequireComponent(typeof(EntityStatsController))]
     public sealed class HealthComponent : MonoBehaviour, IReadOnlyHealth
     {
         private IEventBusGameplay _eventBus;
 
         [Header("Configuration")]
-        private StatComponent _stats;
+        private CharacterStat _healthStat;
 
         [SerializeField] private float _currentHealth;
 
         public float CurrentHealth => _currentHealth;
-        public float MaxHealth => _stats.Stats[StatType.MaxHealth].Value;
+        public float MaxHealth => _healthStat.Value;
         public bool IsDead => _currentHealth <= 0f;
-        public int LastAttackerId;
+        public InstanceId LastAttackerId;
 
         public event Action<HealthChangeData> OnHealthChange;
         public event Action<DamageResult> OnDamageTaken;
@@ -30,34 +33,29 @@ namespace Wordania.Core.Combat
         {
             _eventBus = eventBus;
         }
-        public void Awake()
-        {
-            _stats = GetComponent<StatComponent>();
-        }
         private void OnEnable()
         {
-            if (_stats != null && _stats.Stats.ContainsKey(StatType.MaxHealth))
+            if (_healthStat != null)
             {
-                _stats.Stats[StatType.MaxHealth].OnStatChanged -= HandleMaxHealthChange;
-                _stats.Stats[StatType.MaxHealth].OnStatChanged += HandleMaxHealthChange;
+                _healthStat.OnStatChanged -= HandleMaxHealthChange;
+                _healthStat.OnStatChanged += HandleMaxHealthChange;
             }
         }
         private void OnDisable()
         {
-            if (_stats != null && _stats.Stats.ContainsKey(StatType.MaxHealth))
-                _stats.Stats[StatType.MaxHealth].OnStatChanged -= HandleMaxHealthChange;
+            if (_healthStat != null)
+                _healthStat.OnStatChanged -= HandleMaxHealthChange;
         }
         public void SetInitial(float current)
         {
+            var stats = GetComponent<EntityStatsController>();
+            _healthStat = stats.GetStat(StatType.MaxHealth);
+
             _currentHealth = Mathf.Clamp(current, 0f, MaxHealth);
             CheckDeathCondition();
 
-            _stats.Stats[StatType.MaxHealth].OnStatChanged -= HandleMaxHealthChange;
-            _stats.Stats[StatType.MaxHealth].OnStatChanged += HandleMaxHealthChange;
-        }
-        public void Initialize()
-        {
-            SetInitial(MaxHealth);
+            _healthStat.OnStatChanged -= HandleMaxHealthChange;
+            _healthStat.OnStatChanged += HandleMaxHealthChange;
         }
         public void ApplyDamage(DamageResult damage)
         {

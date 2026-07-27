@@ -4,7 +4,7 @@ using Wordania.Core.Identifiers;
 
 namespace Wordania.Features.Skills
 {
-    public interface IPlayerSkillService
+    public interface ISkillTreeService
     {
         int[] SkillPoints { get; }
 

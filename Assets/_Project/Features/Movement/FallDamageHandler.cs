@@ -2,6 +2,7 @@ using UnityEngine;
 using VContainer;
 using Wordania.Core.Combat;
 using Wordania.Core.Gameplay;
+using Wordania.Core.Identifiers;
 
 namespace Wordania.Features.Movement
 {
@@ -12,7 +13,7 @@ namespace Wordania.Features.Movement
         [Header("Dependencies")]
         private ICharacterMovement _movement;
         private IDamageable _damageable;
-        
+
         [Header("Configuration")]
         private float _minVelocityForDamage = float.MaxValue;
         private float _damageMultiplier = 0f;
@@ -42,7 +43,7 @@ namespace Wordania.Features.Movement
 
         private void OnDisable()
         {
-            if(_movement!=null)
+            if (_movement != null)
                 _movement.OnLanded -= HandleLanding;
         }
 
@@ -57,7 +58,7 @@ namespace Wordania.Features.Movement
                 amount: damageAmount,
                 type: DamageType.FallDamage,
                 source: HealthChangeSource.Fall,
-                instigatorId: DamagePayload.EnvironmentId,
+                instigatorId: InstanceId.Environment,
                 hitPoint: _feetPosition,
                 knockback: Vector2.zero
             );

@@ -5,12 +5,17 @@ using VContainer;
 using VContainer.Unity;
 using Wordania.Core.Combat;
 using Wordania.Core.Gameplay;
+using Wordania.Core.Identifiers;
+using Wordania.Core.Mechanics;
 using Wordania.Core.SaveSystem;
 using Wordania.Core.SaveSystem.Data;
 using Wordania.Core.Services;
 using Wordania.Core.Stats;
+using Wordania.Features.Combat;
 using Wordania.Features.Markers;
+using Wordania.Features.Mechanics;
 using Wordania.Features.Services;
+using Wordania.Features.Stats;
 
 namespace Wordania.Features.Player
 {
@@ -21,6 +26,7 @@ namespace Wordania.Features.Player
         private readonly ISaveService _save;
         private readonly IDamageableEntitiesRegistryService _entityRegistry;
         private readonly IEntityTrackerService _entityTracker;
+        private readonly IInstanceIdProvider _idProvider;
 
         public event Action OnPlayerRegistered;
         public event Action OnPlayerUnregistered;
@@ -30,14 +36,15 @@ namespace Wordania.Features.Player
         private PlayerSaveData _cachedSaveData;
         private readonly Transform _parent;
         public IReadOnlyHealth ReadOnlyHealth { get; private set; }
-        public IPlayerSkillContext SkillContext { get; private set; }
+        public IEntityMechanicController PlayerMechanics { get; private set; }
+        public IEntityStats PlayerStats { get; private set; }
         public bool IsPlayerSpawned => _player != null;
         public Vector2 Position => _player.Position;
         public Bounds Hitbox => _player.Hitbox;
-        public int InstanceId => _player.InstanceId;
+        public InstanceId InstanceId => _player.InstanceId;
         public string SaveId => "Player";
 
-        public PlayerService(GameObject playerPrefab, IObjectResolver resolver, ISaveService save, MarkerEntityParent playerParent, IEntityTrackerService entityTracker, IDamageableEntitiesRegistryService entityRegistry)
+        public PlayerService(GameObject playerPrefab, IObjectResolver resolver, ISaveService save, MarkerEntityParent playerParent, IEntityTrackerService entityTracker, IDamageableEntitiesRegistryService entityRegistry, IInstanceIdProvider idProvider)
         {
             _playerPrefab = playerPrefab;
             _resolver = resolver;
@@ -45,6 +52,7 @@ namespace Wordania.Features.Player
             _parent = playerParent.transform;
             _entityRegistry = entityRegistry;
             _entityTracker = entityTracker;
+            _idProvider = idProvider;
         }
         public void Start()
         {
@@ -84,16 +92,17 @@ namespace Wordania.Features.Player
 
             if (_cachedSaveData != null)
             {
-                player.InitializeLoaded(_cachedSaveData.CurrentHealth);
+                player.InitializeLoaded(_idProvider.Next(), _cachedSaveData.CurrentHealth);
             }
             else
             {
-                player.InitializeNew();
+                player.InitializeNew(_idProvider.Next());
             }
 
             _player = player;
             ReadOnlyHealth = player.GetComponent<HealthComponent>();
-            SkillContext = player;
+            PlayerMechanics = player.GetComponent<EntityMechanicController>();
+            PlayerStats = player.GetComponent<EntityStatsController>();
 
 
 
@@ -111,7 +120,7 @@ namespace Wordania.Features.Player
             OnPlayerUnregistered?.Invoke();
             _player = null;
         }
-        public bool IsPlayer(int entityId)
+        public bool IsPlayer(InstanceId entityId)
         {
             return entityId == _player.InstanceId;
         }

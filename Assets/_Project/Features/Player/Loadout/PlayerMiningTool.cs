@@ -37,7 +37,7 @@ namespace Wordania.Features.Player.Loadout
             _player = context;
             _mechanicIds = mechanicIds;
         }
-        public bool ExecutePrimaryAction(Vector2 targetWorldPos, int instigatorId)
+        public bool ExecutePrimaryAction(Vector2 targetWorldPos, InstanceId instigatorId)
         {
             if (Time.time < _lastActionTime + _actionRate) return false;
 
@@ -50,7 +50,7 @@ namespace Wordania.Features.Player.Loadout
             _lastActionTime = Time.time;
             return true;
         }
-        public bool ExecuteSecondaryAction(Vector2 targetWorldPos, int instigatorId) { return false; }
+        public bool ExecuteSecondaryAction(Vector2 targetWorldPos, InstanceId instigatorId) { return false; }
 
         public void ReleasePrimaryAction() { }
         public void OnEquip()

@@ -7,6 +7,7 @@ using System;
 using UnityEngine;
 using Wordania.Core.SaveSystem;
 using Wordania.Core.Config;
+using Wordania.Core.Identifiers;
 using Wordania.Core.Inputs;
 using Wordania.Core.Events;
 
@@ -26,6 +27,8 @@ namespace Wordania.Boot
             builder.RegisterInstance<IInputReader>(_inputReader);
             _inputReader.Initialize();
             builder.Register<JsonSaveService>(Lifetime.Singleton).As<ISaveService>();
+
+            builder.Register<InstanceIdProvider>(Lifetime.Singleton).As<IInstanceIdProvider>();
 
             builder.RegisterEntryPoint<GameBootstrapper>();
         }

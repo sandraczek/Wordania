@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Wordania.Core.Stats
 {
     public enum StatModifierType
@@ -11,17 +9,16 @@ namespace Wordania.Core.Stats
 
     public class StatModifier
     {
-        public float Value { get; }
-        public StatModifierType Type { get; }
-        public int Order { get; }
-        public object Source { get; }
+        public readonly float Value;
+        public readonly StatModifierType Type;
+        public readonly int Order;
 
-        public StatModifier(float value, StatModifierType type, object source = null)
+        public StatModifier(float value, StatModifierType type, int order = 0)
         {
             Value = value;
             Type = type;
-            Order = (int)type;
-            Source = source;
+
+            Order = order == 0 ? (int)type : order;
         }
     }
 }

@@ -11,11 +11,6 @@ namespace Wordania.Features.Mechanics.Implementations
             return true;
         }
 
-        public void OnTick(float deltaTime)
-        {
-
-        }
-
         public void OnDeactivate()
         {
 

@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using VContainer;
 using Wordania.Core.Combat;
+using Wordania.Core.Identifiers;
 using Wordania.Core.Services;
 using Wordania.Features.Combat;
 using Wordania.Features.Mechanics;
@@ -44,8 +45,8 @@ namespace Wordania.Features.Player
 
         private void HandleGodModeChanged(bool isGodMode)
         {
-            if (isGodMode) _mechanics.EnableMechanic(_mechanicIds.GodMode);
-            else _mechanics.DisableMechanic(_mechanicIds.GodMode);
+            if (isGodMode) _mechanics.EnableMechanic(_mechanicIds.GodMode, InstanceId.Debug);
+            else _mechanics.DisableMechanic(_mechanicIds.GodMode, InstanceId.Debug);
         }
     }
 }

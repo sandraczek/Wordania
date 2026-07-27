@@ -9,6 +9,7 @@ using Wordania.Core.Services;
 using Wordania.Core.Identifiers;
 using System;
 using Wordania.Features.Bosses.Yeinn.Data;
+using Wordania.Features.Combat;
 
 namespace Wordania.Features.Bosses.Yeinn.Parts
 {
@@ -25,7 +26,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         public void Initialize(YeinnHandData handData, Transform restAnchor)
         {
             base.Initialize(handData);
-            
+
             _idleState = new YeinnHandIdleState(_data.Idle, this, _playerProvider, restAnchor);
             _swipeState = new YeinnHandSwipeState(_data.Swipe, this, _playerProvider);
             _slamState = new YeinnHandSlamState(_data.Slam, this, _playerProvider);

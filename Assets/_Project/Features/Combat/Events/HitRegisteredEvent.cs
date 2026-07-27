@@ -2,6 +2,7 @@ using System;
 using Unity.Mathematics;
 using UnityEngine;
 using Wordania.Core.Events;
+using Wordania.Core.Identifiers;
 
 namespace Wordania.Features.Combat.Events
 {
@@ -9,10 +10,10 @@ namespace Wordania.Features.Combat.Events
     {
         public float2 Direction;
         public int ProjectileDataId;
-        public int HitEntityId;
+        public InstanceId HitEntityId;
         public float2 HitPosition;
         public float DamageMultiplier;
-        public int InstigatorId;
+        public InstanceId InstigatorId;
     }
 
     public struct HitRegisteredEvent : IGameEvent

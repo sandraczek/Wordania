@@ -177,7 +177,7 @@ namespace Wordania.Features
 
             //skills
             builder.Register<MechanicFactory>(Lifetime.Scoped).As<IMechanicFactory>();
-            builder.RegisterEntryPoint<PlayerSkillService>(Lifetime.Scoped).As<IPlayerSkillService>();
+            builder.RegisterEntryPoint<SkillTreeService>(Lifetime.Scoped).As<ISkillTreeService>();
             builder.RegisterEntryPoint<KillSkillPointService>(Lifetime.Scoped);
 
 
@@ -247,6 +247,8 @@ TODOS:
 - fix enemies stopping after hit
 - can remove dependency between player and healthbar (move to event bus)
 - refactor PlayerSkillService (should not hold data - needed for when there are more players)
+- merge all IEntity interfaces
+- stat init
 
 features:
 boss spawning

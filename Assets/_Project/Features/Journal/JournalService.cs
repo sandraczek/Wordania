@@ -15,7 +15,7 @@ namespace Wordania.Features.Journal
         private readonly IEventBusGameplay _eventBus;
         private readonly IPlayerProvider _player;
 
-        private readonly Dictionary<int, IPlayerJournal> _journals = new();
+        private readonly Dictionary<InstanceId, IPlayerJournal> _journals = new();
         public JournalService(IEventBusGameplay eventBus, IPlayerProvider player)
         {
             _eventBus = eventBus;
@@ -40,7 +40,7 @@ namespace Wordania.Features.Journal
             _eventBus?.Unsubscribe<DeathEvent>(HandleDeathEvent);
             _eventBus?.Unsubscribe<BossDeathEvent>(HandleBossDeathEvent);
         }
-        private IPlayerJournal GetPlayerJournal(int id)
+        private IPlayerJournal GetPlayerJournal(InstanceId id)
         {
             if (!_player.IsPlayer(id))
             {
@@ -83,7 +83,7 @@ namespace Wordania.Features.Journal
         }
         private void CreateJournalForPlayer()
         {
-            int id = _player.InstanceId;
+            InstanceId id = _player.InstanceId;
             if (_journals.ContainsKey(id))
             {
                 Debug.LogWarning("Tried creating journal for a player that already has a journal");
@@ -94,7 +94,7 @@ namespace Wordania.Features.Journal
         }
         private void DeleteJournalOfPlayer()
         {
-            int id = _player.InstanceId;
+            InstanceId id = _player.InstanceId;
             if (!_journals.ContainsKey(id))
             {
                 Debug.LogWarning("Tried to remove journal of a player that does not have one");

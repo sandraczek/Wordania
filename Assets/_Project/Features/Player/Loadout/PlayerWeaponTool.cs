@@ -20,7 +20,7 @@ namespace Wordania.Features.Player.Loadout
         {
             _factory = weaponFactory;
         }
-        public bool ExecutePrimaryAction(Vector2 targetWorldPos, int instigatorId)
+        public bool ExecutePrimaryAction(Vector2 targetWorldPos, InstanceId instigatorId)
         {
             if (_currentWeapon == null) return false;
 
@@ -37,7 +37,7 @@ namespace Wordania.Features.Player.Loadout
             };
             return _currentWeapon.Fire(context);
         }
-        public bool ExecuteSecondaryAction(Vector2 targetWorldPos, int instigatorId) => false;
+        public bool ExecuteSecondaryAction(Vector2 targetWorldPos, InstanceId instigatorId) => false;
 
         public void ReleasePrimaryAction() { }
 

@@ -43,7 +43,6 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         public Vector2 Position => transform.position;
         public bool IsAlive { get; set; } = true;
         public bool IsPersistent { get; } = true;
-        public int InstanceId => gameObject.GetInstanceID();
 
         [Inject]
         public void Construct(IEventBusGameplay eventBus, IActiveEnemiesRegistryService enemyRegistry, IPlayerProvider player)

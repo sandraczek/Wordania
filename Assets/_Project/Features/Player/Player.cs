@@ -20,22 +20,23 @@ using Wordania.Features.Mechanics.Data;
 using Wordania.Features.Movement;
 using Wordania.Features.Player.FSM;
 using Wordania.Features.Player.View;
+using Wordania.Features.Stats;
 
 namespace Wordania.Features.Player
 {
     [RequireComponent(typeof(PlayerController))]
     [RequireComponent(typeof(HealthComponent))]
-    [RequireComponent(typeof(StatComponent))]
     [RequireComponent(typeof(EntityMechanicController))]
+    [RequireComponent(typeof(EntityStatsController))]
     [RequireComponent(typeof(InvincibilityController))]
     [RequireComponent(typeof(DamageMitigator))]
-    public sealed class Player : MonoBehaviour, IDamageable, ITrackable, IPlayerSkillContext
+    public sealed class Player : MonoBehaviour, IDamageable, ITrackable
     {
         [Header("Components")]
         private PlayerController _controller;
         private StateMachine<PlayerBaseState> _stateMachine;
         private HealthComponent _health;
-        private StatComponent _stats;
+        private EntityStatsController _stats;
         private EntityMechanicController _mechanics;
         private InvincibilityController _invincibility;
         private DamageMitigator _mitigation;
@@ -46,9 +47,10 @@ namespace Wordania.Features.Player
         private PlayerConfig _config;
         private PlayerService _playerService;
         private MechanicIds _mechanicIds;
+        private PlayerContext _context;
         public Bounds Hitbox => _controller.GetBounds();
         public Vector2 Position => _controller.GetBounds().center;
-        public int InstanceId { get; private set; }
+        public InstanceId InstanceId { get; private set; }
         public EntityFaction Faction { get; private set; } = EntityFaction.Player;
 
         [Inject]
@@ -56,45 +58,46 @@ namespace Wordania.Features.Player
         {
             _controller = GetComponent<PlayerController>();
             _health = GetComponent<HealthComponent>();
-            _stats = GetComponent<StatComponent>();
+            _stats = GetComponent<EntityStatsController>();
             _invincibility = GetComponent<InvincibilityController>();
             _mitigation = GetComponent<DamageMitigator>();
             _mechanics = GetComponent<EntityMechanicController>();
 
-            InstanceId = gameObject.GetInstanceID();
-
             _playerService = playerService; // TODO: make interface ?
             _config = config;
             _mechanicIds = mechanicIds;
+            _context = context;
 
             _stateMachine = new StateMachine<PlayerBaseState>();
 
-            context.Bind(InstanceId, _stateMachine, _controller, _health, _stats, _config, _mechanics, transform);
             _factory = new(context, inputs, inventory);
         }
-        public void InitializeNew()
+        public void InitializeNew(InstanceId instanceId)
         {
+            InstanceId = instanceId;
             Init();
 
-            _health.Initialize();
+            _health.SetInitial(_config.MaxHealth);
         }
-        public void InitializeLoaded(float currentHealth)
+        public void InitializeLoaded(InstanceId instanceId, float currentHealth)
         {
+            InstanceId = instanceId;
             Init();
             _health.SetInitial(currentHealth);
         }
         private void Init()
         {
+            _context.Bind(InstanceId, _stateMachine, _controller, _health, _stats, _config, _mechanics, transform);
             // ---
             _stateMachine.SwitchState(_factory.InitialState);
 
             //starting mechanics
-            _mechanics.EnableMechanic(_mechanicIds.Mining);
-            _mechanics.EnableMechanic(_mechanicIds.Building);
+            _mechanics.EnableMechanic(_mechanicIds.Mining, InstanceId.Innate);
+            _mechanics.EnableMechanic(_mechanicIds.Building, InstanceId.Innate);
 
-            _stats.Stats.Clear();
-            _stats.Stats.Add(StatType.MaxHealth, new(_config.MaxHealth));
-            _stats.Stats.Add(StatType.MovementSpeed, new(_config.MoveSpeed));
+            // _stats.Stats.Clear();
+            // _stats.Stats.Add(StatType.MaxHealth, new(_config.MaxHealth));
+            // _stats.Stats.Add(StatType.MoveSpeed, new(_config.MoveSpeed));
 
             _mitigation.Initialize(
                 _config.GeneralResistance,
@@ -170,24 +173,14 @@ namespace Wordania.Features.Player
         {
             visuals.PlayHurtEffect();
         }
-        public void UnlockMechanic(AssetId mechanicId)
+        public void UnlockMechanic(AssetId mechanicId, InstanceId source)
         {
-            _mechanics.EnableMechanic(mechanicId);
+            _mechanics.EnableMechanic(mechanicId, source);
         }
 
-        public void LockMechanic(AssetId mechanicId)
+        public void LockMechanic(AssetId mechanicId, InstanceId source)
         {
-            _mechanics.DisableMechanic(mechanicId);
-        }
-
-        public void AddModifier(StatType type, StatModifier modifier)
-        {
-            _stats.Stats[type].AddModifier(modifier);
-        }
-
-        public void RemoveModifiers(StatType type, AssetId modifier)
-        {
-            _stats.Stats[type].RemoveAllModifiersFromSource(modifier);
+            _mechanics.DisableMechanic(mechanicId, source);
         }
 
         public PlayerSaveData GetSaveData()

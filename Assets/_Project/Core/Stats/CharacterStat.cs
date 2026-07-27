@@ -1,18 +1,21 @@
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace Wordania.Core.Stats
 {
+    using System;
+    using System.Collections.Generic;
+    using UnityEngine;
+
     [Serializable]
     public class CharacterStat
     {
         public event Action OnStatChanged;
 
         [SerializeField] private float _baseValue;
-        private readonly List<StatModifier> _statModifiers = new();
+
+        private readonly List<StatModifier> _statModifiers = new(4);
         private bool _isDirty = true;
         private float _lastCalculatedValue;
+
+        private static readonly ModifierComparer _comparer = new ModifierComparer();
 
         public float Value
         {
@@ -26,10 +29,6 @@ namespace Wordania.Core.Stats
                 return _lastCalculatedValue;
             }
         }
-        public static implicit operator float(CharacterStat stats)
-        {
-            return stats?.Value ?? 0f;
-        }
 
         public CharacterStat(float baseValue)
         {
@@ -40,7 +39,7 @@ namespace Wordania.Core.Stats
         {
             _isDirty = true;
             _statModifiers.Add(modifier);
-            _statModifiers.Sort(CompareModifierOrder);
+            _statModifiers.Sort(_comparer);
             OnStatChanged?.Invoke();
         }
 
@@ -55,54 +54,30 @@ namespace Wordania.Core.Stats
             return false;
         }
 
-        public bool RemoveAllModifiersFromSource(object source)
-        {
-            bool didRemove = false;
-
-            for (int i = _statModifiers.Count - 1; i >= 0; i--)
-            {
-                if (_statModifiers[i].Source == source)
-                {
-                    _isDirty = true;
-                    didRemove = true;
-                    _statModifiers.RemoveAt(i);
-                }
-            }
-
-            if (didRemove)
-            {
-                OnStatChanged?.Invoke();
-            }
-
-            return didRemove;
-        }
-
-        private int CompareModifierOrder(StatModifier a, StatModifier b)
-        {
-            if (a.Order < b.Order) return -1;
-            if (a.Order > b.Order) return 1;
-            return 0;
-        }
-
         private float CalculateFinalValue()
         {
             float finalValue = _baseValue;
-            float sumPercentAdd = 0;
+            float sumPercentAdd = 0f;
 
-            foreach (var modifier in _statModifiers)
+            for (int i = 0; i < _statModifiers.Count; i++)
             {
+                StatModifier modifier = _statModifiers[i];
+
                 switch (modifier.Type)
                 {
                     case StatModifierType.Flat:
                         finalValue += modifier.Value;
                         break;
+
                     case StatModifierType.PercentAdd:
                         sumPercentAdd += modifier.Value;
-                        if (IsLastModifierOfType(modifier, StatModifierType.PercentAdd))
+                        if (i + 1 == _statModifiers.Count || _statModifiers[i + 1].Type != StatModifierType.PercentAdd)
                         {
                             finalValue *= 1.0f + sumPercentAdd;
+                            sumPercentAdd = 0f;
                         }
                         break;
+
                     case StatModifierType.PercentMult:
                         finalValue *= modifier.Value;
                         break;
@@ -112,10 +87,13 @@ namespace Wordania.Core.Stats
             return (float)Math.Round(finalValue, 4);
         }
 
-        private bool IsLastModifierOfType(StatModifier current, StatModifierType type)
+        private readonly struct ModifierComparer : IComparer<StatModifier>
         {
-            int index = _statModifiers.IndexOf(current);
-            return index + 1 >= _statModifiers.Count || _statModifiers[index + 1].Type != type;
+            public int Compare(StatModifier a, StatModifier b)
+            {
+                if (a == null || b == null) return 0;
+                return a.Order.CompareTo(b.Order);
+            }
         }
     }
 }

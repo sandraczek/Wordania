@@ -6,7 +6,9 @@ namespace Wordania.Features.Mechanics
     {
         bool OnActivate(IEntityContext context);
         void OnDeactivate();
-
+    }
+    public interface ITickableMechanic : IMechanic
+    {
         void OnTick(float deltaTime);
     }
 }

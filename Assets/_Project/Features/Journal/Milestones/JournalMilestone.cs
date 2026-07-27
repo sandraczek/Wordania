@@ -5,7 +5,6 @@ using Wordania.Core.Attributes;
 using Wordania.Core.Data;
 using Wordania.Core.Identifiers;
 using Wordania.Features.Mechanics.Data;
-using Wordania.Features.Skills.Effects;
 
 namespace Wordania.Features.Journal.Milestones
 {

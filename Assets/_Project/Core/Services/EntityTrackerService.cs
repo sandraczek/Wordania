@@ -6,6 +6,7 @@ using UnityEngine;
 using VContainer.Unity;
 using Wordania.Core.Combat;
 using Wordania.Core.Gameplay;
+using Wordania.Core.Identifiers;
 using Wordania.Core.Services;
 
 namespace Wordania.Features.Services
@@ -25,11 +26,11 @@ namespace Wordania.Features.Services
             if (TryGet(entity.InstanceId, out _)) return;
 
             base.Register(entity);
-            
+
             _trackables.Add(entity);
         }
 
-        public override void Unregister(int entityId)
+        public override void Unregister(InstanceId entityId)
         {
             if (TryGet(entityId, out ITrackable entity))
             {
@@ -73,7 +74,7 @@ namespace Wordania.Features.Services
             for (int i = 0; i < _trackables.Count; i++)
             {
                 Bounds bounds = _trackables[i].Hitbox;
-                
+
                 _targetAABBs[i] = new TargetAABB
                 {
                     EntityInstanceId = _trackables[i].InstanceId,

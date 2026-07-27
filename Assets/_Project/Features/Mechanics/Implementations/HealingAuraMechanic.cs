@@ -1,10 +1,11 @@
 using Wordania.Core.Combat;
 using Wordania.Core.Gameplay;
+using Wordania.Features.Combat;
 using Wordania.Features.Mechanics.Data;
 
 namespace Wordania.Features.Mechanics.Implementations
 {
-    public class HealingAuraMechanic : IMechanic
+    public class HealingAuraMechanic : ITickableMechanic
     {
         private readonly HealingAuraMechanicData _data;
         private HealthComponent _health;

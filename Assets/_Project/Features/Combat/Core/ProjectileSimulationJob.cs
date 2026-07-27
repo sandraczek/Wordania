@@ -51,7 +51,7 @@ namespace Wordania.Features.Combat.Core
                 {
                     HitEventsQueue.Enqueue(new ProjectileHitData
                     {
-                        HitEntityId = -1,
+                        HitEntityId = default,
                         ProjectileDataId = data.DataId,
                         InstigatorId = data.InstigatorId,
                         HitPosition = data.CurrentPosition,

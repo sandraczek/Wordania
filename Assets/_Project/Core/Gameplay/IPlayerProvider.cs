@@ -3,6 +3,9 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using Wordania.Core.Combat;
+using Wordania.Core.Identifiers;
+using Wordania.Core.Mechanics;
+using Wordania.Core.Stats;
 
 namespace Wordania.Core.Gameplay
 {
@@ -10,14 +13,15 @@ namespace Wordania.Core.Gameplay
     {
         Transform PlayerTransform { get; }
         IReadOnlyHealth ReadOnlyHealth { get; }
-        IPlayerSkillContext SkillContext { get; }
+        IEntityMechanicController PlayerMechanics { get; }
+        IEntityStats PlayerStats { get; }
         Vector2 Position { get; }
         Bounds Hitbox { get; }
-        int InstanceId { get; }
+        InstanceId InstanceId { get; }
         bool IsPlayerSpawned { get; }
         event Action OnPlayerRegistered;
         event Action OnPlayerUnregistered;
 
-        bool IsPlayer(int entityId);
+        bool IsPlayer(InstanceId entityId);
     }
 }

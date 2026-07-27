@@ -15,23 +15,24 @@ using Wordania.Features.Enemies.FSM;
 using Wordania.Features.Enemies.Movement;
 using Wordania.Features.Mechanics;
 using Wordania.Features.Movement;
+using Wordania.Features.Stats;
 
 namespace Wordania.Features.Enemies.Core
 {
     [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]
-    [RequireComponent(typeof(StatComponent))]
     [RequireComponent(typeof(EntityMechanicController))]
     [RequireComponent(typeof(DamageMitigator))]
     [RequireComponent(typeof(InvincibilityController))]
+    [RequireComponent(typeof(EntityStatsController))]
     public sealed class EnemyController : MonoBehaviour, IEnemy, ICharacterMovement, IDamageable, ITrackable
     {
         public EnemyTemplate Data;
         private IActiveEnemiesRegistryService _registry;
         private IEventBusGameplay _eventBus;
         private HealthComponent _health;
-        private StatComponent _stats;
+        private EntityStatsController _stats;
         private EntityMechanicController _mechanics;
         private Rigidbody2D _rb;
         private Collider2D _col;
@@ -40,7 +41,7 @@ namespace Wordania.Features.Enemies.Core
         private EnemyStateFactory _stateFactory;
         private DamageMitigator _mitigation;
         private InvincibilityController _invincibility;
-        public int InstanceId => gameObject.GetInstanceID();
+        public InstanceId InstanceId { get; private set; }
         public bool IsPersistent { get; } = false;
         public EntityFaction Faction { get; private set; } = EntityFaction.Enemy;
 
@@ -83,7 +84,7 @@ namespace Wordania.Features.Enemies.Core
             _health = GetComponent<HealthComponent>();
             _rb = GetComponent<Rigidbody2D>();
             _col = GetComponent<Collider2D>();
-            _stats = GetComponent<StatComponent>();
+            _stats = GetComponent<EntityStatsController>();
             _mechanics = GetComponent<EntityMechanicController>();
             _mitigation = GetComponent<DamageMitigator>();
             _invincibility = GetComponent<InvincibilityController>();
@@ -92,16 +93,17 @@ namespace Wordania.Features.Enemies.Core
             _stateMachine = new();
             _stateFactory = new(this, _stateMachine);
         }
-        public void Initialize(Action onDeath)
+        public void Initialize(InstanceId instanceId, Action onDeath)
         {
+            InstanceId = instanceId;
             if (Data == null) Debug.LogError($"{transform.name}: No data was set in prefab");
             _onDeathFactoryAction = onDeath;
 
-            _stats.Stats.Clear();
-            _stats.Stats.Add(StatType.MaxHealth, new(Data.Stats.MaxHealth));
-            _stats.Stats.Add(StatType.MovementSpeed, new(Data.Movement.PatrolSpeed)); // to change
+            // _stats.Stats.Clear();
+            // _stats.Stats.Add(StatType.MaxHealth, new(Data.Stats.MaxHealth));
+            // _stats.Stats.Add(StatType.MovementSpeed, new(Data.Movement.PatrolSpeed)); // to change
 
-            _health.Initialize();
+            _health.SetInitial(Data.Stats.MaxHealth);
             _mechanics.ClearAllMechanics();
             _maxFallSpeed = 0f;
             SetGravity(Data.Movement.GravityScale);
@@ -123,7 +125,7 @@ namespace Wordania.Features.Enemies.Core
             }
             if (TryGetComponent(out ContactDamageDealer damage))
             {
-                damage.Initialize(Data.Combat.ContactDamage, Data.Combat.Knockback, Data.Combat.DamageType, Data.Combat.DamageSource);
+                damage.Initialize(InstanceId, Data.Combat.ContactDamage, Data.Combat.Knockback, Data.Combat.DamageType, Data.Combat.DamageSource);
             }
 
 

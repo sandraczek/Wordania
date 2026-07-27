@@ -9,6 +9,7 @@ using Wordania.Core.Services;
 using Wordania.Core.Identifiers;
 using System;
 using Wordania.Features.Bosses.Yeinn.Data;
+using Wordania.Features.Combat;
 
 namespace Wordania.Features.Bosses.Yeinn.Parts
 {
@@ -31,7 +32,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
 
             SwitchState(_hoverState);
         }
-       
+
         public void CommandSlamAttack() => SwitchState(_slamState);
         public void CommandChaseAttack() => SwitchState(_chaseState);
         public void CommandHoverAttack() => SwitchState(_hoverState);

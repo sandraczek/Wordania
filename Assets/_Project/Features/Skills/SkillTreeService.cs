@@ -8,25 +8,29 @@ using Wordania.Core.Gameplay;
 using Wordania.Core.Identifiers;
 using Wordania.Core.SaveSystem;
 using Wordania.Core.SaveSystem.Data;
+using Wordania.Core.Stats;
 using Wordania.Features.Player;
+using Wordania.Features.Stats;
 
 namespace Wordania.Features.Skills
 {
-    public class PlayerSkillService : IPlayerSkillService, ISaveable, IStartable, IDisposable
+    public class SkillTreeService : ISkillTreeService, ISaveable, IStartable, IDisposable
     {
         private readonly IAssetRegistry<SkillData> _registry;
         private readonly ISaveService _save;
         private readonly IPlayerProvider _player;
 
         private HashSet<AssetId> _unlockedSkills = new();
+        private readonly Dictionary<AssetId, StatModifier[]> _appliedSkillStats = new();
         public int[] SkillPoints { get; private set; } = new int[(int)SkillPointsType.Count];
 
         public string SaveId => "playerSkills";
 
         public event Action<int[]> OnPointsChanged;
         public event Action<AssetId> OnSkillUnlocked;
+        public event Action<AssetId> OnSkillLocked;
 
-        public PlayerSkillService(IAssetRegistry<SkillData> registry, ISaveService save, IPlayerProvider player)
+        public SkillTreeService(IAssetRegistry<SkillData> registry, ISaveService save, IPlayerProvider player)
         {
             _registry = registry;
             _save = save;
@@ -97,6 +101,24 @@ namespace Wordania.Features.Skills
             OnPointsChanged?.Invoke(SkillPoints);
             OnSkillUnlocked?.Invoke(skillId);
         }
+        public void LockSkill(AssetId skillId)
+        {
+            if (!_unlockedSkills.Contains(skillId)) return;
+
+            _unlockedSkills.Remove(skillId);
+            var skill = _registry.Get(skillId);
+
+            foreach (SkillPoint sp in skill.Cost)                       // returning skill points
+            {
+
+                SkillPoints[(int)sp.Type] += sp.Value;
+            }
+
+            RevertSkillEffects(skill);
+
+            OnPointsChanged?.Invoke(SkillPoints);
+            OnSkillLocked?.Invoke(skillId);
+        }
 
         public void AddPoints(SkillPointsType type, int points)
         {
@@ -132,9 +154,60 @@ namespace Wordania.Features.Skills
                 Debug.LogWarning("Could not apply skill effects - skill is null");
                 return;
             }
-            foreach (var effect in skill.Effects)
+            foreach (var mechanics in skill.Mechanics)
             {
-                effect.Apply(_player.SkillContext, skill.Id);
+                _player.PlayerMechanics.EnableMechanic(mechanics.Id, InstanceId.SkillTree);
+            }
+
+            if (skill.Stats.Count > 0)
+            {
+                StatModifier[] generatedModifiers = new StatModifier[skill.Stats.Count];
+
+                for (int i = 0; i < skill.Stats.Count; i++)
+                {
+                    StatData statData = skill.Stats[i];
+                    CharacterStat targetStat = _player.PlayerStats.GetStat(statData.Stat);
+
+                    if (targetStat != null)
+                    {
+                        var modifier = new StatModifier(statData.Value, statData.ModifierType);
+                        targetStat.AddModifier(modifier);
+                        generatedModifiers[i] = modifier;
+                    }
+                }
+
+                _appliedSkillStats.Add(skill.Id, generatedModifiers);
+            }
+        }
+
+        public void RevertSkillEffects(SkillData skill)
+        {
+            if (skill == null)
+            {
+                Debug.LogWarning("Could not revert skill effects - skill is null");
+                return;
+            }
+            foreach (var mechanics in skill.Mechanics)
+            {
+                _player.PlayerMechanics.DisableMechanic(mechanics.Id, InstanceId.SkillTree);
+            }
+
+            if (_appliedSkillStats.TryGetValue(skill.Id, out var statModifiers))
+            {
+                for (int i = 0; i < skill.Stats.Count; i++)
+                {
+                    StatData rewardDef = skill.Stats[i];
+                    CharacterStat targetStat = _player.PlayerStats.GetStat(rewardDef.Stat);
+
+                    StatModifier modifierToRemove = statModifiers[i];
+
+                    if (targetStat != null && modifierToRemove != null)
+                    {
+                        targetStat.RemoveModifier(modifierToRemove);
+                    }
+                }
+
+                _appliedSkillStats.Remove(skill.Id);
             }
         }
         private void HandlePlayerRegistered()

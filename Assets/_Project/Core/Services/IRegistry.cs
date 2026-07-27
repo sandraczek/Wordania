@@ -3,12 +3,12 @@ using Wordania.Core.Identifiers;
 
 namespace Wordania.Core.Services
 {
-    public interface IRegistry<T> where T:IEntity
+    public interface IRegistry<T> where T : IEntity
     {
-        int Count {get;}
+        int Count { get; }
         void Register(T entity);
-        void Unregister(int entityId);
+        void Unregister(InstanceId entityId);
         IReadOnlyList<T> GetAll();
-        public bool TryGet(int entityId, out T entity);
+        public bool TryGet(InstanceId entityId, out T entity);
     }
 }

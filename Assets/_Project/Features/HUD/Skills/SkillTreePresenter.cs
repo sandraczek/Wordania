@@ -9,12 +9,12 @@ namespace Wordania.Features.HUD.Skills
     public class SkillTreePresenter : IStartable, IDisposable
     {
         private readonly SkillTreeView _view;
-        private readonly IPlayerSkillService _skills;
+        private readonly ISkillTreeService _skills;
         private readonly IAssetRegistry<SkillData> _skillRegistry;
 
         public SkillTreePresenter(
             SkillTreeView view,
-            IPlayerSkillService entitySkills,
+            ISkillTreeService entitySkills,
             IAssetRegistry<SkillData> skillRegistry)
         {
             _view = view ? view : throw new ArgumentNullException(nameof(view));

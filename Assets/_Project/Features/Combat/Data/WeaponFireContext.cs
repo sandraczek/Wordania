@@ -8,7 +8,7 @@ namespace Wordania.Features.Combat.Data
         public Vector2 position;
         public Vector2 direction;
         public float damageMultiplier;
-        public int instigatorId;
+        public InstanceId instigatorId;
         public EntityFaction TargetFactionMask;
     }
 }

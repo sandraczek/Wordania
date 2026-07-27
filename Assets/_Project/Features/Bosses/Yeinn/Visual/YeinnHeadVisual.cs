@@ -3,11 +3,12 @@ using UnityEngine;
 using Wordania.Core.Combat;
 using Wordania.Features.Bosses.Visual;
 using Wordania.Features.Bosses.Yeinn.Parts;
+using Wordania.Features.Combat;
 
 namespace Wordania.Features.Bosses.Yeinn.Visual
 {
     [RequireComponent(typeof(SpriteRenderer))]
-    public sealed class YeinnHeadVisual: MonoBehaviour
+    public sealed class YeinnHeadVisual : MonoBehaviour
     {
         [SerializeField] private BossVisualSettings _settings;
         [SerializeField] private YeinnHeadController _head;
@@ -30,12 +31,12 @@ namespace Wordania.Features.Bosses.Yeinn.Visual
         }
         private void OnEnable()
         {
-            _head.OnDefeated+=Hide;
+            _head.OnDefeated += Hide;
             _health.OnDamageTaken += HandleDamageTaken;
         }
         private void OnDisable()
         {
-            _head.OnDefeated-=Hide;
+            _head.OnDefeated -= Hide;
             _health.OnDamageTaken -= HandleDamageTaken;
         }
         private void Hide()

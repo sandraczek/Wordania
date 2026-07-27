@@ -11,6 +11,8 @@ using System;
 using Wordania.Features.Bosses.Yeinn.Data;
 using UnityEngine.UIElements;
 using Wordania.Core.Stats;
+using Wordania.Features.Stats;
+using Wordania.Features.Combat;
 
 namespace Wordania.Features.Bosses.Yeinn.Parts
 {
@@ -18,18 +20,19 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(DamageMitigator))]
-    [RequireComponent(typeof(StatComponent))]
+    [RequireComponent(typeof(EntityStatsController))]
     public abstract class BossPartController<T> : MonoBehaviour, IDamageable, ITrackable where T : BossPartData
     {
         [Header("Dependencies")]
         private IEntityTrackerService _entityTracker;
         private IDamageableEntitiesRegistryService _entityRegistry;
+        private IInstanceIdProvider _idProvider;
         protected IPlayerProvider _playerProvider;
 
         protected T _data;
         private StateMachine<IState> _stateMachine;
         private HealthComponent _health;
-        private StatComponent _stats;
+        private EntityStatsController _stats;
         private Rigidbody2D _rb;
         private Collider2D _col;
         protected DamageMitigator _mitigation;
@@ -43,26 +46,28 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
 
         public event Action OnDefeated;
         public bool IsDefeated { get; private set; } = false;
-        public int InstanceId => gameObject.GetInstanceID();
+        public InstanceId InstanceId { get; private set; }
         public EntityFaction Faction => EntityFaction.Enemy; // enemy or boss ?
         public Bounds Hitbox => _col.bounds;
         public Vector2 Position => _rb.position;
 
         [Inject]
-        public void Construct(IPlayerProvider playerProvider, IDamageableEntitiesRegistryService entityRegistry, IEntityTrackerService entityTracker)
+        public void Construct(IPlayerProvider playerProvider, IDamageableEntitiesRegistryService entityRegistry, IEntityTrackerService entityTracker, IInstanceIdProvider idProvider)
         {
             _entityRegistry = entityRegistry;
             _entityTracker = entityTracker;
             _playerProvider = playerProvider;
+            _idProvider = idProvider;
         }
         public virtual void Initialize(T data)
         {
             _data = data;
+            InstanceId = _idProvider.Next();
 
             _stateMachine = new StateMachine<IState>();
 
-            _stats.Stats.Clear();
-            _stats.Stats.Add(StatType.MaxHealth, new(_data.MaxHealth));
+            // _stats.Stats.Clear();
+            // _stats.Stats.Add(StatType.MaxHealth, new(_data.MaxHealth));
 
             _mitigation.Initialize
             (
@@ -79,7 +84,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
 
             if (TryGetComponent(out ContactDamageDealer damage))
             {
-                damage.Initialize(_data.ContactDamage, _data.Knockback, _data.DamageType, _data.DamageSource);
+                damage.Initialize(InstanceId, _data.ContactDamage, _data.Knockback, _data.DamageType, _data.DamageSource);
             }
         }
         private void Awake()
@@ -87,7 +92,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             _health = GetComponent<HealthComponent>();
             _col = GetComponent<Collider2D>();
             _rb = GetComponent<Rigidbody2D>();
-            _stats = GetComponent<StatComponent>();
+            _stats = GetComponent<EntityStatsController>();
             _mitigation = GetComponent<DamageMitigator>();
         }
         private void OnEnable()
