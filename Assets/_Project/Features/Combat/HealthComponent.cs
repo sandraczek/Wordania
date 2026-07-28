@@ -46,13 +46,18 @@ namespace Wordania.Features.Combat
             if (_healthStat != null)
                 _healthStat.OnStatChanged -= HandleMaxHealthChange;
         }
-        public void SetInitial(float current)
+        public void Initialize()
         {
             var stats = GetComponent<EntityStatsController>();
             _healthStat = stats.GetStat(StatType.MaxHealth);
-
-            _currentHealth = Mathf.Clamp(current, 0f, MaxHealth);
-            CheckDeathCondition();
+        }
+        public void InitializeSpawn()
+        {
+            InitializeSpawn(MaxHealth);
+        }
+        public void InitializeSpawn(float current)
+        {
+            SetCurrentHealth(current);
 
             _healthStat.OnStatChanged -= HandleMaxHealthChange;
             _healthStat.OnStatChanged += HandleMaxHealthChange;

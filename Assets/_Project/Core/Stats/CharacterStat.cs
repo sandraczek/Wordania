@@ -9,13 +9,13 @@ namespace Wordania.Core.Stats
     {
         public event Action OnStatChanged;
 
-        [SerializeField] private float _baseValue;
+        private float _baseValue;
 
         private readonly List<StatModifier> _statModifiers = new(4);
         private bool _isDirty = true;
         private float _lastCalculatedValue;
 
-        private static readonly ModifierComparer _comparer = new ModifierComparer();
+        private static readonly ModifierComparer _comparer = new();
 
         public float Value
         {
@@ -33,6 +33,13 @@ namespace Wordania.Core.Stats
         public CharacterStat(float baseValue)
         {
             _baseValue = baseValue;
+        }
+
+        public void RemoveAllModifiers()
+        {
+            _statModifiers.Clear();
+            _isDirty = true;
+            OnStatChanged?.Invoke();
         }
 
         public void AddModifier(StatModifier modifier)

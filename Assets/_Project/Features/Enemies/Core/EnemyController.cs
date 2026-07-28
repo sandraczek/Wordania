@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using VContainer;
@@ -41,6 +42,7 @@ namespace Wordania.Features.Enemies.Core
         private EnemyStateFactory _stateFactory;
         private DamageMitigator _mitigation;
         private InvincibilityController _invincibility;
+        private ContactDamageDealer _contactDamage;
         public InstanceId InstanceId { get; private set; }
         public bool IsPersistent { get; } = false;
         public EntityFaction Faction { get; private set; } = EntityFaction.Enemy;
@@ -78,9 +80,7 @@ namespace Wordania.Features.Enemies.Core
         {
             _registry = registry;
             _eventBus = eventBus;
-        }
-        public void Awake()
-        {
+
             _health = GetComponent<HealthComponent>();
             _rb = GetComponent<Rigidbody2D>();
             _col = GetComponent<Collider2D>();
@@ -92,24 +92,44 @@ namespace Wordania.Features.Enemies.Core
 
             _stateMachine = new();
             _stateFactory = new(this, _stateMachine);
+
+            List<(StatType, float)> startingStats = new()
+            {
+                { (StatType.MaxHealth, Data.Stats.MaxHealth) },
+                { (StatType.MoveSpeed, Data.Movement.PatrolSpeed) } //to change
+            };
+            _stats.Initialize(startingStats);
+
+            _health.Initialize();
+
+            if (TryGetComponent(out FallDamageHandler fall))
+            {
+                fall.Initialize(Data.Movement.FallDamageThreshold, Data.Movement.FallDamageMultiplier);
+            }
+            if (TryGetComponent(out _contactDamage))
+            {
+                _contactDamage.Initialize(Data.Combat.ContactDamage, Data.Combat.Knockback, Data.Combat.DamageType, Data.Combat.DamageSource);
+            }
         }
-        public void Initialize(InstanceId instanceId, Action onDeath)
+
+        public void InitializeSpawn(InstanceId instanceId, Action onDeath)
         {
             InstanceId = instanceId;
             if (Data == null) Debug.LogError($"{transform.name}: No data was set in prefab");
             _onDeathFactoryAction = onDeath;
 
-            // _stats.Stats.Clear();
-            // _stats.Stats.Add(StatType.MaxHealth, new(Data.Stats.MaxHealth));
-            // _stats.Stats.Add(StatType.MovementSpeed, new(Data.Movement.PatrolSpeed)); // to change
+            _registry.Register(this);
 
-            _health.SetInitial(Data.Stats.MaxHealth);
+            _stats.InitializeSpawn();
+            _health.InitializeSpawn();
             _mechanics.ClearAllMechanics();
+
             _maxFallSpeed = 0f;
             SetGravity(Data.Movement.GravityScale);
+
             _stateMachine.SwitchState(_stateFactory.InitialState);
 
-            _mitigation.Initialize
+            _mitigation.InitializeSpawn
             (
                 Data.Combat.GeneralResistance,
                 Data.Combat.PhysicalResistance,
@@ -118,26 +138,14 @@ namespace Wordania.Features.Enemies.Core
                 Data.Combat.FallResistance
             );
 
-            //to change
-            if (TryGetComponent(out FallDamageHandler fall))
-            {
-                fall.Initialize(Data.Movement.FallDamageThreshold, Data.Movement.FallDamageMultiplier);
-            }
-            if (TryGetComponent(out ContactDamageDealer damage))
-            {
-                damage.Initialize(InstanceId, Data.Combat.ContactDamage, Data.Combat.Knockback, Data.Combat.DamageType, Data.Combat.DamageSource);
-            }
-
-
+            if (_contactDamage != null)
+                _contactDamage.InitializeSpawn(InstanceId);
         }
         private void OnEnable()
         {
-            _registry.Register(this);
             _health.OnDamageTaken += Handlehurt;
             _health.OnDamageTaken += HandleHurtVisuals;
             _health.OnDeath += HandleDeath;
-            _invincibility.Started += OnInvincibilityStarted;
-            _invincibility.Ended += OnInvincibilityEnded;
         }
         private void OnDisable()
         {
@@ -145,8 +153,6 @@ namespace Wordania.Features.Enemies.Core
             _health.OnDamageTaken -= Handlehurt;
             _health.OnDamageTaken -= HandleHurtVisuals;
             _health.OnDeath -= HandleDeath;
-            _invincibility.Started -= OnInvincibilityStarted;
-            _invincibility.Ended -= OnInvincibilityEnded;
         }
         private void Update()
         {
@@ -262,19 +268,23 @@ namespace Wordania.Features.Enemies.Core
         }
         private void HandleDeath()
         {
-            //Debug.Log($"{Data.DisplayName} died");
             _eventBus.Publish(new DeathEvent(Data.Id, _health.LastAttackerId));
-            _onDeathFactoryAction.Invoke();
+            ReturnToPool();
         }
         public void Remove()
         {
-            //Debug.Log($"{Data.DisplayName} removed");
+            ReturnToPool();
+        }
+        private void ReturnToPool()
+        {
+            if (!_registry.TryGet(InstanceId, out _)) return;
+
+            _registry.Unregister(InstanceId);
             _onDeathFactoryAction.Invoke();
         }
-        //TODO: move ?
+
         public void ApplyDamage(DamagePayload payload)
         {
-            ;
             if (_health.IsDead) return;
             //Applying Damage even if invincible (only knockback affected)
 
@@ -300,14 +310,6 @@ namespace Wordania.Features.Enemies.Core
         {
             Debug.DrawRay(Position + Vector2.up * 0.2f, Vector2.down * 0.4f);
             Debug.DrawRay(Position + Vector2.right * 0.2f, Vector2.left * 0.4f);
-        }
-        private void OnInvincibilityStarted() // Bullets die on enemy who does not get knockback (but gets damage)
-        {
-            //Faction = 0;
-        }
-        private void OnInvincibilityEnded()
-        {
-            //Faction = EntityFaction.Enemy;
         }
         private void HandleHurtVisuals(DamageResult damage)
         {

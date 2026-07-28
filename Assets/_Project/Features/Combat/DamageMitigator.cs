@@ -7,10 +7,10 @@ namespace Wordania.Core.Combat
     public class DamageMitigator : MonoBehaviour
     {
         private float _generalResistance;
-        private readonly Dictionary<DamageType, float> _typeResistance = new();
+        private readonly Dictionary<DamageType, float> _typeResistance = new(10);
         private bool _isInitialized = false;
 
-        public void Initialize(
+        public void InitializeSpawn(
             float generalResistance,
             float physical,
             float magical,

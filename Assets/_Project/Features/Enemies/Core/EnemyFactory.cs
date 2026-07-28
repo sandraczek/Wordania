@@ -54,7 +54,7 @@ namespace Wordania.Features.Enemies.Core
 
             EnemyController enemy = pool.Get();
             enemy.transform.position = position;
-            enemy.Initialize(_idProvider.Next(), () =>
+            enemy.InitializeSpawn(_idProvider.Next(), () =>
                 {
                     _entityRegistry.Unregister(enemy.InstanceId);
                     _entityTracker.Unregister(enemy.InstanceId);

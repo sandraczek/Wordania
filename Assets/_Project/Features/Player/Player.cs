@@ -76,14 +76,15 @@ namespace Wordania.Features.Player
         {
             InstanceId = instanceId;
             Init();
-
-            _health.SetInitial(_config.MaxHealth);
+            _health.Initialize();
+            _health.InitializeSpawn();
         }
         public void InitializeLoaded(InstanceId instanceId, float currentHealth)
         {
             InstanceId = instanceId;
             Init();
-            _health.SetInitial(currentHealth);
+            _health.Initialize();
+            _health.InitializeSpawn(currentHealth);
         }
         private void Init()
         {
@@ -95,11 +96,14 @@ namespace Wordania.Features.Player
             _mechanics.EnableMechanic(_mechanicIds.Mining, InstanceId.Innate);
             _mechanics.EnableMechanic(_mechanicIds.Building, InstanceId.Innate);
 
-            // _stats.Stats.Clear();
-            // _stats.Stats.Add(StatType.MaxHealth, new(_config.MaxHealth));
-            // _stats.Stats.Add(StatType.MoveSpeed, new(_config.MoveSpeed));
+            List<(StatType, float)> startingStats = new()
+            {
+                { (StatType.MaxHealth, _config.MaxHealth) },
+                { (StatType.MoveSpeed, _config.MoveSpeed) }
+            };
+            _stats.Initialize(startingStats);
 
-            _mitigation.Initialize(
+            _mitigation.InitializeSpawn(
                 _config.GeneralResistance,
                 _config.PhysicalResistance,
                 _config.MagicalResistance,

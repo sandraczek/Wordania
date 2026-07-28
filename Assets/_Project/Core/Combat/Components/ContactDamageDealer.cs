@@ -9,15 +9,18 @@ namespace Wordania.Core.Combat
         private Vector2 _knockback;
         private DamageType _damageType;
         private HealthChangeSource _source;
-        private InstanceId _ownerId;
+        private InstanceId _ownerId = InstanceId.Empty;
 
-        public void Initialize(InstanceId ownerId, float damageAmount, Vector2 knockbackForce, DamageType damageType, HealthChangeSource damageSource)
+        public void Initialize(float damageAmount, Vector2 knockbackForce, DamageType damageType, HealthChangeSource damageSource)
         {
-            _ownerId = ownerId;
             _damageAmount = damageAmount;
             _knockback = knockbackForce;
             _damageType = damageType;
             _source = damageSource;
+        }
+        public void InitializeSpawn(InstanceId ownerId)
+        {
+            _ownerId = ownerId;
         }
         private void OnCollisionStay2D(Collision2D collision)
         {

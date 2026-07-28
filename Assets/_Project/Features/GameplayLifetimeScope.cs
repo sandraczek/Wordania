@@ -244,11 +244,11 @@ TODOS:
 - somehow make projectiles hitbox not a point
 - fix magic color in light shader graph
 - prewarming
-- fix enemies stopping after hit
 - can remove dependency between player and healthbar (move to event bus)
 - refactor PlayerSkillService (should not hold data - needed for when there are more players)
 - merge all IEntity interfaces
-- stat init
+- refactor DamageMitigator to be like stat controller
+- refactor Invincibility so health component uses it
 
 features:
 boss spawning

@@ -1,61 +1,48 @@
 namespace Wordania.Features.Stats
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using UnityEngine;
     using Wordania.Core.Gameplay;
     using Wordania.Core.Stats;
 
     public class EntityStatsController : MonoBehaviour, IEntityStats
     {
-        [Header("Base Stat Definitions")]
-        [SerializeField] private float _baseMaxHealth = 100f;
-        [SerializeField] private float _baseMoveSpeed = 5f;
-        [SerializeField] private float _baseAttackDamage = 10f;
-        [SerializeField] private float _baseArmor = 0f;
-
-        public CharacterStat MaxHealth { get; private set; }
-        public CharacterStat MoveSpeed { get; private set; }
-        public CharacterStat AttackDamage { get; private set; }
-        public CharacterStat Armor { get; private set; }
-
-        private CharacterStat[] _statsLookupTable;
-
-        private void Awake()
+        private CharacterStat[] _stats;
+        private bool _statsInitialized = false;
+        public void Initialize(IReadOnlyList<(StatType, float)> startingStats)
         {
-            InitializeStats();
-        }
 
-        private void InitializeStats()
-        {
-            MaxHealth = new CharacterStat(_baseMaxHealth);
-            MoveSpeed = new CharacterStat(_baseMoveSpeed);
-            AttackDamage = new CharacterStat(_baseAttackDamage);
-            Armor = new CharacterStat(_baseArmor);
-
-            int maxEnumIndex = 0;
-            foreach (StatType statType in Enum.GetValues(typeof(StatType)))
+            int maxIndex = -1;
+            for (int i = 0; i < startingStats.Count; i++)
             {
-                int index = (int)statType;
-                if (index > maxEnumIndex)
+                int index = (int)startingStats[i].Item1;
+                if (index > maxIndex)
                 {
-                    maxEnumIndex = index;
+                    maxIndex = index;
                 }
             }
 
-            _statsLookupTable = new CharacterStat[maxEnumIndex + 1];
+            _stats = new CharacterStat[maxIndex + 1];
 
-            _statsLookupTable[(int)StatType.MaxHealth] = MaxHealth;
-            _statsLookupTable[(int)StatType.MoveSpeed] = MoveSpeed;
-            _statsLookupTable[(int)StatType.AttackDamage] = AttackDamage;
-            _statsLookupTable[(int)StatType.Armor] = Armor;
+            for (int i = 0; i < startingStats.Count; i++)
+            {
+                int statIndex = (int)startingStats[i].Item1;
+                _stats[statIndex] = new CharacterStat(startingStats[i].Item2);
+            }
+
+            _statsInitialized = true;
         }
 
         public CharacterStat GetStat(StatType statType)
         {
+            if (!_statsInitialized) Debug.LogWarning("Stats were not initialized.");
+
             int index = (int)statType;
-            if (index >= 0 && index < _statsLookupTable.Length)
+            if (index >= 0 && index < _stats.Length)
             {
-                return _statsLookupTable[index];
+                return _stats[index];
             }
 
             return null;
@@ -63,8 +50,18 @@ namespace Wordania.Features.Stats
 
         public bool TryGetStat(StatType statType, out CharacterStat stat)
         {
+            if (!_statsInitialized) Debug.LogWarning("Stats were not initialized.");
+
             stat = GetStat(statType);
             return stat != null;
+        }
+
+        public void InitializeSpawn()
+        {
+            foreach (var stat in _stats)
+            {
+                stat.RemoveAllModifiers();
+            }
         }
     }
 }

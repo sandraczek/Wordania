@@ -13,6 +13,7 @@ using UnityEngine.UIElements;
 using Wordania.Core.Stats;
 using Wordania.Features.Stats;
 using Wordania.Features.Combat;
+using System.Collections.Generic;
 
 namespace Wordania.Features.Bosses.Yeinn.Parts
 {
@@ -58,6 +59,12 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             _entityTracker = entityTracker;
             _playerProvider = playerProvider;
             _idProvider = idProvider;
+
+            _health = GetComponent<HealthComponent>();
+            _col = GetComponent<Collider2D>();
+            _rb = GetComponent<Rigidbody2D>();
+            _stats = GetComponent<EntityStatsController>();
+            _mitigation = GetComponent<DamageMitigator>();
         }
         public virtual void Initialize(T data)
         {
@@ -66,10 +73,13 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
 
             _stateMachine = new StateMachine<IState>();
 
-            // _stats.Stats.Clear();
-            // _stats.Stats.Add(StatType.MaxHealth, new(_data.MaxHealth));
+            List<(StatType, float)> startingStats = new()
+            {
+                { (StatType.MaxHealth, _data.MaxHealth) },
+            };
+            _stats.Initialize(startingStats);
 
-            _mitigation.Initialize
+            _mitigation.InitializeSpawn
             (
                 _data.GeneralResistance,
                 _data.PhysicalResistance,
@@ -77,23 +87,17 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
                 _data.EnvironmentalResistance,
                 _data.FallResistance
             );
-            _health.SetInitial(_data.MaxHealth);
+            _health.Initialize();
+            _health.InitializeSpawn(_data.MaxHealth);
 
             _entityTracker.Register(this);
             _entityRegistry.Register(this);
 
             if (TryGetComponent(out ContactDamageDealer damage))
             {
-                damage.Initialize(InstanceId, _data.ContactDamage, _data.Knockback, _data.DamageType, _data.DamageSource);
+                damage.Initialize(_data.ContactDamage, _data.Knockback, _data.DamageType, _data.DamageSource);
+                damage.InitializeSpawn(InstanceId);
             }
-        }
-        private void Awake()
-        {
-            _health = GetComponent<HealthComponent>();
-            _col = GetComponent<Collider2D>();
-            _rb = GetComponent<Rigidbody2D>();
-            _stats = GetComponent<EntityStatsController>();
-            _mitigation = GetComponent<DamageMitigator>();
         }
         private void OnEnable()
         {
