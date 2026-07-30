@@ -6,6 +6,8 @@ namespace Wordania.Core.Combat
         Magical,
         Environmental,
         FallDamage,
-        TrueDamage
+        TrueDamage,
+
+        COUNT
     }
 }

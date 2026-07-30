@@ -79,14 +79,15 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             };
             _stats.Initialize(startingStats);
 
-            _mitigation.InitializeSpawn
-            (
-                _data.GeneralResistance,
-                _data.PhysicalResistance,
-                _data.MagicalResistance,
-                _data.EnvironmentalResistance,
-                _data.FallResistance
-            );
+            List<(DamageType, float)> resistances = new()
+            {
+                {(DamageType.Physical, _data.PhysicalResistance)},
+                {(DamageType.Magical, _data.MagicalResistance)},
+                {(DamageType.Environmental, _data.EnvironmentalResistance)},
+                {(DamageType.FallDamage, _data.FallResistance)}
+            };
+            _mitigation.InitializeSpawn(_data.GeneralResistance, resistances);
+
             _health.Initialize();
             _health.InitializeSpawn(_data.MaxHealth);
 

@@ -6,24 +6,28 @@ namespace Wordania.Core.Combat
 
     public class DamageMitigator : MonoBehaviour
     {
+        private float[] _resistances;
         private float _generalResistance;
-        private readonly Dictionary<DamageType, float> _typeResistance = new(10);
         private bool _isInitialized = false;
 
-        public void InitializeSpawn(
-            float generalResistance,
-            float physical,
-            float magical,
-            float environmental,
-            float fall
-            )
+        /// <summary>
+        /// Initialize on spawn to ensure every modifier is resetted.
+        /// <see cref="DamageType.TrueDamage"/> should be left at default value.
+        /// The final damage is calculated with formula: (1 - general) * (1 - typed) * damage
+        /// </summary>
+        /// <param name="generalResistance"></param>
+        /// <param name="resistances"> unsetted types will be set to 0f</param>
+        public void InitializeSpawn(float generalResistance, IReadOnlyList<(DamageType, float)> resistances)
         {
             _generalResistance = generalResistance;
-            _typeResistance[DamageType.Physical] = physical;
-            _typeResistance[DamageType.Magical] = magical;
-            _typeResistance[DamageType.Environmental] = environmental;
-            _typeResistance[DamageType.FallDamage] = fall;
-            _typeResistance[DamageType.TrueDamage] = 0f;
+
+            _resistances = new float[(int)DamageType.COUNT];
+
+            for (int i = 0; i < resistances.Count; i++)
+            {
+                int damageTypeIndex = (int)resistances[i].Item1;
+                _resistances[damageTypeIndex] = resistances[i].Item2;
+            }
 
             _isInitialized = true;
         }
@@ -36,13 +40,13 @@ namespace Wordania.Core.Combat
             }
 
             // Stacking general resistance and type resistance
-            float finalDamage = payload.Amount * (1f - _generalResistance) * (1f - _typeResistance[payload.Type]);
+            float finalDamage = payload.Amount * (1f - _generalResistance) * (1f - _resistances[(int)payload.Type]);
 
             return new DamageResult(payload, finalDamage, false);
         }
-        public void SetResistance(float res, DamageType type)
+        public void SetResistance(DamageType type, float res)
         {
-            _typeResistance[type] = res;
+            _resistances[(int)type] = res;
         }
         public void SetGeneralResistance(float res)
         {

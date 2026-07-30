@@ -129,14 +129,14 @@ namespace Wordania.Features.Enemies.Core
 
             _stateMachine.SwitchState(_stateFactory.InitialState);
 
-            _mitigation.InitializeSpawn
-            (
-                Data.Combat.GeneralResistance,
-                Data.Combat.PhysicalResistance,
-                Data.Combat.MagicalResistance,
-                Data.Combat.EnvironmentalResistance,
-                Data.Combat.FallResistance
-            );
+            List<(DamageType, float)> resistances = new()
+            {
+                {(DamageType.Physical, Data.Combat.PhysicalResistance)},
+                {(DamageType.Magical, Data.Combat.MagicalResistance)},
+                {(DamageType.Environmental, Data.Combat.EnvironmentalResistance)},
+                {(DamageType.FallDamage, Data.Combat.FallResistance)}
+            };
+            _mitigation.InitializeSpawn(Data.Combat.GeneralResistance, resistances);
 
             if (_contactDamage != null)
                 _contactDamage.InitializeSpawn(InstanceId);

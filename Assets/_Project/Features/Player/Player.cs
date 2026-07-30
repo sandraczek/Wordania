@@ -103,13 +103,14 @@ namespace Wordania.Features.Player
             };
             _stats.Initialize(startingStats);
 
-            _mitigation.InitializeSpawn(
-                _config.GeneralResistance,
-                _config.PhysicalResistance,
-                _config.MagicalResistance,
-                _config.EnvironmentalResistance,
-                _config.FallResistance
-                );
+            List<(DamageType, float)> resistances = new()
+            {
+                {(DamageType.Physical, _config.PhysicalResistance)},
+                {(DamageType.Magical, _config.MagicalResistance)},
+                {(DamageType.Environmental, _config.EnvironmentalResistance)},
+                {(DamageType.FallDamage, _config.FallResistance)}
+            };
+            _mitigation.InitializeSpawn(_config.GeneralResistance, resistances);
 
             //to change
             if (TryGetComponent(out FallDamageHandler fall))
