@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Wordania.Core.Data;
 using Wordania.Core.Identifiers;

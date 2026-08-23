@@ -1122,6 +1122,15 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""ShowJournal"",
+                    ""type"": ""Button"",
+                    ""id"": ""6cdeab42-07ea-434a-b636-204513e935ff"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""ShowMap"",
                     ""type"": ""Button"",
                     ""id"": ""a7889e77-73e4-47a6-849c-7961b8fb887c"",
@@ -1158,6 +1167,17 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ShowInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7850fa5e-de2e-414b-bbd9-4126482cffd6"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShowJournal"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1363,6 +1383,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         // HUD
         m_HUD = asset.FindActionMap("HUD", throwIfNotFound: true);
         m_HUD_ShowInventory = m_HUD.FindAction("ShowInventory", throwIfNotFound: true);
+        m_HUD_ShowJournal = m_HUD.FindAction("ShowJournal", throwIfNotFound: true);
         m_HUD_ShowMap = m_HUD.FindAction("ShowMap", throwIfNotFound: true);
         m_HUD_ShowSkillTree = m_HUD.FindAction("ShowSkillTree", throwIfNotFound: true);
         m_HUD_Exit = m_HUD.FindAction("Exit", throwIfNotFound: true);
@@ -1910,6 +1931,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_HUD;
     private List<IHUDActions> m_HUDActionsCallbackInterfaces = new List<IHUDActions>();
     private readonly InputAction m_HUD_ShowInventory;
+    private readonly InputAction m_HUD_ShowJournal;
     private readonly InputAction m_HUD_ShowMap;
     private readonly InputAction m_HUD_ShowSkillTree;
     private readonly InputAction m_HUD_Exit;
@@ -1928,6 +1950,10 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "HUD/ShowInventory".
         /// </summary>
         public InputAction @ShowInventory => m_Wrapper.m_HUD_ShowInventory;
+        /// <summary>
+        /// Provides access to the underlying input action "HUD/ShowJournal".
+        /// </summary>
+        public InputAction @ShowJournal => m_Wrapper.m_HUD_ShowJournal;
         /// <summary>
         /// Provides access to the underlying input action "HUD/ShowMap".
         /// </summary>
@@ -1969,6 +1995,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @ShowInventory.started += instance.OnShowInventory;
             @ShowInventory.performed += instance.OnShowInventory;
             @ShowInventory.canceled += instance.OnShowInventory;
+            @ShowJournal.started += instance.OnShowJournal;
+            @ShowJournal.performed += instance.OnShowJournal;
+            @ShowJournal.canceled += instance.OnShowJournal;
             @ShowMap.started += instance.OnShowMap;
             @ShowMap.performed += instance.OnShowMap;
             @ShowMap.canceled += instance.OnShowMap;
@@ -1992,6 +2021,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @ShowInventory.started -= instance.OnShowInventory;
             @ShowInventory.performed -= instance.OnShowInventory;
             @ShowInventory.canceled -= instance.OnShowInventory;
+            @ShowJournal.started -= instance.OnShowJournal;
+            @ShowJournal.performed -= instance.OnShowJournal;
+            @ShowJournal.canceled -= instance.OnShowJournal;
             @ShowMap.started -= instance.OnShowMap;
             @ShowMap.performed -= instance.OnShowMap;
             @ShowMap.canceled -= instance.OnShowMap;
@@ -2418,6 +2450,13 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnShowInventory(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ShowJournal" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnShowJournal(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "ShowMap" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

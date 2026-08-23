@@ -1,17 +1,19 @@
-namespace Wordania.Features.Mapping
+using UnityEngine;
+using VContainer;
+using Wordania.Core.HUD;
+using Wordania.Core.Inputs;
+
+namespace Wordania.Features.HUD.Journal
 {
-    using UnityEngine;
-    using VContainer;
-    using Wordania.Core.HUD;
-    using Wordania.Core.Inputs;
-
     [RequireComponent(typeof(CanvasGroup))]
-    public class WorldMapView : MonoBehaviour, IHUDWindow
+    [RequireComponent(typeof(JournalView))]
+    public sealed class JournalDisplay : MonoBehaviour, IHUDWindow
     {
-        private CanvasGroup _canvasGroup;
-
         private IInputReader _inputs;
         private IHUDStateManager _hud;
+
+        private JournalView _view;
+        private CanvasGroup _canvasGroup;
         private bool _isOpen = false;
 
         [Inject]
@@ -20,13 +22,16 @@ namespace Wordania.Features.Mapping
             _inputs = inputs;
             _hud = hudManager;
         }
+
         private void Awake()
         {
+            _view = GetComponent<JournalView>();
             _canvasGroup = GetComponent<CanvasGroup>();
         }
+
         private void Start()
         {
-            _inputs.OnToggleMap += HandleMapToggle;
+            _inputs.OnToggleJournal += HandleJournalToggle;
             _isOpen = false;
             ApplyVisibility(false);
         }
@@ -34,11 +39,11 @@ namespace Wordania.Features.Mapping
         {
             if (_inputs != null)
             {
-                _inputs.OnToggleMap -= HandleMapToggle;
+                _inputs.OnToggleJournal -= HandleJournalToggle;
             }
         }
 
-        private void HandleMapToggle()
+        private void HandleJournalToggle()
         {
             _isOpen = !_isOpen;
 
@@ -51,6 +56,7 @@ namespace Wordania.Features.Mapping
         {
             if (!_isOpen) return;
 
+            _hud.UnregisterOpenWindow(this);
             _isOpen = false;
             ApplyVisibility(false);
         }
@@ -59,6 +65,9 @@ namespace Wordania.Features.Mapping
             _canvasGroup.alpha = open ? 1f : 0f;
             _canvasGroup.interactable = open;
             _canvasGroup.blocksRaycasts = open;
+
+            if (open)
+                _view.LoadPage();
         }
     }
 }

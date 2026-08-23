@@ -16,4 +16,7 @@ MonoBehaviour:
     _editorId: lamp_block_journal_entry
     _hash: -39842870
   Milestones: []
+  DisplayName: unnamed
+  SortOrder: 2147483647
+  Icon: {fileID: 740283661255203588, guid: 1d6c046acf1894a939ee82180d9a52fb, type: 3}
   _source: {fileID: 11400000, guid: a88a74e71c89c409e9726a50c901820b, type: 2}

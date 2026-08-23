@@ -7,7 +7,7 @@ namespace Wordania.Features.Inventory
     public sealed class ItemData : DataAsset
     {
         [Space]
-        [SerializeField] private string _displayName;
+        [SerializeField] private string _displayName = "unnamed";
         [SerializeField] private Sprite _icon;
         [SerializeField] private int _maxStackSize = 99;
         public string DisplayName => _displayName;

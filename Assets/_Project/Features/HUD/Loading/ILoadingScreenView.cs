@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 
 namespace Wordania.Features.HUD.Loading
 {
-    public interface ILoadingScreenService
+    public interface ILoadingScreenView
     {
         void Show();
         void UpdateProgress(float progress, string message = "");

@@ -30,6 +30,7 @@ namespace Wordania.Core.Inputs
         public event Action OnToggleInventory;
         public event Action OnExitPerformed;
         public event Action OnToggleMap;
+        public event Action OnToggleJournal;
         public event Action OnToggleSkillTree;
 
         // debug service
@@ -132,6 +133,10 @@ namespace Wordania.Core.Inputs
         public void OnShowSkillTree(InputAction.CallbackContext context)
         {
             if (context.performed) OnToggleSkillTree?.Invoke();
+        }
+        public void OnShowJournal(InputAction.CallbackContext context)
+        {
+            if (context.performed) OnToggleJournal?.Invoke();
         }
 
         public void ConsumeJump()

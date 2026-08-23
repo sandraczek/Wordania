@@ -1036,6 +1036,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "ShowJournal",
+                    "type": "Button",
+                    "id": "6cdeab42-07ea-434a-b636-204513e935ff",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "ShowMap",
                     "type": "Button",
                     "id": "a7889e77-73e4-47a6-849c-7961b8fb887c",
@@ -1072,6 +1081,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ShowInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7850fa5e-de2e-414b-bbd9-4126482cffd6",
+                    "path": "<Keyboard>/j",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ShowJournal",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

@@ -12,7 +12,9 @@ namespace Wordania.Features.Journal.Entries
     {
         public List<JournalMilestone> Milestones;
         public abstract AssetId TargetId { get; }
-        public abstract JournalCategory Category { get; }
+        public string DisplayName = "unnamed";
+        public int SortOrder = int.MaxValue;
+        public Sprite Icon;
 
 #if UNITY_EDITOR
         protected override void OnValidate()
@@ -35,6 +37,8 @@ namespace Wordania.Features.Journal.Entries
     {
         Enemies,
         Bosses,
-        Blocks
+        Blocks,
+
+        COUNT
     }
 }

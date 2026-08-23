@@ -16,4 +16,7 @@ MonoBehaviour:
     _editorId: sandstone_block_journal_entry
     _hash: -1494914891
   Milestones: []
+  DisplayName: unnamed
+  SortOrder: 2147483647
+  Icon: {fileID: -1943579140663470588, guid: 432e16f9cd57a4f218fcd8e74dcf017f, type: 3}
   _source: {fileID: 11400000, guid: ac2e6dc4b81884de1bec820e48ea8cf3, type: 2}

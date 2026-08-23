@@ -17,7 +17,6 @@ namespace Wordania.Features.Enemies.Data
         [field: SerializeField] public EnemyController Prefab;
 
         [field: SerializeField] public string DisplayName { get; private set; } = "Unknown Enemy";
-
         [field: Space(10)]
         [field: Header("Modules")]
         [field: SerializeField] public EnemyStatsData Stats { get; private set; }
@@ -28,9 +27,6 @@ namespace Wordania.Features.Enemies.Data
 
         [field: SerializeField] public ItemData Loot { get; private set; }
 
-        //to change
-        public float FallDamageThreshold => Movement.FallDamageThreshold;
-        public float FallDamageMultiplier => Movement.FallDamageMultiplier;
 
 #if UNITY_EDITOR
         protected override void OnValidate()

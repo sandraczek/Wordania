@@ -44,7 +44,7 @@ namespace Wordania.Core.HUD
 
         public void UnregisterOpenWindow(IHUDWindow window)
         {
-            if (_activeWindow != window) return;
+            if (window == null || _activeWindow != window) return;
 
             _activeWindow = null;
             _inputs.SetGameplayMode();

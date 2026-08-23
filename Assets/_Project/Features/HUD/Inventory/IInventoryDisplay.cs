@@ -2,7 +2,7 @@ using Unity;
 
 namespace Wordania.Features.HUD.Inventory
 {
-    public interface IInventoryDisplay
+    public interface IInventoryView
     {
         void Show();
         void Hide();

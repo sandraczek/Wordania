@@ -23,7 +23,7 @@ namespace Wordania.Core.Data
 #endif
         protected virtual AssetId GetKey(T asset) => asset.Id;
 
-        public void Initialize()
+        public virtual void Initialize()
         {
             _lookupTable = new Dictionary<AssetId, T>(_assets.Count);
             foreach (var asset in _assets)

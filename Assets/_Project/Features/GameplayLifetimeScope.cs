@@ -47,6 +47,7 @@ using Wordania.Features.Mechanics;
 using Wordania.Features.Mechanics.Data;
 using Wordania.Features.Journal.Entries;
 using Wordania.Features.Journal.Milestones;
+using Wordania.Features.HUD.Journal;
 
 namespace Wordania.Features
 {
@@ -70,17 +71,20 @@ namespace Wordania.Features
         [SerializeField] private GameObject _playerPrefab;
         [SerializeField] private Chunk _chunkPrefab;
         [SerializeField] private CameraService _cameraService;
+        [SerializeField] private JournalEntryRegistry _journalEntryRegistry;
+
         [SerializeField] private HealthBarUI _healthBarUI;
-        [SerializeField] private InventoryView _inventoryView;
-        [SerializeField] private InventoryDisplayUI _inventoryDisplayUI;
+        [SerializeField] private InventoryDisplay _inventoryView;
+        [SerializeField] private InventoryView _inventoryDisplayUI;
         [SerializeField] private InventorySlotUI _inventorySlotPrefab;
         [SerializeField] private LoadingScreenView _loadingScreen;
         [SerializeField] private SavingIcon _savingIcon;
         [SerializeField] private WorldMapController _worldMapController;
-        [SerializeField] private WorldMapView _worldMapView;
+        [SerializeField] private WorldMapDisplay _worldMapView;
         [SerializeField] private SkillTreeView _skillTreeView;
         [SerializeField] private SkillTreeDisplay _skillTreeDisplay;
-        [SerializeField] private JournalEntryRegistry _journalEntryRegistry;
+        [SerializeField] private JournalView _journalView;
+        [SerializeField] private JournalDisplay _journalDisplay;
 
         //debug
         [Header("Save Slot 0 For a New Game")]
@@ -202,7 +206,7 @@ namespace Wordania.Features
             builder.RegisterInstance(_uiConfig);
             builder.RegisterEntryPoint<HUDStateManager>(Lifetime.Scoped).As<IHUDStateManager>();
 
-            builder.RegisterComponent(_loadingScreen).As<ILoadingScreenService>();
+            builder.RegisterComponent(_loadingScreen).As<ILoadingScreenView>();
 
             builder.RegisterComponent(_savingIcon).As<IHUDSavingService>();
             builder.RegisterEntryPoint<SavingIconPresenter>(Lifetime.Scoped);
@@ -211,7 +215,7 @@ namespace Wordania.Features
             builder.RegisterEntryPoint<HealthBarPresenter>(Lifetime.Scoped);
 
             builder.RegisterComponent(_inventoryDisplayUI)
-                .As<IInventoryDisplay>()
+                .As<IInventoryView>()
                 .WithParameter(_inventorySlotPrefab);
             builder.RegisterComponent(_inventoryView);
 
@@ -223,6 +227,10 @@ namespace Wordania.Features
             builder.RegisterComponent(_skillTreeView);
             builder.RegisterComponent(_skillTreeDisplay);
             builder.RegisterEntryPoint<SkillTreePresenter>(Lifetime.Scoped);
+
+            builder.Register<JournalSortService>(Lifetime.Scoped).As<IJournalSortService>();
+            builder.RegisterComponent(_journalView).As<IJournalView>();
+            builder.RegisterComponent(_journalDisplay);
 
             //
             //DEBUG
@@ -248,6 +256,9 @@ TODOS:
 - refactor PlayerSkillService (should not hold data - needed for when there are more players)
 - merge all IEntity interfaces
 - refactor Invincibility so health component uses it
+- refactor all HUD
+- clean up component registration
+- fix switching menu (resumes game)
 
 features:
 boss spawning

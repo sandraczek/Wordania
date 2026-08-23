@@ -30,10 +30,5 @@ namespace Wordania.Features.HUD.Skills
                 _skillPointsText.text = text;
             }
         }
-
-        public void SetVisibility(bool isVisible)
-        {
-            gameObject.SetActive(isVisible);
-        }
     }
 }

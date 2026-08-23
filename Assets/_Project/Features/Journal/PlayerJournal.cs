@@ -1,56 +1,64 @@
 using System.Collections.Generic;
+using UnityEditor.VersionControl;
+using VContainer.Unity;
 using Wordania.Core.Identifiers;
+using Wordania.Features.Journal.Entries;
+using Wordania.Features.World.Events;
 
 namespace Wordania.Features.Journal
 {
     public sealed class PlayerJournal : IPlayerJournal
     {
         private readonly InstanceId _playerId;
-        private readonly Dictionary<AssetId, int> _enemies = new();
-        private readonly Dictionary<AssetId, int> _bosses = new();
-        private readonly Dictionary<AssetId, int> _blocks = new();
+        private readonly Dictionary<AssetId, int>[] _entries;
 
         public PlayerJournal(InstanceId playerId)
         {
             _playerId = playerId;
+
+            _entries = new Dictionary<AssetId, int>[(int)JournalCategory.COUNT];
+            for (int i = 0; i < (int)JournalCategory.COUNT; i++)
+            {
+                _entries[i] = new(16);
+            }
         }
 
-        public int IncrementEnemy(AssetId id)
+        public int Increment(JournalCategory category, AssetId id)
         {
-            if (_enemies.ContainsKey(id))
+            int index = (int)category;
+            if (_entries[index].ContainsKey(id))
             {
-                _enemies[id]++;
+                _entries[index][id]++;
             }
             else
             {
-                _enemies.Add(id, 1);
+                _entries[index].Add(id, 1);
             }
-            return _enemies[id];
+            return _entries[index][id];
 
         }
-        public int IncrementBoss(AssetId id)
+        public void IncrementBatch(JournalCategory category, IReadOnlyList<BlockMineRecord> minedBlocks)
         {
-            if (_bosses.ContainsKey(id))
+            int index = (int)category;
+
+            for (int i = 0; i < minedBlocks.Count; i++)
             {
-                _bosses[id]++;
+                var blocks = minedBlocks[i];
+
+                if (_entries[index].ContainsKey(blocks.Id))
+                {
+                    _entries[index][blocks.Id] += blocks.Count;
+                }
+                else
+                {
+                    _entries[index].Add(blocks.Id, blocks.Count);
+                }
             }
-            else
-            {
-                _bosses.Add(id, 1);
-            }
-            return _bosses[id];
         }
-        public int IncrementBlock(AssetId id)
+
+        public IReadOnlyDictionary<AssetId, int> GetDictionary(JournalCategory category)
         {
-            if (_blocks.ContainsKey(id))
-            {
-                _blocks[id]++;
-            }
-            else
-            {
-                _blocks.Add(id, 1);
-            }
-            return _blocks[id];
+            return _entries[(int)category];
         }
     }
 }

@@ -16,4 +16,7 @@ MonoBehaviour:
     _editorId: boss_yeinn_journal_entry
     _hash: -849440351
   Milestones: []
+  DisplayName: unnamed
+  SortOrder: 2147483647
+  Icon: {fileID: -4116716709983548963, guid: ee1c5b0ffe7ee445bb9e05be6514da7e, type: 3}
   _source: {fileID: 11400000, guid: d58728627ae204fcda8e9a698aabdb95, type: 2}

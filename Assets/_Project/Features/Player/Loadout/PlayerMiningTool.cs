@@ -93,11 +93,11 @@ namespace Wordania.Features.Player.Loadout
 
             if (!_areaMine)
             {
-                if (!_world.TryDamageSingleBlock(targetWorldPos, _minePower)) return false;
+                if (!_world.TryDamageSingleBlock(targetWorldPos, _minePower, _player.InstanceId)) return false;
             }
             else
             {
-                if (!_world.TryDamageCircle(targetWorldPos, _areaRadius, _minePower)) return false;
+                if (!_world.TryDamageCircle(targetWorldPos, _areaRadius, _minePower, _player.InstanceId)) return false;
             }
             return true;
         }

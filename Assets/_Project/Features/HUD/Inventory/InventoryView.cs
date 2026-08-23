@@ -1,65 +1,88 @@
 using UnityEngine;
+using UnityEngine.Pool;
+using System.Collections.Generic;
 using VContainer;
-using VContainer.Unity;
-using Wordania.Core.HUD;
-using Wordania.Core.Inputs;
 using Wordania.Features.Inventory;
 
 namespace Wordania.Features.HUD.Inventory
 {
-    public sealed class InventoryView : MonoBehaviour, IHUDWindow
+    public sealed class InventoryView : MonoBehaviour, IInventoryView
     {
         [Header("Dependencies")]
-        private IInventoryDisplay _display;
-        private IInputReader _inputs;
-        private IHUDStateManager _hud;
+        private IInventoryService _inventory;
 
-        private bool _isOpen = false;
+        [Header("UI Setup")]
+        private InventorySlotUI _slotPrefab;
+        [SerializeField] private Transform _contentParent;
+
+        private ObjectPool<InventorySlotUI> _pool;
+        private readonly List<InventorySlotUI> _activeSlots = new();
 
         [Inject]
-        public void Construct(IInventoryDisplay inventoryDisplay, IInputReader inputs, IHUDStateManager HUDManager)
+        public void Construct(IInventoryService inventoryService, InventorySlotUI inventorySlotPrefab)
         {
-            _display = inventoryDisplay;
-            _inputs = inputs;
-            _hud = HUDManager;
+            _inventory = inventoryService;
+            _slotPrefab = inventorySlotPrefab;
         }
-        void Start()
+        private void Awake()
         {
-            _isOpen = false;
-            ApplyVisibility(false);
+            _pool = new ObjectPool<InventorySlotUI>(
+                createFunc: OnCreateSlot,
+                actionOnGet: OnGetSlot,
+                actionOnRelease: OnReleaseSlot,
+                actionOnDestroy: OnDestroySlot,
+                collectionCheck: false,
+                defaultCapacity: 20,
+                maxSize: 100
+            );
         }
+
+        #region Pool Callbacks
+        private InventorySlotUI OnCreateSlot() => Instantiate(_slotPrefab, _contentParent);
+
+        private void OnGetSlot(InventorySlotUI slot) => slot.gameObject.SetActive(true);
+
+        private void OnReleaseSlot(InventorySlotUI slot) => slot.gameObject.SetActive(false);
+
+        private void OnDestroySlot(InventorySlotUI slot) => Destroy(slot.gameObject);
+        #endregion
+
         private void OnEnable()
         {
-            _inputs.OnToggleInventory += HandleToggleInventory;
+            _inventory.OnInventoryChanged += RefreshUI;
+            RefreshUI();
         }
 
         private void OnDisable()
         {
-            if (_inputs == null) return;
-
-            _inputs.OnToggleInventory -= HandleToggleInventory;
+            _inventory.OnInventoryChanged -= RefreshUI;
         }
 
-        private void HandleToggleInventory()
+        private void RefreshUI()
         {
-            _isOpen = !_isOpen;
+            foreach (var slot in _activeSlots)
+            {
+                _pool.Release(slot);
+            }
+            _activeSlots.Clear();
 
-            if (_isOpen) _hud.RegisterOpenWindow(this);
-            else _hud.UnregisterOpenWindow(this);
+            foreach (var entry in _inventory.GetAllEntries())
+            {
+                InventorySlotUI slot = _pool.Get();
 
-            ApplyVisibility(_isOpen);
+                slot.transform.SetAsLastSibling();
+
+                slot.SetData(entry);
+                _activeSlots.Add(slot);
+            }
         }
-        public void Close()
+        public void Show()
         {
-            if (!_isOpen) return;
-
-            _isOpen = false;
-            ApplyVisibility(false);
+            gameObject.SetActive(true);
         }
-        private void ApplyVisibility(bool open)
+        public void Hide()
         {
-            if (open) _display.Show();
-            else _display.Hide();
+            gameObject.SetActive(false);
         }
     }
 }

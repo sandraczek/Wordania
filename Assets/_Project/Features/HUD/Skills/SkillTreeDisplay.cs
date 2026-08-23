@@ -8,10 +8,10 @@ namespace Wordania.Features.HUD.Skills
     [RequireComponent(typeof(CanvasGroup))]
     public sealed class SkillTreeDisplay : MonoBehaviour, IHUDWindow
     {
-        private CanvasGroup _canvasGroup;
-
         private IInputReader _inputs;
         private IHUDStateManager _hud;
+
+        private CanvasGroup _canvasGroup;
         private bool _isOpen = false;
 
         [Inject]
@@ -51,6 +51,7 @@ namespace Wordania.Features.HUD.Skills
         {
             if (!_isOpen) return;
 
+            _hud.UnregisterOpenWindow(this);
             _isOpen = false;
             ApplyVisibility(false);
         }

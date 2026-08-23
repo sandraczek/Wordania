@@ -16,9 +16,9 @@ namespace Wordania.Features.World
 
         public void RandomizeSeed();
         public UniTask GenerateWorldAsync(CancellationToken token);
-        public bool TryDamageSingleBlock(Vector3 worldPosition, float damagePower);
-        public WorldLayer DamageTile(int x, int y, float damagePower);
-        public bool TryDamageCircle(Vector2 worldPos, float radius, float damagePower);
+        public bool TryDamageSingleBlock(Vector3 worldPosition, float damagePower, InstanceId instigatorId);
+        public WorldLayer DamageTile(int x, int y, float damagePower, InstanceId instigatorId);
+        public bool TryDamageCircle(Vector2 worldPos, float radius, float damagePower, InstanceId instigatorId);
 
         public bool TryPlaceBlock(Vector3 worldPosition, AssetId blockId);
         public Vector2 GetCellCenter(Vector2 worldPosition);

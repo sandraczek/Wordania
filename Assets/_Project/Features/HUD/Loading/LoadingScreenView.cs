@@ -8,7 +8,7 @@ using VContainer;
 namespace Wordania.Features.HUD.Loading
 {
     [RequireComponent(typeof(CanvasGroup))]
-    public sealed class LoadingScreenView : MonoBehaviour, ILoadingScreenService
+    public sealed class LoadingScreenView : MonoBehaviour, ILoadingScreenView
     {
         private HUDConfig _config;
         private CanvasGroup _canvasGroup;
@@ -32,8 +32,8 @@ namespace Wordania.Features.HUD.Loading
             if (_fillImage.fillAmount < _targetProgress)
             {
                 _fillImage.fillAmount = Mathf.MoveTowards(
-                    _fillImage.fillAmount, 
-                    _targetProgress, 
+                    _fillImage.fillAmount,
+                    _targetProgress,
                     _config.LoadingBarFillSpeed * Time.unscaledDeltaTime
                 );
             }
@@ -67,10 +67,10 @@ namespace Wordania.Features.HUD.Loading
             while (time < durationInSeconds)
             {
                 time += Time.unscaledDeltaTime;
-                
+
                 _canvasGroup.alpha = Mathf.Lerp(startAlpha, 0f, time / durationInSeconds);
-                
-                await UniTask.Yield(); 
+
+                await UniTask.Yield();
             }
 
             _canvasGroup.alpha = 0f;

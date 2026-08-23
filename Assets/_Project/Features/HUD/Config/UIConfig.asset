@@ -22,3 +22,6 @@ MonoBehaviour:
   WorldMapMinZoom: 0.02
   WorldMapMaxZoom: 1
   WorldMapZoomSensitivity: 0.003
+  JournalEntryRectOnPage: {x: 4, y: 4}
+  JournalLockedName: ?????
+  JournalLockedSprite: {fileID: 466061199892534620, guid: 5d6517b6ca68d4fed802c4e5461dcefe, type: 3}

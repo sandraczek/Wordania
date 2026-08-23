@@ -15,7 +15,7 @@ MonoBehaviour:
   _id:
     _editorId: boss_yeinn
     _hash: -1348982482
-  <DisplayName>k__BackingField: Yeinn the Abhorrent
+  <DisplayName>k__BackingField: 
   <Prefab>k__BackingField: {fileID: 8657881721284743941, guid: a6b3b60a2c78a4899b69b4e289c6c854, type: 3}
   <Reward>k__BackingField:
     _skillPoints:

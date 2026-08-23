@@ -19,10 +19,11 @@ using Wordania.Features.World.Data;
 using Wordania.Core.Identifiers;
 using UnityEditor.VersionControl;
 using Wordania.Core.Events;
+using Wordania.Features.World.Events;
 
 namespace Wordania.Features.World
 {
-    public sealed class WorldService : IWorldService, IStartable, IDisposable, ISaveable
+    public sealed class WorldService : IWorldService, IStartable, IDisposable, ISaveable, ILateTickable
     {
         [Header("References")]
         private readonly IBlockRegistry _blockDatabase;
@@ -34,6 +35,9 @@ namespace Wordania.Features.World
         [Header("Data")]
         public WorldData Data { get; private set; }
         private readonly IEventBusGameplay _eventBus;
+
+        private readonly Dictionary<InstanceId, Dictionary<AssetId, int>> _pendingDestructions = new();
+        private readonly List<BlockMineRecord> _reusableBatchList = new(32);
 
         public string SaveId => "World";
 
@@ -62,6 +66,27 @@ namespace Wordania.Features.World
         {
             _save.Unregister(this);
         }
+
+        public void LateTick()
+        {
+            if (_pendingDestructions.Count == 0) return;
+
+            foreach (var kvp in _pendingDestructions)
+            {
+                InstanceId instigator = kvp.Key;
+                Dictionary<AssetId, int> blocks = kvp.Value;
+
+                _reusableBatchList.Clear();
+                foreach (var blockData in blocks)
+                {
+                    _reusableBatchList.Add(new BlockMineRecord(blockData.Key, blockData.Value));
+                }
+
+                _eventBus.Publish(new BlocksMinedBatchEvent(instigator, _reusableBatchList));
+
+                blocks.Clear();
+            }
+        }
         public void RandomizeSeed()
         {
             _settings.Seed = Mathf.Abs(Guid.NewGuid().GetHashCode()) % WorldSettings.MaxSeed;
@@ -72,18 +97,18 @@ namespace Wordania.Features.World
             Debug.Assert(_settings.Width % _settings.ChunkSize == 0 && _settings.Height % _settings.ChunkSize == 0);
             Data = await _generator.GenerateWorldAsync(token);
         }
-        public bool TryDamageSingleBlock(Vector3 worldPosition, float damagePower)
+        public bool TryDamageSingleBlock(Vector3 worldPosition, float damagePower, InstanceId instigatorId)
         {
             Vector2Int pos = _settings.WorldToGrid(worldPosition);
             if (!_settings.WithinBoundaries(pos.x, pos.y)) return false;
-            WorldLayer result = DamageTile(pos.x, pos.y, damagePower);
+            WorldLayer result = DamageTile(pos.x, pos.y, damagePower, instigatorId);
             if (result == WorldLayer.None) return false;
 
             Vector2Int coord = GetChunkCoord(pos.x, pos.y);
             OnChunkChanged?.Invoke(coord, result);
             return true;
         }
-        public WorldLayer DamageTile(int x, int y, float damagePower)
+        public WorldLayer DamageTile(int x, int y, float damagePower, InstanceId instigatorId)
         {
             if (!_settings.WithinBoundaries(x, y)) return WorldLayer.None;
             BlockData data = _blockDatabase.Get(Data.GetTile(x, y).Main);
@@ -97,6 +122,8 @@ namespace Wordania.Features.World
 
                 OnBlockChanged?.Invoke(new(x, y), WorldLayer.Main);
 
+                RegisterBlockDestroyed(instigatorId, data.Id);
+
                 //DROPPING LOOT
                 _eventBus.Publish(new LootEvent(data.loot, data.lootAmount));
 
@@ -108,7 +135,7 @@ namespace Wordania.Features.World
             }
             return changedLayers;
         }
-        public bool TryDamageCircle(Vector2 worldPos, float radius, float damagePower)
+        public bool TryDamageCircle(Vector2 worldPos, float radius, float damagePower, InstanceId instigatorId)
         {
             int minX = Mathf.FloorToInt(worldPos.x - radius);
             int maxX = Mathf.CeilToInt(worldPos.x + radius);
@@ -132,7 +159,7 @@ namespace Wordania.Features.World
 
                     if (distSq <= radius * radius)
                     {
-                        WorldLayer result = DamageTile(x, y, damagePower);
+                        WorldLayer result = DamageTile(x, y, damagePower, instigatorId);
 
                         if (result != WorldLayer.None)
                         {
@@ -173,6 +200,25 @@ namespace Wordania.Features.World
             OnBlockChanged?.Invoke(pos, WorldLayer.Main);
             return true;
         }
+
+        public void RegisterBlockDestroyed(InstanceId instigator, AssetId blockId)
+        {
+            if (!_pendingDestructions.TryGetValue(instigator, out var playerBatch))
+            {
+                playerBatch = new Dictionary<AssetId, int>();
+                _pendingDestructions.Add(instigator, playerBatch);
+            }
+
+            if (playerBatch.ContainsKey(blockId))
+            {
+                playerBatch[blockId]++;
+            }
+            else
+            {
+                playerBatch.Add(blockId, 1);
+            }
+        }
+
         public Vector2 GetCellCenter(Vector2 worldPosition)
         {
             Vector2Int pos = _settings.WorldToGrid(worldPosition);

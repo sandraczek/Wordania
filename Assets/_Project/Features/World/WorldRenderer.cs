@@ -71,13 +71,13 @@ namespace Wordania.Features.World
 
             foreach (Chunk chunk in _chunks)
             {
-                token.ThrowIfCancellationRequested();
                 chunk.Refresh(WorldLayer.Main | WorldLayer.Background | WorldLayer.Foreground);
                 chunksProcessed++;
 
                 if (chunksProcessed % _settings.RenderingBatchSize == 0)
                 {
                     await UniTask.Yield();
+                    token.ThrowIfCancellationRequested();
                 }
             }
         }

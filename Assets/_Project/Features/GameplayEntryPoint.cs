@@ -20,6 +20,7 @@ using Wordania.Features.Bosses.Core;
 using Wordania.Features.Bosses.Data;
 using Wordania.Core.Identifiers;
 using Wordania.Features.World.Lighting;
+using Wordania.Features.HUD.Journal;
 
 namespace Wordania.Features
 {
@@ -32,7 +33,8 @@ namespace Wordania.Features
         private readonly IPlayerProvider _playerPrivider;
         private readonly IInputReader _inputReader;
         private readonly ICameraService _camera;
-        private readonly ILoadingScreenService _loadingScreen;
+        private readonly ILoadingScreenView _loadingScreen;
+        private readonly IJournalView _journalView;
         private readonly IEnemyFactory _enemyFactory;
         private readonly EnemyTemplate _enemyToPrewarm;
         private readonly IMapUpdateService _map;
@@ -50,7 +52,8 @@ namespace Wordania.Features
             IPlayerProvider playerProvider,
             IInputReader inputReader,
             ICameraService camera,
-            ILoadingScreenService loadingScreen,
+            ILoadingScreenView loadingScreen,
+            IJournalView journalView,
             IEnemyFactory enemyFactory,
             EnemyTemplate enemyTemplate, //DEBUG
             IMapUpdateService mapUpdate, // temporary ?
@@ -70,6 +73,7 @@ namespace Wordania.Features
             _inputReader = inputReader;
             _camera = camera;
             _loadingScreen = loadingScreen;
+            _journalView = journalView;
             _enemyFactory = enemyFactory;
             _enemyToPrewarm = enemyTemplate;
             _map = mapUpdate;
@@ -116,7 +120,10 @@ namespace Wordania.Features
             await _enemyFactory.PrewarmPoolAsync(_enemyToPrewarm);
             //not prewarming projectiles and weapons
 
-            _loadingScreen.UpdateProgress(0.7f, "Spawning Player");
+            _loadingScreen.UpdateProgress(0.7f, "Loading Journal");
+            await _journalView.InitializeAsync(cancellation);
+
+            _loadingScreen.UpdateProgress(0.75f, "Spawning Player");
             Vector3 spawnPos = _world.GetSpawnPoint();
             _playerSpawner.SpawnPlayer(spawnPos);
 
