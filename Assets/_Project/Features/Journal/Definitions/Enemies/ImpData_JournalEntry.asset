@@ -16,7 +16,7 @@ MonoBehaviour:
     _editorId: imp_enemy_journal_entry
     _hash: -496106535
   Milestones: []
-  DisplayName: unnamed
+  DisplayName: Imp
   SortOrder: 2147483647
   Icon: {fileID: -7003023425941040722, guid: 7b9394a6eea804cfdae7a464e254392f, type: 3}
   _source: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}

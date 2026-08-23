@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Wordania.Core.Constants;
 
 namespace Wordania.Features.HUD.Journal
 {
@@ -41,8 +42,8 @@ namespace Wordania.Features.HUD.Journal
                 _block.onClick.RemoveAllListeners();
         }
 
-        private void HandleEnemyClick() => _view.SwitchCategory(Features.Journal.Entries.JournalCategory.Enemies);
-        private void HandleBossClick() => _view.SwitchCategory(Features.Journal.Entries.JournalCategory.Bosses);
-        private void HandleBlockClick() => _view.SwitchCategory(Features.Journal.Entries.JournalCategory.Blocks);
+        private void HandleEnemyClick() => _view.SwitchCategory(JournalCategory.Enemies);
+        private void HandleBossClick() => _view.SwitchCategory(JournalCategory.Bosses);
+        private void HandleBlockClick() => _view.SwitchCategory(JournalCategory.Blocks);
     }
 }

@@ -53,7 +53,6 @@ namespace Wordania.Features.HUD.Inventory
         {
             if (!_isOpen) return;
 
-            _hud.UnregisterOpenWindow(this);
             _isOpen = false;
             ApplyVisibility(false);
         }

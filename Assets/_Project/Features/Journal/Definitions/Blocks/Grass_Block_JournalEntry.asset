@@ -16,7 +16,7 @@ MonoBehaviour:
     _editorId: grass_block_journal_entry
     _hash: -768242696
   Milestones: []
-  DisplayName: unnamed
+  DisplayName: grass
   SortOrder: 2147483647
   Icon: {fileID: -5975590178677228237, guid: d913b3a2f29fa4ee394b7c8bc5f9aa25, type: 3}
   _source: {fileID: 11400000, guid: 2c8c6a670e61a4dbb882e00f461fb8b9, type: 2}

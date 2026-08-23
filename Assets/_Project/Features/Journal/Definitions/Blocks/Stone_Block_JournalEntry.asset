@@ -16,7 +16,7 @@ MonoBehaviour:
     _editorId: stone_block_journal_entry
     _hash: 159822347
   Milestones: []
-  DisplayName: unnamed
+  DisplayName: stone
   SortOrder: 2147483647
   Icon: {fileID: 3325232425242191422, guid: 285e3a1322833426b9ca5248202b4c89, type: 3}
   _source: {fileID: 11400000, guid: 28948730022624828ac5373b290d985d, type: 2}

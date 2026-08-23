@@ -16,7 +16,7 @@ MonoBehaviour:
     _editorId: dirt_block_journal_entry
     _hash: 756781701
   Milestones: []
-  DisplayName: unnamed
+  DisplayName: dirt
   SortOrder: 2147483647
   Icon: {fileID: 5407876453321068738, guid: 9844f757e88a7452f958b8febb2e1a8b, type: 3}
   _source: {fileID: 11400000, guid: 5d154869ac4e94c23997e3d3d5cfbe3f, type: 2}

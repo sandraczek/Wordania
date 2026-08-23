@@ -15,7 +15,8 @@ namespace Wordania.Features.HUD.Journal
         protected bool _isUnlocked;
 
         [SerializeField] private Image _image;
-        [SerializeField] private TextMeshProUGUI _textMesh;
+        [SerializeField] private TextMeshProUGUI _name;
+        [SerializeField] private TextMeshProUGUI _killCount;
 
         [HideInInspector] public Vector2Int PagePosition;
 
@@ -30,14 +31,15 @@ namespace Wordania.Features.HUD.Journal
 
             if (_isUnlocked)
             {
-                _textMesh.text = entry.DisplayName;
+                _name.text = entry.DisplayName;
                 _image.sprite = entry.Icon;
             }
             else
             {
-                _textMesh.text = _config.JournalLockedName;
+                _name.text = _config.JournalLockedName;
                 _image.sprite = _config.JournalLockedSprite;
             }
+            _killCount.text = killed.ToString();
 
         }
     }

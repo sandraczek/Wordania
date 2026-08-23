@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
 using VContainer.Unity;
+using Wordania.Core.Constants;
 using Wordania.Core.Data;
 using Wordania.Features.Journal;
 using Wordania.Features.Journal.Entries;

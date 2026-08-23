@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Wordania.Core.Constants;
 using Wordania.Core.Identifiers;
 using Wordania.Features.Journal.Entries;
 

@@ -16,7 +16,7 @@ MonoBehaviour:
     _editorId: granite_block_journal_entry
     _hash: -1620709660
   Milestones: []
-  DisplayName: unnamed
+  DisplayName: granite
   SortOrder: 2147483647
   Icon: {fileID: 7075983119335027866, guid: c8eb84ce9491740e9b5e5af4ddaed336, type: 3}
   _source: {fileID: 11400000, guid: c8d9887c8a618481093519ec5709ed59, type: 2}

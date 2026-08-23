@@ -258,7 +258,7 @@ TODOS:
 - refactor Invincibility so health component uses it
 - refactor all HUD
 - clean up component registration
-- fix switching menu (resumes game)
+- go through all journal milestones when loading save
 
 features:
 boss spawning

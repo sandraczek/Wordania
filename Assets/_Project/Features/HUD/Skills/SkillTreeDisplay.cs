@@ -51,7 +51,6 @@ namespace Wordania.Features.HUD.Skills
         {
             if (!_isOpen) return;
 
-            _hud.UnregisterOpenWindow(this);
             _isOpen = false;
             ApplyVisibility(false);
         }

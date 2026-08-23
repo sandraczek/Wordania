@@ -51,7 +51,6 @@ namespace Wordania.Features.Mapping
         {
             if (!_isOpen) return;
 
-            _hud.UnregisterOpenWindow(this);
             _isOpen = false;
             ApplyVisibility(false);
         }

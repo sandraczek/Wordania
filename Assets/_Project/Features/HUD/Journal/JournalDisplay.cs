@@ -56,7 +56,6 @@ namespace Wordania.Features.HUD.Journal
         {
             if (!_isOpen) return;
 
-            _hud.UnregisterOpenWindow(this);
             _isOpen = false;
             ApplyVisibility(false);
         }

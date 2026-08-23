@@ -32,13 +32,4 @@ namespace Wordania.Features.Journal.Entries
         public TSource Source => _source;
         public sealed override AssetId TargetId => _source != null ? _source.Id : AssetId.Empty;
     }
-
-    public enum JournalCategory
-    {
-        Enemies,
-        Bosses,
-        Blocks,
-
-        COUNT
-    }
 }

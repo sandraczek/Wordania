@@ -16,7 +16,7 @@ MonoBehaviour:
     _editorId: sand_block_journal_entry
     _hash: -424042830
   Milestones: []
-  DisplayName: unnamed
+  DisplayName: sand
   SortOrder: 2147483647
   Icon: {fileID: -5178102573495354779, guid: 12639ce845c954520aa923ac26b78b4a, type: 3}
   _source: {fileID: 11400000, guid: a15f13d08cbc44381b286379ca46a9a5, type: 2}

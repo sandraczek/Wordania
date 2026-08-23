@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor.VersionControl;
 using VContainer.Unity;
+using Wordania.Core.Constants;
 using Wordania.Core.Identifiers;
 using Wordania.Features.Journal.Entries;
 using Wordania.Features.World.Events;
@@ -10,7 +11,7 @@ namespace Wordania.Features.Journal
     public sealed class PlayerJournal : IPlayerJournal
     {
         private readonly InstanceId _playerId;
-        private readonly Dictionary<AssetId, int>[] _entries;
+        private Dictionary<AssetId, int>[] _entries;
 
         public PlayerJournal(InstanceId playerId)
         {
@@ -59,6 +60,10 @@ namespace Wordania.Features.Journal
         public IReadOnlyDictionary<AssetId, int> GetDictionary(JournalCategory category)
         {
             return _entries[(int)category];
+        }
+        public void SetInitial(Dictionary<AssetId, int>[] categories)
+        {
+            _entries = categories;
         }
     }
 }
