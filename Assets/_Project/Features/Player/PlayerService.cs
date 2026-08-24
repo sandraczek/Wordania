@@ -4,6 +4,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using Wordania.Core.Combat;
+using Wordania.Core.Events;
 using Wordania.Core.Gameplay;
 using Wordania.Core.Identifiers;
 using Wordania.Core.Mechanics;
@@ -27,6 +28,8 @@ namespace Wordania.Features.Player
         private readonly IDamageableEntitiesRegistryService _entityRegistry;
         private readonly IEntityTrackerService _entityTracker;
         private readonly IInstanceIdProvider _idProvider;
+        private readonly IEventBusGameplay _bus;
+        private readonly IPlayerSpawnService _spawnService;
 
         public event Action OnPlayerRegistered;
         public event Action OnPlayerUnregistered;
@@ -44,7 +47,17 @@ namespace Wordania.Features.Player
         public InstanceId InstanceId => _player.InstanceId;
         public string SaveId => "Player";
 
-        public PlayerService(GameObject playerPrefab, IObjectResolver resolver, ISaveService save, MarkerEntityParent playerParent, IEntityTrackerService entityTracker, IDamageableEntitiesRegistryService entityRegistry, IInstanceIdProvider idProvider)
+        public PlayerService(
+            GameObject playerPrefab,
+            IObjectResolver resolver,
+            ISaveService save,
+            MarkerEntityParent playerParent,
+            IEntityTrackerService entityTracker,
+            IDamageableEntitiesRegistryService entityRegistry,
+            IInstanceIdProvider idProvider,
+            IEventBusGameplay bus,
+            IPlayerSpawnService spawnService
+            )
         {
             _playerPrefab = playerPrefab;
             _resolver = resolver;
@@ -53,6 +66,8 @@ namespace Wordania.Features.Player
             _entityRegistry = entityRegistry;
             _entityTracker = entityTracker;
             _idProvider = idProvider;
+            _bus = bus;
+            _spawnService = spawnService;
         }
         public void Start()
         {
@@ -63,7 +78,7 @@ namespace Wordania.Features.Player
             _save?.Unregister(this);
         }
 
-        public void SpawnPlayer(Vector2 spawnPosition) //to do: clean this
+        public void SpawnPlayer()
         {
             Vector2 position;
             if (_cachedSaveData != null)
@@ -75,7 +90,7 @@ namespace Wordania.Features.Player
             }
             else
             {
-                position = spawnPosition;
+                position = _spawnService.GetWorldSpawn();
             }
 
             GameObject playerInstance = _resolver.Instantiate(_playerPrefab, position, Quaternion.identity, _parent);
@@ -140,6 +155,11 @@ namespace Wordania.Features.Player
         public void RestoreState(GameSaveData saveData)
         {
             _cachedSaveData = saveData.Player;
+        }
+
+        public void RevivePlayer()
+        {
+            _player.Revive();
         }
 
     }

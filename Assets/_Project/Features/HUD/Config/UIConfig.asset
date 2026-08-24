@@ -25,3 +25,4 @@ MonoBehaviour:
   JournalEntryRectOnPage: {x: 4, y: 4}
   JournalLockedName: ?????
   JournalLockedSprite: {fileID: 466061199892534620, guid: 5d6517b6ca68d4fed802c4e5461dcefe, type: 3}
+  WeaponStoreSlotRectOnPage: {x: 5, y: 5}

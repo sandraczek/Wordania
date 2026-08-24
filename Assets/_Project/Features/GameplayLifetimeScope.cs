@@ -50,6 +50,7 @@ using Wordania.Features.Journal.Milestones;
 using Wordania.Features.HUD.Journal;
 using Wordania.Features.WeaponStore;
 using Wordania.Features.HUD.WeaponStore;
+using Wordania.Features.HUD.DeathScreen;
 
 namespace Wordania.Features
 {
@@ -91,6 +92,7 @@ namespace Wordania.Features
         [SerializeField] private JournalDisplay _journalDisplay;
         [SerializeField] private WeaponStoreView _weaponStoreView;
         [SerializeField] private WeaponStoreDisplay _weaponStoreDisplay;
+        [SerializeField] private DeathScreenView _deathScreenView;
 
         //debug
         [Header("Save Slot 0 For a New Game")]
@@ -182,6 +184,7 @@ namespace Wordania.Features
 
             //player
             builder.RegisterInstance(_playerConfig);
+            builder.Register<PlayerSpawnService>(Lifetime.Scoped).As<IPlayerSpawnService>();
             builder.RegisterEntryPoint<PlayerInventoryService>(Lifetime.Scoped).As<IInventoryService>();
             builder.Register<PlayerContext>(Lifetime.Scoped); //to move to player provider
             builder.RegisterEntryPoint<PlayerService>(Lifetime.Scoped)
@@ -251,6 +254,9 @@ namespace Wordania.Features
             builder.RegisterEntryPoint<WeaponStorePresenter>(Lifetime.Scoped).As<IWeaponStorePresenter>();
             builder.RegisterComponent(_weaponStoreDisplay);
 
+            builder.RegisterComponent(_deathScreenView);
+            builder.RegisterEntryPoint<DeathScreenPresenter>(Lifetime.Scoped);
+
             //
             //DEBUG
             if (TryGetComponent(out DebugSaveComponent saveComponent))
@@ -278,18 +284,16 @@ TODOS:
 - refactor all HUD
 - go through all journal milestones when loading save
 - make sure milestones on blocks work
-- refactor to abstract HUDDisplay
-- move journal views to presenter
 
 features:
 boss spawning
 block builder picker soon? later?
-player reviving
 pause menu
 binary world saving
 nature (trees, water)
 chests
 status effect (fire, poison)
+chat
 
 */
 

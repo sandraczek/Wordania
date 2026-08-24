@@ -129,8 +129,7 @@ namespace Wordania.Features
             await _weaponStorePresenter.InitializeAsync(cancellation);
 
             _loadingScreen.UpdateProgress(0.75f, "Spawning Player");
-            Vector3 spawnPos = _world.GetSpawnPoint();
-            _playerSpawner.SpawnPlayer(spawnPos);
+            _playerSpawner.SpawnPlayer();
 
             _loadingScreen.UpdateProgress(0.9f, "Setting Camera");
             _camera.FollowTarget(_playerPrivider.PlayerTransform);

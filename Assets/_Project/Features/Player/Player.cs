@@ -6,6 +6,7 @@ using VContainer;
 using VContainer.Unity;
 using Wordania.Core;
 using Wordania.Core.Combat;
+using Wordania.Core.Events;
 using Wordania.Core.Gameplay;
 using Wordania.Core.Identifiers;
 using Wordania.Core.Inputs;
@@ -18,6 +19,7 @@ using Wordania.Features.Inventory;
 using Wordania.Features.Mechanics;
 using Wordania.Features.Mechanics.Data;
 using Wordania.Features.Movement;
+using Wordania.Features.Player.Events;
 using Wordania.Features.Player.FSM;
 using Wordania.Features.Player.View;
 using Wordania.Features.Stats;
@@ -48,13 +50,24 @@ namespace Wordania.Features.Player
         private PlayerService _playerService;
         private MechanicIds _mechanicIds;
         private PlayerContext _context;
+        private IPlayerSpawnService _spawnService;
+        private IEventBusGameplay _bus;
         public Bounds Hitbox => _controller.GetBounds();
         public Vector2 Position => _controller.GetBounds().center;
         public InstanceId InstanceId { get; private set; }
         public EntityFaction Faction { get; private set; } = EntityFaction.Player;
 
         [Inject]
-        public void Construct(PlayerConfig config, IInputReader inputs, PlayerContext context, IInventoryService inventory, PlayerService playerService, MechanicIds mechanicIds)
+        public void Construct(
+            PlayerConfig config,
+            IInputReader inputs,
+            PlayerContext context,
+            IInventoryService inventory,
+            PlayerService playerService,
+            MechanicIds mechanicIds,
+            IPlayerSpawnService spawnService,
+            IEventBusGameplay bus
+            )
         {
             _controller = GetComponent<PlayerController>();
             _health = GetComponent<HealthComponent>();
@@ -62,6 +75,8 @@ namespace Wordania.Features.Player
             _invincibility = GetComponent<InvincibilityController>();
             _mitigation = GetComponent<DamageMitigator>();
             _mechanics = GetComponent<EntityMechanicController>();
+            _spawnService = spawnService;
+            _bus = bus;
 
             _playerService = playerService; // TODO: make interface ?
             _config = config;
@@ -124,7 +139,6 @@ namespace Wordania.Features.Player
         }
         private void OnEnable()
         {
-            // to do - make player not a god object
             _health.OnDamageTaken += Handlehurt;
             _health.OnDamageTaken += HandleHurtVisuals;
             _health.OnDeath += HandleDeath;
@@ -171,8 +185,15 @@ namespace Wordania.Features.Player
 
         private void HandleDeath()
         {
-            Debug.Log("Player Died");
             _stateMachine.SwitchState(_factory.Spectate);
+
+            _bus.Publish(new PlayerDeathEvent(InstanceId));
+        }
+        public void Revive()
+        {
+            _controller.Warp(_spawnService.GetSpawn(InstanceId));
+            _health.InitializeSpawn();
+            _stateMachine.SwitchState(_factory.InitialState);
         }
         private void HandleHurtVisuals(DamageResult payload)
         {

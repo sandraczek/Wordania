@@ -23,5 +23,6 @@ namespace Wordania.Core.Gameplay
         event Action OnPlayerUnregistered;
 
         bool IsPlayer(InstanceId entityId);
+        void RevivePlayer();
     }
 }

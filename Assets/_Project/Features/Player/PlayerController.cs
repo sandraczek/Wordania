@@ -102,7 +102,7 @@ namespace Wordania.Features.Player
                 }
             }
         }
-        private void Warp(Vector2 targetPosition)
+        public void Warp(Vector2 targetPosition)
         {
             Vector2 delta = targetPosition - _rb.position;
 
