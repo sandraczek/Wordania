@@ -23,4 +23,7 @@ MonoBehaviour:
     Spread: 6
     BarrelWidth: 1.5
     ProjectileCount: 1
+    SpeedMultRange: 0
+    LifetimeMultRange: 0
     Projectile: {fileID: 11400000, guid: f5b0facbdc5da4ef5adba5a956b4fa22, type: 2}
+  Icon: {fileID: -7189572748111321685, guid: a82a0f041285946e691174050435a787, type: 3}

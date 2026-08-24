@@ -22,6 +22,7 @@ namespace Wordania.Core.Inputs
         event Action OnExitPerformed;
         event Action OnToggleMap;
         event Action OnToggleJournal;
+        event Action OnToggleWeaponStore;
         event Action OnToggleSkillTree;
         event Action OnToggleChunks;
         event Action OnToggleGodMode;

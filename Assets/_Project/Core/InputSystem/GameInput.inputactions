@@ -1036,6 +1036,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "ShowWeaponStore",
+                    "type": "Button",
+                    "id": "4465905d-d1cd-4159-a2f6-7ec78175cbf8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "ShowJournal",
                     "type": "Button",
                     "id": "6cdeab42-07ea-434a-b636-204513e935ff",
@@ -1081,6 +1090,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ShowInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a309c8e8-1e9a-4a57-84f2-43358cfe398e",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ShowWeaponStore",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18c60ae2b76244dd3bc2e2a94eeb5334, type: 3}
+  m_Name: WeaponRegistry
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Combat.Data.WeaponRegistry
+  _assets:
+  - {fileID: 11400000, guid: 72729b5c95586458992a515627c9b1a0, type: 2}
+  - {fileID: 11400000, guid: 3aef1c257a3c54c6696dff5c56c6fa91, type: 2}
+  - {fileID: 11400000, guid: 01f9f4fa347d14daa90f419ede449089, type: 2}

@@ -15,12 +15,14 @@ namespace Wordania.Features.Combat.Data
         public WeaponController Prefab;
 
         public WeaponFireData FireData;
+
+        public Sprite Icon;
     }
 
     [Serializable]
     public sealed class WeaponFireData
     {
-        [Min(0.001f)]public float FireRate = 0.3f;
+        [Min(0.001f)] public float FireRate = 0.3f;
         public float Spread = 0f;
         public float BarrelWidth = 0f;
         public int ProjectileCount = 1;

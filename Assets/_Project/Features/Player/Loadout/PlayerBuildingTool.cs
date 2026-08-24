@@ -27,7 +27,7 @@ namespace Wordania.Features.Player.Loadout
         private float _lastActionTime = float.MinValue;
 
         [Inject]
-        void Construct(IWorldService worldService, IInventoryService playerInventory, PlayerContext context, MechanicIds mechanicIds)
+        public void Construct(IWorldService worldService, IInventoryService playerInventory, PlayerContext context, MechanicIds mechanicIds)
         {
             _world = worldService;
             _inventory = playerInventory;

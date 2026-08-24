@@ -19,7 +19,7 @@ namespace Wordania.Features.HUD
         public float SavingTimeForNextDot = 0.5f;
         public string SavingPrefix = "Saving";
 
-        [Header("WorldMap")]
+        [Header("World Map")]
         public float WorldMapMinZoom = 0.05f;
         public float WorldMapMaxZoom = 1.0f;
         public float WorldMapZoomSensitivity = 0.05f;
@@ -28,5 +28,8 @@ namespace Wordania.Features.HUD
         public Vector2Int JournalEntryRectOnPage;
         public string JournalLockedName;
         public Sprite JournalLockedSprite;
+
+        [Header("Weapon Store")]
+        public Vector2Int WeaponStoreSlotRectOnPage;
     }
 }

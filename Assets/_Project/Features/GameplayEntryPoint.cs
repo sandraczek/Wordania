@@ -21,6 +21,7 @@ using Wordania.Features.Bosses.Data;
 using Wordania.Core.Identifiers;
 using Wordania.Features.World.Lighting;
 using Wordania.Features.HUD.Journal;
+using Wordania.Features.HUD.WeaponStore;
 
 namespace Wordania.Features
 {
@@ -35,6 +36,7 @@ namespace Wordania.Features
         private readonly ICameraService _camera;
         private readonly ILoadingScreenView _loadingScreen;
         private readonly IJournalView _journalView;
+        private readonly IWeaponStorePresenter _weaponStorePresenter;
         private readonly IEnemyFactory _enemyFactory;
         private readonly EnemyTemplate _enemyToPrewarm;
         private readonly IMapUpdateService _map;
@@ -54,6 +56,7 @@ namespace Wordania.Features
             ICameraService camera,
             ILoadingScreenView loadingScreen,
             IJournalView journalView,
+            IWeaponStorePresenter weaponStorePresenter,
             IEnemyFactory enemyFactory,
             EnemyTemplate enemyTemplate, //DEBUG
             IMapUpdateService mapUpdate, // temporary ?
@@ -74,6 +77,7 @@ namespace Wordania.Features
             _camera = camera;
             _loadingScreen = loadingScreen;
             _journalView = journalView;
+            _weaponStorePresenter = weaponStorePresenter;
             _enemyFactory = enemyFactory;
             _enemyToPrewarm = enemyTemplate;
             _map = mapUpdate;
@@ -120,8 +124,9 @@ namespace Wordania.Features
             await _enemyFactory.PrewarmPoolAsync(_enemyToPrewarm);
             //not prewarming projectiles and weapons
 
-            _loadingScreen.UpdateProgress(0.7f, "Loading Journal");
+            _loadingScreen.UpdateProgress(0.7f, "Loading HUD");
             await _journalView.InitializeAsync(cancellation);
+            await _weaponStorePresenter.InitializeAsync(cancellation);
 
             _loadingScreen.UpdateProgress(0.75f, "Spawning Player");
             Vector3 spawnPos = _world.GetSpawnPoint();

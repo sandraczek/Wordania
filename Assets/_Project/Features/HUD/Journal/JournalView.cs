@@ -21,7 +21,7 @@ namespace Wordania.Features.HUD.Journal
         private HUDConfig _config;
         private IObjectResolver _resolver;
 
-        [SerializeField] private JournalPage _page;
+        [SerializeField] private GameObject _page;
         [SerializeField] private JournalEnemyEntryView _enemyEntryPrefab;
         [SerializeField] private JournalBossEntryView _bossEntryPrefab;
         [SerializeField] private JournalBlockEntryView _blockEntryPrefab;
@@ -261,6 +261,7 @@ namespace Wordania.Features.HUD.Journal
             gridLayout.startCorner = GridLayoutGroup.Corner.UpperLeft;
             gridLayout.spacing = Vector2.zero;
 
+            list.Clear();
             for (int i = 0; i < _entriesNumberOnPage; i++)
             {
                 Vector2Int gridPos = new(i % (int)onPage.x, i / (int)onPage.x);

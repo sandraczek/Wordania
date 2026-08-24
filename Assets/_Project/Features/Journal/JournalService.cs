@@ -149,6 +149,31 @@ namespace Wordania.Features.Journal
         {
             return _journals[_player.InstanceId].GetDictionary(category);
         }
+        public int GetKilled(JournalCategory category, AssetId id)
+        {
+            GetDictionary(category).TryGetValue(id, out int killed);
+            return killed;
+        }
+        public int GetKilled(JournalEntry entry)
+        {
+            if (entry is JournalEnemyEntry enemy)
+            {
+                return GetKilled(JournalCategory.Enemies, entry.TargetId);
+            }
+            else if (entry is JournalBossEntry boss)
+            {
+                return GetKilled(JournalCategory.Bosses, entry.TargetId);
+            }
+            else if (entry is JournalBlockEntry block)
+            {
+                return GetKilled(JournalCategory.Blocks, entry.TargetId);
+            }
+            else
+            {
+                Debug.LogError("WeaponRequirementService: Unsupported entry type");
+                return 0;
+            }
+        }
 
         public void CaptureState(GameSaveData saveData)
         {

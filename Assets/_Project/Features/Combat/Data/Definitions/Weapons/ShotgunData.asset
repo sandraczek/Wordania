@@ -26,3 +26,4 @@ MonoBehaviour:
     SpeedMultRange: 0.4
     LifetimeMultRange: 1
     Projectile: {fileID: 11400000, guid: f2517745aa14d424fbf71c9c278da671, type: 2}
+  Icon: {fileID: 5671817721194309078, guid: fca9cdc3614344f729d9059cb372be85, type: 3}

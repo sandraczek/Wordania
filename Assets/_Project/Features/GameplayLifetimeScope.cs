@@ -48,6 +48,8 @@ using Wordania.Features.Mechanics.Data;
 using Wordania.Features.Journal.Entries;
 using Wordania.Features.Journal.Milestones;
 using Wordania.Features.HUD.Journal;
+using Wordania.Features.WeaponStore;
+using Wordania.Features.HUD.WeaponStore;
 
 namespace Wordania.Features
 {
@@ -58,10 +60,12 @@ namespace Wordania.Features
         [SerializeField] private MarkerChunkParent _chunksParent;
         [SerializeField] private BlockRegistry _blockRegistry;
         [SerializeField] private ItemRegistry _itemRegistry;
+        [SerializeField] private WeaponRegistry _weaponRegistry;
         [SerializeField] private ProjectileRegistry _projectileRegistry;
         [SerializeField] private BossRegistry _bossRegistry;
         [SerializeField] private SkillRegistry _skillRegistry;
         [SerializeField] private MechanicRegistry _mechanicRegistry;
+        [SerializeField] private WeaponRequirementRegistry _weaponRequirementRegistry;
         [SerializeField] private WorldSettings _worldSettings;
         [SerializeField] private DaySettings _daySettings;
         [SerializeField] private PlayerConfig _playerConfig;
@@ -85,6 +89,8 @@ namespace Wordania.Features
         [SerializeField] private SkillTreeDisplay _skillTreeDisplay;
         [SerializeField] private JournalView _journalView;
         [SerializeField] private JournalDisplay _journalDisplay;
+        [SerializeField] private WeaponStoreView _weaponStoreView;
+        [SerializeField] private WeaponStoreDisplay _weaponStoreDisplay;
 
         //debug
         [Header("Save Slot 0 For a New Game")]
@@ -103,6 +109,8 @@ namespace Wordania.Features
             builder.RegisterInstance<IAssetRegistry<ItemData>>(_itemRegistry);
             _projectileRegistry.Initialize();
             builder.RegisterInstance<IAssetRegistry<ProjectileData>>(_projectileRegistry);
+            _weaponRegistry.Initialize();
+            builder.RegisterInstance<IAssetRegistry<WeaponData>>(_weaponRegistry);
             _bossRegistry.Initialize();
             builder.RegisterInstance<IAssetRegistry<BossTemplate>>(_bossRegistry);
             _skillRegistry.Initialize();
@@ -113,6 +121,9 @@ namespace Wordania.Features
             builder.RegisterInstance<IAssetRegistry<EnemyTemplate>>(_enemyRegistry);
             _journalEntryRegistry.Initialize();
             builder.RegisterInstance<IAssetRegistry<JournalEntry>>(_journalEntryRegistry);
+            _weaponRequirementRegistry.Initialize();
+            builder.RegisterInstance<IAssetRegistry<WeaponRequirement>>(_weaponRequirementRegistry);
+
             builder.Register<MechanicIds>(Lifetime.Singleton);
 
             builder.Register<GameplayEventBus>(Lifetime.Scoped).As<IEventBusGameplay>();
@@ -202,7 +213,11 @@ namespace Wordania.Features
             builder.RegisterEntryPoint<JournalService>(Lifetime.Scoped).As<IJournalService>();
             builder.RegisterEntryPoint<JournalMilestoneService>(Lifetime.Scoped);
 
-            //TODO: move to HUD lifetime scope
+            //weapon store
+            builder.RegisterEntryPoint<WeaponRequirementService>(Lifetime.Scoped).As<IWeaponRequirementService>();
+            builder.Register<WeaponStoreService>(Lifetime.Scoped).As<IWeaponStoreService>();
+
+            //HUD
             builder.RegisterInstance(_uiConfig);
             builder.RegisterEntryPoint<HUDStateManager>(Lifetime.Scoped).As<IHUDStateManager>();
 
@@ -232,6 +247,10 @@ namespace Wordania.Features
             builder.RegisterComponent(_journalView).As<IJournalView>();
             builder.RegisterComponent(_journalDisplay);
 
+            builder.RegisterComponent(_weaponStoreView);
+            builder.RegisterEntryPoint<WeaponStorePresenter>(Lifetime.Scoped).As<IWeaponStorePresenter>();
+            builder.RegisterComponent(_weaponStoreDisplay);
+
             //
             //DEBUG
             if (TryGetComponent(out DebugSaveComponent saveComponent))
@@ -257,8 +276,10 @@ TODOS:
 - merge all IEntity interfaces
 - refactor Invincibility so health component uses it
 - refactor all HUD
-- clean up component registration
 - go through all journal milestones when loading save
+- make sure milestones on blocks work
+- refactor to abstract HUDDisplay
+- move journal views to presenter
 
 features:
 boss spawning
@@ -268,6 +289,7 @@ pause menu
 binary world saving
 nature (trees, water)
 chests
+status effect (fire, poison)
 
 */
 

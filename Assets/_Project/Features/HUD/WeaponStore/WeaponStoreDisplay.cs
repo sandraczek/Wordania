@@ -2,25 +2,25 @@ using UnityEngine;
 using VContainer;
 using Wordania.Core.HUD;
 using Wordania.Core.Inputs;
+using Wordania.Features.HUD.WeaponStore;
 
 namespace Wordania.Features.HUD.Journal
 {
-    [RequireComponent(typeof(JournalView))]
-    public sealed class JournalDisplay : HUDDisplay<JournalView>
+    [RequireComponent(typeof(WeaponStoreView))]
+    public sealed class WeaponStoreDisplay : HUDDisplay<WeaponStoreView>
     {
         protected override void BindInputs()
         {
-            _inputs.OnToggleJournal += HandleToggle;
+            _inputs.OnToggleWeaponStore += HandleToggle;
         }
         protected override void UnbindInputs()
         {
-            _inputs.OnToggleJournal -= HandleToggle;
+            _inputs.OnToggleWeaponStore -= HandleToggle;
         }
 
         protected override void OnApplyVisibility(bool open)
         {
-            if (open)
-                _view.LoadPage();
+
         }
 
     }

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f9a0718b8c0247faa9f5bc2bb293ace, type: 3}
+  m_Name: Minigun
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.WeaponStore.WeaponRequirement
+  _id:
+    _editorId: minigun_requirement
+    _hash: -1285976488
+  Weapon: {fileID: 11400000, guid: 3aef1c257a3c54c6696dff5c56c6fa91, type: 2}
+  Requirements:
+  - Entry: {fileID: 11400000, guid: f426cf17107584a819799d4d44cc1f83, type: 2}
+    Count: 3
+  - Entry: {fileID: 11400000, guid: 5ad38db825d1f464bb7d96355f3c7b64, type: 2}
+    Count: 20
