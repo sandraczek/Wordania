@@ -283,7 +283,6 @@ TODOS:
 - refactor Invincibility so health component uses it
 - refactor all HUD
 - go through all journal milestones when loading save
-- make sure milestones on blocks work
 
 features:
 boss spawning
@@ -294,6 +293,10 @@ nature (trees, water)
 chests
 status effect (fire, poison)
 chat
+multiplayer
+
+maybe optimization:
+- now checking every milestone for every mined block every frame.
 
 */
 

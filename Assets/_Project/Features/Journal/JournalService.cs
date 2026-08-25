@@ -18,11 +18,13 @@ namespace Wordania.Features.Journal
 {
     public sealed class JournalService : IJournalService, IStartable, IDisposable, ISaveable
     {
-        private readonly IEventBusGameplay _eventBus;
+        private readonly IEventBusGameplay _bus;
         private readonly IPlayerProvider _player;
         private readonly ISaveService _save;
 
         private readonly Dictionary<InstanceId, IPlayerJournal> _journals = new();
+
+        private readonly List<BlockMineRecordedRecord> _cashedMinedBlocksRecords = new();
 
 
         public string SaveId => "JournalService";
@@ -35,7 +37,7 @@ namespace Wordania.Features.Journal
 
         public JournalService(IEventBusGameplay eventBus, IPlayerProvider player, ISaveService save)
         {
-            _eventBus = eventBus;
+            _bus = eventBus;
             _player = player;
             _save = save;
         }
@@ -44,9 +46,9 @@ namespace Wordania.Features.Journal
         {
             _player.OnPlayerRegistered += HandlePlayerRegistered;
             _player.OnPlayerUnregistered += DeleteJournalOfPlayer;
-            _eventBus.Subscribe<DeathEvent>(HandleDeathEvent);
-            _eventBus.Subscribe<BossDeathEvent>(HandleBossDeathEvent);
-            _eventBus.Subscribe<BlocksMinedBatchEvent>(HandleBlocksMinedBatchEvent);
+            _bus.Subscribe<DeathEvent>(HandleDeathEvent);
+            _bus.Subscribe<BossDeathEvent>(HandleBossDeathEvent);
+            _bus.Subscribe<BlocksMinedBatchEvent>(HandleBlocksMinedBatchEvent);
             _save.Register(this);
         }
 
@@ -57,9 +59,9 @@ namespace Wordania.Features.Journal
                 _player.OnPlayerRegistered -= HandlePlayerRegistered;
                 _player.OnPlayerUnregistered -= DeleteJournalOfPlayer;
             }
-            _eventBus?.Unsubscribe<DeathEvent>(HandleDeathEvent);
-            _eventBus?.Unsubscribe<BossDeathEvent>(HandleBossDeathEvent);
-            _eventBus?.Unsubscribe<BlocksMinedBatchEvent>(HandleBlocksMinedBatchEvent);
+            _bus?.Unsubscribe<DeathEvent>(HandleDeathEvent);
+            _bus?.Unsubscribe<BossDeathEvent>(HandleBossDeathEvent);
+            _bus?.Unsubscribe<BlocksMinedBatchEvent>(HandleBlocksMinedBatchEvent);
             _save.Unregister(this);
         }
         private IPlayerJournal GetPlayerJournal(InstanceId id)
@@ -84,7 +86,7 @@ namespace Wordania.Features.Journal
             if (journal == null) return;
 
             int newCount = journal.Increment(JournalCategory.Enemies, death.VictimAssetId);
-            _eventBus.Publish(new EnemyKillRecordedEvent
+            _bus.Publish(new EnemyKillRecordedEvent
             {
                 PlayerInstanceId = death.InstigatorEntityId,
                 EnemyId = death.VictimAssetId,
@@ -97,7 +99,7 @@ namespace Wordania.Features.Journal
             if (journal == null) return;
 
             int newCount = journal.Increment(JournalCategory.Bosses, death.Id);
-            _eventBus.Publish(new BossKillRecordedEvent
+            _bus.Publish(new BossKillRecordedEvent
             {
                 BossId = death.Id,
                 KillCount = newCount
@@ -111,6 +113,18 @@ namespace Wordania.Features.Journal
             if (journal == null || e.MinedBlocks.Count == 0) return;
 
             journal.IncrementBatch(JournalCategory.Blocks, e.MinedBlocks);
+
+
+            _cashedMinedBlocksRecords.Clear();
+
+            var dict = journal.GetDictionary(JournalCategory.Blocks);
+            foreach (var block in e.MinedBlocks)
+            {
+                int oldCount = dict[block.Id];
+                _cashedMinedBlocksRecords.Add(new(block.Id, oldCount, oldCount + block.Count));
+            }
+
+            _bus.Publish(new BlocksMinedRecordedBatchEvent(e.InstigatorEntityId, _cashedMinedBlocksRecords));
         }
         private void CreateJournalForPlayer()
         {
