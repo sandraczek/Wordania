@@ -39,8 +39,6 @@ namespace Wordania.Features.World
         private readonly Dictionary<InstanceId, Dictionary<AssetId, int>> _pendingDestructions = new();
         private readonly List<BlockMineRecord> _reusableBatchList = new(32);
 
-        public string SaveId => "World";
-
         public event Action<Vector2Int, WorldLayer> OnChunkChanged;
         public event Action<Vector2Int, WorldLayer> OnBlockChanged;
 

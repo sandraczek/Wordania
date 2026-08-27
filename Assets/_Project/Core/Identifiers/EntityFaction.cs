@@ -1,5 +1,8 @@
+using System;
+
 namespace Wordania.Core.Identifiers
 {
+    [Flags]
     public enum EntityFaction
     {
         Player = 1 << 0,

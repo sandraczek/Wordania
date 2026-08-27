@@ -9,5 +9,6 @@ namespace Wordania.Core.SaveSystem.Data
     {
         public float[] Position = new float[2];
         public float CurrentHealth;
+        public Guid PersistentId;
     }
 }

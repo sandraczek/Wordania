@@ -12,6 +12,7 @@ using Wordania.Core.SaveSystem;
 using Wordania.Core.SaveSystem.Data;
 using Wordania.Features.Bosses.Events;
 using Wordania.Features.Journal.Entries;
+using Wordania.Features.Journal.Milestones;
 using Wordania.Features.World.Events;
 
 namespace Wordania.Features.Journal
@@ -19,15 +20,12 @@ namespace Wordania.Features.Journal
     public sealed class JournalService : IJournalService, IStartable, IDisposable, ISaveable
     {
         private readonly IEventBusGameplay _bus;
-        private readonly IPlayerProvider _player;
         private readonly ISaveService _save;
+        private readonly IJournalMilestoneService _milestones;
 
-        private readonly Dictionary<InstanceId, IPlayerJournal> _journals = new();
+        private readonly Dictionary<PersistentId, IPlayerJournal> _journals = new();
 
         private readonly List<BlockMineRecordedRecord> _cashedMinedBlocksRecords = new();
-
-
-        public string SaveId => "JournalService";
 
 
         // For now, when there is only one player
@@ -35,17 +33,15 @@ namespace Wordania.Features.Journal
         private Dictionary<AssetId, int>[] _loadedCategories;
         private bool _loadingFromSave = false;
 
-        public JournalService(IEventBusGameplay eventBus, IPlayerProvider player, ISaveService save)
+        public JournalService(IEventBusGameplay eventBus, ISaveService save, IJournalMilestoneService milestones)
         {
             _bus = eventBus;
-            _player = player;
             _save = save;
+            _milestones = milestones;
         }
 
         public void Start()
         {
-            _player.OnPlayerRegistered += HandlePlayerRegistered;
-            _player.OnPlayerUnregistered += DeleteJournalOfPlayer;
             _bus.Subscribe<DeathEvent>(HandleDeathEvent);
             _bus.Subscribe<BossDeathEvent>(HandleBossDeathEvent);
             _bus.Subscribe<BlocksMinedBatchEvent>(HandleBlocksMinedBatchEvent);
@@ -54,11 +50,6 @@ namespace Wordania.Features.Journal
 
         public void Dispose()
         {
-            if (_player != null)
-            {
-                _player.OnPlayerRegistered -= HandlePlayerRegistered;
-                _player.OnPlayerUnregistered -= DeleteJournalOfPlayer;
-            }
             _bus?.Unsubscribe<DeathEvent>(HandleDeathEvent);
             _bus?.Unsubscribe<BossDeathEvent>(HandleBossDeathEvent);
             _bus?.Unsubscribe<BlocksMinedBatchEvent>(HandleBlocksMinedBatchEvent);
@@ -71,7 +62,7 @@ namespace Wordania.Features.Journal
                 Debug.LogWarning($"Tried to find a journal for entity with id: {id}. Only players have journals. Fix");
                 return null;
             }
-            if (!_journals.TryGetValue(_player.InstanceId, out IPlayerJournal journal))
+            if (!_journals.TryGetValue(_player.PersistentId, out IPlayerJournal journal))
             {
                 Debug.LogWarning($"Could not find a journal for player with id: {id}");
                 return null;
@@ -128,7 +119,7 @@ namespace Wordania.Features.Journal
         }
         private void CreateJournalForPlayer()
         {
-            InstanceId id = _player.InstanceId;
+            PersistentId id = _player.PersistentId;
             if (_journals.ContainsKey(id))
             {
                 Debug.LogWarning("Tried creating journal for a player that already has a journal");
@@ -139,7 +130,7 @@ namespace Wordania.Features.Journal
         }
         private void DeleteJournalOfPlayer()
         {
-            InstanceId id = _player.InstanceId;
+            PersistentId id = _player.PersistentId;
             if (!_journals.ContainsKey(id))
             {
                 Debug.LogWarning("Tried to remove journal of a player that does not have one");
@@ -155,13 +146,13 @@ namespace Wordania.Features.Journal
 
             if (_loadingFromSave)
             {
-                _journals[_player.InstanceId].SetInitial(_loadedCategories);
+                _journals[_player.PersistentId].SetInitial(_loadedCategories);
             }
         }
 
         public IReadOnlyDictionary<AssetId, int> GetDictionary(JournalCategory category)
         {
-            return _journals[_player.InstanceId].GetDictionary(category);
+            return _journals[_player.PersistentId].GetDictionary(category);
         }
         public int GetKilled(JournalCategory category, AssetId id)
         {
@@ -196,7 +187,10 @@ namespace Wordania.Features.Journal
             {
                 saveData.Journal.Categories[cat] = new();
                 foreach (var entry in journal.GetDictionary((JournalCategory)cat))
+                {
+                    if (entry.Value <= 0) continue;
                     saveData.Journal.Categories[cat].Entries.Add(new(entry.Key.Hash, entry.Value));
+                }
             }
         }
 
@@ -204,6 +198,8 @@ namespace Wordania.Features.Journal
         {
             int catCount = (int)JournalCategory.COUNT;
             _loadedCategories = new Dictionary<AssetId, int>[catCount];
+
+            List<(AssetId, int)> loadedPairs = new();
 
             for (int cat = 0; cat < catCount; cat++)
             {
@@ -213,8 +209,14 @@ namespace Wordania.Features.Journal
             {
                 var entries = saveData.Journal.Categories[cat].Entries;
                 foreach (var entry in entries)
-                    _loadedCategories[cat].Add(new(entry.Id), entry.Count);
+                {
+                    AssetId id = new(entry.Id);
+                    _loadedCategories[cat].Add(id, entry.Count);
+                    loadedPairs.Add((id, entry.Count));
+                }
             }
+
+            _milestones.CheckAllMilestones(loadedPairs);
 
             _loadingFromSave = true;
         }

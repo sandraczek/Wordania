@@ -10,10 +10,10 @@ namespace Wordania.Features.Journal
 {
     public sealed class PlayerJournal : IPlayerJournal
     {
-        private readonly InstanceId _playerId;
+        private readonly PersistentId _playerId;
         private Dictionary<AssetId, int>[] _entries;
 
-        public PlayerJournal(InstanceId playerId)
+        public PlayerJournal(PersistentId playerId)
         {
             _playerId = playerId;
 

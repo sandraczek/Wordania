@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using VContainer.Unity;
 using Wordania.Core.Combat.Events;
+using Wordania.Core.Constants;
 using Wordania.Core.Data;
 using Wordania.Core.Events;
 using Wordania.Core.Gameplay;
@@ -12,16 +14,14 @@ using Wordania.Features.World.Events;
 
 namespace Wordania.Features.Journal.Milestones
 {
-    public class JournalMilestoneService : IStartable, IDisposable
+    public class JournalMilestoneService : IJournalMilestoneService, IStartable, IDisposable
     {
         private readonly IEventBusGameplay _eventBus;
         private readonly IAssetRegistry<JournalEntry> _entryRegistry;
-        private readonly IPlayerProvider _player;
-        public JournalMilestoneService(IEventBusGameplay eventBus, IAssetRegistry<JournalEntry> entryRegistry, IPlayerProvider player)
+        public JournalMilestoneService(IEventBusGameplay eventBus, IAssetRegistry<JournalEntry> entryRegistry)
         {
             _eventBus = eventBus;
             _entryRegistry = entryRegistry;
-            _player = player;
         }
         public void Start()
         {
@@ -38,6 +38,7 @@ namespace Wordania.Features.Journal.Milestones
 
         private void HandleKill(EnemyKillRecordedEvent e)
         {
+            var playerId = e.PlayerInstanceId;
             var entry = _entryRegistry.Get(e.EnemyId);
             if (entry == null) return;
 
@@ -73,6 +74,22 @@ namespace Wordania.Features.Journal.Milestones
                 foreach (var milestone in entry.Milestones)
                 {
                     if (milestone.TargetThreshold > block.PreviousCount && milestone.TargetThreshold <= block.CurrentCount)
+                    {
+                        _player.PlayerMechanics.EnableMechanic(milestone.Mechanic.Id, InstanceId.Journal);
+                    }
+                }
+            }
+        }
+
+        public void CheckAllMilestones(List<(AssetId, int)> pairs)
+        {
+            for (int i = 0; i < pairs.Count; i++)
+            {
+                var entry = _entryRegistry.Get(pairs[i].Item1);
+
+                foreach (var milestone in entry.Milestones)
+                {
+                    if (milestone.TargetThreshold <= pairs[i].Item2)
                     {
                         _player.PlayerMechanics.EnableMechanic(milestone.Mechanic.Id, InstanceId.Journal);
                     }
