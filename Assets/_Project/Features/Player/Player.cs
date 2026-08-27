@@ -50,11 +50,12 @@ namespace Wordania.Features.Player
         private PlayerService _playerService;
         private MechanicIds _mechanicIds;
         private PlayerContext _context;
-        private IPlayerSpawnService _spawnService;
+        private IPlayerSpawnPointService _spawnPointService;
         private IEventBusGameplay _bus;
         public Bounds Hitbox => _controller.GetBounds();
         public Vector2 Position => _controller.GetBounds().center;
         public InstanceId InstanceId { get; private set; }
+        public PersistentId PersistentId { get; private set; }
         public EntityFaction Faction { get; private set; } = EntityFaction.Player;
 
         [Inject]
@@ -65,7 +66,7 @@ namespace Wordania.Features.Player
             IInventoryService inventory,
             PlayerService playerService,
             MechanicIds mechanicIds,
-            IPlayerSpawnService spawnService,
+            IPlayerSpawnPointService spawnService,
             IEventBusGameplay bus
             )
         {
@@ -75,7 +76,7 @@ namespace Wordania.Features.Player
             _invincibility = GetComponent<InvincibilityController>();
             _mitigation = GetComponent<DamageMitigator>();
             _mechanics = GetComponent<EntityMechanicController>();
-            _spawnService = spawnService;
+            _spawnPointService = spawnService;
             _bus = bus;
 
             _playerService = playerService; // TODO: make interface ?
@@ -87,16 +88,18 @@ namespace Wordania.Features.Player
 
             _factory = new(context, inputs, inventory);
         }
-        public void InitializeNew(InstanceId instanceId)
+        public void InitializeNew(InstanceId instanceId, PersistentId persistentId)
         {
             InstanceId = instanceId;
+            PersistentId = persistentId;
             Init();
             _health.Initialize();
             _health.InitializeSpawn();
         }
-        public void InitializeLoaded(InstanceId instanceId, float currentHealth)
+        public void InitializeLoaded(InstanceId instanceId, PersistentId persistentId, float currentHealth)
         {
             InstanceId = instanceId;
+            PersistentId = persistentId;
             Init();
             _health.Initialize();
             _health.InitializeSpawn(currentHealth);
@@ -191,7 +194,7 @@ namespace Wordania.Features.Player
         }
         public void Revive()
         {
-            _controller.Warp(_spawnService.GetSpawn(InstanceId));
+            _controller.Warp(_spawnPointService.GetSpawn(InstanceId));
             _health.InitializeSpawn();
             _stateMachine.SwitchState(_factory.InitialState);
         }

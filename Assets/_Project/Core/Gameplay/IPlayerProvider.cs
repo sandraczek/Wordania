@@ -18,6 +18,7 @@ namespace Wordania.Core.Gameplay
         Vector2 Position { get; }
         Bounds Hitbox { get; }
         InstanceId InstanceId { get; }
+        PersistentId PersistentId { get; }
         bool IsPlayerSpawned { get; }
         event Action OnPlayerRegistered;
         event Action OnPlayerUnregistered;

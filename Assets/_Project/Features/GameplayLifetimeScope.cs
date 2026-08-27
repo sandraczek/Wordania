@@ -184,7 +184,7 @@ namespace Wordania.Features
 
             //player
             builder.RegisterInstance(_playerConfig);
-            builder.Register<PlayerSpawnService>(Lifetime.Scoped).As<IPlayerSpawnService>();
+            builder.Register<PlayerSpawnPointService>(Lifetime.Scoped).As<IPlayerSpawnPointService>();
             builder.RegisterEntryPoint<PlayerInventoryService>(Lifetime.Scoped).As<IInventoryService>();
             builder.Register<PlayerContext>(Lifetime.Scoped); //to move to player provider
             builder.RegisterEntryPoint<PlayerService>(Lifetime.Scoped)
@@ -213,8 +213,8 @@ namespace Wordania.Features
             builder.Register<BossSpawnerService>(Lifetime.Scoped).As<IBossSpawnerService>();
 
             //journal
+            builder.RegisterEntryPoint<JournalMilestoneService>(Lifetime.Scoped).As<IJournalMilestoneService>();
             builder.RegisterEntryPoint<JournalService>(Lifetime.Scoped).As<IJournalService>();
-            builder.RegisterEntryPoint<JournalMilestoneService>(Lifetime.Scoped);
 
             //weapon store
             builder.RegisterEntryPoint<WeaponRequirementService>(Lifetime.Scoped).As<IWeaponRequirementService>();
@@ -274,17 +274,21 @@ namespace Wordania.Features
 /*
 TODOS:
 
-- somehow make projectiles hitbox not a point ?
 - fix magic color in light shader graph
 - prewarming
 - can remove dependency between player and healthbar (move to event bus)
 - refactor PlayerSkillService (should not hold data - needed for when there are more players)
 - merge all IEntity interfaces
 - refactor Invincibility so health component uses it
-- refactor all HUD
-- go through all journal milestones when loading save
+- FIX: go through all journal milestones when loading save
 
-features:
+large TODOS:
+
+somehow make projectiles hitbox not a point ?
+refactor all HUD
+
+FEATURES:
+
 boss spawning
 block builder picker soon? later?
 pause menu
@@ -297,6 +301,19 @@ multiplayer
 
 maybe optimization:
 - now checking every milestone for every mined block every frame.
+- EntityContext (GetComponentsInChildren)
+
+
+-- currently
+Entity component
+Trackables, Damageables
+
+
+
+
+
+
+Mam dla ciebie duze zadanie. Przejdz przez caly projekt (kazda pojedyncza klase, enum, interfejs, struct, itp) I posprzataj namespace'y. Co mam na mysli - Chcę usunąć podział na Wordania.Core i Wordania.Features. Zamien wszystkie Wordania.Core i Wordania.Features na Wordania. Czyli na przykład, Wordania.Core.Identifiers stanie się Wordania.Identifiers. A jak chodzi o pod foldery, to raczej pozostawiaj jak jest, chyba ze uznasz ze mozna uporzadkowac lepiej (szczegolnie jak jest duzo plikow w jednym folderze) to mozesz zrobic jakies subfoldery). Czyli w przyszlosci bedzie Wordania.FOLDER.SUBFOLDER. Co wazne - na razie niech kazdy plik zostanie na swoim miejscu w folderze, potem to przeniose na ich poprawne miejsca, jedyne co masz zmienic to namespace'y
 
 */
 

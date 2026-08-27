@@ -29,7 +29,7 @@ namespace Wordania.Features.Player
         private readonly IEntityTrackerService _entityTracker;
         private readonly IInstanceIdProvider _idProvider;
         private readonly IEventBusGameplay _bus;
-        private readonly IPlayerSpawnService _spawnService;
+        private readonly IPlayerSpawnPointService _spawnPointService;
 
         public event Action OnPlayerRegistered;
         public event Action OnPlayerUnregistered;
@@ -45,6 +45,7 @@ namespace Wordania.Features.Player
         public Vector2 Position => _player.Position;
         public Bounds Hitbox => _player.Hitbox;
         public InstanceId InstanceId => _player.InstanceId;
+        public PersistentId PersistentId => _player.PersistentId;
         public string SaveId => "Player";
 
         public PlayerService(
@@ -56,7 +57,7 @@ namespace Wordania.Features.Player
             IDamageableEntitiesRegistryService entityRegistry,
             IInstanceIdProvider idProvider,
             IEventBusGameplay bus,
-            IPlayerSpawnService spawnService
+            IPlayerSpawnPointService spawnService
             )
         {
             _playerPrefab = playerPrefab;
@@ -67,7 +68,7 @@ namespace Wordania.Features.Player
             _entityTracker = entityTracker;
             _idProvider = idProvider;
             _bus = bus;
-            _spawnService = spawnService;
+            _spawnPointService = spawnService;
         }
         public void Start()
         {
@@ -90,7 +91,7 @@ namespace Wordania.Features.Player
             }
             else
             {
-                position = _spawnService.GetWorldSpawn();
+                position = _spawnPointService.GetWorldSpawn();
             }
 
             GameObject playerInstance = _resolver.Instantiate(_playerPrefab, position, Quaternion.identity, _parent);
@@ -105,13 +106,15 @@ namespace Wordania.Features.Player
                 return;
             }
 
+            PersistentId persistentId = PersistentId.New();
+
             if (_cachedSaveData != null)
             {
-                player.InitializeLoaded(_idProvider.Next(), _cachedSaveData.CurrentHealth);
+                player.InitializeLoaded(_idProvider.Next(), persistentId, _cachedSaveData.CurrentHealth);
             }
             else
             {
-                player.InitializeNew(_idProvider.Next());
+                player.InitializeNew(_idProvider.Next(), persistentId);
             }
 
             _player = player;

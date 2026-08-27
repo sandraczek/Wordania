@@ -18,10 +18,12 @@ namespace Wordania.Features.Journal.Milestones
     {
         private readonly IEventBusGameplay _eventBus;
         private readonly IAssetRegistry<JournalEntry> _entryRegistry;
-        public JournalMilestoneService(IEventBusGameplay eventBus, IAssetRegistry<JournalEntry> entryRegistry)
+        private readonly IPlayerProvider _player;
+        public JournalMilestoneService(IEventBusGameplay eventBus, IAssetRegistry<JournalEntry> entryRegistry, IPlayerProvider player)
         {
             _eventBus = eventBus;
             _entryRegistry = entryRegistry;
+            _player = player;
         }
         public void Start()
         {
@@ -38,7 +40,6 @@ namespace Wordania.Features.Journal.Milestones
 
         private void HandleKill(EnemyKillRecordedEvent e)
         {
-            var playerId = e.PlayerInstanceId;
             var entry = _entryRegistry.Get(e.EnemyId);
             if (entry == null) return;
 

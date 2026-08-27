@@ -22,6 +22,7 @@ namespace Wordania.Features.Journal
         private readonly IEventBusGameplay _bus;
         private readonly ISaveService _save;
         private readonly IJournalMilestoneService _milestones;
+        private readonly IPlayerProvider _player;
 
         private readonly Dictionary<PersistentId, IPlayerJournal> _journals = new();
 
@@ -33,15 +34,18 @@ namespace Wordania.Features.Journal
         private Dictionary<AssetId, int>[] _loadedCategories;
         private bool _loadingFromSave = false;
 
-        public JournalService(IEventBusGameplay eventBus, ISaveService save, IJournalMilestoneService milestones)
+        public JournalService(IEventBusGameplay eventBus, ISaveService save, IJournalMilestoneService milestones, IPlayerProvider player)
         {
             _bus = eventBus;
             _save = save;
             _milestones = milestones;
+            _player = player;
         }
 
         public void Start()
         {
+            _player.OnPlayerRegistered += HandlePlayerRegistered;
+            _player.OnPlayerUnregistered += DeleteJournalOfPlayer;
             _bus.Subscribe<DeathEvent>(HandleDeathEvent);
             _bus.Subscribe<BossDeathEvent>(HandleBossDeathEvent);
             _bus.Subscribe<BlocksMinedBatchEvent>(HandleBlocksMinedBatchEvent);
@@ -50,6 +54,11 @@ namespace Wordania.Features.Journal
 
         public void Dispose()
         {
+            if (_player != null)
+            {
+                _player.OnPlayerRegistered -= HandlePlayerRegistered;
+                _player.OnPlayerUnregistered -= DeleteJournalOfPlayer;
+            }
             _bus?.Unsubscribe<DeathEvent>(HandleDeathEvent);
             _bus?.Unsubscribe<BossDeathEvent>(HandleBossDeathEvent);
             _bus?.Unsubscribe<BlocksMinedBatchEvent>(HandleBlocksMinedBatchEvent);
@@ -62,9 +71,11 @@ namespace Wordania.Features.Journal
                 Debug.LogWarning($"Tried to find a journal for entity with id: {id}. Only players have journals. Fix");
                 return null;
             }
-            if (!_journals.TryGetValue(_player.PersistentId, out IPlayerJournal journal))
+
+            var persistentId = _player.PersistentId;
+            if (!_journals.TryGetValue(persistentId, out IPlayerJournal journal))
             {
-                Debug.LogWarning($"Could not find a journal for player with id: {id}");
+                Debug.LogWarning($"Could not find a journal for player with id: {persistentId}");
                 return null;
             }
             return journal;
