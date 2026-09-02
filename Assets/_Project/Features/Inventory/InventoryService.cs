@@ -15,18 +15,18 @@ using Wordania.Core.Events;
 
 namespace Wordania.Features.Player
 {
-    public sealed class PlayerInventoryService : IInventoryService, IDisposable, IStartable, ISaveable
+    public sealed class InventoryService : IInventoryService, IDisposable, IStartable, ISaveable
     {
         private readonly InventoryData _data = new();
         private readonly IAssetRegistry<ItemData> _database;
 
         public string SaveId => "PlayerInventory";
 
-        private readonly IEventBusGameplay _eventBus;
+        private readonly IEventBusSession _eventBus;
         public event Action OnInventoryChanged;
         private ISaveService _saveService;
 
-        public PlayerInventoryService(IAssetRegistry<ItemData> database, IEventBusGameplay eventBus, ISaveService saveService)
+        public InventoryService(IAssetRegistry<ItemData> database, IEventBusSession eventBus, ISaveService saveService)
         {
             _database = database;
             _eventBus = eventBus;
@@ -43,7 +43,7 @@ namespace Wordania.Features.Player
             _eventBus?.Unsubscribe<LootEvent>(HandleLoot);
         }
         // TO DO - SWITCH TO List<>
-        public void AddItem(AssetId id, int amount) // to do - convert all to bool
+        public void AddItem(AssetId id, int amount)
         {
             var data = _database.Get(id);   //to do - and also structural refactor HandleLoot
             if (data == null) return;
@@ -92,31 +92,31 @@ namespace Wordania.Features.Player
 
         public void CaptureState(GameSaveData saveData)
         {
-            IEnumerable<InventoryEntry> allHeldItems = GetAllEntries();
-            int itemsLength = _data._content.Count;
-            saveData.PlayerInventory.items = new ItemSaveData[itemsLength];
+            // IEnumerable<InventoryEntry> allHeldItems = GetAllEntries();
+            // int itemsLength = _data._content.Count;
+            // saveData.PlayerInventory.items = new ItemSaveData[itemsLength];
 
-            int slot = 0;
-            foreach (InventoryEntry item in allHeldItems)
-            {
-                ItemSaveData itemSave = new(item.Data.Id.Hash, item.Quantity);
-                saveData.PlayerInventory.items[slot++] = itemSave;
-            }
+            // int slot = 0;
+            // foreach (InventoryEntry item in allHeldItems)
+            // {
+            //     ItemSaveData itemSave = new(item.Data.Id.Hash, item.Quantity);
+            //     saveData.PlayerInventory.items[slot++] = itemSave;
+            // }
         }
 
         public void RestoreState(GameSaveData saveData)
         {
-            ClearInventory();
+            // ClearInventory();
 
-            if (saveData.PlayerInventory.items == null) return;
+            // if (saveData.PlayerInventory.items == null) return;
 
-            foreach (ItemSaveData itemSave in saveData.PlayerInventory.items)
-            {
-                if (itemSave.Id != 0 && itemSave.Quantity > 0)
-                {
-                    AddItem(new AssetId(itemSave.Id), itemSave.Quantity);
-                }
-            }
+            // foreach (ItemSaveData itemSave in saveData.PlayerInventory.items)
+            // {
+            //     if (itemSave.Id != 0 && itemSave.Quantity > 0)
+            //     {
+            //         AddItem(new AssetId(itemSave.Id), itemSave.Quantity);
+            //     }
+            // }
         }
     }
 }

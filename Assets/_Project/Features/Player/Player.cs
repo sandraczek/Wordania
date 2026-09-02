@@ -15,6 +15,7 @@ using Wordania.Core.SaveSystem.Data;
 using Wordania.Core.SFM;
 using Wordania.Core.Stats;
 using Wordania.Features.Combat;
+using Wordania.Features.Identifiers;
 using Wordania.Features.Inventory;
 using Wordania.Features.Mechanics;
 using Wordania.Features.Mechanics.Data;
@@ -32,7 +33,7 @@ namespace Wordania.Features.Player
     [RequireComponent(typeof(EntityStatsController))]
     [RequireComponent(typeof(InvincibilityController))]
     [RequireComponent(typeof(DamageMitigator))]
-    public sealed class Player : MonoBehaviour, IDamageable, ITrackable
+    public sealed class Player : MonoBehaviour, IPersistent, IDamageable, ITrackable
     {
         [Header("Components")]
         private PlayerController _controller;
@@ -51,7 +52,7 @@ namespace Wordania.Features.Player
         private MechanicIds _mechanicIds;
         private PlayerContext _context;
         private IPlayerSpawnPointService _spawnPointService;
-        private IEventBusGameplay _bus;
+        private IEventBusSession _bus;
         public Bounds Hitbox => _controller.GetBounds();
         public Vector2 Position => _controller.GetBounds().center;
         public InstanceId InstanceId { get; private set; }
@@ -67,7 +68,7 @@ namespace Wordania.Features.Player
             PlayerService playerService,
             MechanicIds mechanicIds,
             IPlayerSpawnPointService spawnService,
-            IEventBusGameplay bus
+            IEventBusSession bus
             )
         {
             _controller = GetComponent<PlayerController>();

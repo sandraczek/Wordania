@@ -26,9 +26,9 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         {
             base.Initialize(headData);
 
-            _hoverState = new YeinnHeadHoverState(_data.Hover, this, _playerProvider);
-            _chaseState = new YeinnHeadChaseState(_data.Chase, this, _playerProvider);
-            _slamState = new YeinnHeadSlamState(_data.Slam, this, _playerProvider);
+            _hoverState = new YeinnHeadHoverState(_data.Hover, this, _entities);
+            _chaseState = new YeinnHeadChaseState(_data.Chase, this, _entities);
+            _slamState = new YeinnHeadSlamState(_data.Slam, this, _entities);
 
             SwitchState(_hoverState);
         }

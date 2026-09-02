@@ -7,23 +7,6 @@ namespace Wordania.Features.Enemies.Spawning
     public class GroundCollisionValidator : ISpawnValidator
     {
         private readonly RaycastHit2D[] _raycastResults = new RaycastHit2D[1];
-        
-        // public bool IsValid(in EnemyTemplate template, Vector2 position)
-        // {
-        //     if (!template.Spawn.RequiresGround) return true;
-            
-        //     Vector2 checkPosition = position + (template.Spawn.RequiredClearanceSize.y + 0.05f) * Vector2.down;
-
-        //     Vector2 boxSize = new(template.Spawn.RequiredClearanceSize.x, 0.1f);
-
-        //     var hit = Physics2D.OverlapBox(
-        //         checkPosition,
-        //         boxSize,
-        //         0f,
-        //         template.Movement.GroundLayer);
-
-        //     return hit != null;
-        // }
 
         public bool IsValid(in EnemyTemplate template, Vector2 position)
         {
@@ -36,12 +19,12 @@ namespace Wordania.Features.Enemies.Spawning
 
             while (rayX < maxX)
             {
-                if(!GroundFound(new(rayX,rayY), template.Spawn.MaxDistanceToGround, template.Movement.GroundLayer)) return false;
+                if (!GroundFound(new(rayX, rayY), template.Spawn.MaxDistanceToGround, template.Movement.GroundLayer)) return false;
 
-                rayX+=1f;
+                rayX += 1f;
             }
 
-            return GroundFound(new(maxX,rayY), template.Spawn.MaxDistanceToGround, template.Movement.GroundLayer);
+            return GroundFound(new(maxX, rayY), template.Spawn.MaxDistanceToGround, template.Movement.GroundLayer);
         }
 
         private bool GroundFound(Vector2 rayPos, float depth, LayerMask groundLayer)

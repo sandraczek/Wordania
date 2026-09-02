@@ -23,7 +23,7 @@ namespace Wordania.Features.Combat.Core
         private readonly IDamageableEntitiesRegistryService _entities;
         private readonly IEntityTrackerService _trackables;
         private readonly IAssetRegistry<ProjectileData> _projectileRegistry;
-        private readonly IEventBusGameplay _eventBus;
+        private readonly IEventBusSession _eventBus;
         private readonly Queue<(ProjectileRuntimeData data, ProjectileView view)> _spawnQueue = new();
         private NativeList<ProjectileRuntimeData> _projectilesData = new(1000, Allocator.Persistent);
         private NativeQueue<ProjectileHitData> _hitEventsQueue = new(Allocator.Persistent);
@@ -38,7 +38,7 @@ namespace Wordania.Features.Combat.Core
             IDamageableEntitiesRegistryService entityRegistry,
             IEntityTrackerService trackables,
             IAssetRegistry<ProjectileData> projectileRegistry,
-            IEventBusGameplay eventBus,
+            IEventBusSession eventBus,
             IWorldCollisionJobService world
             )
         {

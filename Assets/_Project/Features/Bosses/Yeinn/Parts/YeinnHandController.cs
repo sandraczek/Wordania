@@ -27,9 +27,9 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         {
             base.Initialize(handData);
 
-            _idleState = new YeinnHandIdleState(_data.Idle, this, _playerProvider, restAnchor);
-            _swipeState = new YeinnHandSwipeState(_data.Swipe, this, _playerProvider);
-            _slamState = new YeinnHandSlamState(_data.Slam, this, _playerProvider);
+            _idleState = new YeinnHandIdleState(_data.Idle, this, _entities, restAnchor);
+            _swipeState = new YeinnHandSwipeState(_data.Swipe, this, _entities);
+            _slamState = new YeinnHandSlamState(_data.Slam, this, _entities);
 
             SwitchState(_idleState);
 

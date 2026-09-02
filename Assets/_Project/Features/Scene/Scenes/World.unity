@@ -335,7 +335,7 @@ GameObject:
   m_Component:
   - component: {fileID: 109496047}
   - component: {fileID: 109496048}
-  - component: {fileID: 109496046}
+  - component: {fileID: 109496049}
   m_Layer: 0
   m_Name: '[GAMEPLAY_SCOPE]'
   m_TagString: Untagged
@@ -343,61 +343,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &109496046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 109496045}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ca912500504f4d17ad71f0f877b2e69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.GameplayLifetimeScope
-  parentReference:
-    TypeName: 
-  autoRun: 1
-  autoInjectGameObjects: []
-  _entitiesParent: {fileID: 362334588}
-  _dynamicParent: {fileID: 437710529}
-  _chunksParent: {fileID: 1027612558}
-  _blockRegistry: {fileID: 11400000, guid: 4f9af77ca6df74fa98911a88ed095585, type: 2}
-  _itemRegistry: {fileID: 11400000, guid: 029601def52d947249da1fa34d026928, type: 2}
-  _weaponRegistry: {fileID: 11400000, guid: d3668127bbf094b73991c0afabe2a7b8, type: 2}
-  _projectileRegistry: {fileID: 11400000, guid: 27b90463f24c14661a2c805437eb06b0, type: 2}
-  _bossRegistry: {fileID: 11400000, guid: 8a912eca5f4cf4419b77e99386ce5152, type: 2}
-  _skillRegistry: {fileID: 11400000, guid: 68ff0a1b1d3f540e79b7f8670caa8af5, type: 2}
-  _mechanicRegistry: {fileID: 11400000, guid: b642ca261bba64180ad9c962e9a49ef2, type: 2}
-  _weaponRequirementRegistry: {fileID: 11400000, guid: 053bc4f1b64084ee2849fcd66d325d2f, type: 2}
-  _worldSettings: {fileID: 11400000, guid: e9faa1548b60a48f4b02264a5b5776c8, type: 2}
-  _daySettings: {fileID: 11400000, guid: 008e561bbce3f48258823ff259d5f389, type: 2}
-  _playerConfig: {fileID: 11400000, guid: cc39e62af189f4db39dd7d35481f27a2, type: 2}
-  _enemySpawnSettings: {fileID: 11400000, guid: c77d18375950242558a20fdf4b16c6ad, type: 2}
-  _enemyRegistry: {fileID: 11400000, guid: 16ef457c17f9b46ea94d3e022ea21977, type: 2}
-  _uiConfig: {fileID: 11400000, guid: 28c4b285bdee34ff5acd4c12d75b6d74, type: 2}
-  _playerPrefab: {fileID: 5377237029528584182, guid: 9dd43d0313ec54733bb0b134308ab288, type: 3}
-  _chunkPrefab: {fileID: 8679379767168436347, guid: d18dcdfeb9d1d4daeb28cc178971393e, type: 3}
-  _cameraService: {fileID: 2046067484}
-  _journalEntryRegistry: {fileID: 11400000, guid: ef67b2bb24c63427ba56404045a978cb, type: 2}
-  _healthBarUI: {fileID: 596826980}
-  _inventoryView: {fileID: 1478385141}
-  _inventoryDisplayUI: {fileID: 1644110971}
-  _inventorySlotPrefab: {fileID: 2399641862120486059, guid: 5f14aedb6b60c4d76845e9dc37919ca7, type: 3}
-  _loadingScreen: {fileID: 1640699638}
-  _savingIcon: {fileID: 579839866}
-  _worldMapController: {fileID: 1956776456}
-  _worldMapView: {fileID: 278490713}
-  _skillTreeView: {fileID: 1613858581}
-  _skillTreeDisplay: {fileID: 1613858582}
-  _journalView: {fileID: 1161629186}
-  _journalDisplay: {fileID: 1161629185}
-  _weaponStoreView: {fileID: 199589537}
-  _weaponStoreDisplay: {fileID: 199589535}
-  _deathScreenView: {fileID: 328775462}
-  _saveSlot: 0
-  _enemyToPrewarm: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}
-  _bossToSpawn: {fileID: 11400000, guid: d58728627ae204fcda8e9a698aabdb95, type: 2}
 --- !u!4 &109496047
 Transform:
   m_ObjectHideFlags: 0
@@ -426,6 +371,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _saveSlot: 9
+--- !u!114 &109496049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109496045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61c762116671f42be847fc6ee257ac8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.NEWGameplayLifetimeScope
+  parentReference:
+    TypeName: 
+  autoRun: 1
+  autoInjectGameObjects: []
+  _entitiesParent: {fileID: 362334588}
+  _dynamicParent: {fileID: 437710529}
+  _chunksParent: {fileID: 1027612558}
+  _playerPrefab: {fileID: 5377237029528584182, guid: 9dd43d0313ec54733bb0b134308ab288, type: 3}
+  _chunkPrefab: {fileID: 8679379767168436347, guid: d18dcdfeb9d1d4daeb28cc178971393e, type: 3}
+  _cameraService: {fileID: 2046067484}
+  _healthBarUI: {fileID: 596826980}
+  _inventoryView: {fileID: 1478385141}
+  _inventoryDisplayUI: {fileID: 1644110971}
+  _inventorySlotPrefab: {fileID: 2399641862120486059, guid: 5f14aedb6b60c4d76845e9dc37919ca7, type: 3}
+  _loadingScreen: {fileID: 1640699638}
+  _savingIcon: {fileID: 579839866}
+  _worldMapController: {fileID: 1956776456}
+  _worldMapView: {fileID: 278490713}
+  _skillTreeView: {fileID: 1613858581}
+  _skillTreeDisplay: {fileID: 1613858582}
+  _journalView: {fileID: 1161629186}
+  _journalDisplay: {fileID: 1161629185}
+  _weaponStoreView: {fileID: 199589537}
+  _weaponStoreDisplay: {fileID: 199589535}
+  _deathScreenView: {fileID: 328775462}
+  _enemyToPrewarm: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}
+  _bossToSpawn: {fileID: 11400000, guid: d58728627ae204fcda8e9a698aabdb95, type: 2}
 --- !u!1 &116241248
 GameObject:
   m_ObjectHideFlags: 0

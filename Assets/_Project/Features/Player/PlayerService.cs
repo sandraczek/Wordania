@@ -20,7 +20,7 @@ using Wordania.Features.Stats;
 
 namespace Wordania.Features.Player
 {
-    public sealed class PlayerService : IPlayerProvider, IPlayerSpawner, ISaveable, IStartable, IDisposable
+    public sealed class PlayerService : Core.Gameplay.IPlayerProvider, IPlayerSpawner, ISaveable, IStartable, IDisposable
     {
         private readonly GameObject _playerPrefab;
         private readonly IObjectResolver _resolver;
@@ -28,7 +28,7 @@ namespace Wordania.Features.Player
         private readonly IDamageableEntitiesRegistryService _entityRegistry;
         private readonly IEntityTrackerService _entityTracker;
         private readonly IInstanceIdProvider _idProvider;
-        private readonly IEventBusGameplay _bus;
+        private readonly IEventBusSession _bus;
         private readonly IPlayerSpawnPointService _spawnPointService;
 
         public event Action OnPlayerRegistered;
@@ -56,7 +56,7 @@ namespace Wordania.Features.Player
             IEntityTrackerService entityTracker,
             IDamageableEntitiesRegistryService entityRegistry,
             IInstanceIdProvider idProvider,
-            IEventBusGameplay bus,
+            IEventBusSession bus,
             IPlayerSpawnPointService spawnService
             )
         {
@@ -145,19 +145,12 @@ namespace Wordania.Features.Player
 
         public void CaptureState(GameSaveData saveData)
         {
-            if (_player != null)
-            {
-                saveData.Player = _player.GetSaveData();
-            }
-            else if (_cachedSaveData != null)
-            {
-                saveData.Player = _cachedSaveData;
-            }
+
         }
 
         public void RestoreState(GameSaveData saveData)
         {
-            _cachedSaveData = saveData.Player;
+
         }
 
         public void RevivePlayer()

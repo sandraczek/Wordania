@@ -31,7 +31,7 @@ namespace Wordania.Features.Enemies.Core
     {
         public EnemyTemplate Data;
         private IActiveEnemiesRegistryService _registry;
-        private IEventBusGameplay _eventBus;
+        private IEventBusSession _eventBus;
         private HealthComponent _health;
         private EntityStatsController _stats;
         private EntityMechanicController _mechanics;
@@ -76,7 +76,7 @@ namespace Wordania.Features.Enemies.Core
         public event Action<float> OnLanded;
 
         [Inject]
-        public void Construct(IActiveEnemiesRegistryService registry, IEventBusGameplay eventBus)
+        public void Construct(IActiveEnemiesRegistryService registry, IEventBusSession eventBus)
         {
             _registry = registry;
             _eventBus = eventBus;

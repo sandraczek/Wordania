@@ -1,5 +1,7 @@
+using System.Linq;
 using UnityEngine;
 using Wordania.Core.Gameplay;
+using Wordania.Core.Services;
 using Wordania.Core.SFM;
 using Wordania.Features.Bosses.Data.SharedAttacks;
 using Wordania.Features.Bosses.Yeinn.Parts;
@@ -8,25 +10,25 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
 {
     public sealed class YeinnHeadSlamState : IState
     {
-        private enum AttackStep 
-        { 
+        private enum AttackStep
+        {
             Windup,
             Smashing,
             Recovering
         }
         private readonly SlamPlayerAttack _data;
         private readonly YeinnHeadController _head;
-        private readonly IPlayerProvider _player;
-        
+        private readonly IEntityRegistry _entities;
+
         private Vector2 _slamStartPos;
         private AttackStep _currentStep;
 
         private float _recoveryTimer;
 
-        public YeinnHeadSlamState(SlamPlayerAttack slam, YeinnHeadController head, IPlayerProvider player)
+        public YeinnHeadSlamState(SlamPlayerAttack slam, YeinnHeadController head, IEntityRegistry entities)
         {
             _head = head;
-            _player = player;
+            _entities = entities;
             _data = slam;
         }
 
@@ -37,10 +39,11 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         public void Enter()
         {
             _recoveryTimer = _data.RecoveryDuration;
-            
-            _slamStartPos = (Vector2)_player.Position + Vector2.up * _data.LiftHeight;
+
+            _slamStartPos = (Vector2)_entities.ActivePlayers.FirstOrDefault().Transform.position + Vector2.up * _data.LiftHeight;
             float speed = float.MaxValue;
-            if(_data.TimeToAttack > 0f){
+            if (_data.TimeToAttack > 0f)
+            {
                 speed = (_slamStartPos - _head.Position).magnitude / _data.TimeToAttack;
             }
             _head.CommandMoveTo(_slamStartPos, Mathf.Min(_data.SlamSpeed, speed));
@@ -63,7 +66,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
                 {
                     _head.CommandChaseAttack();
                 }
-                
+
                 return;
             }
 
@@ -81,9 +84,9 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             {
                 case AttackStep.Windup:
                     _currentStep = AttackStep.Smashing;
-                    
-                    Vector2 target = new(_slamStartPos.x, _player.Position.y - _data.MaxDistanceBelowDynamicPlayer);
-                    _head.CommandMoveTo(target,_data.SlamSpeed);
+
+                    Vector2 target = new(_slamStartPos.x, _entities.ActivePlayers.FirstOrDefault().Transform.position.y - _data.MaxDistanceBelowDynamicPlayer);
+                    _head.CommandMoveTo(target, _data.SlamSpeed);
                     break;
 
                 case AttackStep.Smashing:

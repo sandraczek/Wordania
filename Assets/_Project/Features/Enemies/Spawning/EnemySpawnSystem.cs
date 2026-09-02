@@ -5,6 +5,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using Wordania.Core.Gameplay;
+using Wordania.Core.Services;
 using Wordania.Features.Enemies.Config;
 using Wordania.Features.Enemies.Core;
 using Wordania.Features.Enemies.Data;
@@ -16,7 +17,7 @@ namespace Wordania.Features.Enemies.Spawning
         private readonly EnemySystemSettings _settings;
         private readonly IActiveEnemiesRegistryService _registry;
         private readonly IEnemyFactory _factory;
-        private readonly IPlayerProvider _playerProvider;
+        private readonly IEntityRegistry _entities;
         private readonly IReadOnlyList<ISpawnValidator> _validators;
 
         private float _timeSinceLastSpawn;
@@ -24,35 +25,36 @@ namespace Wordania.Features.Enemies.Spawning
         //DEBUG
         private readonly EnemyTemplate _enemyToSpawn;
 
-        public EnemySpawnSystem(EnemySystemSettings settings, IActiveEnemiesRegistryService registry, IEnemyFactory enemyFactory, IPlayerProvider playerProvider, IReadOnlyList<ISpawnValidator> validators, /*DEBUG*/EnemyTemplate enemyTemplate)
+        public EnemySpawnSystem(EnemySystemSettings settings, IActiveEnemiesRegistryService registry, IEnemyFactory enemyFactory, IEntityRegistry entities, IReadOnlyList<ISpawnValidator> validators, /*DEBUG*/EnemyTemplate enemyTemplate)
         {
             _settings = settings;
             _registry = registry;
             _factory = enemyFactory;
-            _playerProvider = playerProvider;
+            _entities = entities;
             _validators = validators;
 
             _enemyToSpawn = enemyTemplate; //DEBUG
         }
         public void Tick()
         {
-            if(!_playerProvider.IsPlayerSpawned) return;
-            if(_registry.Count >= _settings.MaxActiveEnemies) return;
+            if (_registry.Count >= _settings.MaxActiveEnemies) return;
 
             _timeSinceLastSpawn += Time.deltaTime;
 
             if (_timeSinceLastSpawn >= _settings.SpawnIntervalAttempt)
             {
-                if(AttemptSpawn()){
+                if (AttemptSpawn())
+                {
                     _timeSinceLastSpawn = 0f;
                 }
             }
         }
         private bool AttemptSpawn()
         {
-            if(!_playerProvider.IsPlayerSpawned) return false;
+            int playerCount = _entities.ActivePlayers.Count;
+            if (playerCount == 0) return false;
 
-            Vector2 origin = _playerProvider.Position;
+            Vector2 origin = _entities.ActivePlayers[UnityEngine.Random.Range(0, playerCount - 1)].Transform.position;
             Vector2 candidatePosition = GetRandomPointInAnnulus(origin, _settings.InnerViewportRadius, _settings.OuterSpawnRadius);
 
             foreach (var validator in _validators)

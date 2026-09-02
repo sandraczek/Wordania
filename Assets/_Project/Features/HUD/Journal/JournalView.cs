@@ -10,6 +10,7 @@ using Wordania.Core.Constants;
 using Wordania.Core.Data;
 using Wordania.Features.Journal;
 using Wordania.Features.Journal.Entries;
+using Wordania.Features.Player;
 
 namespace Wordania.Features.HUD.Journal
 {
@@ -20,6 +21,7 @@ namespace Wordania.Features.HUD.Journal
         private IAssetRegistry<JournalEntry> _registry;
         private HUDConfig _config;
         private IObjectResolver _resolver;
+        private PlayerProvider _playerProvider;
 
         [SerializeField] private GameObject _page;
         [SerializeField] private JournalEnemyEntryView _enemyEntryPrefab;
@@ -62,7 +64,8 @@ namespace Wordania.Features.HUD.Journal
             IJournalService journal,
             IAssetRegistry<JournalEntry> registry,
             HUDConfig config,
-            IObjectResolver resolver
+            IObjectResolver resolver,
+            PlayerProvider playerProvider
             )
         {
             _sorter = sorter;
@@ -70,6 +73,7 @@ namespace Wordania.Features.HUD.Journal
             _registry = registry;
             _config = config;
             _resolver = resolver;
+            _playerProvider = playerProvider;
         }
         public void SwitchCategory(JournalCategory category)
         {
@@ -106,7 +110,7 @@ namespace Wordania.Features.HUD.Journal
 
             int prev = _currentPage * _entriesNumberOnPage;
             int max = Mathf.Min(_entriesNumberOnPage, _currentAssetCount - prev);
-            var dict = _journal.GetDictionary(_currentCategory);
+            var dict = _journal.GetDictionary(_playerProvider.PersistentId, _currentCategory);
 
             //Debug.Log($"Journal: {_pagesNumber} pages, {_entriesNumberOnPage} entries on page and {_currentAssetCount} assets. Loading page with {max} entries, from {prev}.");
 

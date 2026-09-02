@@ -10,6 +10,7 @@ namespace Wordania.Core.Identifiers
     {
         public InstanceId InstanceId;
         private readonly Dictionary<Type, object> _features = new();
+        public Transform Transform => transform;
 
         private void Awake()
         {

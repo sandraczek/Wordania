@@ -21,13 +21,13 @@ namespace Wordania.Features.World.Events
     }
     public readonly struct BlocksMinedRecordedBatchEvent : IGameEvent
     {
-        public readonly InstanceId InstigatorEntityId;
+        public readonly PersistentId PersistentId;
 
         public readonly IReadOnlyList<BlockMineRecordedRecord> MinedBlocks;
 
-        public BlocksMinedRecordedBatchEvent(InstanceId instigatorEntityId, IReadOnlyList<BlockMineRecordedRecord> minedBlocks)
+        public BlocksMinedRecordedBatchEvent(PersistentId persistentId, IReadOnlyList<BlockMineRecordedRecord> minedBlocks)
         {
-            InstigatorEntityId = instigatorEntityId;
+            PersistentId = persistentId;
             MinedBlocks = minedBlocks;
         }
     }

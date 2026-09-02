@@ -9,6 +9,7 @@ using Wordania.Core.Events;
 using Wordania.Core.Identifiers;
 using Wordania.Features.Journal;
 using Wordania.Features.Journal.Entries;
+using Wordania.Features.Player;
 
 namespace Wordania.Features.WeaponStore
 {
@@ -16,13 +17,15 @@ namespace Wordania.Features.WeaponStore
     {
         private readonly IJournalService _journal;
         private readonly IAssetRegistry<WeaponRequirement> _registry;
+        private readonly PlayerProvider _playerProvider;
 
         private readonly Dictionary<AssetId, WeaponRequirement> _weapons = new();
 
-        public WeaponRequirementService(IJournalService journal, IAssetRegistry<WeaponRequirement> registry)
+        public WeaponRequirementService(IJournalService journal, IAssetRegistry<WeaponRequirement> registry, PlayerProvider playerProvider)
         {
             _journal = journal;
             _registry = registry;
+            _playerProvider = playerProvider;
         }
 
         public void Start()
@@ -46,7 +49,7 @@ namespace Wordania.Features.WeaponStore
 
             foreach (var req in _weapons[id].Requirements)
             {
-                if (req.Amount > _journal.GetKilled(req.Entry)) return false;
+                if (req.Amount > _journal.GetKilled(_playerProvider.PersistentId, req.Entry)) return false;
             }
 
             return true;

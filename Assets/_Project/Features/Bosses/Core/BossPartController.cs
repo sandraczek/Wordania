@@ -28,7 +28,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         private IEntityTrackerService _entityTracker;
         private IDamageableEntitiesRegistryService _entityRegistry;
         private IInstanceIdProvider _idProvider;
-        protected IPlayerProvider _playerProvider;
+        protected IEntityRegistry _entities;
 
         protected T _data;
         private StateMachine<IState> _stateMachine;
@@ -53,11 +53,11 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         public Vector2 Position => _rb.position;
 
         [Inject]
-        public void Construct(IPlayerProvider playerProvider, IDamageableEntitiesRegistryService entityRegistry, IEntityTrackerService entityTracker, IInstanceIdProvider idProvider)
+        public void Construct(IEntityRegistry entities, IDamageableEntitiesRegistryService entityRegistry, IEntityTrackerService entityTracker, IInstanceIdProvider idProvider)
         {
             _entityRegistry = entityRegistry;
             _entityTracker = entityTracker;
-            _playerProvider = playerProvider;
+            _entities = entities;
             _idProvider = idProvider;
 
             _health = GetComponent<HealthComponent>();

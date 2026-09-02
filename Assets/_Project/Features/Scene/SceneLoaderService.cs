@@ -8,6 +8,7 @@ namespace Wordania.Boot.Services
     {
         private const string SCENE_MENU = "MainMenu";
         private const string SCENE_GAMEPLAY = "Gameplay";
+        private const string SCENE_WORLD = "World";
 
         public async UniTask LoadMenuAsync()
         {
@@ -18,6 +19,10 @@ namespace Wordania.Boot.Services
         public async UniTask LoadGameplayAsync()
         {
             await SceneManager.LoadSceneAsync(SCENE_GAMEPLAY).ToUniTask();
+        }
+        public async UniTask LoadWorldAsync()
+        {
+            await SceneManager.LoadSceneAsync(SCENE_WORLD).ToUniTask();
         }
     }
 }

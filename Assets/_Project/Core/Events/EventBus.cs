@@ -48,6 +48,7 @@ namespace Wordania.Core.Events
             }
         }
     }
-    public sealed class GameplayEventBus : EventBus, IEventBusGameplay { }
     public sealed class ProjectEventBus : EventBus, IEventBusProject { }
+    public sealed class SessionEventBus : EventBus, IEventBusSession { }
+    public sealed class GameplayEventBus : EventBus, IEventBusGameplay { }
 }

@@ -15,9 +15,9 @@ namespace Wordania.Features.WeaponStore
     public class WeaponStoreService : IWeaponStoreService
     {
         private readonly IWeaponRequirementService _requirements;
-        private readonly IEventBusGameplay _bus;
+        private readonly IEventBusSession _bus;
 
-        public WeaponStoreService(IWeaponRequirementService requirements, IEventBusGameplay bus)
+        public WeaponStoreService(IWeaponRequirementService requirements, IEventBusSession bus)
         {
             _requirements = requirements;
             _bus = bus;

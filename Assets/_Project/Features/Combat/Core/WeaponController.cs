@@ -14,14 +14,14 @@ namespace Wordania.Features.Combat.Core
     {
         [HideInInspector] public WeaponData Data;
         private IWeaponFireStrategy _strategy;
-        private IEventBusGameplay _eventBus;
+        private IEventBusSession _eventBus;
 
         private float _lastFiredTime = float.MinValue;
 
         private readonly List<ProjectileSpawnData> _spawnBuffer = new(capacity: 20);
 
         [Inject]
-        public void Construct(IEventBusGameplay eventBus)
+        public void Construct(IEventBusSession eventBus)
         {
             _eventBus = eventBus;
         }

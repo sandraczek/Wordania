@@ -16,7 +16,7 @@ namespace Wordania.Features.World.Lighting // lub Wordania.World.Presentation
         private readonly IStaticLightingService _lightingService;
         private readonly ILightmapRenderer _lightmapRenderer;
 
-        private readonly IEventBusGameplay _eventBus;
+        private readonly IEventBusSession _eventBus;
 
         private bool _isDirty = false;
 
@@ -25,7 +25,7 @@ namespace Wordania.Features.World.Lighting // lub Wordania.World.Presentation
             IWorldService world,
             IStaticLightingService lightingService,
             ILightmapRenderer lightmapRenderer,
-            IEventBusGameplay eventBus
+            IEventBusSession eventBus
             )
         {
             _world = world;

@@ -15,7 +15,7 @@ namespace Wordania.Features.Bosses.Core
     {
         private readonly IAssetRegistry<BossTemplate> _registry;
         private readonly IObjectResolver _resolver;
-        private readonly IEventBusGameplay _eventBus;
+        private readonly IEventBusSession _eventBus;
         private readonly IInstanceIdProvider _idProvider;
         private readonly Transform _parent;
 
@@ -24,7 +24,7 @@ namespace Wordania.Features.Bosses.Core
         public BossSpawnerService(
             IAssetRegistry<BossTemplate> registry,
             IObjectResolver resolver,
-            IEventBusGameplay eventBus,
+            IEventBusSession eventBus,
             IInstanceIdProvider idProvider,
             MarkerEntityParent parent)
         {

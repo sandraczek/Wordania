@@ -7,11 +7,11 @@ namespace Wordania.Core.Combat.Events
     public struct DeathEvent : IGameEvent
     {
         public AssetId VictimAssetId;
-        public InstanceId InstigatorEntityId;
+        public InstanceId InstigatorId;
         public DeathEvent(AssetId victimAssetId, InstanceId instigatorEntityId)
         {
             VictimAssetId = victimAssetId;
-            InstigatorEntityId = instigatorEntityId;
+            InstigatorId = instigatorEntityId;
         }
     }
 }

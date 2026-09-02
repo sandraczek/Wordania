@@ -51,6 +51,8 @@ using Wordania.Features.HUD.Journal;
 using Wordania.Features.WeaponStore;
 using Wordania.Features.HUD.WeaponStore;
 using Wordania.Features.HUD.DeathScreen;
+using Wordania.Features.Session;
+using Wordania.Core.Identifiers;
 
 namespace Wordania.Features
 {
@@ -104,31 +106,12 @@ namespace Wordania.Features
         protected override void Configure(IContainerBuilder builder)
 
         {
-            //asset registries
-            _blockRegistry.Initialize();
-            builder.RegisterInstance<IBlockRegistry>(_blockRegistry);
-            _itemRegistry.Initialize();
-            builder.RegisterInstance<IAssetRegistry<ItemData>>(_itemRegistry);
-            _projectileRegistry.Initialize();
-            builder.RegisterInstance<IAssetRegistry<ProjectileData>>(_projectileRegistry);
-            _weaponRegistry.Initialize();
-            builder.RegisterInstance<IAssetRegistry<WeaponData>>(_weaponRegistry);
-            _bossRegistry.Initialize();
-            builder.RegisterInstance<IAssetRegistry<BossTemplate>>(_bossRegistry);
-            _skillRegistry.Initialize();
-            builder.RegisterInstance<IAssetRegistry<SkillData>>(_skillRegistry);
-            _mechanicRegistry.Initialize();
-            builder.RegisterInstance<IAssetRegistry<MechanicData>>(_mechanicRegistry);
-            _enemyRegistry.Initialize();
-            builder.RegisterInstance<IAssetRegistry<EnemyTemplate>>(_enemyRegistry);
-            _journalEntryRegistry.Initialize();
-            builder.RegisterInstance<IAssetRegistry<JournalEntry>>(_journalEntryRegistry);
-            _weaponRequirementRegistry.Initialize();
-            builder.RegisterInstance<IAssetRegistry<WeaponRequirement>>(_weaponRequirementRegistry);
-
-            builder.Register<MechanicIds>(Lifetime.Singleton);
-
-            builder.Register<GameplayEventBus>(Lifetime.Scoped).As<IEventBusGameplay>();
+            builder.Register<SessionConfig>(Lifetime.Scoped)
+                .WithParameter(_saveSlot)
+                .WithParameter(true)
+                .WithParameter(PersistentId.New());
+            builder.Register<JsonSaveService>(Lifetime.Singleton).As<ISaveService>();
+            builder.Register<SessionEventBus>(Lifetime.Scoped).As<IEventBusSession>();
             builder.RegisterInstance<ICameraService>(_cameraService);
 
             //markers
@@ -137,7 +120,6 @@ namespace Wordania.Features
             builder.RegisterComponent(_chunksParent);
 
             //world
-            builder.RegisterInstance(_worldSettings);
             builder.Register<WorldPassBiomeMap>(Lifetime.Scoped).As<IWorldGenerationPass>();
             builder.Register<WorldPassTerrain>(Lifetime.Scoped).As<IWorldGenerationPass>();
             builder.Register<WorldPassCave>(Lifetime.Scoped).As<IWorldGenerationPass>();
@@ -165,7 +147,6 @@ namespace Wordania.Features
             builder.RegisterEntryPoint<LightmapPresenter>(Lifetime.Scoped);
 
             //day
-            builder.RegisterInstance(_daySettings);
             builder.RegisterEntryPoint<DayNightCycle>(Lifetime.Scoped);
 
             //registries
@@ -174,22 +155,17 @@ namespace Wordania.Features
             builder.Register<ActiveEnemiesRegistryService>(Lifetime.Scoped).As<IActiveEnemiesRegistryService>();
 
             //combat
-            builder.Register<DummyFireStrategy>(Lifetime.Singleton).As<IWeaponFireStrategy>();
-            builder.Register<SingleFireStrategy>(Lifetime.Singleton).As<IWeaponFireStrategy>();
-            builder.Register<ConeSpreadFireStrategy>(Lifetime.Singleton).As<IWeaponFireStrategy>();
-
             builder.Register<WeaponFactory>(Lifetime.Scoped).As<IWeaponFactory>();
             builder.RegisterEntryPoint<ProjectileSimulationService>(Lifetime.Scoped).As<IProjectileSimulationService>();
             builder.RegisterEntryPoint<ProjectileFactory>(Lifetime.Scoped).As<IProjectileFactory>();
 
             //player
-            builder.RegisterInstance(_playerConfig);
             builder.Register<PlayerSpawnPointService>(Lifetime.Scoped).As<IPlayerSpawnPointService>();
-            builder.RegisterEntryPoint<PlayerInventoryService>(Lifetime.Scoped).As<IInventoryService>();
-            builder.Register<PlayerContext>(Lifetime.Scoped); //to move to player provider
+            builder.RegisterEntryPoint<InventoryService>(Lifetime.Scoped).As<IInventoryService>();
+            builder.Register<PlayerContext>(Lifetime.Scoped);
             builder.RegisterEntryPoint<PlayerService>(Lifetime.Scoped)
                 .AsSelf()
-                .As<IPlayerProvider>()
+                .As<Core.Gameplay.IPlayerProvider>()
                 .As<IPlayerSpawner>()
                 .WithParameter(_playerPrefab);
 
@@ -198,9 +174,7 @@ namespace Wordania.Features
             builder.RegisterEntryPoint<SkillTreeService>(Lifetime.Scoped).As<ISkillTreeService>();
             builder.RegisterEntryPoint<KillSkillPointService>(Lifetime.Scoped);
 
-
             //enemies
-            builder.RegisterInstance(_enemySpawnSettings);
             builder.RegisterEntryPoint<EnemyFactory>(Lifetime.Scoped).As<IEnemyFactory>();
 
             builder.Register<GroundCollisionValidator>(Lifetime.Scoped).As<ISpawnValidator>();
@@ -221,7 +195,6 @@ namespace Wordania.Features
             builder.Register<WeaponStoreService>(Lifetime.Scoped).As<IWeaponStoreService>();
 
             //HUD
-            builder.RegisterInstance(_uiConfig);
             builder.RegisterEntryPoint<HUDStateManager>(Lifetime.Scoped).As<IHUDStateManager>();
 
             builder.RegisterComponent(_loadingScreen).As<ILoadingScreenView>();
@@ -263,11 +236,12 @@ namespace Wordania.Features
                 builder.RegisterComponent(saveComponent).WithParameter(_saveSlot);
 
             builder.RegisterEntryPoint<GameplayEntryPoint>(Lifetime.Scoped)
-            .WithParameter(_saveSlot)           // TEMPORARY withParameters
             .WithParameter(_enemyToPrewarm) //
             .WithParameter(_bossToSpawn);
         }
     }
+
+
 }
 #if UNITY_EDITOR
 
@@ -281,6 +255,8 @@ TODOS:
 - merge all IEntity interfaces
 - refactor Invincibility so health component uses it
 - FIX: go through all journal milestones when loading save
+- refactor inventory. Why does player - factory needs it?
+- inventoryDisplay on Canvas.
 
 large TODOS:
 
@@ -302,11 +278,14 @@ multiplayer
 maybe optimization:
 - now checking every milestone for every mined block every frame.
 - EntityContext (GetComponentsInChildren)
+- 
 
 
 -- currently
-Entity component
-Trackables, Damageables
+check lifetimes f.e. Lifetime.Scoped (with ai)
+daynightService split to two
+registry
+saving
 
 
 

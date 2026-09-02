@@ -8,6 +8,7 @@ namespace Wordania.Core.Events
         void Unsubscribe<T>(Action<T> handler) where T : struct, IGameEvent;
         void Publish<T>(T gameEvent) where T : struct, IGameEvent;
     }
-    public interface IEventBusGameplay : IEventBus { }
     public interface IEventBusProject : IEventBus { }
+    public interface IEventBusSession : IEventBus { }
+    public interface IEventBusGameplay : IEventBus { }
 }

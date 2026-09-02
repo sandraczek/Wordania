@@ -14,9 +14,9 @@ namespace Wordania.Features.Skills
         private readonly IAssetRegistry<EnemyTemplate> _enemyRegistry;
         private readonly IAssetRegistry<BossTemplate> _bossRegistry;
         private readonly ISkillTreeService _skills;
-        private readonly IEventBusGameplay _eventBus;
+        private readonly IEventBusSession _eventBus;
 
-        public KillSkillPointService(IAssetRegistry<EnemyTemplate> enemyRegistry, IAssetRegistry<BossTemplate> bossRegistry, ISkillTreeService skills, IEventBusGameplay eventBus)
+        public KillSkillPointService(IAssetRegistry<EnemyTemplate> enemyRegistry, IAssetRegistry<BossTemplate> bossRegistry, ISkillTreeService skills, IEventBusSession eventBus)
         {
             _enemyRegistry = enemyRegistry;
             _bossRegistry = bossRegistry;

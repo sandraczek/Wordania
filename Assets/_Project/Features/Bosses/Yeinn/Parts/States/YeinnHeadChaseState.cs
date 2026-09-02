@@ -1,5 +1,8 @@
+using System.Linq;
 using UnityEngine;
+using Wordania.Core.Combat;
 using Wordania.Core.Gameplay;
+using Wordania.Core.Services;
 using Wordania.Core.SFM;
 using Wordania.Features.Bosses.Data.SharedAttacks;
 using Wordania.Features.Bosses.Yeinn.Parts;
@@ -10,11 +13,11 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
     {
         private readonly ChasePlayerAttack _data;
         private readonly YeinnHeadController _head;
-        private readonly IPlayerProvider _player;
-        public YeinnHeadChaseState(ChasePlayerAttack chase, YeinnHeadController head, IPlayerProvider player)
+        private readonly IEntityRegistry _entities;
+        public YeinnHeadChaseState(ChasePlayerAttack chase, YeinnHeadController head, IEntityRegistry entities)
         {
             _head = head;
-            _player = player;
+            _entities = entities;
             _data = chase;
         }
 
@@ -24,7 +27,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         }
         public void Enter()
         {
-            _head.CommandTrack(_player.PlayerTransform, _data.Speed);
+            _head.CommandTrack(_entities.ActivePlayers.FirstOrDefault().Transform, _data.Speed);
         }
 
         public void Update()
@@ -33,7 +36,14 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         }
         public void FixedUpdate()
         {
-            if (_player?.ReadOnlyHealth?.IsDead ?? true) _head.CommandHoverAttack();
+            for (int i = 0; i < _entities.ActivePlayers.Count; i++)
+            {
+                if (_entities.ActivePlayers[i].TryGetFeature(out IReadOnlyHealth health) && !health.IsDead)
+                {
+                    return;
+                }
+            }
+            _head.CommandHoverAttack();
         }
         public void Exit()
         {

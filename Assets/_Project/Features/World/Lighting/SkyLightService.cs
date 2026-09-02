@@ -28,9 +28,9 @@ namespace Wordania.Features.World.Lighting
         }
         private readonly Queue<LightRemovalNode> _lightRemovalQueue = new(1024);
 
-        private readonly IEventBusGameplay _eventBus;
+        private readonly IEventBusSession _eventBus;
 
-        public SkyLightService(WorldSettings settings, IWorldService world, IBlockRegistry blockRegistry, IEventBusGameplay eventBus)
+        public SkyLightService(WorldSettings settings, IWorldService world, IBlockRegistry blockRegistry, IEventBusSession eventBus)
         {
             _settings = settings;
             _world = world;

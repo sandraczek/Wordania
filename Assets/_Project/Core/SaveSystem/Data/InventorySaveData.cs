@@ -6,6 +6,7 @@ namespace Wordania.Core.SaveSystem.Data
     [Serializable]
     public sealed class InventorySaveData
     {
+        public PersistentId PersistentId;
         public ItemSaveData[] items;
     }
 

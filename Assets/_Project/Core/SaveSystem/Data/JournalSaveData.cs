@@ -8,6 +8,7 @@ namespace Wordania.Core.SaveSystem.Data
     [Serializable]
     public sealed class JournalSaveData
     {
+        public PersistentId PersistentId;
         public JournalCategoryDto[] Categories = new JournalCategoryDto[(int)JournalCategory.COUNT];
 
     }

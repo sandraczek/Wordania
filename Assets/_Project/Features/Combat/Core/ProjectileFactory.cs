@@ -21,7 +21,7 @@ namespace Wordania.Features.Combat.Core
     {
         private readonly IObjectResolver _resolver;
         private readonly IProjectileSimulationService _simulationService;
-        private readonly IEventBusGameplay _eventBus;
+        private readonly IEventBusSession _eventBus;
         private readonly Transform _parent;
         private readonly Dictionary<AssetId, IObjectPool<ProjectileView>> _pools = new();
         private readonly int _defaultPoolSize = 20;
@@ -30,7 +30,7 @@ namespace Wordania.Features.Combat.Core
 
         public ProjectileFactory(
             IObjectResolver resolver,
-            IEventBusGameplay eventBus,
+            IEventBusSession eventBus,
             IProjectileSimulationService simulationService,
             MarkerDynamicParent projectileParent
             )

@@ -1,5 +1,6 @@
 using UnityEngine;
 using Wordania.Core.Gameplay;
+using Wordania.Core.Services;
 using Wordania.Core.SFM;
 using Wordania.Features.Bosses.Data.SharedAttacks;
 using Wordania.Features.Bosses.Yeinn.Parts;
@@ -10,12 +11,12 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
     {
         private readonly IdleReturnAttack _data;
         private readonly YeinnHandController _hand;
-        private readonly IPlayerProvider _player;
+        private readonly IEntityRegistry _entities;
         private readonly Transform _anchor;
-        public YeinnHandIdleState(IdleReturnAttack idle, YeinnHandController hand, IPlayerProvider player, Transform anchor)
+        public YeinnHandIdleState(IdleReturnAttack idle, YeinnHandController hand, IEntityRegistry entities, Transform anchor)
         {
             _hand = hand;
-            _player = player;
+            _entities = entities;
             _anchor = anchor;
             _data = idle;
         }
@@ -26,7 +27,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         }
         public void Enter()
         {
-            _hand.CommandTrack(_anchor,_data.returnSpeed, true);
+            _hand.CommandTrack(_anchor, _data.returnSpeed, true);
         }
 
         public void Update()
@@ -35,7 +36,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         }
         public void FixedUpdate()
         {
-            if(_hand.IsMoving) return;
+            if (_hand.IsMoving) return;
 
             _hand.CommandLockTo(_anchor);
             _hand.SetRotation(-90f);

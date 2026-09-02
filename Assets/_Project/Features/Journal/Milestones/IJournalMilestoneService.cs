@@ -16,6 +16,6 @@ namespace Wordania.Features.Journal.Milestones
 {
     public interface IJournalMilestoneService
     {
-        void CheckAllMilestones(List<(AssetId, int)> pairs);
+        //public IEnumerable<AssetId> GetEarnedMechanics(IReadOnlyList<(AssetId, int)> currentStats);
     }
 }

@@ -5,22 +5,23 @@ using VContainer;
 using VContainer.Unity;
 using Wordania.Core.Combat;
 using Wordania.Core.Gameplay;
+using Wordania.Features.Player;
 
 namespace Wordania.Features.HUD.Health
 {
     public sealed class HealthBarPresenter : IStartable, IDisposable
     {
-        private IPlayerProvider _playerProvider;
+        private PlayerProvider _playerProvider;
         private IHUDHealthBarService _healthBar;
 
-        public HealthBarPresenter(IPlayerProvider playerPrivder, IHUDHealthBarService healthBar)
+        public HealthBarPresenter(PlayerProvider playerPrivder, IHUDHealthBarService healthBar)
         {
             _playerProvider = playerPrivder;
             _healthBar = healthBar;
         }
         public void Start()
         {
-            if (_playerProvider.IsPlayerSpawned)
+            if (_playerProvider.IsSpawned)
                 HandlePlayerRegistered();
 
             _playerProvider.OnPlayerRegistered += HandlePlayerRegistered;

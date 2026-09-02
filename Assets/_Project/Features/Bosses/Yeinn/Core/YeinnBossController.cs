@@ -10,6 +10,8 @@ using Wordania.Features.Bosses.Yeinn.Data;
 using Wordania.Features.Bosses.Yeinn.Parts;
 using Wordania.Features.Enemies.Core;
 using Wordania.Core.Events;
+using Wordania.Core.Services;
+using Wordania.Core.Combat;
 
 namespace Wordania.Features.Bosses.Yeinn.Core
 {
@@ -18,8 +20,8 @@ namespace Wordania.Features.Bosses.Yeinn.Core
     {
         [Header("Dependencies")]
         private IActiveEnemiesRegistryService _enemyRegistry;
-        private IEventBusGameplay _eventBus;
-        private IPlayerProvider _player;
+        private IEventBusSession _eventBus;
+        private Wordania.Core.Services.IEntityRegistry _entities;
 
 
         [Header("Boss Parts")]
@@ -45,11 +47,11 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         public bool IsPersistent { get; } = true;
 
         [Inject]
-        public void Construct(IEventBusGameplay eventBus, IActiveEnemiesRegistryService enemyRegistry, IPlayerProvider player)
+        public void Construct(IEventBusSession eventBus, IActiveEnemiesRegistryService enemyRegistry, IEntityRegistry entities)
         {
             _eventBus = eventBus;
             _enemyRegistry = enemyRegistry;
-            _player = player;
+            _entities = entities;
         }
         protected override void OnInitialize(YeinnTemplate template)
         {
@@ -77,7 +79,16 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         }
         private void FixedUpdate()
         {
-            if (_player?.ReadOnlyHealth?.IsDead ?? true)
+            bool allPlayersDead = true;
+            for (int i = 0; i < _entities.ActivePlayers.Count; i++)
+            {
+                if (_entities.ActivePlayers[i].TryGetFeature(out IReadOnlyHealth health) && !health.IsDead)
+                {
+                    allPlayersDead = false;
+                    break;
+                }
+            }
+            if (allPlayersDead)
             {
                 TransitionToDormant();
             }
