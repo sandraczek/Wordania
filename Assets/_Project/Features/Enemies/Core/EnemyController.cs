@@ -24,10 +24,10 @@ namespace Wordania.Features.Enemies.Core
     [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]
-    [RequireComponent(typeof(EntityMechanicController))]
+    [RequireComponent(typeof(MechanicsComponent))]
     [RequireComponent(typeof(DamageMitigator))]
     [RequireComponent(typeof(InvincibilityController))]
-    [RequireComponent(typeof(EntityStatsController))]
+    [RequireComponent(typeof(StatsComponent))]
     [RequireComponent(typeof(Entity))]
     public sealed class EnemyController : MonoBehaviour, IEnemy, ICharacterMovement, IDamageable, ITrackable
     {
@@ -36,8 +36,8 @@ namespace Wordania.Features.Enemies.Core
 
         public Entity Entity;
         private HealthComponent _health;
-        private EntityStatsController _stats;
-        private EntityMechanicController _mechanics;
+        private StatsComponent _stats;
+        private MechanicsComponent _mechanics;
         private Rigidbody2D _rb;
         private Collider2D _col;
         public Bounds Hitbox => _col.bounds;
@@ -84,8 +84,8 @@ namespace Wordania.Features.Enemies.Core
             _health = GetComponent<HealthComponent>();
             _rb = GetComponent<Rigidbody2D>();
             _col = GetComponent<Collider2D>();
-            _stats = GetComponent<EntityStatsController>();
-            _mechanics = GetComponent<EntityMechanicController>();
+            _stats = GetComponent<StatsComponent>();
+            _mechanics = GetComponent<MechanicsComponent>();
             _mitigation = GetComponent<DamageMitigator>();
             _invincibility = GetComponent<InvincibilityController>();
 

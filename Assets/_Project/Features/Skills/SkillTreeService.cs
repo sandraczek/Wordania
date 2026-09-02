@@ -10,6 +10,7 @@ using Wordania.Core.SaveSystem;
 using Wordania.Core.SaveSystem.Data;
 using Wordania.Core.Services;
 using Wordania.Core.Stats;
+using Wordania.Features.Mechanics;
 using Wordania.Features.Player;
 using Wordania.Features.Stats;
 
@@ -20,115 +21,143 @@ namespace Wordania.Features.Skills
         private readonly IAssetRegistry<SkillData> _registry;
         private readonly ISaveService _save;
         private readonly IEntityRegistry _entities;
+        private readonly PlayerProvider _playerProvider;
 
-        private readonly Dictionary<PersistentId, PlayerSkillTree> _dictionary;
+        private readonly Dictionary<PersistentId, PlayerSkillTree> _dictionary = new();
 
-        public int[] SkillPoints { get; private set; } = new int[(int)SkillPointsType.Count]; //to deleete
+        public event Action<int[]> OnLocalPointsChanged;
+        public event Action<AssetId> OnLocalSkillUnlocked;
+        public event Action<AssetId> OnLocalSkillLocked;
 
-        public event Action<int[]> OnPointsChanged;
-        public event Action<AssetId> OnSkillUnlocked;
-        public event Action<AssetId> OnSkillLocked;
-
-        public SkillTreeService(IAssetRegistry<SkillData> registry, ISaveService save)
+        public SkillTreeService(IAssetRegistry<SkillData> registry, ISaveService save, PlayerProvider playerProvider, IEntityRegistry entities)
         {
             _registry = registry;
             _save = save;
-            //_entities = entities;
+            _playerProvider = playerProvider;
+            _entities = entities;
         }
         public void Start()
         {
-            // _save.Register(this);
-            // _entities.OnPlayerRegistered += HandlePlayerRegistered;
-
-            // // TEMPORARY -------------------------------------------------------------------------------------------------
-            // for (int i = 0; i < SkillPoints.Length; i++)
-            //     SkillPoints[i] = 1000;
+            _save.Register(this);
         }
         public void Dispose()
         {
-            // if (_entities != null)
-            //     _entities.OnPlayerRegistered -= HandlePlayerRegistered;
-            // _save?.Unregister(this);
+            _save?.Unregister(this);
         }
 
-        public bool IsSkillUnlocked(AssetId skillId)
+        private PlayerSkillTree GetSkills(PersistentId persistentId)
         {
-            //return _unlockedSkills.Contains(skillId);
+            if (!_dictionary.TryGetValue(persistentId, out var skills))
+            {
+                skills = new();
 
+                // TEMPORARY -------------------------------------------------------------------------------------------------
+                for (int i = 0; i < skills.SkillPoints.Length; i++)
+                    skills.SkillPoints[i] = 1000;
+
+                _dictionary[persistentId] = skills;
+            }
+            return skills;
+        }
+
+        public int[] GetSkillPoints(PersistentId persistentId)
+        {
+            var skills = GetSkills(persistentId);
+
+            return skills.SkillPoints;
+        }
+
+        public bool IsSkillUnlocked(PersistentId persistentId, AssetId skillId)
+        {
+            if (_dictionary.TryGetValue(persistentId, out PlayerSkillTree skills))
+                return skills.UnlockedSkills.Contains(skillId);
             return false;
         }
 
-        public bool CanUnlock(SkillData skill)
+        public bool CanUnlock(PersistentId persistentId, SkillData skill)
         {
-            // if (skill == null || IsSkillUnlocked(skill.Id))
-            // {
-            //     return false;
-            // }
+            if (skill == null || IsSkillUnlocked(persistentId, skill.Id))
+            {
+                return false;
+            }
 
-            // foreach (SkillPoint sp in skill.Cost)
-            // {
-            //     if (SkillPoints[(int)sp.Type] < sp.Value) return false;
-            // }
+            if (!_dictionary.TryGetValue(persistentId, out PlayerSkillTree skills))
+            {
+                return false;
+            }
 
-            // foreach (var reqId in skill.Prerequisites)
-            // {
-            //     if (!IsSkillUnlocked(reqId.Id))
-            //     {
-            //         return false;
-            //     }
-            // }
-            // 
-            // return true;
+            foreach (SkillPoint sp in skill.Cost)
+            {
+                if (skills.SkillPoints[(int)sp.Type] < sp.Value) return false;
+            }
 
-            return false;
+            foreach (var reqId in skill.Prerequisites)
+            {
+                if (!IsSkillUnlocked(persistentId, reqId.Id))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
-        public void UnlockSkill(AssetId skillId)
+        public void UnlockSkill(PersistentId persistentId, AssetId skillId)
         {
-            // var skill = _registry.Get(skillId);
+            var skills = GetSkills(persistentId);
+            var skill = _registry.Get(skillId);
 
-            // if (!CanUnlock(skill))
-            // {
-            //     throw new InvalidOperationException($"Tried unlocking skill {skillId} but prerequisites were not met or insufficient points.");
-            // }
+            foreach (SkillPoint sp in skill.Cost)
+            {
+                skills.SkillPoints[(int)sp.Type] -= sp.Value;
+            }
 
-            // foreach (SkillPoint sp in skill.Cost)
-            // {
-            //     SkillPoints[(int)sp.Type] -= sp.Value;
-            // }
+            skills.UnlockedSkills.Add(skillId);
 
-            // _unlockedSkills.Add(skillId);
+            ApplySkillEffects(persistentId, skill);
 
-            // ApplySkillEffects(skill);
-
-            // OnPointsChanged?.Invoke(SkillPoints);
-            // OnSkillUnlocked?.Invoke(skillId);
+            if (_playerProvider.IsLocalPlayer(persistentId))
+            {
+                OnLocalPointsChanged?.Invoke(skills.SkillPoints);
+                OnLocalSkillUnlocked?.Invoke(skillId);
+            }
         }
-        public void LockSkill(AssetId skillId)
+        public void LockSkill(PersistentId persistentId, AssetId skillId)
         {
-            // if (!_unlockedSkills.Contains(skillId)) return;
+            var skills = GetSkills(persistentId);
 
-            // _unlockedSkills.Remove(skillId);
-            // var skill = _registry.Get(skillId);
+            if (!skills.UnlockedSkills.Contains(skillId)) return;
 
-            // foreach (SkillPoint sp in skill.Cost)                       // returning skill points
-            // {
+            skills.UnlockedSkills.Remove(skillId);
+            var skill = _registry.Get(skillId);
 
-            //     SkillPoints[(int)sp.Type] += sp.Value;
-            // }
+            foreach (SkillPoint sp in skill.Cost)                 // returning skill points
+            {
 
-            // RevertSkillEffects(skill);
+                skills.SkillPoints[(int)sp.Type] += sp.Value;
+            }
 
-            // OnPointsChanged?.Invoke(SkillPoints);
-            // OnSkillLocked?.Invoke(skillId);
+            RevertSkillEffects(persistentId, skill);
+
+            if (_playerProvider.IsLocalPlayer(persistentId))
+            {
+                OnLocalPointsChanged?.Invoke(skills.SkillPoints);
+                OnLocalSkillLocked?.Invoke(skillId);
+            }
         }
 
-        public void AddPoints(SkillPointsType type, int points)
+        public void AddPoints(PersistentId persistentId, SkillPointsType type, int points)
         {
-            // if (points <= 0) return;
+            if (points <= 0) return;
 
-            // SkillPoints[(int)type] += points;
-            // OnPointsChanged?.Invoke(SkillPoints);
+            var skills = GetSkills(persistentId);
+
+            skills.SkillPoints[(int)type] += points;
+
+            if (_playerProvider.IsLocalPlayer(persistentId))
+            {
+                OnLocalPointsChanged?.Invoke(skills.SkillPoints);
+            }
         }
 
         public void CaptureState(GameSaveData saveData)
@@ -150,76 +179,80 @@ namespace Wordania.Features.Skills
             //     _unlockedSkills = saveData.Skills.UnlockedSkills.Select(s => new AssetId(s)).ToHashSet();
         }
 
-        public void ApplySkillEffects(SkillData skill)
+        public void ApplySkillEffects(PersistentId persistentId, SkillData skill)
         {
-            // if (skill == null)
-            // {
-            //     Debug.LogWarning("Could not apply skill effects - skill is null");
-            //     return;
-            // }
-            // foreach (var mechanics in skill.Mechanics)
-            // {
-            //     _entities.PlayerMechanics.EnableMechanic(mechanics.Id, InstanceId.SkillTree);
-            // }
+            if (skill == null)
+            {
+                Debug.LogWarning("Could not apply skill effects - skill is null");
+                return;
+            }
+            var entity = _entities.Entities[_entities.GetInstanceId(persistentId)];
 
-            // if (skill.Stats.Count > 0)
-            // {
-            //     StatModifier[] generatedModifiers = new StatModifier[skill.Stats.Count];
+            if (skill.Mechanics.Count > 0 && entity.TryGetFeature(out MechanicsComponent mechanics))
+            {
+                foreach (var mechanic in skill.Mechanics)
+                {
+                    mechanics.EnableMechanic(mechanic.Id, InstanceId.SkillTree);
+                }
+            }
 
-            //     for (int i = 0; i < skill.Stats.Count; i++)
-            //     {
-            //         StatData statData = skill.Stats[i];
-            //         CharacterStat targetStat = _entities.PlayerStats.GetStat(statData.Stat);
+            if (skill.Stats.Count > 0 && entity.TryGetFeature(out StatsComponent stats))
+            {
+                StatModifier[] generatedModifiers = new StatModifier[skill.Stats.Count];
 
-            //         if (targetStat != null)
-            //         {
-            //             var modifier = new StatModifier(statData.Value, statData.ModifierType);
-            //             targetStat.AddModifier(modifier);
-            //             generatedModifiers[i] = modifier;
-            //         }
-            //     }
+                for (int i = 0; i < skill.Stats.Count; i++)
+                {
+                    StatData statData = skill.Stats[i];
+                    CharacterStat targetStat = stats.GetStat(statData.Stat);
 
-            //     _appliedSkillStats.Add(skill.Id, generatedModifiers);
-            // }
+                    if (targetStat != null)
+                    {
+                        var modifier = new StatModifier(statData.Value, statData.ModifierType);
+                        targetStat.AddModifier(modifier);
+                        generatedModifiers[i] = modifier;
+                    }
+                }
+
+                var skills = GetSkills(persistentId);
+                skills.AppliedSkillStats.Add(skill.Id, generatedModifiers);
+            }
         }
 
-        public void RevertSkillEffects(SkillData skill)
+        public void RevertSkillEffects(PersistentId persistentId, SkillData skill)
         {
-            // if (skill == null)
-            // {
-            //     Debug.LogWarning("Could not revert skill effects - skill is null");
-            //     return;
-            // }
-            // foreach (var mechanics in skill.Mechanics)
-            // {
-            //     _entities.PlayerMechanics.DisableMechanic(mechanics.Id, InstanceId.SkillTree);
-            // }
+            if (skill == null)
+            {
+                Debug.LogWarning("Could not revert skill effects - skill is null");
+                return;
+            }
+            var entity = _entities.Entities[_entities.GetInstanceId(persistentId)];
 
-            // if (_appliedSkillStats.TryGetValue(skill.Id, out var statModifiers))
-            // {
-            //     for (int i = 0; i < skill.Stats.Count; i++)
-            //     {
-            //         StatData rewardDef = skill.Stats[i];
-            //         CharacterStat targetStat = _entities.PlayerStats.GetStat(rewardDef.Stat);
+            if (skill.Mechanics.Count > 0 && entity.TryGetFeature(out MechanicsComponent mechanics))
+            {
+                foreach (var mechanic in skill.Mechanics)
+                {
+                    mechanics.DisableMechanic(mechanic.Id, InstanceId.SkillTree);
+                }
+            }
+            var skills = GetSkills(persistentId);
 
-            //         StatModifier modifierToRemove = statModifiers[i];
+            if (skills.AppliedSkillStats.TryGetValue(skill.Id, out var statModifiers) && entity.TryGetFeature(out StatsComponent stats))
+            {
+                for (int i = 0; i < skill.Stats.Count; i++)
+                {
+                    StatData rewardDef = skill.Stats[i];
+                    CharacterStat targetStat = stats.GetStat(rewardDef.Stat);
 
-            //         if (targetStat != null && modifierToRemove != null)
-            //         {
-            //             targetStat.RemoveModifier(modifierToRemove);
-            //         }
-            //     }
+                    StatModifier modifierToRemove = statModifiers[i];
 
-            //     _appliedSkillStats.Remove(skill.Id);
-            // }
-        }
-        private void HandlePlayerRegistered()
-        {
-            // foreach (var skillId in _unlockedSkills)
-            // {
-            //     ApplySkillEffects(_registry.Get(skillId));
-            //     OnSkillUnlocked?.Invoke(skillId);
-            // }
+                    if (targetStat != null && modifierToRemove != null)
+                    {
+                        targetStat.RemoveModifier(modifierToRemove);
+                    }
+                }
+
+                skills.AppliedSkillStats.Remove(skill.Id);
+            }
         }
     }
 }

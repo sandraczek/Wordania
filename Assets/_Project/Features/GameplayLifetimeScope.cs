@@ -251,17 +251,14 @@ TODOS:
 
 - fix magic color in light shader graph
 - prewarming
-- can remove dependency between player and healthbar (move to event bus)
-- refactor PlayerSkillService (should not hold data - needed for when there are more players)
 - refactor Invincibility so health component uses it
 - FIX: go through all journal milestones when loading save
 - refactor inventory. Why does player - factory needs it?
-- inventoryDisplay on Canvas.
+- inventoryDisplay component is on Canvas.
 
 large TODOS:
 
 somehow make projectiles hitbox not a point ?
-refactor all HUD
 
 FEATURES:
 
@@ -278,13 +275,14 @@ multiplayer
 maybe optimization:
 - now checking every milestone for every mined block every frame.
 - EntityContext (GetComponentsInChildren)
-- 
+-* skills view goes through every node every point changed.
 
 
 -- currently
 try get feature
 unify event bus
 saving
+inventory to multiplayer
 
 
 

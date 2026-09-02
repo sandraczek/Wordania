@@ -43,8 +43,8 @@ namespace Wordania.Features.Player
             PlayerTransform = player.transform;
 
             ReadOnlyHealth = player.GetComponent<HealthComponent>();
-            PlayerMechanics = player.GetComponent<EntityMechanicController>();
-            PlayerStats = player.GetComponent<EntityStatsController>();
+            PlayerMechanics = player.GetComponent<MechanicsComponent>();
+            PlayerStats = player.GetComponent<StatsComponent>();
 
             OnPlayerRegistered?.Invoke();
         }
@@ -63,6 +63,10 @@ namespace Wordania.Features.Player
         public bool IsLocalPlayer(InstanceId entityId)
         {
             return IsSpawned && CurrentPlayer.InstanceId == entityId;
+        }
+        public bool IsLocalPlayer(PersistentId persistentId)
+        {
+            return IsSpawned && CurrentPlayer.PersistentId == persistentId;
         }
     }
 }

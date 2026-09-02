@@ -1,7 +1,9 @@
 using System;
 using VContainer.Unity;
 using Wordania.Core.Data;
+using Wordania.Core.Gameplay;
 using Wordania.Core.Identifiers;
+using Wordania.Features.Player;
 using Wordania.Features.Skills;
 
 namespace Wordania.Features.HUD.Skills
@@ -11,21 +13,25 @@ namespace Wordania.Features.HUD.Skills
         private readonly SkillTreeView _view;
         private readonly ISkillTreeService _skills;
         private readonly IAssetRegistry<SkillData> _skillRegistry;
+        private readonly PlayerProvider _playerProvider;
 
         public SkillTreePresenter(
             SkillTreeView view,
             ISkillTreeService entitySkills,
-            IAssetRegistry<SkillData> skillRegistry)
+            IAssetRegistry<SkillData> skillRegistry,
+            PlayerProvider playerProvider
+            )
         {
             _view = view ? view : throw new ArgumentNullException(nameof(view));
             _skills = entitySkills ?? throw new ArgumentNullException(nameof(entitySkills));
             _skillRegistry = skillRegistry ?? throw new ArgumentNullException(nameof(skillRegistry));
+            _playerProvider = playerProvider;
         }
 
         public void Start()
         {
-            _skills.OnSkillUnlocked += HandleSkillUnlocked;
-            _skills.OnPointsChanged += HandlePointsChanged;
+            _skills.OnLocalSkillUnlocked += HandleSkillUnlocked;
+            _skills.OnLocalPointsChanged += HandlePointsChanged;
 
             foreach (var nodeView in _view.NodeViews)
             {
@@ -41,8 +47,8 @@ namespace Wordania.Features.HUD.Skills
 
         public void Dispose()
         {
-            _skills.OnSkillUnlocked -= HandleSkillUnlocked;
-            _skills.OnPointsChanged -= HandlePointsChanged;
+            _skills.OnLocalSkillUnlocked -= HandleSkillUnlocked;
+            _skills.OnLocalPointsChanged -= HandlePointsChanged;
 
             foreach (var nodeView in _view.NodeViews)
             {
@@ -52,15 +58,15 @@ namespace Wordania.Features.HUD.Skills
 
         private void HandleNodeClicked(AssetId clickedSkillId)
         {
-            if (_skills.IsSkillUnlocked(clickedSkillId))
+            if (_skills.IsSkillUnlocked(_playerProvider.PersistentId, clickedSkillId))
             {
                 return;
             }
 
             SkillData data = _skillRegistry.Get(clickedSkillId);
-            if (_skills.CanUnlock(data))
+            if (_skills.CanUnlock(_playerProvider.PersistentId, data))
             {
-                _skills.UnlockSkill(clickedSkillId);
+                _skills.UnlockSkill(_playerProvider.PersistentId, clickedSkillId);
             }
             else
             {
@@ -82,7 +88,7 @@ namespace Wordania.Features.HUD.Skills
 
         private void RefreshEntireTree()
         {
-            _view.UpdateSkillPoints(_skills.SkillPoints);
+            _view.UpdateSkillPoints(_skills.GetSkillPoints(_playerProvider.PersistentId));
 
             foreach (var nodeView in _view.NodeViews)
             {
@@ -95,12 +101,12 @@ namespace Wordania.Features.HUD.Skills
 
         private SkillNodeState DetermineNodeState(SkillData skillData)
         {
-            if (_skills.IsSkillUnlocked(skillData.Id))
+            if (_skills.IsSkillUnlocked(_playerProvider.PersistentId, skillData.Id))
             {
                 return SkillNodeState.Unlocked;
             }
 
-            if (_skills.CanUnlock(skillData))
+            if (_skills.CanUnlock(_playerProvider.PersistentId, skillData))
             {
                 return SkillNodeState.Available;
             }

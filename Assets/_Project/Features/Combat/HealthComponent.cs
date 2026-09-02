@@ -10,7 +10,7 @@ using Wordania.Features.Stats;
 
 namespace Wordania.Features.Combat
 {
-    [RequireComponent(typeof(EntityStatsController))]
+    [RequireComponent(typeof(StatsComponent))]
     public sealed class HealthComponent : MonoBehaviour, IReadOnlyHealth
     {
         private IEventBusSession _eventBus;
@@ -48,7 +48,7 @@ namespace Wordania.Features.Combat
         }
         public void Initialize()
         {
-            var stats = GetComponent<EntityStatsController>();
+            var stats = GetComponent<StatsComponent>();
             _healthStat = stats.GetStat(StatType.MaxHealth);
         }
         public void InitializeSpawn()

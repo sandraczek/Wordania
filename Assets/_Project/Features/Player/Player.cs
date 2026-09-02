@@ -29,8 +29,8 @@ namespace Wordania.Features.Player
 {
     [RequireComponent(typeof(PlayerController))]
     [RequireComponent(typeof(HealthComponent))]
-    [RequireComponent(typeof(EntityMechanicController))]
-    [RequireComponent(typeof(EntityStatsController))]
+    [RequireComponent(typeof(MechanicsComponent))]
+    [RequireComponent(typeof(StatsComponent))]
     [RequireComponent(typeof(InvincibilityController))]
     [RequireComponent(typeof(DamageMitigator))]
     public sealed class Player : MonoBehaviour, IPersistent, IDamageable, ITrackable
@@ -39,8 +39,8 @@ namespace Wordania.Features.Player
         private PlayerController _controller;
         private StateMachine<PlayerBaseState> _stateMachine;
         private HealthComponent _health;
-        private EntityStatsController _stats;
-        private EntityMechanicController _mechanics;
+        private StatsComponent _stats;
+        private MechanicsComponent _mechanics;
         private InvincibilityController _invincibility;
         private DamageMitigator _mitigation;
         [SerializeField] private PlayerVisuals visuals;
@@ -71,10 +71,10 @@ namespace Wordania.Features.Player
         {
             _controller = GetComponent<PlayerController>();
             _health = GetComponent<HealthComponent>();
-            _stats = GetComponent<EntityStatsController>();
+            _stats = GetComponent<StatsComponent>();
             _invincibility = GetComponent<InvincibilityController>();
             _mitigation = GetComponent<DamageMitigator>();
-            _mechanics = GetComponent<EntityMechanicController>();
+            _mechanics = GetComponent<MechanicsComponent>();
             _spawnPointService = spawnService;
             _bus = bus;
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using Wordania.Core.Gameplay;
 using Wordania.Core.Identifiers;
 using Wordania.Features.Identifiers;
@@ -81,7 +82,12 @@ namespace Wordania.Core.Services
         }
         public InstanceId GetInstanceId(PersistentId persistentId)
         {
-            return _instanceMap[persistentId];
+            if (!_instanceMap.TryGetValue(persistentId, out InstanceId id))
+            {
+                Debug.LogError($"No player attached to this persistentId: {persistentId}");
+            }
+
+            return id;
         }
 
         public bool IsPlayer(InstanceId instanceId)

@@ -7,7 +7,7 @@ namespace Wordania.Features.Stats
     using Wordania.Core.Gameplay;
     using Wordania.Core.Stats;
 
-    public class EntityStatsController : MonoBehaviour, IEntityStats
+    public class StatsComponent : MonoBehaviour, IEntityStats
     {
         private CharacterStat[] _stats;
         private bool _statsInitialized = false;

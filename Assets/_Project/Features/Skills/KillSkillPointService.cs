@@ -4,6 +4,7 @@ using VContainer.Unity;
 using Wordania.Core.Combat.Events;
 using Wordania.Core.Data;
 using Wordania.Core.Events;
+using Wordania.Core.Identifiers;
 using Wordania.Features.Bosses.Data;
 using Wordania.Features.Enemies.Data;
 
@@ -38,16 +39,16 @@ namespace Wordania.Features.Skills
             var template = _enemyRegistry.Get(e.EnemyId);
             if (template == null) return;
 
-            AddReward(template.Reward, e.KillCount);
+            AddReward(e.PersistentId, template.Reward, e.KillCount);
         }
         private void HandleBossKill(BossKillRecordedEvent e)
         {
             var template = _bossRegistry.Get(e.BossId);
             if (template == null) return;
 
-            AddReward(template.Reward, e.KillCount);
+            AddReward(e.PersistentId, template.Reward, e.KillCount);
         }
-        private void AddReward(RewardData reward, int kills) // here choose player later
+        private void AddReward(PersistentId persistentId, RewardData reward, int kills) // here choose player later
         {
             float mult = GetMultiplier(reward, kills);
             foreach (var skillPoint in reward.SkillPoints)
@@ -55,7 +56,7 @@ namespace Wordania.Features.Skills
                 int points = Mathf.RoundToInt(skillPoint.Value * mult);
                 if (points <= 0) continue;
 
-                _skills.AddPoints(skillPoint.Type, points);
+                _skills.AddPoints(persistentId, skillPoint.Type, points);
             }
         }
 

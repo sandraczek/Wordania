@@ -10,12 +10,12 @@ using Wordania.Features.Mechanics.Data;
 
 namespace Wordania.Features.Player
 {
-    [RequireComponent(typeof(EntityMechanicController))]
+    [RequireComponent(typeof(MechanicsComponent))]
     public class PlayerDebugHandler : MonoBehaviour
     {
         private IDebugService _debugService;
         private MechanicIds _mechanicIds;
-        private EntityMechanicController _mechanics;
+        private MechanicsComponent _mechanics;
 
         [Inject]
         public void Construct(IDebugService debugService, MechanicIds mechanicIds)
@@ -25,7 +25,7 @@ namespace Wordania.Features.Player
         }
         public void Awake()
         {
-            _mechanics = GetComponent<EntityMechanicController>();
+            _mechanics = GetComponent<MechanicsComponent>();
         }
 
         private void OnEnable()

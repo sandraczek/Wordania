@@ -16,9 +16,9 @@ namespace Wordania.Features.Player
         public StateMachine<PlayerBaseState> StateMachine;
         public PlayerController Controller;
         public HealthComponent Health;
-        public EntityStatsController Stats;
+        public StatsComponent Stats;
         public PlayerConfig Config;
-        public EntityMechanicController Mechanics;
+        public MechanicsComponent Mechanics;
         public Transform Transform;
 
         public PlayerContext() { }
@@ -27,9 +27,9 @@ namespace Wordania.Features.Player
             StateMachine<PlayerBaseState> states,
             PlayerController controller,
             HealthComponent health,
-            EntityStatsController stats,
+            StatsComponent stats,
             PlayerConfig config,
-            EntityMechanicController mechanics,
+            MechanicsComponent mechanics,
             Transform transform)
         {
             InstanceId = instanceId;

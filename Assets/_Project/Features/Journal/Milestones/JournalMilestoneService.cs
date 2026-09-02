@@ -45,7 +45,7 @@ namespace Wordania.Features.Journal.Milestones
             {
                 if (milestone.TargetThreshold == e.KillCount)
                 {
-                    if (_entities.Entities[_entities.GetInstanceId(e.PersistentId)].TryGetFeature(out EntityMechanicController mechanics))
+                    if (_entities.Entities[_entities.GetInstanceId(e.PersistentId)].TryGetFeature(out MechanicsComponent mechanics))
                         mechanics.EnableMechanic(milestone.Mechanic.Id, InstanceId.Journal);
                     //_eventBus.Publish(new MechanicUnlockedEvent(e.PersistentId, milestone.Mechanic.Id, InstanceId.Journal));
                 }

@@ -6,14 +6,13 @@ namespace Wordania.Features.Skills
 {
     public interface ISkillTreeService
     {
-        int[] SkillPoints { get; }
+        int[] GetSkillPoints(PersistentId persistentId);
+        bool IsSkillUnlocked(PersistentId persistentId, AssetId skillId);
+        bool CanUnlock(PersistentId persistentId, SkillData skill);
+        void UnlockSkill(PersistentId persistentId, AssetId skillId);
+        void AddPoints(PersistentId persistentId, SkillPointsType type, int points);
 
-        bool IsSkillUnlocked(AssetId skillId);
-        bool CanUnlock(SkillData skill);
-        void UnlockSkill(AssetId skillId);
-        void AddPoints(SkillPointsType type, int points);
-
-        event Action<int[]> OnPointsChanged;
-        event Action<AssetId> OnSkillUnlocked;
+        event Action<int[]> OnLocalPointsChanged;
+        event Action<AssetId> OnLocalSkillUnlocked;
     }
 }

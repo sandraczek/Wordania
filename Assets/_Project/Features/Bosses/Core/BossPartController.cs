@@ -21,7 +21,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(DamageMitigator))]
-    [RequireComponent(typeof(EntityStatsController))]
+    [RequireComponent(typeof(StatsComponent))]
     [RequireComponent(typeof(Entity))]
     public abstract class BossPartController<T> : MonoBehaviour, IDamageable, ITrackable where T : BossPartData
     {
@@ -32,7 +32,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         protected T _data;
         private StateMachine<IState> _stateMachine;
         private HealthComponent _health;
-        private EntityStatsController _stats;
+        private StatsComponent _stats;
         private Rigidbody2D _rb;
         private Collider2D _col;
         protected DamageMitigator _mitigation;
@@ -60,7 +60,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             _health = GetComponent<HealthComponent>();
             _col = GetComponent<Collider2D>();
             _rb = GetComponent<Rigidbody2D>();
-            _stats = GetComponent<EntityStatsController>();
+            _stats = GetComponent<StatsComponent>();
             _mitigation = GetComponent<DamageMitigator>();
         }
         public virtual void Initialize(T data)

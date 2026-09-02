@@ -6,8 +6,8 @@ namespace Wordania.Features.Skills
 {
     public class PlayerSkillTree
     {
-        private HashSet<AssetId> _unlockedSkills = new();
-        private readonly Dictionary<AssetId, StatModifier[]> _appliedSkillStats = new();
+        public readonly HashSet<AssetId> UnlockedSkills = new();
+        public readonly Dictionary<AssetId, StatModifier[]> AppliedSkillStats = new();
         public int[] SkillPoints { get; private set; } = new int[(int)SkillPointsType.Count];
     }
 }

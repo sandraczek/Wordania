@@ -34,7 +34,7 @@ namespace Wordania.Features.Journal
         // For now, when there is only one player
 
         private Dictionary<AssetId, int>[] _loadedCategories;
-        private bool _loadingFromSave = false;
+        //private bool _loadingFromSave = false;
 
         public JournalService(IEventBusSession eventBus, ISaveService save, IJournalMilestoneService milestones, IEntityRegistry entities)
         {

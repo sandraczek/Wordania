@@ -9,7 +9,7 @@ namespace Wordania.Features.Mechanics
     using Wordania.Core.Mechanics;
 
     [RequireComponent(typeof(Entity))]
-    public class EntityMechanicController : MonoBehaviour, IEntityMechanicController
+    public class MechanicsComponent : MonoBehaviour, IEntityMechanicController
     {
         private IMechanicFactory _factory;
         private Entity _entity;

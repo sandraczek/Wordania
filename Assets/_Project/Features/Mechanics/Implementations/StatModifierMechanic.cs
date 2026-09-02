@@ -26,7 +26,7 @@ namespace Wordania.Features.Mechanics.Implementations
         {
             _entity = entity;
 
-            if (!entity.TryGetFeature<EntityStatsController>(out var statsController))
+            if (!entity.TryGetFeature<StatsComponent>(out var statsController))
             {
                 return false;
             }
@@ -45,7 +45,7 @@ namespace Wordania.Features.Mechanics.Implementations
 
         public void OnDeactivate()
         {
-            if (_appliedModifier != null && _entity != null && _entity.TryGetFeature<EntityStatsController>(out var statsController))
+            if (_appliedModifier != null && _entity != null && _entity.TryGetFeature<StatsComponent>(out var statsController))
             {
                 CharacterStat statToModify = statsController.GetStat(_targetStat);
 
