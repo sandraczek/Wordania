@@ -1,5 +1,6 @@
 using Wordania.Core.Combat;
 using Wordania.Core.Gameplay;
+using Wordania.Core.Identifiers;
 using Wordania.Features.Combat;
 using Wordania.Features.Mechanics.Data;
 
@@ -15,9 +16,9 @@ namespace Wordania.Features.Mechanics.Implementations
             //_data = data;
         }
 
-        public bool OnActivate(IEntityContext context)
+        public bool OnActivate(Entity entity)
         {
-            if (!context.TryGetFeature(out _invincibility))
+            if (!entity.TryGetFeature(out _invincibility))
             {
                 return false;
             }

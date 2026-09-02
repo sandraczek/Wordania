@@ -149,25 +149,26 @@ namespace Wordania.Features
             //day
             builder.RegisterEntryPoint<DayNightCycle>(Lifetime.Scoped);
 
-            //registries
-            builder.Register<DamageableEntitiesRegistryService>(Lifetime.Scoped).As<IDamageableEntitiesRegistryService>();
-            builder.RegisterEntryPoint<EntityTrackerService>(Lifetime.Scoped).As<IEntityTrackerService>();
-            builder.Register<ActiveEnemiesRegistryService>(Lifetime.Scoped).As<IActiveEnemiesRegistryService>();
+            //registry
+            builder.Register<EntityRegistry>(Lifetime.Scoped).As<IEntityRegistry>();
 
             //combat
             builder.Register<WeaponFactory>(Lifetime.Scoped).As<IWeaponFactory>();
+            builder.RegisterEntryPoint<AABBTargetableService>(Lifetime.Scoped).AsSelf();
             builder.RegisterEntryPoint<ProjectileSimulationService>(Lifetime.Scoped).As<IProjectileSimulationService>();
             builder.RegisterEntryPoint<ProjectileFactory>(Lifetime.Scoped).As<IProjectileFactory>();
 
-            //player
-            builder.Register<PlayerSpawnPointService>(Lifetime.Scoped).As<IPlayerSpawnPointService>();
+            //inventory
             builder.RegisterEntryPoint<InventoryService>(Lifetime.Scoped).As<IInventoryService>();
+
+            //player
+            builder.Register<PlayerStateService>(Lifetime.Scoped).AsSelf();
+            builder.Register<PlayerSpawnPointService>(Lifetime.Scoped).As<IPlayerSpawnPointService>();
             builder.Register<PlayerContext>(Lifetime.Scoped);
-            builder.RegisterEntryPoint<PlayerService>(Lifetime.Scoped)
+            builder.Register<PlayerSpawnerService>(Lifetime.Scoped)
                 .AsSelf()
-                .As<Core.Gameplay.IPlayerProvider>()
-                .As<IPlayerSpawner>()
-                .WithParameter(_playerPrefab);
+                .WithParameter(_playerPrefab); // FUCK YOU
+            builder.Register<PlayerProvider>(Lifetime.Scoped);
 
             //skills
             builder.Register<MechanicFactory>(Lifetime.Scoped).As<IMechanicFactory>();
@@ -233,7 +234,7 @@ namespace Wordania.Features
             //
             //DEBUG
             if (TryGetComponent(out DebugSaveComponent saveComponent))
-                builder.RegisterComponent(saveComponent).WithParameter(_saveSlot);
+                builder.RegisterComponent(saveComponent);
 
             builder.RegisterEntryPoint<GameplayEntryPoint>(Lifetime.Scoped)
             .WithParameter(_enemyToPrewarm) //
@@ -252,7 +253,6 @@ TODOS:
 - prewarming
 - can remove dependency between player and healthbar (move to event bus)
 - refactor PlayerSkillService (should not hold data - needed for when there are more players)
-- merge all IEntity interfaces
 - refactor Invincibility so health component uses it
 - FIX: go through all journal milestones when loading save
 - refactor inventory. Why does player - factory needs it?
@@ -282,9 +282,8 @@ maybe optimization:
 
 
 -- currently
-check lifetimes f.e. Lifetime.Scoped (with ai)
-daynightService split to two
-registry
+try get feature
+unify event bus
 saving
 
 

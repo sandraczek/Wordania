@@ -14,9 +14,7 @@ namespace Wordania.Features.Player
         private readonly IObjectResolver _resolver;
         private readonly PlayerStateService _stateService;
         private readonly PlayerProvider _localProvider;
-        private readonly IDamageableEntitiesRegistryService _entityRegistry;
-        private readonly IEntityRegistry _registry;
-        private readonly IEntityTrackerService _entityTracker;
+        private readonly IEntityRegistry _entities;
         private readonly IInstanceIdProvider _idProvider;
         private readonly IPlayerSpawnPointService _spawnPointService;
         private readonly Transform _parent;
@@ -26,8 +24,6 @@ namespace Wordania.Features.Player
             IObjectResolver resolver,
             PlayerStateService stateService,
             PlayerProvider localProvider,
-            IDamageableEntitiesRegistryService entityRegistry,
-            IEntityTrackerService entityTracker,
             IEntityRegistry registry,
             IInstanceIdProvider idProvider,
             IPlayerSpawnPointService spawnPointService,
@@ -37,9 +33,7 @@ namespace Wordania.Features.Player
             _resolver = resolver;
             _stateService = stateService;
             _localProvider = localProvider;
-            _entityRegistry = entityRegistry;
-            _entityTracker = entityTracker;
-            _registry = registry;
+            _entities = registry;
             _idProvider = idProvider;
             _spawnPointService = spawnPointService;
             _parent = playerParent.transform;
@@ -73,9 +67,7 @@ namespace Wordania.Features.Player
                 player.InitializeNew(_idProvider.Next(), persistentId);
             }
 
-            _registry.Register(player.GetComponent<IEntityContext>(), player.InstanceId);
-            _entityRegistry.Register(player);
-            _entityTracker.Register(player);
+            _entities.Register(player.GetComponent<Entity>(), player.InstanceId);
 
             if (isLocalClient)
             {
@@ -91,8 +83,7 @@ namespace Wordania.Features.Player
 
             _stateService.UpdateState(player.PersistentId, player.GetSaveData());
 
-            _entityRegistry.Unregister(player.InstanceId);
-            _entityTracker.Unregister(player.InstanceId);
+            _entities.Unregister(player.InstanceId);
 
             if (_localProvider.IsLocalPlayer(player.InstanceId))
             {

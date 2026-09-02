@@ -27,7 +27,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         }
         public void Enter()
         {
-            _head.CommandTrack(_entities.ActivePlayers.FirstOrDefault().Transform, _data.Speed);
+            _head.CommandTrack(_entities.Players.FirstOrDefault().Transform, _data.Speed);
         }
 
         public void Update()
@@ -36,9 +36,9 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         }
         public void FixedUpdate()
         {
-            for (int i = 0; i < _entities.ActivePlayers.Count; i++)
+            for (int i = 0; i < _entities.Players.Count; i++)
             {
-                if (_entities.ActivePlayers[i].TryGetFeature(out IReadOnlyHealth health) && !health.IsDead)
+                if (_entities.Players[i].TryGetFeature(out IReadOnlyHealth health) && !health.IsDead)
                 {
                     return;
                 }

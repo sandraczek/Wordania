@@ -88,7 +88,7 @@ namespace Wordania.Features.Journal
         }
         private void HandleBossDeathEvent(BossDeathEvent e)
         {
-            foreach (var player in _entities.ActivePlayers) // giving it all to (every active) player
+            foreach (var player in _entities.Players) // giving it all to (every active) player
             {
                 if (!_entities.TryGetPersistentId(player.InstanceId, out PersistentId persistentId)) return;
                 IPlayerJournal journal = GetPlayerJournal(persistentId);

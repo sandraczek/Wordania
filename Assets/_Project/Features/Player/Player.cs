@@ -48,7 +48,6 @@ namespace Wordania.Features.Player
         [Header("Dependencies")]
         private PlayerStateFactory _factory;
         private PlayerConfig _config;
-        private PlayerService _playerService;
         private MechanicIds _mechanicIds;
         private PlayerContext _context;
         private IPlayerSpawnPointService _spawnPointService;
@@ -65,7 +64,6 @@ namespace Wordania.Features.Player
             IInputReader inputs,
             PlayerContext context,
             IInventoryService inventory,
-            PlayerService playerService,
             MechanicIds mechanicIds,
             IPlayerSpawnPointService spawnService,
             IEventBusSession bus
@@ -80,7 +78,6 @@ namespace Wordania.Features.Player
             _spawnPointService = spawnService;
             _bus = bus;
 
-            _playerService = playerService; // TODO: make interface ?
             _config = config;
             _mechanicIds = mechanicIds;
             _context = context;
@@ -136,10 +133,6 @@ namespace Wordania.Features.Player
             {
                 fall.Initialize(_config.FallDamageThreshold, _config.FallDamageMultiplier);
             }
-        }
-        public void OnDestroy()
-        {
-            _playerService.UnregisterPlayer();
         }
         private void OnEnable()
         {

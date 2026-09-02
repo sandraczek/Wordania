@@ -47,7 +47,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         }
         private void SetTarget()
         {
-            foreach (var entity in _entities.ActivePlayers)
+            foreach (var entity in _entities.Players)
             {
                 if (entity.TryGetFeature(out IReadOnlyHealth health) && !health.IsDead)
                 {

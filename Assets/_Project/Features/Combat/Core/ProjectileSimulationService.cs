@@ -20,10 +20,11 @@ namespace Wordania.Features.Combat.Core
 {
     public sealed class ProjectileSimulationService : IProjectileSimulationService, IDisposable, ITickable, ILateTickable
     {
-        private readonly IDamageableEntitiesRegistryService _entities;
-        private readonly IEntityTrackerService _trackables;
         private readonly IAssetRegistry<ProjectileData> _projectileRegistry;
+        private readonly AABBTargetableService _aabbService;
         private readonly IEventBusSession _eventBus;
+        private readonly IEntityRegistry _entities;
+
         private readonly Queue<(ProjectileRuntimeData data, ProjectileView view)> _spawnQueue = new();
         private NativeList<ProjectileRuntimeData> _projectilesData = new(1000, Allocator.Persistent);
         private NativeQueue<ProjectileHitData> _hitEventsQueue = new(Allocator.Persistent);
@@ -35,18 +36,18 @@ namespace Wordania.Features.Combat.Core
 
         public ProjectileSimulationService
             (
-            IDamageableEntitiesRegistryService entityRegistry,
-            IEntityTrackerService trackables,
             IAssetRegistry<ProjectileData> projectileRegistry,
+            AABBTargetableService aabbService,
             IEventBusSession eventBus,
-            IWorldCollisionJobService world
+            IWorldCollisionJobService world,
+            IEntityRegistry entities
             )
         {
-            _entities = entityRegistry;
-            _trackables = trackables;
             _projectileRegistry = projectileRegistry;
+            _aabbService = aabbService;
             _eventBus = eventBus;
             _world = world;
+            _entities = entities;
         }
         public void Dispose()
         {
@@ -64,7 +65,8 @@ namespace Wordania.Features.Combat.Core
         {
             if (!_projectilesData.IsCreated || !_hitEventsQueue.IsCreated) return;
 
-            _currentTargets = _trackables.GetTargetAABBs();
+            _currentTargets = _aabbService.GetTargetAABBs();
+            //Debug.Log(_currentTargets.Length);
 
             // 1. Schedule the Job across multiple CPU cores
             var job = new ProjectileSimulationJob
@@ -149,7 +151,7 @@ namespace Wordania.Features.Combat.Core
         {
             while (_hitEventsQueue.TryDequeue(out ProjectileHitData hitEvent))
             {
-                if (!_entities.TryGet(hitEvent.HitEntityId, out IDamageable damageable)) continue;
+                if (!_entities.Entities.TryGetValue(hitEvent.HitEntityId, out Entity entity) || !entity.TryGetFeature(out IDamageable damageable)) continue;
 
                 var data = _projectileRegistry.Get(new AssetId(hitEvent.ProjectileDataId));
                 if (data == null) Debug.LogError("Data is null. Try refreshing projectile database");

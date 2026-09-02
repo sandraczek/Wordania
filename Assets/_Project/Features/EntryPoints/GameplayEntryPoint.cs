@@ -28,8 +28,10 @@ namespace Wordania.Features
 {
     public sealed class GameplayEntryPoint : IAsyncStartable
     {
+        private readonly ISaveService _save;
+        private readonly IWorldService _world;
         private readonly IWorldRenderer _worldRenderer;
-        private readonly IPlayerSpawner _playerSpawner;
+        private readonly PlayerSpawnerService _playerSpawner;
         private readonly PlayerProvider _playerProvider;
         private readonly IInputReader _inputReader;
         private readonly ICameraService _camera;
@@ -39,11 +41,17 @@ namespace Wordania.Features
         private readonly IEnemyFactory _enemyFactory;
         private readonly EnemyTemplate _enemyToPrewarm;
         private readonly IMapUpdateService _map;
+        private readonly ISkyLightService _skyLightService;
+        private readonly IStaticLightingService _staticLightingService;
+        private readonly IWorldCollisionJobService _worldCollisionJob;
         private readonly IBossSpawnerService _bossSpawner; // for testing
         private readonly AssetId _bossToSpawn; // for testing
+        private readonly SessionConfig _sessionConfig;
         public GameplayEntryPoint(
+            ISaveService saveService,
+            IWorldService worldService,
             IWorldRenderer worldRenderer,
-            IPlayerSpawner playerSpawner,
+            PlayerSpawnerService playerSpawner,
             PlayerProvider playerProvider,
             IInputReader inputReader,
             ICameraService camera,
@@ -53,10 +61,16 @@ namespace Wordania.Features
             IEnemyFactory enemyFactory,
             EnemyTemplate enemyTemplate, //DEBUG
             IMapUpdateService mapUpdate, // temporary ?
+            IWorldCollisionJobService worldCollisionJob,
             IBossSpawnerService bossSpawner, // for testing
-            BossTemplate bossToSpawn // for testing
+            BossTemplate bossToSpawn, // for testing
+            ISkyLightService skyLightService,
+            IStaticLightingService staticLightingService,
+            SessionConfig sessionConfig
             )
         {
+            _save = saveService;
+            _world = worldService;
             _worldRenderer = worldRenderer;
             _playerSpawner = playerSpawner;
             _playerProvider = playerProvider;
@@ -68,19 +82,35 @@ namespace Wordania.Features
             _enemyFactory = enemyFactory;
             _enemyToPrewarm = enemyTemplate;
             _map = mapUpdate;
+            _worldCollisionJob = worldCollisionJob;
             _bossSpawner = bossSpawner;
             _bossToSpawn = bossToSpawn.Id;
+            _skyLightService = skyLightService;
+            _staticLightingService = staticLightingService;
+            _sessionConfig = sessionConfig;
         }
         public async UniTask StartAsync(System.Threading.CancellationToken cancellation)
         {
-            Debug.Log("<color=green>[GAMEPLAY] Gameplay Start Sequence Initiated...</color>");
+            Debug.Log("<color=green>[GAMEPLAY] Start Sequence Initiated...</color>");
 
             _inputReader.DisableAllInput();
 
             _loadingScreen.Show();
             _loadingScreen.UpdateProgress(0f, "Loading");
-
+            if (_sessionConfig.SaveSlot == 0)
+            {
+                _loadingScreen.UpdateProgress(0.1f, "Generating World");
+                _world.RandomizeSeed();
+                await _world.GenerateWorldAsync(cancellation);
+            }
+            else
+            {
+                _loadingScreen.UpdateProgress(0.1f, "Loading Save");
+                await _save.LoadGameAsync(_save.DefaultPrefix + _sessionConfig.SaveSlot.ToString());
+            }
             _loadingScreen.UpdateProgress(0.3f, "Lighting the World up");
+            await _skyLightService.InitializeSkyLightAsync(cancellation, 5000);
+            await _staticLightingService.InitializeLightAsync(cancellation);
 
             _loadingScreen.UpdateProgress(0.4f, "Rendering World");
             await _worldRenderer.RenderInitialWorldAsync(cancellation);
@@ -88,6 +118,7 @@ namespace Wordania.Features
 
             Time.timeScale = 0f;
 
+            _worldCollisionJob.InitializeCollisionArray();
             await _map.RenderInitialMapAsync(cancellation);
 
             _loadingScreen.UpdateProgress(0.55f, "Prewarming Pools"); //DEBUG - later biome based prewarm
@@ -99,7 +130,7 @@ namespace Wordania.Features
             await _weaponStorePresenter.InitializeAsync(cancellation);
 
             _loadingScreen.UpdateProgress(0.75f, "Spawning Player");
-            _playerSpawner.SpawnPlayer();
+            _playerSpawner.SpawnPlayer(_sessionConfig.LocalPersistentId, true);
 
             _loadingScreen.UpdateProgress(0.9f, "Setting Camera");
             _camera.FollowTarget(_playerProvider.PlayerTransform);

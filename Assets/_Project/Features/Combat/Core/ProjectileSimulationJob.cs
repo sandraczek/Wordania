@@ -79,7 +79,7 @@ namespace Wordania.Features.Combat.Core
             {
                 TargetAABB target = Targets[i];
 
-                if (target.EntityInstanceId == data.InstigatorId) continue;
+                if (target.InstanceId == data.InstigatorId) continue;
                 if ((target.FactionId & data.TargetFactionMask) == 0) continue;
 
                 if (LineIntersectsAABB(data.PreviousPosition, data.CurrentPosition, target.Min, target.Max, out float2 hitpoint))
@@ -88,7 +88,7 @@ namespace Wordania.Features.Combat.Core
                     {
                         Direction = math.normalizesafe(data.Velocity),
                         ProjectileDataId = data.DataId,
-                        HitEntityId = target.EntityInstanceId,
+                        HitEntityId = target.InstanceId,
                         HitPosition = hitpoint,
                         DamageMultiplier = data.DamageMultiplier,
                         InstigatorId = data.InstigatorId

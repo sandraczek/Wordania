@@ -40,7 +40,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         {
             _recoveryTimer = _data.RecoveryDuration;
 
-            _slamStartPos = (Vector2)_entities.ActivePlayers.FirstOrDefault().Transform.position + Vector2.up * _data.LiftHeight;
+            _slamStartPos = (Vector2)_entities.Players.FirstOrDefault().Transform.position + Vector2.up * _data.LiftHeight;
             float speed = float.MaxValue;
             if (_data.TimeToAttack > 0f)
             {
@@ -84,7 +84,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
                 case AttackStep.Windup:
                     _currentStep = AttackStep.Smashing;
 
-                    Vector2 target = new(_slamStartPos.x, _entities.ActivePlayers.FirstOrDefault().Transform.position.y - _data.MaxDistanceBelowDynamicPlayer);
+                    Vector2 target = new(_slamStartPos.x, _entities.Players.FirstOrDefault().Transform.position.y - _data.MaxDistanceBelowDynamicPlayer);
                     _hand.CommandMoveTo(target, _data.SlamSpeed);
                     _hand.SetRotation(-90f); //TODO: make a method for smooth rotation
                     break;

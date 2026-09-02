@@ -15,7 +15,6 @@ namespace Wordania.Features.Enemies.Spawning
     public sealed class EnemySpawnSystem : ITickable
     {
         private readonly EnemySystemSettings _settings;
-        private readonly IActiveEnemiesRegistryService _registry;
         private readonly IEnemyFactory _factory;
         private readonly IEntityRegistry _entities;
         private readonly IReadOnlyList<ISpawnValidator> _validators;
@@ -25,10 +24,9 @@ namespace Wordania.Features.Enemies.Spawning
         //DEBUG
         private readonly EnemyTemplate _enemyToSpawn;
 
-        public EnemySpawnSystem(EnemySystemSettings settings, IActiveEnemiesRegistryService registry, IEnemyFactory enemyFactory, IEntityRegistry entities, IReadOnlyList<ISpawnValidator> validators, /*DEBUG*/EnemyTemplate enemyTemplate)
+        public EnemySpawnSystem(EnemySystemSettings settings, IEnemyFactory enemyFactory, IEntityRegistry entities, IReadOnlyList<ISpawnValidator> validators, /*DEBUG*/EnemyTemplate enemyTemplate)
         {
             _settings = settings;
-            _registry = registry;
             _factory = enemyFactory;
             _entities = entities;
             _validators = validators;
@@ -37,7 +35,7 @@ namespace Wordania.Features.Enemies.Spawning
         }
         public void Tick()
         {
-            if (_registry.Count >= _settings.MaxActiveEnemies) return;
+            if (_entities.Enemies.Count >= _settings.MaxActiveEnemies) return;
 
             _timeSinceLastSpawn += Time.deltaTime;
 
@@ -51,10 +49,10 @@ namespace Wordania.Features.Enemies.Spawning
         }
         private bool AttemptSpawn()
         {
-            int playerCount = _entities.ActivePlayers.Count;
+            int playerCount = _entities.Players.Count;
             if (playerCount == 0) return false;
 
-            Vector2 origin = _entities.ActivePlayers[UnityEngine.Random.Range(0, playerCount - 1)].Transform.position;
+            Vector2 origin = _entities.Players[UnityEngine.Random.Range(0, playerCount - 1)].Transform.position;
             Vector2 candidatePosition = GetRandomPointInAnnulus(origin, _settings.InnerViewportRadius, _settings.OuterSpawnRadius);
 
             foreach (var validator in _validators)

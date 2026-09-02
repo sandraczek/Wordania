@@ -4,11 +4,9 @@ using Wordania.Core.Identifiers;
 
 namespace Wordania.Core.Gameplay
 {
-    public interface IEnemy: IEntity
+    public interface IEnemy
     {
         Vector2 Position { get; }
-        bool IsAlive { get; }
-        bool IsPersistent { get; }
         void Remove();
     }
 }

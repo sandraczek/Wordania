@@ -79,7 +79,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         private Vector2 GetStartingPos()
         {
             _currentDirection = Mathf.Sign(Random.value - 0.5f);
-            return (Vector2)_entities.ActivePlayers.FirstOrDefault().Transform.position - _data.DistanceFromPlayer * _currentDirection * Vector2.right;
+            return (Vector2)_entities.Players.FirstOrDefault().Transform.position - _data.DistanceFromPlayer * _currentDirection * Vector2.right;
         }
     }
 }

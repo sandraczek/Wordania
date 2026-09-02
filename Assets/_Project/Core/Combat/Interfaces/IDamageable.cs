@@ -3,7 +3,7 @@ using Wordania.Core.Identifiers;
 
 namespace Wordania.Core.Combat
 {
-    public interface IDamageable : IEntity
+    public interface IDamageable
     {
         void ApplyDamage(DamagePayload payload);
     }

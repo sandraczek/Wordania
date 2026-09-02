@@ -395,7 +395,7 @@ MonoBehaviour:
   _weaponStoreView: {fileID: 199589537}
   _weaponStoreDisplay: {fileID: 199589535}
   _deathScreenView: {fileID: 328775462}
-  _saveSlot: 9
+  _saveSlot: 0
   _enemyToPrewarm: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}
   _bossToSpawn: {fileID: 11400000, guid: d58728627ae204fcda8e9a698aabdb95, type: 2}
 --- !u!4 &109496047

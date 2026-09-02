@@ -16,12 +16,11 @@ using Wordania.Core.Combat;
 namespace Wordania.Features.Bosses.Yeinn.Core
 {
     //TODO: move some to parent BossController
-    public sealed class YeinnBossController : BossController<YeinnTemplate>, IEnemy
+    public sealed class YeinnBossController : BossController<YeinnTemplate>
     {
         [Header("Dependencies")]
-        private IActiveEnemiesRegistryService _enemyRegistry;
         private IEventBusSession _eventBus;
-        private Wordania.Core.Services.IEntityRegistry _entities;
+        private IEntityRegistry _entities;
 
 
         [Header("Boss Parts")]
@@ -42,15 +41,11 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         private IState _death;
 
         public bool AreBothHandsDefeated => _leftHand.IsDefeated && _rightHand.IsDefeated;
-        public Vector2 Position => transform.position;
-        public bool IsAlive { get; set; } = true;
-        public bool IsPersistent { get; } = true;
 
         [Inject]
-        public void Construct(IEventBusSession eventBus, IActiveEnemiesRegistryService enemyRegistry, IEntityRegistry entities)
+        public void Construct(IEventBusSession eventBus, IEntityRegistry entities)
         {
             _eventBus = eventBus;
-            _enemyRegistry = enemyRegistry;
             _entities = entities;
         }
         protected override void OnInitialize(YeinnTemplate template)
@@ -69,8 +64,6 @@ namespace Wordania.Features.Bosses.Yeinn.Core
             _death = new YeinnDeathState(this);
 
             _phaseStateMachine.SwitchState(_phaseOne);
-
-            _enemyRegistry.Register(this);
         }
 
         private void Update()
@@ -80,9 +73,9 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         private void FixedUpdate()
         {
             bool allPlayersDead = true;
-            for (int i = 0; i < _entities.ActivePlayers.Count; i++)
+            for (int i = 0; i < _entities.Players.Count; i++)
             {
-                if (_entities.ActivePlayers[i].TryGetFeature(out IReadOnlyHealth health) && !health.IsDead)
+                if (_entities.Players[i].TryGetFeature(out IReadOnlyHealth health) && !health.IsDead)
                 {
                     allPlayersDead = false;
                     break;
@@ -127,7 +120,6 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         }
         public void Remove()
         {
-            _enemyRegistry.Unregister(InstanceId);
             Destroy(gameObject);
         }
     }

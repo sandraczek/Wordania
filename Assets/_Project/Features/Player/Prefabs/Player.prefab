@@ -23,6 +23,8 @@ GameObject:
   - component: {fileID: 164336912652386122}
   - component: {fileID: -699833200805861112}
   - component: {fileID: 6568903139303736386}
+  - component: {fileID: 7961776357102600182}
+  - component: {fileID: 2120078001002764324}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -160,7 +162,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Wordania.Core::Wordania.Core.Combat.HealthComponent
   _currentHealth: 0
-  LastAttackerId: 0
 --- !u!114 &4436758731559536367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,6 +289,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5663b4c40f9d549ad80a4dfcbf3b8707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Mechanics.EntityMechanicController
+--- !u!114 &7961776357102600182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5377237029528584182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfbb7bfdb3e4e4566949daebe51df720, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Combat.InvincibilityController
+--- !u!114 &2120078001002764324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5377237029528584182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 408a24d8dc99e4406aa53577cfc1176b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Core.Combat.DamageMitigator
 --- !u!1 &7354028105140276930
 GameObject:
   m_ObjectHideFlags: 0

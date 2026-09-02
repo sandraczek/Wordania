@@ -8,6 +8,7 @@ using Wordania.Core.Combat.Events;
 using Wordania.Core.Events;
 using Wordania.Core.Gameplay;
 using Wordania.Core.Identifiers;
+using Wordania.Core.Services;
 using Wordania.Core.SFM;
 using Wordania.Core.Stats;
 using Wordania.Features.Combat;
@@ -27,11 +28,13 @@ namespace Wordania.Features.Enemies.Core
     [RequireComponent(typeof(DamageMitigator))]
     [RequireComponent(typeof(InvincibilityController))]
     [RequireComponent(typeof(EntityStatsController))]
+    [RequireComponent(typeof(Entity))]
     public sealed class EnemyController : MonoBehaviour, IEnemy, ICharacterMovement, IDamageable, ITrackable
     {
         public EnemyTemplate Data;
-        private IActiveEnemiesRegistryService _registry;
         private IEventBusSession _eventBus;
+
+        public Entity Entity;
         private HealthComponent _health;
         private EntityStatsController _stats;
         private EntityMechanicController _mechanics;
@@ -44,7 +47,6 @@ namespace Wordania.Features.Enemies.Core
         private InvincibilityController _invincibility;
         private ContactDamageDealer _contactDamage;
         public InstanceId InstanceId { get; private set; }
-        public bool IsPersistent { get; } = false;
         public EntityFaction Faction { get; private set; } = EntityFaction.Enemy;
 
         public float VelocityX
@@ -65,8 +67,6 @@ namespace Wordania.Features.Enemies.Core
         }
         public Vector2 Position => (Vector2)transform.position;
 
-
-        public bool IsAlive => gameObject.activeSelf && !_health.IsDead;
         [field: SerializeField] public bool IsGrounded { get; private set; }
         private float _maxFallSpeed = 0f;
         private bool _isFacingRight = true;
@@ -76,11 +76,11 @@ namespace Wordania.Features.Enemies.Core
         public event Action<float> OnLanded;
 
         [Inject]
-        public void Construct(IActiveEnemiesRegistryService registry, IEventBusSession eventBus)
+        public void Construct(IEventBusSession eventBus)
         {
-            _registry = registry;
             _eventBus = eventBus;
 
+            Entity = GetComponent<Entity>();
             _health = GetComponent<HealthComponent>();
             _rb = GetComponent<Rigidbody2D>();
             _col = GetComponent<Collider2D>();
@@ -118,8 +118,6 @@ namespace Wordania.Features.Enemies.Core
             if (Data == null) Debug.LogError($"{transform.name}: No data was set in prefab");
             _onDeathFactoryAction = onDeath;
 
-            _registry.Register(this);
-
             _stats.InitializeSpawn();
             _health.InitializeSpawn();
             _mechanics.ClearAllMechanics();
@@ -149,7 +147,6 @@ namespace Wordania.Features.Enemies.Core
         }
         private void OnDisable()
         {
-            _registry.Unregister(InstanceId);
             _health.OnDamageTaken -= Handlehurt;
             _health.OnDamageTaken -= HandleHurtVisuals;
             _health.OnDeath -= HandleDeath;
@@ -269,17 +266,10 @@ namespace Wordania.Features.Enemies.Core
         private void HandleDeath()
         {
             _eventBus.Publish(new DeathEvent(Data.Id, _health.LastAttackerId));
-            ReturnToPool();
+            _onDeathFactoryAction.Invoke();
         }
         public void Remove()
         {
-            ReturnToPool();
-        }
-        private void ReturnToPool()
-        {
-            if (!_registry.TryGet(InstanceId, out _)) return;
-
-            _registry.Unregister(InstanceId);
             _onDeathFactoryAction.Invoke();
         }
 

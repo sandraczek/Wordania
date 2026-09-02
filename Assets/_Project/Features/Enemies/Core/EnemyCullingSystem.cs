@@ -11,16 +11,14 @@ namespace Wordania.Features.Enemies.Core
     {
         private readonly EnemySystemSettings _settings;
         private readonly IEntityRegistry _entities;
-        private readonly IActiveEnemiesRegistryService _registry;
 
         private readonly List<IEnemy> _enemiesToRemove = new(32);
         private float _timeSinceLastCheck;
 
-        public EnemyCullingSystem(EnemySystemSettings settings, IEntityRegistry entities, IActiveEnemiesRegistryService registry)
+        public EnemyCullingSystem(EnemySystemSettings settings, IEntityRegistry entities)
         {
             _settings = settings;
             _entities = entities;
-            _registry = registry;
         }
         public void Tick()
         {
@@ -33,23 +31,22 @@ namespace Wordania.Features.Enemies.Core
 
         private void PerformDespawnCheck()
         {
-            int playerCount = _entities.ActivePlayers.Count;
+            int playerCount = _entities.Players.Count;
             if (playerCount == 0) return;
             _enemiesToRemove.Clear();
 
-            var activeEnemies = _registry.GetAll();
             float despawnRadiusSqr = _settings.DespawnRadius * _settings.DespawnRadius;
 
 
             Vector2[] positions = new Vector2[playerCount];
             for (int i = 0; i < playerCount; i++)
             {
-                positions[i] = _entities.ActivePlayers[i].Transform.position;
+                positions[i] = _entities.Players[i].Transform.position;
             }
 
-            foreach (var enemy in activeEnemies)
+            foreach (var entity in _entities.Enemies)
             {
-                if (enemy.IsPersistent) continue;
+                if (!entity.TryGetFeature(out IEnemy enemy)) continue;
                 bool toRemove = true;
 
                 for (int i = 0; i < playerCount; i++)

@@ -22,11 +22,10 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(DamageMitigator))]
     [RequireComponent(typeof(EntityStatsController))]
+    [RequireComponent(typeof(Entity))]
     public abstract class BossPartController<T> : MonoBehaviour, IDamageable, ITrackable where T : BossPartData
     {
         [Header("Dependencies")]
-        private IEntityTrackerService _entityTracker;
-        private IDamageableEntitiesRegistryService _entityRegistry;
         private IInstanceIdProvider _idProvider;
         protected IEntityRegistry _entities;
 
@@ -53,10 +52,8 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
         public Vector2 Position => _rb.position;
 
         [Inject]
-        public void Construct(IEntityRegistry entities, IDamageableEntitiesRegistryService entityRegistry, IEntityTrackerService entityTracker, IInstanceIdProvider idProvider)
+        public void Construct(IEntityRegistry entities, IInstanceIdProvider idProvider)
         {
-            _entityRegistry = entityRegistry;
-            _entityTracker = entityTracker;
             _entities = entities;
             _idProvider = idProvider;
 
@@ -91,8 +88,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             _health.Initialize();
             _health.InitializeSpawn(_data.MaxHealth);
 
-            _entityTracker.Register(this);
-            _entityRegistry.Register(this);
+            _entities.Register(GetComponent<Entity>(), InstanceId);
 
             if (TryGetComponent(out ContactDamageDealer damage))
             {
@@ -198,8 +194,7 @@ namespace Wordania.Features.Bosses.Yeinn.Parts
             IsDefeated = true;
             OnDefeated?.Invoke();
 
-            _entityRegistry.Unregister(InstanceId);
-            _entityTracker.Unregister(InstanceId);
+            _entities.Unregister(InstanceId);
 
             _col.enabled = false;
             this.enabled = false;

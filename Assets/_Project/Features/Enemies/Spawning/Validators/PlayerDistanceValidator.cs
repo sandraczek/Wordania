@@ -22,12 +22,12 @@ namespace Wordania.Features.Enemies.Spawning
 
         public bool IsValid(in EnemyTemplate template, Vector2 position)
         {
-            int playerCount = _entities.ActivePlayers.Count;
+            int playerCount = _entities.Players.Count;
 
 
             for (int i = 0; i < playerCount; i++)
             {
-                float distanceSq = ((Vector2)_entities.ActivePlayers[i].Transform.position - position).SqrMagnitude();
+                float distanceSq = ((Vector2)_entities.Players[i].Transform.position - position).SqrMagnitude();
 
                 if (distanceSq < _requiredDistanceSq) return false;
             }

@@ -6,6 +6,7 @@ using Wordania.Core.Combat.Events;
 using Wordania.Core.Data;
 using Wordania.Core.Events;
 using Wordania.Core.Identifiers;
+using Wordania.Core.Services;
 using Wordania.Features.Journal.Entries;
 using Wordania.Features.Mechanics;
 using Wordania.Features.Mechanics.Data;
@@ -16,11 +17,13 @@ namespace Wordania.Features.Journal.Milestones
     {
         private readonly IEventBusSession _eventBus;
         private readonly IAssetRegistry<JournalEntry> _entryRegistry;
+        private readonly IEntityRegistry _entities;
 
-        public JournalMilestoneService(IEventBusSession eventBus, IAssetRegistry<JournalEntry> entryRegistry)
+        public JournalMilestoneService(IEventBusSession eventBus, IAssetRegistry<JournalEntry> entryRegistry, IEntityRegistry entities)
         {
             _eventBus = eventBus;
             _entryRegistry = entryRegistry;
+            _entities = entities;
         }
 
         public void Start()
@@ -42,7 +45,9 @@ namespace Wordania.Features.Journal.Milestones
             {
                 if (milestone.TargetThreshold == e.KillCount)
                 {
-                    _eventBus.Publish(new MechanicUnlockedEvent(e.PersistentId, milestone.Mechanic.Id, InstanceId.Journal));
+                    if (_entities.Entities[_entities.GetInstanceId(e.PersistentId)].TryGetFeature(out EntityMechanicController mechanics))
+                        mechanics.EnableMechanic(milestone.Mechanic.Id, InstanceId.Journal);
+                    //_eventBus.Publish(new MechanicUnlockedEvent(e.PersistentId, milestone.Mechanic.Id, InstanceId.Journal));
                 }
             }
         }

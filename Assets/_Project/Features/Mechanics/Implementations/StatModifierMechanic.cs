@@ -13,7 +13,7 @@ namespace Wordania.Features.Mechanics.Implementations
         private readonly StatModifierType _modifierType;
 
         private StatModifier _appliedModifier;
-        private IEntityContext _context;
+        private Entity _entity;
 
         public StatModifierMechanic(StatData data)
         {
@@ -22,11 +22,11 @@ namespace Wordania.Features.Mechanics.Implementations
             _modifierType = data.ModifierType;
         }
 
-        public bool OnActivate(IEntityContext context)
+        public bool OnActivate(Entity entity)
         {
-            _context = context;
+            _entity = entity;
 
-            if (!context.TryGetFeature<EntityStatsController>(out var statsController))
+            if (!entity.TryGetFeature<EntityStatsController>(out var statsController))
             {
                 return false;
             }
@@ -45,7 +45,7 @@ namespace Wordania.Features.Mechanics.Implementations
 
         public void OnDeactivate()
         {
-            if (_appliedModifier != null && _context != null && _context.TryGetFeature<EntityStatsController>(out var statsController))
+            if (_appliedModifier != null && _entity != null && _entity.TryGetFeature<EntityStatsController>(out var statsController))
             {
                 CharacterStat statToModify = statsController.GetStat(_targetStat);
 
@@ -53,7 +53,7 @@ namespace Wordania.Features.Mechanics.Implementations
             }
 
             _appliedModifier = null;
-            _context = null;
+            _entity = null;
         }
     }
 }

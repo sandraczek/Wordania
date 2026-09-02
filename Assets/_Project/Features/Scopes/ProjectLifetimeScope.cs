@@ -111,8 +111,8 @@ namespace Wordania.Boot
             builder.RegisterInstance(_startSettings);
 
 
-            builder.RegisterEntryPoint<SessionBootstrapper>();
-            //builder.RegisterEntryPoint<GameBootstrapper>();
+            //builder.RegisterEntryPoint<SessionBootstrapper>();
+            builder.RegisterEntryPoint<GameBootstrapper>();
 
 
 

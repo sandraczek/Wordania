@@ -19,7 +19,6 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         }
         public void Enter()
         {
-            _manager.IsAlive = false;
             _manager.OnDeathSequenceComplete();
         }
 
@@ -29,7 +28,7 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         }
         public void FixedUpdate()
         {
-            
+
         }
         public void Exit()
         {

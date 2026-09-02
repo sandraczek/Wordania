@@ -8,11 +8,11 @@ namespace Wordania.Features.Mechanics
     using Wordania.Core.Identifiers;
     using Wordania.Core.Mechanics;
 
-    [RequireComponent(typeof(IEntityContext))]
+    [RequireComponent(typeof(Entity))]
     public class EntityMechanicController : MonoBehaviour, IEntityMechanicController
     {
         private IMechanicFactory _factory;
-        private IEntityContext _context;
+        private Entity _entity;
 
         private readonly Dictionary<AssetId, MechanicTracker> _activeMechanics = new(8);
 
@@ -28,7 +28,7 @@ namespace Wordania.Features.Mechanics
 
         private void Awake()
         {
-            _context = GetComponent<IEntityContext>();
+            _entity = GetComponent<Entity>();
         }
 
         public void EnableMechanic(AssetId mechanicId, InstanceId source)
@@ -39,7 +39,7 @@ namespace Wordania.Features.Mechanics
 
                 IMechanic mechanic = _factory.CreateMechanic(mechanicId);
 
-                if (!mechanic.OnActivate(_context))
+                if (!mechanic.OnActivate(_entity))
                 {
                     mechanic.OnDeactivate();
                     _factory.ReleaseMechanic(mechanicId, mechanic);
