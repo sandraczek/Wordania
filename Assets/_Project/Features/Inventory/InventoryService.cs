@@ -12,82 +12,104 @@ using Wordania.Core.Identifiers;
 using Wordania.Features.Inventory.Events;
 using Wordania.Core.Data;
 using Wordania.Core.Events;
+using Wordania.Core.Services;
 
 namespace Wordania.Features.Player
 {
+    /// <summary>
+    /// Currently, only players have inventories (see HandleEvents, checking IsPlayer)
+    /// </summary>
     public sealed class InventoryService : IInventoryService, IDisposable, IStartable, ISaveable
     {
-        private readonly InventoryData _data = new();
         private readonly IAssetRegistry<ItemData> _database;
+        private readonly IEventBusSession _bus;
+        private readonly ISaveService _saveService;
+        private readonly IEntityRegistry _entities;
+        private readonly PlayerProvider _playerProvider;
 
-        public string SaveId => "PlayerInventory";
+        private readonly Dictionary<PersistentId, InventoryData> _inventories = new();
 
-        private readonly IEventBusSession _eventBus;
         public event Action OnInventoryChanged;
-        private ISaveService _saveService;
 
-        public InventoryService(IAssetRegistry<ItemData> database, IEventBusSession eventBus, ISaveService saveService)
+        public InventoryService(IAssetRegistry<ItemData> database, IEventBusSession eventBus, ISaveService saveService, IEntityRegistry entities, PlayerProvider playerProvider)
         {
             _database = database;
-            _eventBus = eventBus;
+            _bus = eventBus;
             _saveService = saveService;
+            _entities = entities;
+            _playerProvider = playerProvider;
         }
         public void Start()
         {
             _saveService.Register(this);
-            _eventBus.Subscribe<LootEvent>(HandleLoot);
+            _bus.Subscribe<LootEvent>(HandleLoot);
         }
         public void Dispose()
         {
             _saveService?.Unregister(this);
-            _eventBus?.Unsubscribe<LootEvent>(HandleLoot);
+            _bus?.Unsubscribe<LootEvent>(HandleLoot);
         }
-        // TO DO - SWITCH TO List<>
-        public void AddItem(AssetId id, int amount)
-        {
-            var data = _database.Get(id);   //to do - and also structural refactor HandleLoot
-            if (data == null) return;
-            if (data == null || amount <= 0) return;
 
-            if (_data._content.TryGetValue(data.Id, out InventoryEntry entry))
+        private InventoryData GetInventory(PersistentId persistentId)
+        {
+            if (!_inventories.TryGetValue(persistentId, out var inventory))
             {
-                entry.Add(amount);
+                inventory = new();
+                _inventories[persistentId] = inventory;
             }
-            else
-            {
-                _data._content.Add(data.Id, new InventoryEntry(data, amount));
-            }
-
-            OnInventoryChanged?.Invoke();
+            return inventory;
         }
 
-        public bool RemoveItem(AssetId id, int amount)
+        public void AddItem(PersistentId persistentId, AssetId id, int count)
         {
-            var data = _database.Get(id);
-            if (data == null || amount <= 0) return false;
+            if (count <= 0) return;
 
-            if (_data._content.TryGetValue(data.Id, out InventoryEntry entry))
-            {
-                bool success = entry.TryRemove(amount);
-                if (success) OnInventoryChanged?.Invoke();
-                return success;
-            }
+            var item = _database.Get(id);
+            if (item == null) return;
 
-            return false;
-        }
-        public int GetQuantity(AssetId itemId)
-        {
-            return _data._content.TryGetValue(itemId, out InventoryEntry entry) ? entry.Quantity : 0;
-        }
-        public IEnumerable<InventoryEntry> GetAllEntries() => _data._content.Values;
-        public void ClearInventory()
-        {
-            _data._content.Clear();
+            var inventory = GetInventory(persistentId);
+
+            int leftovers = inventory.Add(item, count); // return unused
+
+            if (_playerProvider.IsLocalPlayer(persistentId))
+                OnInventoryChanged?.Invoke();
         }
 
-        private void HandleLoot(LootEvent loot)
+        public void RemoveItem(PersistentId persistentId, AssetId id, int count)
         {
-            AddItem(loot.Item.Id, loot.Quantity);
+            if (count <= 0) return;
+
+            var item = _database.Get(id);
+            if (item == null) return;
+
+            var inventory = GetInventory(persistentId);
+
+            inventory.Remove(item, count);
+
+            if (_playerProvider.IsLocalPlayer(persistentId))
+                OnInventoryChanged?.Invoke();
+        }
+        public bool HasItems(PersistentId persistentId, AssetId id, int count)
+        {
+            var item = _database.Get(id);
+            if (item == null) return false;
+
+            var inventory = GetInventory(persistentId);
+
+            return inventory.Has(item, count);
+        }
+        public IEnumerable<KeyValuePair<AssetId, InventoryEntry>> GetAllEntries(PersistentId persistentId)
+        {
+            var inventory = GetInventory(persistentId);
+
+            return inventory.Dictionary.AsEnumerable();
+        }
+
+        private void HandleLoot(LootEvent e)
+        {
+            if (!_entities.IsPlayer(e.InstanceId) || !_entities.TryGetPersistentId(e.InstanceId, out PersistentId persistentId)) return;
+
+            AddItem(persistentId, e.ItemId, e.Quantity);
         }
 
         public void CaptureState(GameSaveData saveData)

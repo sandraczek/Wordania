@@ -3,6 +3,8 @@ using UnityEngine.Pool;
 using System.Collections.Generic;
 using VContainer;
 using Wordania.Features.Inventory;
+using Wordania.Features.Player;
+using Wordania.Core.Data;
 
 namespace Wordania.Features.HUD.Inventory
 {
@@ -10,6 +12,8 @@ namespace Wordania.Features.HUD.Inventory
     {
         [Header("Dependencies")]
         private IInventoryService _inventory;
+        private PlayerProvider _playerProvider;
+        private IAssetRegistry<ItemData> _registry;
 
         [Header("UI Setup")]
         private InventorySlotUI _slotPrefab;
@@ -19,10 +23,12 @@ namespace Wordania.Features.HUD.Inventory
         private readonly List<InventorySlotUI> _activeSlots = new();
 
         [Inject]
-        public void Construct(IInventoryService inventoryService, InventorySlotUI inventorySlotPrefab)
+        public void Construct(IInventoryService inventoryService, InventorySlotUI inventorySlotPrefab, PlayerProvider playerProvider, IAssetRegistry<ItemData> registry)
         {
             _inventory = inventoryService;
             _slotPrefab = inventorySlotPrefab;
+            _playerProvider = playerProvider;
+            _registry = registry;
         }
         private void Awake()
         {
@@ -66,13 +72,15 @@ namespace Wordania.Features.HUD.Inventory
             }
             _activeSlots.Clear();
 
-            foreach (var entry in _inventory.GetAllEntries())
+            foreach (var (id, entry) in _inventory.GetAllEntries(_playerProvider.PersistentId))
             {
                 InventorySlotUI slot = _pool.Get();
 
-                slot.transform.SetAsLastSibling();
+                slot.transform.SetAsLastSibling(); // needed?
 
-                slot.SetData(entry);
+                ItemData item = _registry.Get(id);
+
+                slot.SetData(item, entry.Count);
                 _activeSlots.Add(slot);
             }
         }

@@ -73,7 +73,7 @@ namespace Wordania.Features.Player.Loadout
             {
                 foreach (Ingredient ingredient in _buildingBlocks[_currentBlockIndex].recipe.Requirements)
                 {
-                    if (_inventory.GetQuantity(ingredient.item.Id) < ingredient.amount) return false;
+                    if (!_inventory.HasItems(_player.PersistentId, ingredient.item.Id, ingredient.amount)) return false;
                 }
             }
 
@@ -86,7 +86,7 @@ namespace Wordania.Features.Player.Loadout
 
             foreach (Ingredient ingredient in _buildingBlocks[_currentBlockIndex].recipe.Requirements)
             {
-                _inventory.RemoveItem(ingredient.item.Id, ingredient.amount);
+                _inventory.RemoveItem(_player.PersistentId, ingredient.item.Id, ingredient.amount);
             }
 
             return true;

@@ -123,7 +123,7 @@ namespace Wordania.Features.World
                 RegisterBlockDestroyed(instigatorId, data.Id);
 
                 //DROPPING LOOT
-                _eventBus.Publish(new LootEvent(data.loot, data.lootAmount));
+                _eventBus.Publish(new LootEvent(instigatorId, data.loot.Id, data.lootAmount));
 
                 changedLayers = WorldLayer.Main | WorldLayer.Damage;
             }

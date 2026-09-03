@@ -12,6 +12,7 @@ namespace Wordania.Features.Player
 {
     public sealed class PlayerContext
     {
+        public PersistentId PersistentId;
         public InstanceId InstanceId;
         public StateMachine<PlayerBaseState> StateMachine;
         public PlayerController Controller;
@@ -23,6 +24,7 @@ namespace Wordania.Features.Player
 
         public PlayerContext() { }
         public void Bind(
+            PersistentId persistentId,
             InstanceId instanceId,
             StateMachine<PlayerBaseState> states,
             PlayerController controller,
@@ -32,6 +34,7 @@ namespace Wordania.Features.Player
             MechanicsComponent mechanics,
             Transform transform)
         {
+            PersistentId = persistentId;
             InstanceId = instanceId;
             StateMachine = states;
             Controller = controller;

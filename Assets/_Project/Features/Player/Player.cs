@@ -104,7 +104,7 @@ namespace Wordania.Features.Player
         }
         private void Init()
         {
-            _context.Bind(InstanceId, _stateMachine, _controller, _health, _stats, _config, _mechanics, transform);
+            _context.Bind(PersistentId, InstanceId, _stateMachine, _controller, _health, _stats, _config, _mechanics, transform);
             // ---
             _stateMachine.SwitchState(_factory.InitialState);
 

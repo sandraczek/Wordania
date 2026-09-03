@@ -10,9 +10,9 @@ namespace Wordania.Features.Inventory
     {
         event Action OnInventoryChanged;
 
-        void AddItem(AssetId itemId, int amount);
-        bool RemoveItem(AssetId itemId, int amount);
-        int GetQuantity(AssetId itemId);
-        IEnumerable<InventoryEntry> GetAllEntries();
+        void AddItem(PersistentId persistentId, AssetId itemId, int amount);
+        void RemoveItem(PersistentId persistentId, AssetId itemId, int amount);
+        bool HasItems(PersistentId persistentId, AssetId itemId, int count);
+        IEnumerable<KeyValuePair<AssetId, InventoryEntry>> GetAllEntries(PersistentId persistentId);
     }
 }

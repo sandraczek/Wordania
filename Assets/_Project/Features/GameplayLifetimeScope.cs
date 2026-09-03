@@ -255,6 +255,7 @@ TODOS:
 - FIX: go through all journal milestones when loading save
 - refactor inventory. Why does player - factory needs it?
 - inventoryDisplay component is on Canvas.
+- clean directories
 
 large TODOS:
 
@@ -276,6 +277,7 @@ maybe optimization:
 - now checking every milestone for every mined block every frame.
 - EntityContext (GetComponentsInChildren)
 -* skills view goes through every node every point changed.
+- can put events in f.e. InventoryView to disable when hiding window
 
 
 -- currently

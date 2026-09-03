@@ -19,6 +19,9 @@ using Wordania.Features.World.Events;
 
 namespace Wordania.Features.Journal
 {
+    /// <summary>
+    /// Currently, only players have journals (see HandleEvents, checking IsPlayer)
+    /// </summary>
     public sealed class JournalService : IJournalService, IStartable, IDisposable, ISaveable
     {
         private readonly IEventBusSession _bus;
