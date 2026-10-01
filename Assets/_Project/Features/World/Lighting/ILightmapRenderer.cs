@@ -1,8 +1,7 @@
 // ILightmapRenderer.cs
 using System;
-using Wordania.Features.World;
 
-namespace Wordania.Features.World.Lighting
+namespace Wordania.World.Lighting
 {
     public interface ILightmapRenderer : IDisposable
     {

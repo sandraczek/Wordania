@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Wordania.Features.Bosses.Visual
+namespace Wordania.Bosses.Visual
 {
     [CreateAssetMenu(menuName = "Bosses/Visual")]
     public sealed class BossVisualSettings: ScriptableObject

@@ -1,22 +1,20 @@
 using System.Collections.Generic;
-using Wordania.Core.Combat;
-using Wordania.Features.Combat.Data;
+using Wordania.Combat.Data;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using System;
 using VContainer.Unity;
-using Wordania.Features.Combat.Events;
-using Wordania.Features.Enemies.Core;
-using Wordania.Features.Services;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Services;
-using Wordania.Features.World;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
-using Wordania.Core.Events;
-namespace Wordania.Features.Combat.Core
+using Wordania.Combat.Events;
+using Wordania.Enemies.Core;
+using Wordania.Services;
+using Wordania.Gameplay;
+using Wordania.World;
+using Wordania.Data;
+using Wordania.Identifiers;
+using Wordania.Events;
+namespace Wordania.Combat.Core
 {
     public sealed class ProjectileSimulationService : IProjectileSimulationService, IDisposable, ITickable, ILateTickable
     {

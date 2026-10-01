@@ -2,9 +2,8 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Wordania.Features.World.Data;
 
-namespace Wordania.Features.World.Lighting
+namespace Wordania.World.Lighting
 {
     public interface IStaticLightingService
     {

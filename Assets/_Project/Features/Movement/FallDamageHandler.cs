@@ -1,10 +1,9 @@
 using UnityEngine;
 using VContainer;
-using Wordania.Core.Combat;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
+using Wordania.Combat;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.Movement
+namespace Wordania.Movement
 {
     [RequireComponent(typeof(ICharacterMovement))]
     [RequireComponent(typeof(IDamageable))]

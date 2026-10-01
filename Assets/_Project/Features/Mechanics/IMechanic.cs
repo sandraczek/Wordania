@@ -1,7 +1,6 @@
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.Mechanics
+namespace Wordania.Mechanics
 {
     public interface IMechanic
     {

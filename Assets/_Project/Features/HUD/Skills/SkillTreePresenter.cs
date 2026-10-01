@@ -1,12 +1,11 @@
 using System;
 using VContainer.Unity;
-using Wordania.Core.Data;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Player;
-using Wordania.Features.Skills;
+using Wordania.Data;
+using Wordania.Identifiers;
+using Wordania.Player;
+using Wordania.Skills;
 
-namespace Wordania.Features.HUD.Skills
+namespace Wordania.HUD.Skills
 {
     public class SkillTreePresenter : IStartable, IDisposable
     {

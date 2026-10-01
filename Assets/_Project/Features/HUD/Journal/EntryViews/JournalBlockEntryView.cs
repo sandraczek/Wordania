@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Wordania.Features.Journal.Entries;
-using Wordania.Features.Journal.Milestones;
-using Wordania.Features.World;
+using Wordania.Journal.Entries;
+using Wordania.World;
 
-namespace Wordania.Features.HUD.Journal
+namespace Wordania.HUD.Journal
 {
     public sealed class JournalBlockEntryView : JournalEntryView
     {

@@ -1,6 +1,6 @@
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 
-namespace Wordania.Core.Mechanics
+namespace Wordania.Mechanics
 {
     public interface IEntityMechanicController
     {

@@ -1,4 +1,4 @@
-namespace Wordania.Core.Events
+namespace Wordania.Events
 {
     public interface IGameEvent { }
 }

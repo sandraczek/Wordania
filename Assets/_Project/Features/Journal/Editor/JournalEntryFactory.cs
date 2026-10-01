@@ -2,10 +2,10 @@
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-using Wordania.Core.Data;
-using Wordania.Features.Journal.Entries;
+using Wordania.Data;
+using Wordania.Journal.Entries;
 
-namespace Wordania.Features.Journal.Editor
+namespace Wordania.Journal.Editor
 {
     /// <summary>
     /// Editor helper that creates <see cref="JournalEntry"/> assets from a source

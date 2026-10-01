@@ -1,7 +1,6 @@
 using System;
-using Wordania.Core.Stats;
 
-namespace Wordania.Features.Stats
+namespace Wordania.Stats
 {
     [Serializable]
     public struct StatData

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer.Unity;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Services;
-using Wordania.Features.Enemies.Config;
+using Wordania.Gameplay;
+using Wordania.Services;
+using Wordania.Enemies.Config;
 
-namespace Wordania.Features.Enemies.Core
+namespace Wordania.Enemies.Core
 {
     public sealed class EnemyCullingSystem : ITickable
     {

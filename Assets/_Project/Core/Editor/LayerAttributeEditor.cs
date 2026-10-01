@@ -1,9 +1,8 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using Wordania.Core.Attributes;
 
-namespace Wordania.Core.Editor
+namespace Wordania.Attributes.Editor
 {
     [CustomPropertyDrawer(typeof(LayerAttribute))]
     public class LayerAttributeEditor : PropertyDrawer

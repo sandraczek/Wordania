@@ -1,7 +1,7 @@
 using UnityEngine;
-using Wordania.Features.World;
+using Wordania.World.Data;
 
-namespace Wordania.Features.Journal.Entries
+namespace Wordania.Journal.Entries
 {
     [CreateAssetMenu(fileName = "NewBlockEntry", menuName = "Journal/Block")]
     public sealed class JournalBlockEntry : JournalEntry<BlockData>

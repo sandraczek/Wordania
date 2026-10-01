@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Wordania.Core.Events
+namespace Wordania.Events
 {
     public sealed class EventBus : IEventBus
     {

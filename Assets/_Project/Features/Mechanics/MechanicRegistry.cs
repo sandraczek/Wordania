@@ -1,9 +1,9 @@
 using UnityEditor;
 using UnityEngine;
-using Wordania.Core.Data;
-using Wordania.Features.Mechanics.Data;
+using Wordania.Data;
+using Wordania.Mechanics.Data;
 
-namespace Wordania.Features.Mechanics
+namespace Wordania.Mechanics
 {
     [CreateAssetMenu(fileName = "MechanicRegistry", menuName = "Mechanics/Registry")]
     public sealed class MechanicRegistry : AssetRegistry<MechanicData>

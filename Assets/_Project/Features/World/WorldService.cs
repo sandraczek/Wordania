@@ -8,20 +8,20 @@ using VContainer;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using VContainer.Unity;
-using Wordania.Core.SaveSystem;
-using Wordania.Core.SaveSystem.Data;
+using Wordania.SaveSystem;
+using Wordania.SaveSystem.Data;
 using System.Threading;
 using System.Security.Cryptography;
-using Wordania.Core.Config;
-using Wordania.Features.Inventory.Events;
-using Wordania.Features.World.Config;
-using Wordania.Features.World.Data;
-using Wordania.Core.Identifiers;
+using Wordania.Config;
+using Wordania.Inventory.Events;
+using Wordania.World.Config;
+using Wordania.World.Data;
+using Wordania.Identifiers;
 using UnityEditor.VersionControl;
-using Wordania.Core.Events;
-using Wordania.Features.World.Events;
+using Wordania.Events;
+using Wordania.World.Events;
 
-namespace Wordania.Features.World
+namespace Wordania.World
 {
     public sealed class WorldService : IWorldService, IStartable, IDisposable, ISaveable, ILateTickable
     {

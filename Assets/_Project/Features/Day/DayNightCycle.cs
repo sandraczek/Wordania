@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 using VContainer.Unity;
-using Wordania.Core.SaveSystem;
-using Wordania.Core.SaveSystem.Data;
+using Wordania.SaveSystem;
+using Wordania.SaveSystem.Data;
 
-namespace Wordania.Features.Day
+namespace Wordania.Day
 {
     public sealed class DayNightCycle : ITickable, IStartable, IDisposable, ISaveable
     {

@@ -1,11 +1,10 @@
 using UnityEngine;
 using VContainer;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Mechanics;
-using Wordania.Features.Mechanics.Implementations;
-using Wordania.Features.Stats;
+using Wordania.Mechanics;
+using Wordania.Mechanics.Implementations;
+using Wordania.Stats;
 
-namespace Wordania.Features.Mechanics.Data
+namespace Wordania.Mechanics.Data
 {
     [CreateAssetMenu(fileName = "StatModifierMechanicData", menuName = "Mechanics/Mechanics/StatModifier")]
     public class StatModifierMechanicData : MechanicData

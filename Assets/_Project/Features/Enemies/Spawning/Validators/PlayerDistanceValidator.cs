@@ -1,9 +1,9 @@
 using UnityEngine;
-using Wordania.Core.Services;
-using Wordania.Features.Enemies.Config;
-using Wordania.Features.Enemies.Data;
+using Wordania.Services;
+using Wordania.Enemies.Config;
+using Wordania.Enemies.Data;
 
-namespace Wordania.Features.Enemies.Spawning
+namespace Wordania.Enemies.Spawning
 {
     public class PlayerDistanceValidator : ISpawnValidator
     {

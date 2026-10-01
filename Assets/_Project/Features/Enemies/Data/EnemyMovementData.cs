@@ -1,9 +1,8 @@
 using System;
 using UnityEngine;
-using Wordania.Features.Inventory;
-using Wordania.Features.Movement;
+using Wordania.Movement;
 
-namespace Wordania.Features.Enemies.Data
+namespace Wordania.Enemies.Data
 {
     [Serializable]
     public sealed class EnemyMovementData

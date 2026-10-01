@@ -1,11 +1,9 @@
 using System;
 using Unity.Mathematics;
 using UnityEngine;
-using Wordania.Core;
-using Wordania.Core.Inputs;
-using Wordania.Core.SFM;
+using Wordania.Inputs;
 
-namespace Wordania.Features.Player.FSM
+namespace Wordania.Player.FSM
 {
     public sealed class PlayerIdleState : PlayerGroundState
     {

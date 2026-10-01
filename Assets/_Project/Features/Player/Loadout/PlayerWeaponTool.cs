@@ -3,11 +3,11 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using VContainer;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Combat.Core;
-using Wordania.Features.Combat.Data;
+using Wordania.Identifiers;
+using Wordania.Combat.Core;
+using Wordania.Combat.Data;
 
-namespace Wordania.Features.Player.Loadout
+namespace Wordania.Player.Loadout
 {
     public class PlayerWeaponTool : MonoBehaviour, IToolActionExecutor // on player's hand. Later - POCO?
     {

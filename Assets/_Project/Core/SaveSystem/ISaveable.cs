@@ -1,6 +1,6 @@
-using Wordania.Core.SaveSystem.Data;
+using Wordania.SaveSystem.Data;
 
-namespace Wordania.Core.SaveSystem
+namespace Wordania.SaveSystem
 {
     public interface ISaveable
     {

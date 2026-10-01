@@ -1,6 +1,4 @@
-using Wordania.Core.Identifiers;
-
-namespace Wordania.Features.Identifiers
+namespace Wordania.Identifiers
 {
     public interface IPersistent
     {

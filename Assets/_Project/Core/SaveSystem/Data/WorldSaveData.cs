@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Wordania.Core.SaveSystem.Data
+namespace Wordania.SaveSystem.Data
 {
     [Serializable]
     public sealed class WorldSaveData

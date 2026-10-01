@@ -1,9 +1,9 @@
 using UnityEngine;
-using Wordania.Core.SFM;
-using Wordania.Features.Bosses.Yeinn.Data;
-using Wordania.Features.Bosses.Yeinn.Parts;
+using Wordania.SFM;
+using Wordania.Bosses.Yeinn.Data;
+using Wordania.Bosses.Yeinn.Parts;
 
-namespace Wordania.Features.Bosses.Yeinn.Core
+namespace Wordania.Bosses.Yeinn.Core
 {
     /// <summary>
     /// Phase One: Hands are alive. The head hovers while hands take turns attacking.

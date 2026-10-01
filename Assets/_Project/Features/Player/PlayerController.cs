@@ -1,15 +1,13 @@
 using System;
 using UnityEngine;
 using VContainer;
-using Wordania.Core;
-using Wordania.Core.Identifiers;
-using Wordania.Core.Inputs;
-using Wordania.Core.SFM;
-using Wordania.Features.Movement;
-using Wordania.Features.Player.FSM;
-using Wordania.Features.World;
+using Wordania.Identifiers;
+using Wordania.Inputs;
+using Wordania.SFM;
+using Wordania.Movement;
+using Wordania.World;
 
-namespace Wordania.Features.Player
+namespace Wordania.Player
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]

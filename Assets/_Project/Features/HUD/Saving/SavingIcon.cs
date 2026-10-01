@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using VContainer;
 
-namespace Wordania.Features.HUD.Saving
+namespace Wordania.HUD.Saving
 {
     [RequireComponent(typeof(CanvasGroup))]
     public sealed class SavingIcon : MonoBehaviour, IHUDSavingService

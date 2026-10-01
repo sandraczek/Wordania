@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
 using VContainer;
-using Wordania.Core.Config;
+using Wordania.Config;
 using VContainer.Unity;
 
-namespace Wordania.Features.Mapping
+namespace Wordania.Mapping
 {
     public interface IMapService
     {

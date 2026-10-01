@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using Wordania.Core.Data;
+using Wordania.Data;
 
-namespace Wordania.Features.World.Data
+namespace Wordania.World.Data
 {
     public interface IBlockRegistry : IAssetRegistry<BlockData>
     {

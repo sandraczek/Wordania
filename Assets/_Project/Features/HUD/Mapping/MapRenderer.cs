@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-using Wordania.Features.Mapping;
+using Wordania.Mapping;
 
-namespace Wordania.Features.HUD.Mapping
+namespace Wordania.HUD.Mapping
 {
     [RequireComponent(typeof(RawImage))]
     public class MapRenderer : MonoBehaviour

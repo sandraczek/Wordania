@@ -1,8 +1,8 @@
 using UnityEngine;
-using Wordania.Core;
-using Wordania.Core.Inputs;
+using Wordania.Inputs;
+using Wordania.Stats;
 
-namespace Wordania.Features.Player.FSM
+namespace Wordania.Player.FSM
 {
     public class PlayerActiveState : PlayerBaseState
     {
@@ -38,7 +38,7 @@ namespace Wordania.Features.Player.FSM
         protected void ApplyStandardMovement(float accelerationMult = 1f, float decelerationMult = 1f, float speedMult = 1f)
         {
             float xInput = _inputs.MovementInput.x;
-            float targetSpeed = xInput * _context.Stats.GetStat(Core.Stats.StatType.MoveSpeed).Value * speedMult;
+            float targetSpeed = xInput * _context.Stats.GetStat(StatType.MoveSpeed).Value * speedMult;
 
             bool isAccelerating = Mathf.Abs(xInput) > _context.Config.MinAccelerationInput;
             float currentAccel = isAccelerating ?

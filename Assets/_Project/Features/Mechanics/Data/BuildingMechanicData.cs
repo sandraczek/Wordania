@@ -1,10 +1,9 @@
 using UnityEngine;
 using VContainer;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Mechanics;
-using Wordania.Features.Mechanics.Implementations;
+using Wordania.Mechanics;
+using Wordania.Mechanics.Implementations;
 
-namespace Wordania.Features.Mechanics.Data
+namespace Wordania.Mechanics.Data
 {
     [CreateAssetMenu(fileName = "BuildingMechanicData", menuName = "Mechanics/Mechanics/Building")]
     public class BuildingMechanicData : MechanicData

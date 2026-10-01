@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Wordania.Core.Attributes;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Mechanics;
-using Wordania.Features.Mechanics.Data;
-using Wordania.Features.Stats;
+using Wordania.Attributes;
+using Wordania.Data;
+using Wordania.Mechanics;
+using Wordania.Mechanics.Data;
+using Wordania.Stats;
 
-namespace Wordania.Features.Skills
+namespace Wordania.Skills
 {
     [CreateAssetMenu(fileName = "NewSkillDefinition", menuName = "Skills/Data")]
     public class SkillData : DataAsset

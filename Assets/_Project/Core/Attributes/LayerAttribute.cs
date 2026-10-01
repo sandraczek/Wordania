@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Wordania.Core.Attributes
+namespace Wordania.Attributes
 {
     public class LayerAttribute : PropertyAttribute { }
 }

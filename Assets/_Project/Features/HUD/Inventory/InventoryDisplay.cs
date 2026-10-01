@@ -1,11 +1,10 @@
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Core.HUD;
-using Wordania.Core.Inputs;
-using Wordania.Features.Inventory;
+using Wordania.HUD;
+using Wordania.Inputs;
 
-namespace Wordania.Features.HUD.Inventory
+namespace Wordania.HUD.Inventory
 {
     public sealed class InventoryDisplay : MonoBehaviour, IHUDWindow
     {

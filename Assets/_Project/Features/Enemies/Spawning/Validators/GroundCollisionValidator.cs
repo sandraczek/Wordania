@@ -1,8 +1,7 @@
 using UnityEngine;
-using Wordania.Features.Enemies.Config;
-using Wordania.Features.Enemies.Data;
+using Wordania.Enemies.Data;
 
-namespace Wordania.Features.Enemies.Spawning
+namespace Wordania.Enemies.Spawning
 {
     public class GroundCollisionValidator : ISpawnValidator
     {

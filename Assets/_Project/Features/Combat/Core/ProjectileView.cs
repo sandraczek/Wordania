@@ -1,9 +1,8 @@
 using System;
 using UnityEngine;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Combat.Data;
+using Wordania.Identifiers;
 
-namespace Wordania.Core.Combat
+namespace Wordania.Combat.Core
 {
     public sealed class ProjectileView : MonoBehaviour
     {

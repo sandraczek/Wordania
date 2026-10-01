@@ -3,13 +3,14 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using System;
-using Wordania.Features.Markers;
+using Wordania.Markers;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Wordania.Core.Config;
-using Wordania.Features.World.Config;
+using Wordania.World.Config;
+using Wordania.World.Chunks;
+using Wordania.World.Data;
 
-namespace Wordania.Features.World
+namespace Wordania.World
 {
     public sealed class WorldRenderer : IWorldRenderer, IStartable, IDisposable
     {

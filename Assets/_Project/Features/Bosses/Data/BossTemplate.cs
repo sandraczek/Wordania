@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Bosses.Core;
-using Wordania.Features.Skills;
+using Wordania.Data;
+using Wordania.Bosses.Core;
+using Wordania.Skills;
 
-namespace Wordania.Features.Bosses.Data
+namespace Wordania.Bosses.Data
 {
     public abstract class BossTemplate : DataAsset
     {

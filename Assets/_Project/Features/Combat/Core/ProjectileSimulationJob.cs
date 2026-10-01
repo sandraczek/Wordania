@@ -2,11 +2,11 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
-using Wordania.Core.Gameplay;
-using Wordania.Features.Combat.Data;
-using Wordania.Features.Combat.Events;
+using Wordania.Gameplay;
+using Wordania.Combat.Data;
+using Wordania.Combat.Events;
 
-namespace Wordania.Features.Combat.Core
+namespace Wordania.Combat.Core
 {
     [BurstCompile(CompileSynchronously = true)]
     public struct ProjectileSimulationJob : IJobParallelFor

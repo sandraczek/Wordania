@@ -1,10 +1,9 @@
 using UnityEngine;
 using VContainer;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Mechanics;
+using Wordania.Data;
+using Wordania.Mechanics;
 
-namespace Wordania.Features.Mechanics.Data
+namespace Wordania.Mechanics.Data
 {
     public abstract class MechanicData : DataAsset
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Wordania.Features.World.Lighting
+namespace Wordania.World.Lighting
 {
     public class DynamicLightingService : IDynamicLightingService, ITickable
     {

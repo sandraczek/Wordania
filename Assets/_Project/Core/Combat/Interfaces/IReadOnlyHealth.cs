@@ -1,6 +1,6 @@
 using System;
 
-namespace Wordania.Core.Combat
+namespace Wordania.Combat
 {
     public interface IReadOnlyHealth
     {

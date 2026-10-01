@@ -1,12 +1,11 @@
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
-using Wordania.Core.Services;
-using Wordania.Features.Bosses.Data;
+using Wordania.Data;
+using Wordania.Identifiers;
+using Wordania.Bosses.Data;
 
-namespace Wordania.Features.Bosses.Core
+namespace Wordania.Bosses.Core
 {
     public interface IBossSpawnerService
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Wordania.Features.Skills
+namespace Wordania.Skills
 {
     public enum SkillPointsType
     {

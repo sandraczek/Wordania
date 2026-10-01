@@ -2,16 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using VContainer.Unity;
-using Wordania.Core.Combat.Events;
-using Wordania.Core.Data;
-using Wordania.Core.Events;
-using Wordania.Core.Identifiers;
-using Wordania.Core.Services;
-using Wordania.Features.Journal.Entries;
-using Wordania.Features.Mechanics;
-using Wordania.Features.Mechanics.Data;
+using Wordania.Combat.Events;
+using Wordania.Data;
+using Wordania.Events;
+using Wordania.Identifiers;
+using Wordania.Services;
+using Wordania.Journal.Entries;
+using Wordania.Mechanics;
 
-namespace Wordania.Features.Journal.Milestones
+namespace Wordania.Journal.Milestones
 {
     public class JournalMilestoneService : IJournalMilestoneService, IStartable, IDisposable
     {

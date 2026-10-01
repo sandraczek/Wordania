@@ -1,7 +1,7 @@
 using UnityEngine;
-using Wordania.Core.Data;
+using Wordania.Data;
 
-namespace Wordania.Features.Bosses.Data
+namespace Wordania.Bosses.Data
 {
     [CreateAssetMenu(fileName = "BossRegistry", menuName = "Bosses/Database")]
     public sealed class BossRegistry: AssetRegistry<BossTemplate>

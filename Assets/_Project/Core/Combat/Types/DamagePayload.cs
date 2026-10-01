@@ -1,7 +1,7 @@
 using UnityEngine;
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 
-namespace Wordania.Core.Combat
+namespace Wordania.Combat
 {
     public readonly struct DamagePayload
     {

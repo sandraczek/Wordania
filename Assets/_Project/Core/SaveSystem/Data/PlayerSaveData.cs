@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Wordania.Core.Stats;
+using Wordania.Stats;
 
-namespace Wordania.Core.SaveSystem.Data
+namespace Wordania.SaveSystem.Data
 {
     [Serializable]
     public sealed class PlayerSaveData

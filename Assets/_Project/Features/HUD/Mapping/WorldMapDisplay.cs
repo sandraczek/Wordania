@@ -1,9 +1,9 @@
-namespace Wordania.Features.Mapping
+namespace Wordania.HUD.Mapping
 {
     using UnityEngine;
     using VContainer;
-    using Wordania.Core.HUD;
-    using Wordania.Core.Inputs;
+    using Wordania.HUD;
+    using Wordania.Inputs;
 
     [RequireComponent(typeof(CanvasGroup))]
     public class WorldMapDisplay : MonoBehaviour, IHUDWindow

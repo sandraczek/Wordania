@@ -3,9 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Core.Combat;
+using Wordania.Combat;
 
-namespace Wordania.Features.HUD.Health
+namespace Wordania.HUD.Health
 {
     public sealed class HealthBarUI : MonoBehaviour, IHUDHealthBarService
     {

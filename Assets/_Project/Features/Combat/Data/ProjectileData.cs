@@ -1,11 +1,11 @@
 using System;
 using System.Xml.Serialization;
 using UnityEngine;
-using Wordania.Core.Combat;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
+using Wordania.Combat;
+using Wordania.Data;
+using Wordania.Combat.Core;
 
-namespace Wordania.Features.Combat.Data
+namespace Wordania.Combat.Data
 {
     [CreateAssetMenu(fileName = "NewProjectile", menuName = "Combat/Projectile")]
     public sealed class ProjectileData : DataAsset

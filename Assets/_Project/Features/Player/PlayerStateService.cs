@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using VContainer.Unity;
-using Wordania.Core.Identifiers;
-using Wordania.Core.SaveSystem;
-using Wordania.Core.SaveSystem.Data;
+using Wordania.Identifiers;
+using Wordania.SaveSystem;
+using Wordania.SaveSystem.Data;
 
-namespace Wordania.Features.Player
+namespace Wordania.Player
 {
     public sealed class PlayerStateService : ISaveable, IStartable, IDisposable
     {

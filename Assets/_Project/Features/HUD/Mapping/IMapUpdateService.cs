@@ -5,10 +5,10 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Core.Config;
-using Wordania.Features.World;
+using Wordania.Config;
+using Wordania.World;
 
-namespace Wordania.Features.Mapping
+namespace Wordania.Mapping
 {
     public interface IMapUpdateService
     {

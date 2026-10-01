@@ -6,13 +6,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Core.Constants;
-using Wordania.Core.Data;
-using Wordania.Features.Journal;
-using Wordania.Features.Journal.Entries;
-using Wordania.Features.Player;
+using Wordania.Constants;
+using Wordania.Data;
+using Wordania.Journal;
+using Wordania.Journal.Entries;
+using Wordania.Player;
 
-namespace Wordania.Features.HUD.Journal
+namespace Wordania.HUD.Journal
 {
     public sealed class JournalView : MonoBehaviour, IJournalView
     {

@@ -3,18 +3,17 @@ using System;
 using System.Collections.Generic;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Features.Inventory;
-using Wordania.Core.SaveSystem;
-using Wordania.Core.SaveSystem.Data;
+using Wordania.SaveSystem;
+using Wordania.SaveSystem.Data;
 using System.Linq;
-using Codice.CM.WorkspaceServer.Lock;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Inventory.Events;
-using Wordania.Core.Data;
-using Wordania.Core.Events;
-using Wordania.Core.Services;
+using Wordania.Identifiers;
+using Wordania.Inventory.Events;
+using Wordania.Data;
+using Wordania.Events;
+using Wordania.Services;
+using Wordania.Player;
 
-namespace Wordania.Features.Player
+namespace Wordania.Inventory
 {
     /// <summary>
     /// Currently, only players have inventories (see HandleEvents, checking IsPlayer)

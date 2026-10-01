@@ -1,10 +1,9 @@
 using System;
 using UnityEngine;
 using VContainer;
-using Wordania.Core.HUD;
-using Wordania.Core.Inputs;
+using Wordania.Inputs;
 
-namespace Wordania.Core.HUD
+namespace Wordania.HUD
 {
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class HUDDisplay<T> : MonoBehaviour, IHUDWindow where T : MonoBehaviour

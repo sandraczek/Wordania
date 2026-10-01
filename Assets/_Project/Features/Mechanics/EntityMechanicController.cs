@@ -1,12 +1,11 @@
-namespace Wordania.Features.Mechanics
+namespace Wordania.Mechanics
 {
     using System.Collections.Generic;
     using UnityEngine;
     using VContainer;
-    using Wordania.Core.Combat;
-    using Wordania.Core.Gameplay;
-    using Wordania.Core.Identifiers;
-    using Wordania.Core.Mechanics;
+    using Wordania.Combat;
+    using Wordania.Gameplay;
+    using Wordania.Identifiers;
 
     [RequireComponent(typeof(Entity))]
     public class MechanicsComponent : MonoBehaviour, IEntityMechanicController

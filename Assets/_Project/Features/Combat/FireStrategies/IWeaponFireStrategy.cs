@@ -1,8 +1,8 @@
-using Wordania.Features.Combat.Data;
+using Wordania.Combat.Data;
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Wordania.Features.Combat.FireStrategies
+namespace Wordania.Combat.FireStrategies
 {
     public interface IWeaponFireStrategy
     {

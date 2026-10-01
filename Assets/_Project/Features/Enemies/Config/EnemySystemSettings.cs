@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Wordania.Features.Enemies.Config
+namespace Wordania.Enemies.Config
 {
     [CreateAssetMenu(fileName = "NewEnemySpawnSettings", menuName = "Enemies/Enemy Spawn Settings")]
     public class EnemySystemSettings : ScriptableObject

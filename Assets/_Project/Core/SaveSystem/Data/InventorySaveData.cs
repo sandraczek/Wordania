@@ -1,7 +1,7 @@
 using System;
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 
-namespace Wordania.Core.SaveSystem.Data
+namespace Wordania.SaveSystem.Data
 {
     [Serializable]
     public sealed class InventorySaveData

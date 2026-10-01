@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Wordania.Features.Journal.Entries;
+using Wordania.Journal.Entries;
 
-namespace Wordania.Features.HUD.Journal
+namespace Wordania.HUD.Journal
 {
     public interface IJournalSortService
     {

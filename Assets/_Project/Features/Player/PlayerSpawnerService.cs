@@ -1,13 +1,11 @@
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-using Wordania.Core.Services;
-using Wordania.Features.Markers;
-using Wordania.Features.Services;
+using Wordania.Identifiers;
+using Wordania.Services;
+using Wordania.Markers;
 
-namespace Wordania.Features.Player
+namespace Wordania.Player
 {
     public sealed class PlayerSpawnerService
     {

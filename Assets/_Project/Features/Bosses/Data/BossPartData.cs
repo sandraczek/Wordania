@@ -1,9 +1,8 @@
 using System;
 using UnityEngine;
-using Wordania.Core.Combat;
-using Wordania.Core.Identifiers;
+using Wordania.Combat;
 
-namespace Wordania.Features.Bosses.Data
+namespace Wordania.Bosses.Data
 {
     /// <summary>
     /// Represents statistical data for a specific part of the boss (e.g., Head, Left Hand).

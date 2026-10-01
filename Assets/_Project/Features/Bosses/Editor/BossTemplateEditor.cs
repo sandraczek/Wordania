@@ -1,11 +1,11 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using Wordania.Features.Bosses.Data;
-using Wordania.Features.Journal.Editor;
-using Wordania.Features.Journal.Entries;
+using Wordania.Bosses.Data;
+using Wordania.Journal.Editor;
+using Wordania.Journal.Entries;
 
-namespace Wordania.Features.Bosses.Editor
+namespace Wordania.Bosses.Editor
 {
     [CustomEditor(typeof(BossTemplate), true)]
     public sealed class BossTemplateEditor : UnityEditor.Editor

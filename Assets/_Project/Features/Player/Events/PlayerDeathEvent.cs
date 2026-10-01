@@ -1,7 +1,7 @@
-using Wordania.Core.Events;
-using Wordania.Core.Identifiers;
+using Wordania.Events;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.Player.Events
+namespace Wordania.Player.Events
 {
     public readonly struct PlayerDeathEvent : IGameEvent
     {

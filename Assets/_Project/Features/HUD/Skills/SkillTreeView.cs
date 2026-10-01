@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using Wordania.Features.Skills;
+using Wordania.Skills;
 
-namespace Wordania.Features.HUD.Skills
+namespace Wordania.HUD.Skills
 {
     public class SkillTreeView : MonoBehaviour
     {

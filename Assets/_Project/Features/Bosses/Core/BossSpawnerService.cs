@@ -1,15 +1,14 @@
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Core.Data;
-using Wordania.Core.Events;
-using Wordania.Core.Identifiers;
-using Wordania.Core.Services;
-using Wordania.Features.Bosses.Data;
-using Wordania.Features.Bosses.Events;
-using Wordania.Features.Markers;
+using Wordania.Data;
+using Wordania.Events;
+using Wordania.Identifiers;
+using Wordania.Bosses.Data;
+using Wordania.Bosses.Events;
+using Wordania.Markers;
 
-namespace Wordania.Features.Bosses.Core
+namespace Wordania.Bosses.Core
 {
     public sealed class BossSpawnerService : IBossSpawnerService
     {

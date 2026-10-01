@@ -1,9 +1,8 @@
-using Wordania.Core.Combat;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Mechanics.Data;
+using Wordania.Combat;
+using Wordania.Gameplay;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.Mechanics.Implementations
+namespace Wordania.Mechanics.Implementations
 {
     public class BuildingMechanic : IMechanic
     {

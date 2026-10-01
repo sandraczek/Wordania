@@ -1,8 +1,7 @@
 using UnityEngine;
-using Wordania.Features.Bosses.Data;
-using Wordania.Features.Combat.Data;
+using Wordania.Bosses.Data;
 
-namespace Wordania.Features.Bosses.Yeinn.Data
+namespace Wordania.Bosses.Yeinn.Data
 {
     [CreateAssetMenu(fileName = "YeinnTemplate", menuName = "Bosses/Yeinn/Template")]
     public sealed class YeinnTemplate: BossTemplate

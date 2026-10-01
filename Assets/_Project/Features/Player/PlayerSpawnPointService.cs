@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Wordania.Core.Identifiers;
-using Wordania.Features.World;
+using Wordania.Identifiers;
+using Wordania.World;
 
-namespace Wordania.Features.Player
+namespace Wordania.Player
 {
     public class PlayerSpawnPointService : IPlayerSpawnPointService
     {

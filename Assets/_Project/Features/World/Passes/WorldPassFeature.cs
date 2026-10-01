@@ -1,13 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Wordania.Features.World.Config;
-using Wordania.Features.World.Data;
+using Wordania.World.Config;
+using Wordania.World.Data;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 using System.Diagnostics;
 
-namespace Wordania.Features.World.Passes
+namespace Wordania.World.Passes
 {
     public class WorldPassFeature : IWorldGenerationPass
     {

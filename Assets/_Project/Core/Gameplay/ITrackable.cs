@@ -1,8 +1,8 @@
 using Unity.Mathematics;
 using UnityEngine;
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 
-namespace Wordania.Core.Gameplay
+namespace Wordania.Gameplay
 {
     public struct TargetAABB
     {

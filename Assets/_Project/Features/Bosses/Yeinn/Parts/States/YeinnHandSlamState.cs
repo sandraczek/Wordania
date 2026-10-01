@@ -1,12 +1,11 @@
 using System.Linq;
 using UnityEngine;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Services;
-using Wordania.Core.SFM;
-using Wordania.Features.Bosses.Data.SharedAttacks;
-using Wordania.Features.Bosses.Yeinn.Parts;
+using Wordania.Gameplay;
+using Wordania.Services;
+using Wordania.SFM;
+using Wordania.Bosses.Data.SharedAttacks;
 
-namespace Wordania.Features.Bosses.Yeinn.Parts
+namespace Wordania.Bosses.Yeinn.Parts
 {
     public sealed class YeinnHandSlamState : IState
     {

@@ -3,10 +3,10 @@ using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using VContainer.Unity;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Services;
+using Wordania.Gameplay;
+using Wordania.Services;
 
-namespace Wordania.Features.Combat.Core
+namespace Wordania.Combat.Core
 {
     public class AABBTargetableService : IDisposable, ITickable
     {

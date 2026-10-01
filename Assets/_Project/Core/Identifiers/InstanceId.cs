@@ -1,4 +1,4 @@
-namespace Wordania.Core.Identifiers
+namespace Wordania.Identifiers
 {
     using System;
 

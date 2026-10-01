@@ -1,9 +1,9 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Wordania.Core.Gameplay;
-using Wordania.Features.Enemies.Data;
+using Wordania.Gameplay;
+using Wordania.Enemies.Data;
 
-namespace Wordania.Features.Enemies.Core
+namespace Wordania.Enemies.Core
 {
     public interface IEnemyFactory
     {

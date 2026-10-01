@@ -1,10 +1,8 @@
-namespace Wordania.Features.Mechanics.Implementations
+namespace Wordania.Mechanics.Implementations
 {
-    using Wordania.Core.Gameplay;
-    using Wordania.Core.Identifiers;
-    using Wordania.Features.Mechanics;
-    using Wordania.Core.Stats;
-    using Wordania.Features.Stats;
+    using Wordania.Identifiers;
+    using Wordania.Mechanics;
+    using Wordania.Stats;
 
     public class StatModifierMechanic : IMechanic
     {

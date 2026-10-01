@@ -2,11 +2,11 @@ using UnityEngine;
 using UnityEngine.Pool;
 using System.Collections.Generic;
 using VContainer;
-using Wordania.Features.Inventory;
-using Wordania.Features.Player;
-using Wordania.Core.Data;
+using Wordania.Inventory;
+using Wordania.Player;
+using Wordania.Data;
 
-namespace Wordania.Features.HUD.Inventory
+namespace Wordania.HUD.Inventory
 {
     public sealed class InventoryView : MonoBehaviour, IInventoryView
     {

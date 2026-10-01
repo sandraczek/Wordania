@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using Wordania.Core.Constants;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Journal.Entries;
-using Wordania.Features.World.Events;
+using Wordania.Constants;
+using Wordania.Identifiers;
+using Wordania.World.Events;
 
-namespace Wordania.Features.Journal
+namespace Wordania.Journal
 {
     public interface IPlayerJournal
     {

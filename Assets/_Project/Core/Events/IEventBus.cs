@@ -1,6 +1,6 @@
 using System;
 
-namespace Wordania.Core.Events
+namespace Wordania.Events
 {
     public interface IEventBus
     {

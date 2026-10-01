@@ -1,14 +1,12 @@
 using System;
 using UnityEngine;
 using VContainer;
-using Wordania.Core.Combat;
-using Wordania.Core.Identifiers;
-using Wordania.Core.Services;
-using Wordania.Features.Combat;
-using Wordania.Features.Mechanics;
-using Wordania.Features.Mechanics.Data;
+using Wordania.Identifiers;
+using Wordania.Services;
+using Wordania.Mechanics;
+using Wordania.Mechanics.Data;
 
-namespace Wordania.Features.Player
+namespace Wordania.Player
 {
     [RequireComponent(typeof(MechanicsComponent))]
     public class PlayerDebugHandler : MonoBehaviour

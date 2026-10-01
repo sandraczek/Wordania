@@ -1,7 +1,7 @@
 using UnityEngine;
-using Wordania.Core.Data;
+using Wordania.Data;
 
-namespace Wordania.Features.Combat.Data
+namespace Wordania.Combat.Data
 {
     [CreateAssetMenu(fileName = "ProjectileRegistry", menuName = "Combat/Projectile Registry")]
     public sealed class ProjectileRegistry : AssetRegistry<ProjectileData>

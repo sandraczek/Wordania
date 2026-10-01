@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 using VContainer.Unity;
-using Wordania.Core.Config;
-using Wordania.Core.Inputs;
+using Wordania.Config;
+using Wordania.Inputs;
 
-namespace Wordania.Core.Services
+namespace Wordania.Services
 {
     public sealed class DebugService : IDebugService, IStartable, IDisposable
     {

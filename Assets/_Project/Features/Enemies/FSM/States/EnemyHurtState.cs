@@ -1,9 +1,8 @@
 using UnityEngine;
-using Wordania.Core;
-using Wordania.Core.SFM;
-using Wordania.Features.Enemies.Core;
+using Wordania.SFM;
+using Wordania.Enemies.Core;
 
-namespace Wordania.Features.Enemies.FSM
+namespace Wordania.Enemies.FSM
 {
     public sealed class EnemyHurtState : EnemyBaseState
     {

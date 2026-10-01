@@ -2,59 +2,56 @@ using UnityEngine;
 using System;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Features.Player;
-using Wordania.Core.Gameplay;
-using Wordania.Features.World;
-using Wordania.Features.Markers;
-using Wordania.Features.Inventory;
-using Wordania.Features.Player.FSM;
-using Wordania.Features.Services;
-using Wordania.Core;
-using Wordania.Features.HUD;
-using Wordania.Features.HUD.Health;
-using Wordania.Features.HUD.Inventory;
-using Wordania.Features.HUD.Loading;
-using Wordania.Features.HUD.Saving;
-using Wordania.Features.Enemies.Core;
-using Wordania.Features.Enemies.Data;
-using Wordania.Features.Enemies.Config;
-using Wordania.Features.Enemies.Spawning;
-using Wordania.Features.Mapping;
-using Wordania.Features.HUD.Mapping;
-using Wordania.Core.HUD;
-using Wordania.Features.Combat.Core;
-using Wordania.Features.Combat.Events;
-using Wordania.Core.Services;
-using Wordania.Features.Combat.Data;
-using Wordania.Features.Combat.FireStrategies;
-using Wordania.Features.Inventory.Events;
-using Wordania.Core.Data;
-using Wordania.Features.Bosses.Events;
-using Wordania.Features.Bosses.Data;
-using Wordania.Features.Bosses.Core;
-using Wordania.Features.World.Config;
-using Wordania.Features.World.Data;
-using Wordania.Features.World.Passes;
+using Wordania.Player;
+using Wordania.World;
+using Wordania.Markers;
+using Wordania.Inventory;
+using Wordania.Player.FSM;
+using Wordania.Services;
+using Wordania.HUD;
+using Wordania.HUD.Health;
+using Wordania.HUD.Inventory;
+using Wordania.HUD.Loading;
+using Wordania.HUD.Saving;
+using Wordania.Enemies.Core;
+using Wordania.Enemies.Data;
+using Wordania.Enemies.Config;
+using Wordania.Enemies.Spawning;
+using Wordania.Mapping;
+using Wordania.HUD.Mapping;
+using Wordania.Combat.Core;
+using Wordania.Combat.Events;
+using Wordania.Combat.Data;
+using Wordania.Combat.FireStrategies;
+using Wordania.Inventory.Events;
+using Wordania.Data;
+using Wordania.Bosses.Events;
+using Wordania.Bosses.Data;
+using Wordania.Bosses.Core;
+using Wordania.World.Config;
+using Wordania.World.Data;
+using Wordania.World.Passes;
 using UnityEngine.UI;
-using Wordania.Features.World.Lighting;
-using Wordania.Features.Day;
-using Wordania.Core.SaveSystem;
-using Wordania.Features.Skills;
-using Wordania.Features.HUD.Skills;
-using Wordania.Core.Events;
-using Wordania.Features.Journal;
-using Wordania.Features.Mechanics;
-using Wordania.Features.Mechanics.Data;
-using Wordania.Features.Journal.Entries;
-using Wordania.Features.Journal.Milestones;
-using Wordania.Features.HUD.Journal;
-using Wordania.Features.WeaponStore;
-using Wordania.Features.HUD.WeaponStore;
-using Wordania.Features.HUD.DeathScreen;
-using Wordania.Features.Session;
-using Wordania.Core.Identifiers;
+using Wordania.World.Lighting;
+using Wordania.Day;
+using Wordania.SaveSystem;
+using Wordania.Skills;
+using Wordania.HUD.Skills;
+using Wordania.Events;
+using Wordania.Journal;
+using Wordania.Mechanics;
+using Wordania.Mechanics.Data;
+using Wordania.Journal.Entries;
+using Wordania.Journal.Milestones;
+using Wordania.HUD.Journal;
+using Wordania.WeaponStore;
+using Wordania.HUD.WeaponStore;
+using Wordania.HUD.DeathScreen;
+using Wordania.Session;
+using Wordania.Identifiers;
+using Wordania.World.Chunks;
 
-namespace Wordania.Features
+namespace Wordania
 {
     public sealed class GameplayLifetimeScope : LifetimeScope
     {
@@ -287,7 +284,6 @@ saving
 
 
 
-Mam dla ciebie duze zadanie. Przejdz przez caly projekt (kazda pojedyncza klase, enum, interfejs, struct, itp) I posprzataj namespace'y. Co mam na mysli - Chcę usunąć podział na Wordania.Core i Wordania.Features. Zamien wszystkie Wordania.Core i Wordania.Features na Wordania. Czyli na przykład, Wordania.Core.Identifiers stanie się Wordania.Identifiers. A jak chodzi o pod foldery, to raczej pozostawiaj jak jest, chyba ze uznasz ze mozna uporzadkowac lepiej (szczegolnie jak jest duzo plikow w jednym folderze) to mozesz zrobic jakies subfoldery). Czyli w przyszlosci bedzie Wordania.FOLDER.SUBFOLDER. Co wazne - na razie niech kazdy plik zostanie na swoim miejscu w folderze, potem to przeniose na ich poprawne miejsca, jedyne co masz zmienic to namespace'y
 
 */
 

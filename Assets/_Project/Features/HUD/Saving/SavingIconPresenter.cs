@@ -1,9 +1,9 @@
 using System;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Core.SaveSystem;
+using Wordania.SaveSystem;
 
-namespace Wordania.Features.HUD.Saving
+namespace Wordania.HUD.Saving
 {
     public sealed class SavingIconPresenter :IStartable, IDisposable
     {

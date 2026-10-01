@@ -6,16 +6,14 @@ using UnityEngine;
 using UnityEngine.Pool;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Core;
-using Wordania.Core.Combat;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Combat.Data;
-using Wordania.Features.Combat.Events;
-using Wordania.Core.Events;
-using Wordania.Features.Markers;
+using Wordania.Gameplay;
+using Wordania.Identifiers;
+using Wordania.Combat.Data;
+using Wordania.Combat.Events;
+using Wordania.Events;
+using Wordania.Markers;
 
-namespace Wordania.Features.Combat.Core
+namespace Wordania.Combat.Core
 {
     public sealed class ProjectileFactory : IProjectileFactory, IStartable, IDisposable
     {

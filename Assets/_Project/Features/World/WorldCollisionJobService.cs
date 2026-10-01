@@ -4,10 +4,10 @@ using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 using VContainer.Unity;
-using Wordania.Core.Config;
-using Wordania.Features.World.Config;
+using Wordania.Config;
+using Wordania.World.Config;
 
-namespace Wordania.Features.World
+namespace Wordania.World
 {
     public class WorldCollisionJobService : IWorldCollisionJobService, IStartable, IDisposable, ILateTickable
     {

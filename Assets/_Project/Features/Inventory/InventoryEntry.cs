@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-namespace Wordania.Features.Inventory
+namespace Wordania.Inventory
 {
     [Serializable]
     public class InventoryEntry

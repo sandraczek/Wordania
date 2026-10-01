@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Wordania.Core.Constants;
-using Wordania.Core.Identifiers;
+using Wordania.Constants;
+using Wordania.Identifiers;
 
-namespace Wordania.Core.SaveSystem.Data
+namespace Wordania.SaveSystem.Data
 {
     [Serializable]
     public sealed class JournalSaveData

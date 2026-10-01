@@ -1,14 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-namespace Wordania.Core.Data
+namespace Wordania.Data
 {
     public abstract class AssetRegistry<T> : ScriptableObject, IAssetRegistry<T> where T : DataAsset
     {

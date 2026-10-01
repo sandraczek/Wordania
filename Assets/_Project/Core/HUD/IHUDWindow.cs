@@ -1,4 +1,4 @@
-namespace Wordania.Core.HUD
+namespace Wordania.HUD
 {
     /// <summary>
     /// A HUD window that can be force-closed by <see cref="IHUDStateManager"/> when another window is opened,

@@ -1,7 +1,7 @@
 using UnityEngine;
-using Wordania.Core.Attributes;
+using Wordania.Attributes;
 
-namespace Wordania.Features.Player
+namespace Wordania.Player
 {
     [CreateAssetMenu(fileName = "PlayerConfig", menuName = "Player/Config")]
     public sealed class PlayerConfig : ScriptableObject

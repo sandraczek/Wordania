@@ -1,8 +1,7 @@
 using System;
 using UnityEngine;
-using Wordania.Features.Inventory;
 
-namespace Wordania.Features.Enemies.Data
+namespace Wordania.Enemies.Data
 {
     [Serializable]
     public sealed class EnemyStatsData

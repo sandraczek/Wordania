@@ -3,11 +3,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Combat.Data;
+using Wordania.Data;
+using Wordania.Identifiers;
+using Wordania.Combat.Data;
 
-namespace Wordania.Features.HUD.WeaponStore
+namespace Wordania.HUD.WeaponStore
 {
     public class WeaponStoreSlotView : MonoBehaviour
     {

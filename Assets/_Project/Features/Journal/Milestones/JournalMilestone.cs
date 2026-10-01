@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Wordania.Core.Attributes;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Mechanics.Data;
+using Wordania.Data;
+using Wordania.Identifiers;
+using Wordania.Mechanics.Data;
 
-namespace Wordania.Features.Journal.Milestones
+namespace Wordania.Journal.Milestones
 {
 
     [Serializable]

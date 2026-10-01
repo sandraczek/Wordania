@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
-using Wordania.Core.Services;
+using Wordania.Services;
 
 namespace Wordania.Boot.Services
 {

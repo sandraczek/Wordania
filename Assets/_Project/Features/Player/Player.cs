@@ -4,28 +4,23 @@ using Cysharp.Threading.Tasks.Triggers;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Core;
-using Wordania.Core.Combat;
-using Wordania.Core.Events;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-using Wordania.Core.Inputs;
-using Wordania.Core.SaveSystem;
-using Wordania.Core.SaveSystem.Data;
-using Wordania.Core.SFM;
-using Wordania.Core.Stats;
-using Wordania.Features.Combat;
-using Wordania.Features.Identifiers;
-using Wordania.Features.Inventory;
-using Wordania.Features.Mechanics;
-using Wordania.Features.Mechanics.Data;
-using Wordania.Features.Movement;
-using Wordania.Features.Player.Events;
-using Wordania.Features.Player.FSM;
-using Wordania.Features.Player.View;
-using Wordania.Features.Stats;
+using Wordania.Combat;
+using Wordania.Events;
+using Wordania.Gameplay;
+using Wordania.Identifiers;
+using Wordania.Inputs;
+using Wordania.SaveSystem.Data;
+using Wordania.SFM;
+using Wordania.Stats;
+using Wordania.Inventory;
+using Wordania.Mechanics;
+using Wordania.Mechanics.Data;
+using Wordania.Movement;
+using Wordania.Player.Events;
+using Wordania.Player.FSM;
+using Wordania.Player.View;
 
-namespace Wordania.Features.Player
+namespace Wordania.Player
 {
     [RequireComponent(typeof(PlayerController))]
     [RequireComponent(typeof(HealthComponent))]

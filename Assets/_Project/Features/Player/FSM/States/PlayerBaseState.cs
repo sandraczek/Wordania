@@ -1,9 +1,8 @@
 using UnityEngine;
-using Wordania.Core;
-using Wordania.Core.Inputs;
-using Wordania.Core.SFM;
+using Wordania.Inputs;
+using Wordania.SFM;
 
-namespace Wordania.Features.Player.FSM
+namespace Wordania.Player.FSM
 {
     public abstract class PlayerBaseState : IState
     {

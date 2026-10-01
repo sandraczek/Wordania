@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Wordania.Features
+namespace Wordania
 {
     [CreateAssetMenu(menuName = "Game/DebugStartingSettings")]
     public sealed class DebugStartSettings : ScriptableObject

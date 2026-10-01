@@ -4,13 +4,12 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Services;
-using Wordania.Features.Enemies.Config;
-using Wordania.Features.Enemies.Core;
-using Wordania.Features.Enemies.Data;
+using Wordania.Services;
+using Wordania.Enemies.Config;
+using Wordania.Enemies.Core;
+using Wordania.Enemies.Data;
 
-namespace Wordania.Features.Enemies.Spawning
+namespace Wordania.Enemies.Spawning
 {
     public sealed class EnemySpawnSystem : ITickable
     {

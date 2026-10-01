@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEditor.VersionControl;
 
-namespace Wordania.Core.Services
+namespace Wordania.Services
 {
     public interface IDebugService
     {

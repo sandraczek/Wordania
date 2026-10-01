@@ -3,14 +3,14 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using VContainer;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Combat.Core;
-using Wordania.Features.Combat.Data;
-using Wordania.Features.Inventory;
-using Wordania.Features.Mechanics.Data;
-using Wordania.Features.World;
+using Wordania.Identifiers;
+using Wordania.Combat.Data;
+using Wordania.Inventory;
+using Wordania.Mechanics.Data;
+using Wordania.World;
+using Wordania.World.Data;
 
-namespace Wordania.Features.Player.Loadout
+namespace Wordania.Player.Loadout
 {
     public class PlayerBuildingTool : MonoBehaviour, IToolActionExecutor // on player's hand. Later - POCO
     {

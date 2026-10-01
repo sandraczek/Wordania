@@ -1,4 +1,4 @@
-namespace Wordania.Core.SFM
+namespace Wordania.SFM
 {
     public interface IState
     {

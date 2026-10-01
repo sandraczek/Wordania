@@ -1,12 +1,10 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using Wordania.Core;
-using Wordania.Core.SFM;
-using Wordania.Features.Enemies.Core;
-using Wordania.Features.Enemies.Data;
-using Wordania.Features.Enemies.Movement;
+using Wordania.SFM;
+using Wordania.Enemies.Core;
+using Wordania.Enemies.Movement;
 
-namespace Wordania.Features.Enemies.FSM
+namespace Wordania.Enemies.FSM
 {
     public sealed class EnemyPatrolState : EnemyBaseState
     {

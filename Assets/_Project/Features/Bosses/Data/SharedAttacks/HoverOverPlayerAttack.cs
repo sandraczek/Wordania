@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Wordania.Features.Bosses.Data.SharedAttacks
+namespace Wordania.Bosses.Data.SharedAttacks
 {
     [Serializable]
     public struct HoverOverPlayerAttack

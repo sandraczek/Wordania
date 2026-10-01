@@ -1,10 +1,9 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Inventory;
+using Wordania.Data;
+using Wordania.Inventory;
 
-namespace Wordania.Features.World
+namespace Wordania.World.Data
 {
     [CreateAssetMenu(fileName = "NewBlock", menuName = "World/Block")]
     public sealed class BlockData : DataAsset

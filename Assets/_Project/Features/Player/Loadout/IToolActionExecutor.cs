@@ -1,7 +1,7 @@
 using UnityEngine;
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.Player.Loadout
+namespace Wordania.Player.Loadout
 {
     public interface IToolActionExecutor
     {

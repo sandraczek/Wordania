@@ -1,10 +1,9 @@
 using System.Linq;
 using UnityEngine;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Mechanics.Data;
+using Wordania.Data;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.Mechanics.Data
+namespace Wordania.Mechanics.Data
 {
     public class MechanicIds
     {

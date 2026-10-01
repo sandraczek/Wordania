@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Wordania.Core.Combat
+namespace Wordania.Combat
 {
 
     public class DamageMitigator : MonoBehaviour

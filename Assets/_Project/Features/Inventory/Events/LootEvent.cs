@@ -1,10 +1,10 @@
 using UnityEngine;
 using System;
-using Wordania.Features.Inventory;
-using Wordania.Core.Events;
-using Wordania.Core.Identifiers;
+using Wordania.Inventory;
+using Wordania.Events;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.Inventory.Events
+namespace Wordania.Inventory.Events
 {
     public readonly struct LootEvent : IGameEvent
     {

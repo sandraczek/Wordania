@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using VContainer.Unity;
-using Wordania.Core.Data;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-using Wordania.Core.SaveSystem;
-using Wordania.Core.SaveSystem.Data;
-using Wordania.Core.Services;
-using Wordania.Core.Stats;
-using Wordania.Features.Mechanics;
-using Wordania.Features.Player;
-using Wordania.Features.Stats;
+using Wordania.Data;
+using Wordania.Identifiers;
+using Wordania.SaveSystem;
+using Wordania.SaveSystem.Data;
+using Wordania.Services;
+using Wordania.Stats;
+using Wordania.Mechanics;
+using Wordania.Player;
 
-namespace Wordania.Features.Skills
+namespace Wordania.Skills
 {
     public class SkillTreeService : ISkillTreeService, ISaveable, IStartable, IDisposable
     {

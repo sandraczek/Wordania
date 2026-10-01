@@ -3,11 +3,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Core.Combat;
-using Wordania.Core.Gameplay;
-using Wordania.Features.Player;
+using Wordania.Combat;
+using Wordania.Player;
 
-namespace Wordania.Features.HUD.Health
+namespace Wordania.HUD.Health
 {
     public sealed class HealthBarPresenter : IStartable, IDisposable
     {

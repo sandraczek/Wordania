@@ -1,4 +1,4 @@
-namespace Wordania.Features.Player.Loadout
+namespace Wordania.Player.Loadout
 {
     /// <summary>
     /// Wraps a simple tool that requires no dynamic data binding (e.g., builder, miner).

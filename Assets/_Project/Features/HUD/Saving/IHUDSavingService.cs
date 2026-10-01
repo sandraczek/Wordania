@@ -1,4 +1,4 @@
-namespace Wordania.Features.HUD.Saving
+namespace Wordania.HUD.Saving
 {
     public interface IHUDSavingService
     {

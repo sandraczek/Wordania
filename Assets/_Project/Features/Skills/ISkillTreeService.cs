@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.Skills
+namespace Wordania.Skills
 {
     public interface ISkillTreeService
     {

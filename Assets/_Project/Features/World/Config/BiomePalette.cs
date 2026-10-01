@@ -1,7 +1,7 @@
 using UnityEngine;
-using Wordania.Core.Data; // Assuming BlockData is accessible from here or a specific block namespace
+using Wordania.World.Data;
 
-namespace Wordania.Features.World.Config
+namespace Wordania.World.Config
 {
     /// <summary>
     /// Defines the visual and physical composition of a specific biome.

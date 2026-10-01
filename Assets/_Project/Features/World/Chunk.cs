@@ -1,11 +1,10 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using VContainer;
-using Wordania.Core.Config;
-using Wordania.Core.Services;
-using Wordania.Features.World.Config;
+using Wordania.Services;
+using Wordania.World.Config;
 
-namespace Wordania.Features.World
+namespace Wordania.World.Chunks
 {
     public sealed class Chunk : MonoBehaviour
     {
@@ -116,7 +115,10 @@ namespace Wordania.Features.World
         }
         public int GetChunkSize() => _settings.ChunkSize;
     }
+}
 
+namespace Wordania.World
+{
     [System.Flags]
     public enum WorldLayer
     {

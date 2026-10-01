@@ -1,12 +1,11 @@
 
 using System;
 using VContainer.Unity;
-using Wordania.Core.Combat.Events;
-using Wordania.Core.Events;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Journal;
+using Wordania.Combat.Events;
+using Wordania.Events;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.WeaponStore
+namespace Wordania.WeaponStore
 {
     public interface IWeaponStoreService
     {

@@ -1,10 +1,8 @@
-using Wordania.Core.Combat;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Combat;
-using Wordania.Features.Mechanics.Data;
+using Wordania.Combat;
+using Wordania.Identifiers;
+using Wordania.Mechanics.Data;
 
-namespace Wordania.Features.Mechanics.Implementations
+namespace Wordania.Mechanics.Implementations
 {
     public class GodModeMechanic : IMechanic
     {

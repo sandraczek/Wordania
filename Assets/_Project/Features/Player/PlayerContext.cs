@@ -1,14 +1,12 @@
 using UnityEngine;
-using Wordania.Core.Combat;
-using Wordania.Core.Identifiers;
-using Wordania.Core.SFM;
-using Wordania.Core.Stats;
-using Wordania.Features.Combat;
-using Wordania.Features.Mechanics;
-using Wordania.Features.Player.FSM;
-using Wordania.Features.Stats;
+using Wordania.Combat;
+using Wordania.Identifiers;
+using Wordania.SFM;
+using Wordania.Stats;
+using Wordania.Mechanics;
+using Wordania.Player.FSM;
 
-namespace Wordania.Features.Player
+namespace Wordania.Player
 {
     public sealed class PlayerContext
     {

@@ -3,28 +3,26 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Features.World;
-using Wordania.Features.Player;
-using Wordania.Core.Gameplay;
-using Wordania.Core;
-using Wordania.Features.Services;
-using Wordania.Features.HUD;
-using Wordania.Core.SaveSystem;
-using Wordania.Features.HUD.Loading;
-using Wordania.Features.HUD.Saving;
-using Wordania.Features.Enemies.Data;
-using Wordania.Features.Enemies.Core;
-using Wordania.Features.Mapping;
-using Wordania.Core.Inputs;
-using Wordania.Features.Bosses.Core;
-using Wordania.Features.Bosses.Data;
-using Wordania.Core.Identifiers;
-using Wordania.Features.World.Lighting;
-using Wordania.Features.HUD.Journal;
-using Wordania.Features.HUD.WeaponStore;
-using Wordania.Features.Session;
+using Wordania.World;
+using Wordania.Player;
+using Wordania.Services;
+using Wordania.HUD;
+using Wordania.SaveSystem;
+using Wordania.HUD.Loading;
+using Wordania.HUD.Saving;
+using Wordania.Enemies.Data;
+using Wordania.Enemies.Core;
+using Wordania.Mapping;
+using Wordania.Inputs;
+using Wordania.Bosses.Core;
+using Wordania.Bosses.Data;
+using Wordania.Identifiers;
+using Wordania.World.Lighting;
+using Wordania.HUD.Journal;
+using Wordania.HUD.WeaponStore;
+using Wordania.Session;
 
-namespace Wordania.Features
+namespace Wordania
 {
     public sealed class GameplayEntryPoint : IAsyncStartable
     {

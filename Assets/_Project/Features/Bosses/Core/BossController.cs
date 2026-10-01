@@ -1,12 +1,11 @@
 using UnityEngine;
 using VContainer;
-using Wordania.Core.Events;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Bosses.Data;
-using Wordania.Features.Bosses.Events;
+using Wordania.Events;
+using Wordania.Identifiers;
+using Wordania.Bosses.Data;
+using Wordania.Bosses.Events;
 
-namespace Wordania.Features.Bosses.Core
+namespace Wordania.Bosses.Core
 {
     public interface IBossController
     {

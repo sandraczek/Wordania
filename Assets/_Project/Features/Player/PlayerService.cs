@@ -3,22 +3,22 @@
 // using UnityEngine;
 // using VContainer;
 // using VContainer.Unity;
-// using Wordania.Core.Combat;
-// using Wordania.Core.Events;
-// using Wordania.Core.Gameplay;
-// using Wordania.Core.Identifiers;
-// using Wordania.Core.Mechanics;
-// using Wordania.Core.SaveSystem;
-// using Wordania.Core.SaveSystem.Data;
-// using Wordania.Core.Services;
-// using Wordania.Core.Stats;
-// using Wordania.Features.Combat;
-// using Wordania.Features.Markers;
-// using Wordania.Features.Mechanics;
-// using Wordania.Features.Services;
-// using Wordania.Features.Stats;
+// using Wordania.Combat;
+// using Wordania.Events;
+// using Wordania.Gameplay;
+// using Wordania.Identifiers;
+// using Wordania.Mechanics;
+// using Wordania.SaveSystem;
+// using Wordania.SaveSystem.Data;
+// using Wordania.Services;
+// using Wordania.Stats;
+// using Wordania.Combat;
+// using Wordania.Markers;
+// using Wordania.Mechanics;
+// using Wordania.Services;
+// using Wordania.Stats;
 
-// namespace Wordania.Features.Player
+// namespace Wordania.Player
 // {
 //     public sealed class PlayerService : Core.Gameplay.IPlayerProvider, IPlayerSpawner, ISaveable, IStartable, IDisposable
 //     {

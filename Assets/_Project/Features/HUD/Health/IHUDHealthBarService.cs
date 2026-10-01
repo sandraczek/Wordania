@@ -1,6 +1,6 @@
-using Wordania.Core.Combat;
+using Wordania.Combat;
 
-namespace Wordania.Features.HUD.Health
+namespace Wordania.HUD.Health
 {
     public interface IHUDHealthBarService
     {

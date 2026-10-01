@@ -2,11 +2,11 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Wordania.Core.Config;
-using Wordania.Features.World.Config;
-using Wordania.Features.World.Data;
+using Wordania.World.Config;
+using Wordania.World.Data;
+using Wordania.World.Passes;
 
-namespace Wordania.Features.World
+namespace Wordania.World
 {
     public sealed class WorldGenerator : IWorldGenerator
     {

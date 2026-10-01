@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Wordania.Features.World.Config
+namespace Wordania.World.Config
 {
     [CreateAssetMenu(fileName = "WorldFeaturesConfig", menuName = "World/Features Config")]
     public class WorldFeatureConfiguration : ScriptableObject

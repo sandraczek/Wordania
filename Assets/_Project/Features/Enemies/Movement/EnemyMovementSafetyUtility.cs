@@ -1,7 +1,6 @@
 using UnityEngine;
-using Wordania.Features.Enemies.Data;
 
-namespace Wordania.Features.Enemies.Movement
+namespace Wordania.Enemies.Movement
 {
     public static class EnemyMovementSafetyUtility
     {

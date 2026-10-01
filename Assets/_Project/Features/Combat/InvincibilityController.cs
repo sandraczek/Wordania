@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace Wordania.Features.Combat
+namespace Wordania.Combat
 {
     public enum InvincibilitySource
     {

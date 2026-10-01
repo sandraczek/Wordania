@@ -1,8 +1,7 @@
 using UnityEngine;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
+using Wordania.Data;
 
-namespace Wordania.Features.Enemies.Data
+namespace Wordania.Enemies.Data
 {
     [CreateAssetMenu(fileName = "EnemyRegistry", menuName = "Enemies/Registry")]
     public sealed class EnemyRegistry : AssetRegistry<EnemyTemplate>

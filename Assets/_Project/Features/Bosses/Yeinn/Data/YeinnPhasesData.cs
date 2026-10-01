@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Wordania.Features.Bosses.Yeinn.Data
+namespace Wordania.Bosses.Yeinn.Data
 {
     [Serializable]
     public struct YeinnPhaseOneData

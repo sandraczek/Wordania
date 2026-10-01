@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Journal.Milestones;
+using Wordania.Data;
+using Wordania.Identifiers;
+using Wordania.Journal.Milestones;
 
 
-namespace Wordania.Features.Journal.Entries
+namespace Wordania.Journal.Entries
 {
     public abstract class JournalEntry : DataAsset
     {

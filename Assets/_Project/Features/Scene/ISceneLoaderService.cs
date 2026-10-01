@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
 
-namespace Wordania.Core.Services
+namespace Wordania.Services
 {
     public interface ISceneLoaderService
     {

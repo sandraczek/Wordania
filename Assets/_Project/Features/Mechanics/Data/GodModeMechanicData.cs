@@ -1,9 +1,8 @@
 using UnityEngine;
 using VContainer;
-using Wordania.Features.Mechanics;
-using Wordania.Features.Mechanics.Implementations;
+using Wordania.Mechanics.Implementations;
 
-namespace Wordania.Features.Mechanics.Data
+namespace Wordania.Mechanics.Data
 {
     [CreateAssetMenu(fileName = "GodModeMechanicData", menuName = "Mechanics/Mechanics/God Mode")]
     public class GodModeMechanicData : MechanicData

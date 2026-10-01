@@ -1,7 +1,7 @@
 using UnityEngine;
-using Wordania.Core.Data;
+using Wordania.Data;
 
-namespace Wordania.Features.Inventory
+namespace Wordania.Inventory
 {
     [CreateAssetMenu(fileName = "Item_New", menuName = "Inventory/Item")]
     public sealed class ItemData : DataAsset

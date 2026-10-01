@@ -1,9 +1,8 @@
 using UnityEngine;
 using VContainer;
-using Wordania.Features.Mechanics;
-using Wordania.Features.Mechanics.Implementations;
+using Wordania.Mechanics.Implementations;
 
-namespace Wordania.Features.Mechanics.Data
+namespace Wordania.Mechanics.Data
 {
     [CreateAssetMenu(fileName = "HealingAuraMechanicData", menuName = "Mechanics/Mechanics/Healing Aura")]
     public class HealingAuraMechanicData : MechanicData

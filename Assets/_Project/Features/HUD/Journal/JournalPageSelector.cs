@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Wordania.Features.HUD.Journal
+namespace Wordania.HUD.Journal
 {
     public sealed class JournalPageSelector : MonoBehaviour
     {

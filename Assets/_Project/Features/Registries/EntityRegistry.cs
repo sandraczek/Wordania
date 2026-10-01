@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Identifiers;
-using Wordania.Features.Player;
+using Wordania.Gameplay;
+using Wordania.Identifiers;
 
-namespace Wordania.Core.Services
+namespace Wordania.Services
 {
     public interface IEntityRegistry
     {
@@ -47,7 +45,7 @@ namespace Wordania.Core.Services
                 _instanceMap[persistentEntity.PersistentId] = instanceId;
             }
 
-            if (entity.TryGetFeature<Player>(out _))
+            if (entity.TryGetFeature<Player.Player>(out _))
             {
                 _players.Add(entity);
             }
@@ -94,7 +92,7 @@ namespace Wordania.Core.Services
         {
             if (_entities.TryGetValue(instanceId, out var entity))
             {
-                return entity.TryGetFeature<Player>(out _);
+                return entity.TryGetFeature<Player.Player>(out _);
             }
             return false;
         }

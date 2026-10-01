@@ -1,4 +1,4 @@
-namespace Wordania.Core.Stats
+namespace Wordania.Stats
 {
     public interface IEntityStats
     {

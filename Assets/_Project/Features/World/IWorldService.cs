@@ -3,10 +3,10 @@ using UnityEngine.Tilemaps;
 using System;
 using Cysharp.Threading.Tasks;
 using System.Threading;
-using Wordania.Core.Identifiers;
-using Wordania.Features.World.Data;
+using Wordania.Identifiers;
+using Wordania.World.Data;
 
-namespace Wordania.Features.World
+namespace Wordania.World
 {
     public interface IWorldService
     {

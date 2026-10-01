@@ -1,11 +1,11 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using Wordania.Features.Enemies.Data;
-using Wordania.Features.Journal.Editor;
-using Wordania.Features.Journal.Entries;
+using Wordania.Enemies.Data;
+using Wordania.Journal.Editor;
+using Wordania.Journal.Entries;
 
-namespace Wordania.Features.Enemies.Editor
+namespace Wordania.Enemies.Editor
 {
     [CustomEditor(typeof(EnemyTemplate))]
     public sealed class EnemyTemplateEditor : UnityEditor.Editor

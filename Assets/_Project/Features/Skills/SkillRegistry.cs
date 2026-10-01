@@ -1,8 +1,8 @@
 using UnityEditor;
 using UnityEngine;
-using Wordania.Core.Data;
+using Wordania.Data;
 
-namespace Wordania.Features.Skills
+namespace Wordania.Skills
 {
     [CreateAssetMenu(fileName = "SkillRegistry", menuName = "Skills/Registry")]
     public sealed class SkillRegistry : AssetRegistry<SkillData>

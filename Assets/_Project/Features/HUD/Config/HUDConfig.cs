@@ -1,7 +1,6 @@
 using UnityEngine;
-using Wordania.Features.HUD.Journal;
 
-namespace Wordania.Features.HUD
+namespace Wordania.HUD
 {
     [CreateAssetMenu(fileName = "HUDConfig", menuName = "HUD/Config")]
     public sealed class HUDConfig : ScriptableObject

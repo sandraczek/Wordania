@@ -1,6 +1,6 @@
 using System;
 
-namespace Wordania.Core.SaveSystem.Data
+namespace Wordania.SaveSystem.Data
 {
     [Serializable]
     public sealed class TimeSaveData

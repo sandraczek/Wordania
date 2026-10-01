@@ -1,16 +1,12 @@
 using System;
 using UnityEngine;
-using Wordania.Core.Combat;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-using Wordania.Core.Mechanics;
-using Wordania.Core.Stats;
-using Wordania.Features.Combat;
-using Wordania.Features.Mechanics;
-using Wordania.Features.Session;
-using Wordania.Features.Stats;
+using Wordania.Combat;
+using Wordania.Identifiers;
+using Wordania.Mechanics;
+using Wordania.Stats;
+using Wordania.Session;
 
-namespace Wordania.Features.Player
+namespace Wordania.Player
 {
     public sealed class PlayerProvider
     {

@@ -1,7 +1,7 @@
-using Wordania.Core.SFM;
-using Wordania.Features.Bosses.Yeinn.Parts;
+using Wordania.SFM;
+using Wordania.Bosses.Yeinn.Parts;
 
-namespace Wordania.Features.Bosses.Yeinn.Core
+namespace Wordania.Bosses.Yeinn.Core
 {
     /// <summary>
     /// Dormant: player is dead. Boss parts are parked in their idle poses and stop attacking

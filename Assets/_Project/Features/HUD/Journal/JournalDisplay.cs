@@ -1,9 +1,9 @@
 using UnityEngine;
 using VContainer;
-using Wordania.Core.HUD;
-using Wordania.Core.Inputs;
+using Wordania.HUD;
+using Wordania.Inputs;
 
-namespace Wordania.Features.HUD.Journal
+namespace Wordania.HUD.Journal
 {
     [RequireComponent(typeof(JournalView))]
     public sealed class JournalDisplay : HUDDisplay<JournalView>

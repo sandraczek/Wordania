@@ -1,10 +1,10 @@
 using System;
 using Unity.Mathematics;
 using UnityEngine;
-using Wordania.Core.Events;
-using Wordania.Core.Identifiers;
+using Wordania.Events;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.Combat.Events
+namespace Wordania.Combat.Events
 {
     public struct ProjectileHitData
     {

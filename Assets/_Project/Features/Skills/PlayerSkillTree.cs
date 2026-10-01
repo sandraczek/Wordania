@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Wordania.Core.Identifiers;
-using Wordania.Core.Stats;
+using Wordania.Identifiers;
+using Wordania.Stats;
 
-namespace Wordania.Features.Skills
+namespace Wordania.Skills
 {
     public class PlayerSkillTree
     {

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Wordania.Core.Events;
-using Wordania.Core.Identifiers;
+using Wordania.Events;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.World.Events
+namespace Wordania.World.Events
 {
 
     public readonly struct BlockMineRecordedRecord

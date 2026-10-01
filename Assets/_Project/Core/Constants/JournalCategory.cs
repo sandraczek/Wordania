@@ -1,4 +1,4 @@
-namespace Wordania.Core.Constants
+namespace Wordania.Constants
 {
     public enum JournalCategory
     {

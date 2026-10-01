@@ -1,7 +1,7 @@
-// using Wordania.Core.Identifiers;
-// using Wordania.Core.Stats;
+// using Wordania.Identifiers;
+// using Wordania.Stats;
 
-// namespace Wordania.Core.Gameplay
+// namespace Wordania.Gameplay
 // {
 //     public interface IPlayerSkillContext
 //     {

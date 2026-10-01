@@ -1,7 +1,7 @@
 using UnityEngine;
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.Combat.Data
+namespace Wordania.Combat.Data
 {
     public struct WeaponFireContext
     {

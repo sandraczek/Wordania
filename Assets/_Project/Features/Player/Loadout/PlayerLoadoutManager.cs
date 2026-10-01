@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
-using Wordania.Core.Data;
-using Wordania.Core.Events;
-using Wordania.Core.Identifiers;
-using Wordania.Core.Inputs;
-using Wordania.Features.Combat.Data;
-using Wordania.Features.WeaponStore;
+using Wordania.Data;
+using Wordania.Events;
+using Wordania.Identifiers;
+using Wordania.Inputs;
+using Wordania.Combat.Data;
+using Wordania.WeaponStore;
 
-namespace Wordania.Features.Player.Loadout
+namespace Wordania.Player.Loadout
 {
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(PlayerWeaponTool))]

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Wordania.Core.Attributes
+namespace Wordania.Attributes
 {
     /// <summary>
     /// Attribute used to display a dropdown of derived types for a field serialized with [SerializeReference].

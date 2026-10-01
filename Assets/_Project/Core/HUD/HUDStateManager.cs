@@ -1,9 +1,9 @@
 using System;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Core.Inputs;
+using Wordania.Inputs;
 
-namespace Wordania.Core.HUD
+namespace Wordania.HUD
 {
     public class HUDStateManager : IHUDStateManager, IStartable, IDisposable
     {

@@ -1,11 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
 using VContainer;
-using Wordania.Core.Config;
+using Wordania.Config;
 using VContainer.Unity;
-using Wordania.Features.World.Config;
+using Wordania.World.Config;
 
-namespace Wordania.Features.Mapping
+namespace Wordania.Mapping
 {
     public sealed class MapService : IMapService, IStartable, ILateTickable
     {

@@ -3,21 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using VContainer.Unity;
-using Wordania.Core.Combat.Events;
-using Wordania.Core.Constants;
-using Wordania.Core.Events;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-using Wordania.Core.SaveSystem;
-using Wordania.Core.SaveSystem.Data;
-using Wordania.Core.Services;
-using Wordania.Features.Bosses.Events;
-using Wordania.Features.Identifiers;
-using Wordania.Features.Journal.Entries;
-using Wordania.Features.Journal.Milestones;
-using Wordania.Features.World.Events;
+using Wordania.Combat.Events;
+using Wordania.Constants;
+using Wordania.Events;
+using Wordania.Identifiers;
+using Wordania.SaveSystem;
+using Wordania.SaveSystem.Data;
+using Wordania.Services;
+using Wordania.Bosses.Events;
+using Wordania.Journal.Entries;
+using Wordania.Journal.Milestones;
+using Wordania.World.Events;
 
-namespace Wordania.Features.Journal
+namespace Wordania.Journal
 {
     /// <summary>
     /// Currently, only players have journals (see HandleEvents, checking IsPlayer)

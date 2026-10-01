@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Wordania.Features.Day
+namespace Wordania.Day
 {
     [CreateAssetMenu(fileName = "DaySettings", menuName = "Day/Settings")]
     public sealed class DaySettings : ScriptableObject

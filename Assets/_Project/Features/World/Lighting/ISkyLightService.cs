@@ -1,7 +1,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
-namespace Wordania.Features.World.Lighting
+namespace Wordania.World.Lighting
 {
     public interface ISkyLightService
     {

@@ -1,8 +1,7 @@
 using System;
-using Wordania.Core.Combat;
-using Wordania.Features.Combat.Data;
+using Wordania.Combat.Data;
 
-namespace Wordania.Features.Combat.Core
+namespace Wordania.Combat.Core
 {
 
     public interface IProjectileSimulationService

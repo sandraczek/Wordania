@@ -1,11 +1,10 @@
 // LightmapPresenter.cs
 using System;
 using VContainer.Unity;
-using Wordania.Core.Events;
-using Wordania.Features.World;
-using Wordania.Features.World.Data;
+using Wordania.Events;
+using Wordania.World.Data;
 
-namespace Wordania.Features.World.Lighting // lub Wordania.World.Presentation
+namespace Wordania.World.Lighting // lub Wordania.World.Presentation
 {
     /// <summary>
     /// Binds the core lighting logic to the GPU rendering system.

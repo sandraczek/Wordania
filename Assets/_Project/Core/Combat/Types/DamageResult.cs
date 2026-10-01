@@ -1,4 +1,4 @@
-namespace Wordania.Core.Combat
+namespace Wordania.Combat
 {
     public struct DamageResult
     {

@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
-using Wordania.Core.Events;
-using Wordania.Features.Combat.Data;
+using Wordania.Events;
+using Wordania.Combat.Data;
 
-namespace Wordania.Features.Combat.Events
+namespace Wordania.Combat.Events
 {
     public struct ProjectileFiredEvent : IGameEvent
     {

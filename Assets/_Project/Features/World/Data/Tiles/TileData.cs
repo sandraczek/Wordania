@@ -1,6 +1,6 @@
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.World
+namespace Wordania.World
 {
     public struct TileData
     {

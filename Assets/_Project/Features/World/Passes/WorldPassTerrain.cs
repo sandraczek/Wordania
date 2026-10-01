@@ -2,11 +2,11 @@ using System.Diagnostics;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Wordania.Core.Identifiers;
-using Wordania.Features.World.Config;
-using Wordania.Features.World.Data;
+using Wordania.Identifiers;
+using Wordania.World.Config;
+using Wordania.World.Data;
 
-namespace Wordania.Features.World
+namespace Wordania.World.Passes
 {
     public readonly struct CachedFeatureRule
     {

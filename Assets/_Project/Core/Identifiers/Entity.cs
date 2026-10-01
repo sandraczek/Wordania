@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Wordania.Core.Combat;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-using Wordania.Core.Mechanics;
-using Wordania.Features.Identifiers;
+using Wordania.Combat;
+using Wordania.Gameplay;
+using Wordania.Mechanics;
 
-namespace Wordania.Core.Identifiers
+namespace Wordania.Identifiers
 {
     public class Entity : MonoBehaviour
     {

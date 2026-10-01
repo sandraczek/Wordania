@@ -2,9 +2,8 @@ using System;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using Wordania.Core.Attributes;
 
-namespace Wordania.Core.Editor.Drawers
+namespace Wordania.Attributes.Editor
 {
     /// <summary>
     /// Custom property drawer for fields marked with [SubclassSelector].

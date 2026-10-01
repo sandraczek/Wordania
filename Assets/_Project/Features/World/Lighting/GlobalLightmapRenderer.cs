@@ -4,10 +4,9 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer.Unity;
-using Wordania.Features.World;
-using Wordania.Features.World.Config;
+using Wordania.World.Config;
 
-namespace Wordania.Features.World.Lighting
+namespace Wordania.World.Lighting
 {
     public sealed class GlobalLightmapRenderer : ILightmapRenderer, IStartable, IDisposable
     {

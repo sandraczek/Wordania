@@ -1,14 +1,12 @@
 using System;
 using UnityEngine;
 using VContainer;
-using Wordania.Core.Combat;
-using Wordania.Core.Events;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-using Wordania.Core.Stats;
-using Wordania.Features.Stats;
+using Wordania.Combat;
+using Wordania.Events;
+using Wordania.Identifiers;
+using Wordania.Stats;
 
-namespace Wordania.Features.Combat
+namespace Wordania.Combat
 {
     [RequireComponent(typeof(StatsComponent))]
     public sealed class HealthComponent : MonoBehaviour, IReadOnlyHealth

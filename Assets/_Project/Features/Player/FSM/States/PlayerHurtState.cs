@@ -1,9 +1,7 @@
 using UnityEngine;
-using Wordania.Core;
-using Wordania.Core.Combat;
-using Wordania.Core.Inputs;
+using Wordania.Inputs;
 
-namespace Wordania.Features.Player.FSM
+namespace Wordania.Player.FSM
 {
     public sealed class PlayerHurtState : PlayerBaseState
     {

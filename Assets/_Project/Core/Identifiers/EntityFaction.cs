@@ -1,6 +1,6 @@
 using System;
 
-namespace Wordania.Core.Identifiers
+namespace Wordania.Identifiers
 {
     [Flags]
     public enum EntityFaction

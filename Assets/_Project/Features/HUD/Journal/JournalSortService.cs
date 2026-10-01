@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Wordania.Features.Journal.Entries;
+using Wordania.Journal.Entries;
 
-namespace Wordania.Features.HUD.Journal
+namespace Wordania.HUD.Journal
 {
     public sealed class JournalSortService : IJournalSortService
     {

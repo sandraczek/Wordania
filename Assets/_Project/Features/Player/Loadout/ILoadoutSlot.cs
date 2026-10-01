@@ -1,4 +1,4 @@
-namespace Wordania.Features.Player.Loadout
+namespace Wordania.Player.Loadout
 {
     /// <summary>
     /// Represents a generic equippable slot in the player's hotbar/loadout.

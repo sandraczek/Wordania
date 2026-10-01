@@ -1,9 +1,8 @@
 using UnityEngine;
-using Wordania.Core.Events;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Bosses.Core;
+using Wordania.Events;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.Bosses.Events
+namespace Wordania.Bosses.Events
 {
     public struct BossDeathEvent : IGameEvent
     {

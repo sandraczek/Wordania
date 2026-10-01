@@ -1,9 +1,9 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Wordania.Features.World.Data;
+using Wordania.World.Data;
 
-namespace Wordania.Features.World
+namespace Wordania.World.Passes
 {
     public interface IWorldGenerationPass
     {

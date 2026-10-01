@@ -3,23 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using VContainer;
-using Wordania.Core.Combat;
-using Wordania.Core.Combat.Events;
-using Wordania.Core.Events;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-using Wordania.Core.Services;
-using Wordania.Core.SFM;
-using Wordania.Core.Stats;
-using Wordania.Features.Combat;
-using Wordania.Features.Enemies.Data;
-using Wordania.Features.Enemies.FSM;
-using Wordania.Features.Enemies.Movement;
-using Wordania.Features.Mechanics;
-using Wordania.Features.Movement;
-using Wordania.Features.Stats;
+using Wordania.Combat;
+using Wordania.Combat.Events;
+using Wordania.Events;
+using Wordania.Gameplay;
+using Wordania.Identifiers;
+using Wordania.SFM;
+using Wordania.Stats;
+using Wordania.Enemies.Data;
+using Wordania.Enemies.FSM;
+using Wordania.Enemies.Movement;
+using Wordania.Mechanics;
+using Wordania.Movement;
 
-namespace Wordania.Features.Enemies.Core
+namespace Wordania.Enemies.Core
 {
     [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(Rigidbody2D))]

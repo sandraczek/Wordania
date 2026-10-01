@@ -1,8 +1,7 @@
 using UnityEngine;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Enemies.Data;
+using Wordania.Enemies.Data;
 
-namespace Wordania.Features.Journal.Entries
+namespace Wordania.Journal.Entries
 {
     [CreateAssetMenu(fileName = "NewEnemyEntry", menuName = "Journal/Enemy")]
     public sealed class JournalEnemyEntry : JournalEntry<EnemyTemplate>

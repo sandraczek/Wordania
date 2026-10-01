@@ -4,12 +4,11 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer.Unity;
-using Wordania.Core.Events;
-using Wordania.Features.World;
-using Wordania.Features.World.Config;
-using Wordania.Features.World.Data;
+using Wordania.Events;
+using Wordania.World.Config;
+using Wordania.World.Data;
 
-namespace Wordania.Features.World.Lighting
+namespace Wordania.World.Lighting
 {
     /*
         If I ever made textures all white colored (and made sure they all are)

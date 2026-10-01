@@ -3,10 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-using Wordania.Features.Journal.Entries;
-using Wordania.Features.Journal.Milestones;
+using Wordania.Journal.Entries;
 
-namespace Wordania.Features.HUD.Journal
+namespace Wordania.HUD.Journal
 {
     public abstract class JournalEntryView : MonoBehaviour
     {

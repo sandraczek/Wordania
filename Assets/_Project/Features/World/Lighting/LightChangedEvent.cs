@@ -1,7 +1,7 @@
 using UnityEngine;
-using Wordania.Core.Events;
+using Wordania.Events;
 
-namespace Wordania.Features.World.Lighting
+namespace Wordania.World.Lighting
 {
     public struct LightChangedEvent : IGameEvent
     {

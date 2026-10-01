@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Wordania.Core.Constants;
+using Wordania.Constants;
 
-namespace Wordania.Features.HUD.Journal
+namespace Wordania.HUD.Journal
 {
     public sealed class JournalCategorySelector : MonoBehaviour
     {

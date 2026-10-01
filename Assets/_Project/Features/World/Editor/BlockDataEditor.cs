@@ -1,11 +1,11 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using Wordania.Features.World;
-using Wordania.Features.Journal.Editor;
-using Wordania.Features.Journal.Entries;
+using Wordania.Journal.Editor;
+using Wordania.Journal.Entries;
+using Wordania.World.Data;
 
-namespace Wordania.Features.World.Editor
+namespace Wordania.World.Editor
 {
     [CustomEditor(typeof(BlockData))]
     public sealed class BlockDataEditor : UnityEditor.Editor

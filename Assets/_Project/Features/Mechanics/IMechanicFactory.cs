@@ -1,6 +1,6 @@
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.Mechanics
+namespace Wordania.Mechanics
 {
     public interface IMechanicFactory
     {

@@ -2,9 +2,9 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using VContainer;
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.Inventory
+namespace Wordania.Inventory
 {
     public sealed class InventoryData
     {

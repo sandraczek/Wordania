@@ -1,9 +1,9 @@
 using UnityEngine;
 using VContainer;
-using Wordania.Core.SaveSystem;
-using Wordania.Features.Session;
+using Wordania.SaveSystem;
+using Wordania.Session;
 
-namespace Wordania.Features
+namespace Wordania
 {
     public sealed class DebugSaveComponent : MonoBehaviour
     {

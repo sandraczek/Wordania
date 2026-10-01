@@ -1,8 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Wordania.Features.World.Data;
 
-namespace Wordania.Features.World.Config
+namespace Wordania.World.Config
 {
     [CreateAssetMenu(fileName = "WorldBiomeConfiguration", menuName = "World/Biome Configuration")]
     public sealed class WorldBiomeConfiguration : ScriptableObject

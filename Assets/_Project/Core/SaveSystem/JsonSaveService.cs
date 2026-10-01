@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using Newtonsoft.Json;
-using Wordania.Core.SaveSystem.Data;
+using Wordania.SaveSystem.Data;
 using Cysharp.Threading.Tasks;
 using System;
 
-namespace Wordania.Core.SaveSystem
+namespace Wordania.SaveSystem
 {
     public sealed class JsonSaveService : ISaveService
     {

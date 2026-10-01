@@ -1,8 +1,7 @@
 using UnityEngine;
-using Wordania.Core.Combat;
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 
-namespace Wordania.Core.Gameplay
+namespace Wordania.Gameplay
 {
     public interface IEnemy
     {

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using VContainer;
 using UnityEngine;
 
-namespace Wordania.Core.Gameplay
+namespace Wordania.Gameplay
 {
     public interface IPlayerSpawner
     {

@@ -1,11 +1,10 @@
 using System.Collections;
 using UnityEngine;
-using Wordania.Core.Combat;
-using Wordania.Features.Bosses.Visual;
-using Wordania.Features.Bosses.Yeinn.Parts;
-using Wordania.Features.Combat;
+using Wordania.Combat;
+using Wordania.Bosses.Visual;
+using Wordania.Bosses.Yeinn.Parts;
 
-namespace Wordania.Features.Bosses.Yeinn.Visual
+namespace Wordania.Bosses.Yeinn.Visual
 {
     [RequireComponent(typeof(SpriteRenderer))]
     public sealed class YeinnHeadVisual : MonoBehaviour

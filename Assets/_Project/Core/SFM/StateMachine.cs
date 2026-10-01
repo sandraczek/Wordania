@@ -1,7 +1,7 @@
 using UnityEngine;
-using Wordania.Core.SFM;
+using Wordania.SFM;
 
-namespace Wordania.Core.SFM
+namespace Wordania.SFM
 {
     public sealed class StateMachine<TState> where TState : class, IState
     {

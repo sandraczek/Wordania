@@ -1,21 +1,17 @@
 using UnityEngine;
-using Wordania.Core.SFM;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Combat;
+using Wordania.SFM;
+using Wordania.Gameplay;
+using Wordania.Combat;
 using VContainer;
-using Wordania.Features.Bosses.Data;
-using Wordania.Features.Services;
-using Wordania.Core.Services;
-using Wordania.Core.Identifiers;
+using Wordania.Bosses.Data;
+using Wordania.Services;
+using Wordania.Identifiers;
 using System;
-using Wordania.Features.Bosses.Yeinn.Data;
 using UnityEngine.UIElements;
-using Wordania.Core.Stats;
-using Wordania.Features.Stats;
-using Wordania.Features.Combat;
+using Wordania.Stats;
 using System.Collections.Generic;
 
-namespace Wordania.Features.Bosses.Yeinn.Parts
+namespace Wordania.Bosses.Core
 {
     [RequireComponent(typeof(HealthComponent))]
     [RequireComponent(typeof(Collider2D))]

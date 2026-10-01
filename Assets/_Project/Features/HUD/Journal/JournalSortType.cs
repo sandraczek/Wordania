@@ -1,4 +1,4 @@
-namespace Wordania.Features.HUD.Journal
+namespace Wordania.HUD.Journal
 {
     public enum JournalSortType
     {

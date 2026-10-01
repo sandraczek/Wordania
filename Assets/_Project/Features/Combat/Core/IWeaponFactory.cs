@@ -2,10 +2,10 @@
 
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Wordania.Core.Combat;
-using Wordania.Features.Combat.Data;
+using Wordania.Combat;
+using Wordania.Combat.Data;
 
-namespace Wordania.Features.Combat.Core
+namespace Wordania.Combat.Core
 {
     public interface IWeaponFactory
     {

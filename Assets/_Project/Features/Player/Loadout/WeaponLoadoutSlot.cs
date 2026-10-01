@@ -1,6 +1,6 @@
-using Wordania.Features.Combat.Data;
+using Wordania.Combat.Data;
 
-namespace Wordania.Features.Player.Loadout
+namespace Wordania.Player.Loadout
 {
     /// <summary>
     /// Wraps a weapon tool, ensuring data is bound prior to equipping.

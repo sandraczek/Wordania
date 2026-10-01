@@ -1,6 +1,6 @@
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.Session
+namespace Wordania.Session
 {
     public class SessionConfig
     {

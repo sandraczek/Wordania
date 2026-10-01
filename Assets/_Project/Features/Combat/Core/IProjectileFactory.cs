@@ -2,11 +2,11 @@
 
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Wordania.Core.Combat;
-using Wordania.Features.Combat.Data;
-using Wordania.Features.Combat.Events;
+using Wordania.Combat;
+using Wordania.Combat.Data;
+using Wordania.Combat.Events;
 
-namespace Wordania.Features.Combat.Core
+namespace Wordania.Combat.Core
 {
     public interface IProjectileFactory
     {

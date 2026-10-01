@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Wordania.Core.Constants;
-using Wordania.Core.Data;
+using Wordania.Constants;
+using Wordania.Data;
 
-namespace Wordania.Features.Journal.Entries
+namespace Wordania.Journal.Entries
 {
     public interface IJournalEntryRegistry : IAssetRegistry<JournalEntry>
     {

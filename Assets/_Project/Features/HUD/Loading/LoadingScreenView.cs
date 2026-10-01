@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
 
-namespace Wordania.Features.HUD.Loading
+namespace Wordania.HUD.Loading
 {
     [RequireComponent(typeof(CanvasGroup))]
     public sealed class LoadingScreenView : MonoBehaviour, ILoadingScreenView

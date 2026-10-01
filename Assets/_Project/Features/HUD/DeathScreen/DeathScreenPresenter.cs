@@ -2,13 +2,12 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer.Unity;
-using Wordania.Core.Events;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Services;
-using Wordania.Features.Player;
-using Wordania.Features.Player.Events;
+using Wordania.Events;
+using Wordania.Services;
+using Wordania.Player;
+using Wordania.Player.Events;
 
-namespace Wordania.Features.HUD.DeathScreen
+namespace Wordania.HUD.DeathScreen
 {
     public class DeathScreenPresenter : IStartable, IDisposable
     {

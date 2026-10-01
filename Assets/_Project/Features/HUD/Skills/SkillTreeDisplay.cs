@@ -1,9 +1,8 @@
 using UnityEngine;
 using VContainer;
-using Wordania.Core.HUD;
-using Wordania.Core.Inputs;
+using Wordania.Inputs;
 
-namespace Wordania.Features.HUD.Skills
+namespace Wordania.HUD.Skills
 {
     [RequireComponent(typeof(CanvasGroup))]
     public sealed class SkillTreeDisplay : MonoBehaviour, IHUDWindow

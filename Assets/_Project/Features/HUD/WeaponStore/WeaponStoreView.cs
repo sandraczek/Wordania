@@ -7,12 +7,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
 using VContainer.Unity;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Combat.Data;
-using Wordania.Features.WeaponStore;
+using Wordania.Data;
+using Wordania.Identifiers;
+using Wordania.Combat.Data;
 
-namespace Wordania.Features.HUD.WeaponStore
+namespace Wordania.HUD.WeaponStore
 {
     public class WeaponStoreView : MonoBehaviour
     {

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Wordania.Features.HUD.DeathScreen
+namespace Wordania.HUD.DeathScreen
 {
     public class DeathScreenView : MonoBehaviour
     {

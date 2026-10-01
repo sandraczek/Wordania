@@ -2,9 +2,9 @@ using System;
 using NUnit.Framework.Constraints;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using Wordania.Features.World.Config;
+using Wordania.World.Config;
 
-namespace Wordania.Features.World.Data
+namespace Wordania.World.Data
 {
     public sealed class WorldData
     {

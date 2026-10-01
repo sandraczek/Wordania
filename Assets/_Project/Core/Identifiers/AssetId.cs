@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Wordania.Core.Identifiers
+namespace Wordania.Identifiers
 {
     [Serializable]
     public struct AssetId : IEquatable<AssetId>

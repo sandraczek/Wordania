@@ -1,14 +1,13 @@
 using System;
 using System.Linq;
 using UnityEngine;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Enemies.Core;
-using Wordania.Features.Inventory;
-using Wordania.Features.Movement;
-using Wordania.Features.Skills;
+using Wordania.Data;
+using Wordania.Identifiers;
+using Wordania.Enemies.Core;
+using Wordania.Inventory;
+using Wordania.Skills;
 
-namespace Wordania.Features.Enemies.Data
+namespace Wordania.Enemies.Data
 {
     [CreateAssetMenu(fileName = "NewEnemyData", menuName = "Enemies/Data")]
     public sealed class EnemyTemplate : DataAsset

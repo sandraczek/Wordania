@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
-using Wordania.Core;
-using Wordania.Core.Inputs;
-using Wordania.Features.Combat.Data;
-using Wordania.Features.Combat.FireStrategies;
-using Wordania.Features.Combat.Events;
-using Wordania.Core.Events;
+using Wordania.Combat.Data;
+using Wordania.Combat.FireStrategies;
+using Wordania.Combat.Events;
+using Wordania.Events;
 
-namespace Wordania.Features.Combat.Core
+namespace Wordania.Combat.Core
 {
     public class WeaponController : MonoBehaviour
     {

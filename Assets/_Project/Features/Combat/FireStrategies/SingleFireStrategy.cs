@@ -1,10 +1,9 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using Wordania.Core;
-using Wordania.Features.Combat.Data;
+using Wordania.Combat.Data;
 
-namespace Wordania.Features.Combat.FireStrategies
+namespace Wordania.Combat.FireStrategies
 {
     public sealed class SingleFireStrategy : IWeaponFireStrategy
     {

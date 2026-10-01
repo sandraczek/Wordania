@@ -1,10 +1,10 @@
 using UnityEngine;
 using VContainer;
-using Wordania.Core.HUD;
-using Wordania.Core.Inputs;
-using Wordania.Features.HUD.WeaponStore;
+using Wordania.HUD;
+using Wordania.Inputs;
+using Wordania.HUD.WeaponStore;
 
-namespace Wordania.Features.HUD.Journal
+namespace Wordania.HUD.WeaponStore
 {
     [RequireComponent(typeof(WeaponStoreView))]
     public sealed class WeaponStoreDisplay : HUDDisplay<WeaponStoreView>

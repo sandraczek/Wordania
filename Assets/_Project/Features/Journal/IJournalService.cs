@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Wordania.Core.Constants;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Journal.Entries;
+using Wordania.Constants;
+using Wordania.Identifiers;
+using Wordania.Journal.Entries;
 
-namespace Wordania.Features.Journal
+namespace Wordania.Journal
 {
     public interface IJournalService
     {

@@ -1,10 +1,8 @@
 using UnityEngine;
-using Wordania.Core;
-using Wordania.Core.Inputs;
-using Wordania.Core.SFM;
-using Wordania.Features.Inventory;
+using Wordania.Inputs;
+using Wordania.Inventory;
 
-namespace Wordania.Features.Player.FSM
+namespace Wordania.Player.FSM
 {
     public sealed class PlayerStateFactory
     {

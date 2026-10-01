@@ -1,10 +1,10 @@
 
 // using System.Collections.Generic;
-// using Wordania.Core.Identifiers;
-// using Wordania.Features.Journal.Milestones;
-// using Wordania.Features.Skills;
+// using Wordania.Identifiers;
+// using Wordania.Journal.Milestones;
+// using Wordania.Skills;
 
-// namespace Wordania.Features.Mechanics
+// namespace Wordania.Mechanics
 // {
 //     public class SessionMechanicsAggregator
 //     {

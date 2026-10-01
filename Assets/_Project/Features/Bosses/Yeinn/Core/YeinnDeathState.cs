@@ -1,8 +1,7 @@
 using UnityEngine;
-using Wordania.Core.SFM;
-using Wordania.Features.Bosses.Yeinn.Parts;
+using Wordania.SFM;
 
-namespace Wordania.Features.Bosses.Yeinn.Core
+namespace Wordania.Bosses.Yeinn.Core
 {
     public sealed class YeinnDeathState : IState
     {

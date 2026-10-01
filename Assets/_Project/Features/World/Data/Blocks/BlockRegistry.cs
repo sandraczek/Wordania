@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 using System;
-using Wordania.Core.Services;
-using Wordania.Core.Data;
-namespace Wordania.Features.World.Data
+using Wordania.Services;
+using Wordania.Data;
+namespace Wordania.World.Data
 {
     [CreateAssetMenu(fileName = "BlockRegistry", menuName = "World/Block Registry")]
     public sealed class BlockRegistry : AssetRegistry<BlockData>, IBlockRegistry

@@ -1,19 +1,18 @@
 using UnityEngine;
 using VContainer;
-using Wordania.Core.Gameplay;
-using Wordania.Core.Identifiers;
-using Wordania.Core.SFM;
-using Wordania.Features.Bosses.Core;
-using Wordania.Features.Bosses.Data;
-using Wordania.Features.Bosses.Events;
-using Wordania.Features.Bosses.Yeinn.Data;
-using Wordania.Features.Bosses.Yeinn.Parts;
-using Wordania.Features.Enemies.Core;
-using Wordania.Core.Events;
-using Wordania.Core.Services;
-using Wordania.Core.Combat;
+using Wordania.Gameplay;
+using Wordania.Identifiers;
+using Wordania.SFM;
+using Wordania.Bosses.Core;
+using Wordania.Bosses.Events;
+using Wordania.Bosses.Yeinn.Data;
+using Wordania.Bosses.Yeinn.Parts;
+using Wordania.Enemies.Core;
+using Wordania.Events;
+using Wordania.Services;
+using Wordania.Combat;
 
-namespace Wordania.Features.Bosses.Yeinn.Core
+namespace Wordania.Bosses.Yeinn.Core
 {
     //TODO: move some to parent BossController
     public sealed class YeinnBossController : BossController<YeinnTemplate>

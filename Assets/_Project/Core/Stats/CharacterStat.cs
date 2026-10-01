@@ -1,4 +1,4 @@
-namespace Wordania.Core.Stats
+namespace Wordania.Stats
 {
     using System;
     using System.Collections.Generic;

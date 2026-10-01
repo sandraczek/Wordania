@@ -2,10 +2,10 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Skills;
+using Wordania.Identifiers;
+using Wordania.Skills;
 
-namespace Wordania.Features.HUD.Skills
+namespace Wordania.HUD.Skills
 {
     public enum SkillNodeState
     {

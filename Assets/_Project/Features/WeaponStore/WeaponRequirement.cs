@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Combat.Data;
-using Wordania.Features.Journal.Entries;
+using Wordania.Data;
+using Wordania.Combat.Data;
+using Wordania.Journal.Entries;
 
-namespace Wordania.Features.WeaponStore
+namespace Wordania.WeaponStore
 {
     [CreateAssetMenu(fileName = "Unnamed", menuName = "Combat/Requirements/Requirement")]
     public class WeaponRequirement : DataAsset

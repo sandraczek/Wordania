@@ -1,6 +1,7 @@
 using UnityEngine;
+using Wordania.World.Data;
 
-namespace Wordania.Features.World.Config
+namespace Wordania.World.Config
 {
     [System.Serializable]
     public struct FeatureSpawnRule

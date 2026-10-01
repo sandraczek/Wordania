@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Wordania.Core.Combat{
+namespace Wordania.Combat{
     public readonly struct HealthChangeData //TODO: later, can be changed to support mana etc
     {
         public readonly float PreviousAmount;

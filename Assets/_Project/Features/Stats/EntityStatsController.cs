@@ -1,11 +1,10 @@
-namespace Wordania.Features.Stats
+namespace Wordania.Stats
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
-    using Wordania.Core.Gameplay;
-    using Wordania.Core.Stats;
+    using Wordania.Stats;
 
     public class StatsComponent : MonoBehaviour, IEntityStats
     {

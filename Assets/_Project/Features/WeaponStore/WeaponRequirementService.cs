@@ -3,15 +3,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer.Unity;
-using Wordania.Core.Combat.Events;
-using Wordania.Core.Data;
-using Wordania.Core.Events;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Journal;
-using Wordania.Features.Journal.Entries;
-using Wordania.Features.Player;
+using Wordania.Combat.Events;
+using Wordania.Data;
+using Wordania.Identifiers;
+using Wordania.Journal;
+using Wordania.Journal.Entries;
+using Wordania.Player;
 
-namespace Wordania.Features.WeaponStore
+namespace Wordania.WeaponStore
 {
     public class WeaponRequirementService : IWeaponRequirementService, IStartable
     {

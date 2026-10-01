@@ -1,8 +1,8 @@
 
 using System.Collections.Generic;
-using Wordania.Core.Identifiers;
+using Wordania.Identifiers;
 
-namespace Wordania.Core.Data
+namespace Wordania.Data
 {
     public interface IAssetRegistry<T> where T : DataAsset
     {

@@ -4,7 +4,7 @@ using Unity.Jobs;
 using UnityEngine;
 using VContainer.Unity;
 
-namespace Wordania.Features.World
+namespace Wordania.World
 {
     public interface IWorldCollisionJobService
     {

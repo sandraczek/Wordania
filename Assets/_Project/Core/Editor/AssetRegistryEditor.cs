@@ -2,9 +2,8 @@
 using UnityEditor;
 using UnityEngine;
 using System.Reflection;
-using Wordania.Core.Data;
 
-namespace Wordania.Core.Editor
+namespace Wordania.Data.Editor
 {
     [CustomEditor(typeof(AssetRegistry<>), true)]
     public class AssetCatalogEditor : UnityEditor.Editor

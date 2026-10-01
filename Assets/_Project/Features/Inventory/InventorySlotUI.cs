@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-namespace Wordania.Features.Inventory
+namespace Wordania.Inventory
 {
     public sealed class InventorySlotUI : MonoBehaviour
     {

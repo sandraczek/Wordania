@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Wordania.Features.Skills;
 
-namespace Wordania.Features.Skills
+namespace Wordania.Skills
 {
     /// <summary>
     /// Class for registering rewards for killing

@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer.Unity;
-using Wordania.Core.Services;
+using Wordania.Services;
 
 namespace Wordania.Boot
 {

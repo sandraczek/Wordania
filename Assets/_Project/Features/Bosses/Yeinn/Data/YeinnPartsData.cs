@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
-using Wordania.Features.Bosses.Data;
-using Wordania.Features.Bosses.Data.SharedAttacks;
+using Wordania.Bosses.Data;
+using Wordania.Bosses.Data.SharedAttacks;
 
-namespace Wordania.Features.Bosses.Yeinn.Data
+namespace Wordania.Bosses.Yeinn.Data
 {
     [Serializable]
     public sealed class YeinnHeadData : BossPartData

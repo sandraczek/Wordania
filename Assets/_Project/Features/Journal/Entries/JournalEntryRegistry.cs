@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
+using Wordania.Data;
+using Wordania.Identifiers;
 
-namespace Wordania.Features.Journal.Entries
+namespace Wordania.Journal.Entries
 {
     [CreateAssetMenu(fileName = "JournalEntryRegistry", menuName = "Journal/Registry")]
     public sealed class JournalEntryRegistry : AssetRegistry<JournalEntry>

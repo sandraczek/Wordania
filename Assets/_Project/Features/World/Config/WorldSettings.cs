@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Wordania.Core.Attributes;
-using Wordania.Core.Identifiers;
+using Wordania.Attributes;
+using Wordania.Identifiers;
+using Wordania.World.Data;
 
-namespace Wordania.Features.World.Config
+namespace Wordania.World.Config
 {
     [CreateAssetMenu(fileName = "WorldSettings", menuName = "World/WorldSettings")]
     public sealed class WorldSettings : ScriptableObject

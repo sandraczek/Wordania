@@ -1,4 +1,4 @@
-namespace Wordania.Core.HUD
+namespace Wordania.HUD
 {
     public interface IHUDStateManager
     {

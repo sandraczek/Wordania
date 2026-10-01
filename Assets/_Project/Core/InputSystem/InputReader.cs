@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using UnityEngine.InputSystem;
 
-namespace Wordania.Core.Inputs
+namespace Wordania.Inputs
 {
 
     [CreateAssetMenu(fileName = "InputReader", menuName = "Game/Input Reader")]

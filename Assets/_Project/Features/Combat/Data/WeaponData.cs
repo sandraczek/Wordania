@@ -1,10 +1,9 @@
 using System;
 using UnityEngine;
-using Wordania.Core.Data;
-using Wordania.Core.Identifiers;
-using Wordania.Features.Combat.Core;
+using Wordania.Data;
+using Wordania.Combat.Core;
 
-namespace Wordania.Features.Combat.Data
+namespace Wordania.Combat.Data
 {
     [CreateAssetMenu(fileName = "NewWeapon", menuName = "Combat/Weapon")]
     public sealed class WeaponData : DataAsset

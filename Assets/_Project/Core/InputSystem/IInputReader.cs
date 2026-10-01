@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using VContainer.Unity;
 using System;
 
-namespace Wordania.Core.Inputs
+namespace Wordania.Inputs
 {
     public interface IInputReader
     {

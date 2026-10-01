@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Wordania.Features.World
+namespace Wordania.World.Chunks
 {
 
     [RequireComponent(typeof(LineRenderer))]

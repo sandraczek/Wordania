@@ -1,9 +1,8 @@
 using System;
 using UnityEngine;
-using Wordania.Core;
-using Wordania.Core.Inputs;
+using Wordania.Inputs;
 
-namespace Wordania.Features.Player.FSM
+namespace Wordania.Player.FSM
 {
     public class PlayerAirState : PlayerActiveState
     {
