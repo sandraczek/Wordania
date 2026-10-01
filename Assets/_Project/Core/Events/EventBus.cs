@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Wordania.Core.Events
 {
-    public abstract class EventBus : IEventBus
+    public sealed class EventBus : IEventBus
     {
         private readonly Dictionary<Type, object> _subscribers = new();
 
@@ -48,7 +48,4 @@ namespace Wordania.Core.Events
             }
         }
     }
-    public sealed class ProjectEventBus : EventBus, IEventBusProject { }
-    public sealed class SessionEventBus : EventBus, IEventBusSession { }
-    public sealed class GameplayEventBus : EventBus, IEventBusGameplay { }
 }

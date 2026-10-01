@@ -96,7 +96,7 @@ namespace Wordania.Boot
 
             builder.Register<SceneLoaderService>(Lifetime.Singleton).As<ISceneLoaderService>();
 
-            builder.Register<ProjectEventBus>(Lifetime.Singleton).As<IEventBusProject>();
+            builder.Register<EventBus>(Lifetime.Singleton).As<IEventBus>();
 
             builder.RegisterEntryPoint<DebugService>(Lifetime.Singleton).As<IDebugService>();
 

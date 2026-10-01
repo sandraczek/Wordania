@@ -34,9 +34,9 @@ namespace Wordania.Features.World.Lighting
         private readonly int[] _neighborX = { 1, -1, 0, 0 };
         private readonly int[] _neighborY = { 0, 0, 1, -1 };
 
-        private readonly IEventBusSession _eventBus;
+        private readonly IEventBus _eventBus;
 
-        public StaticLightingService(IBlockRegistry blockRegistry, IWorldService worldService, WorldSettings settings, IEventBusSession eventBus)
+        public StaticLightingService(IBlockRegistry blockRegistry, IWorldService worldService, WorldSettings settings, IEventBus eventBus)
         {
             _blockRegistry = blockRegistry;
             _settings = settings;

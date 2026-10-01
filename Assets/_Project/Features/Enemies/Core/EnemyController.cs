@@ -32,7 +32,7 @@ namespace Wordania.Features.Enemies.Core
     public sealed class EnemyController : MonoBehaviour, IEnemy, ICharacterMovement, IDamageable, ITrackable
     {
         public EnemyTemplate Data;
-        private IEventBusSession _eventBus;
+        private IEventBus _eventBus;
 
         public Entity Entity;
         private HealthComponent _health;
@@ -76,7 +76,7 @@ namespace Wordania.Features.Enemies.Core
         public event Action<float> OnLanded;
 
         [Inject]
-        public void Construct(IEventBusSession eventBus)
+        public void Construct(IEventBus eventBus)
         {
             _eventBus = eventBus;
 

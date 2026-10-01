@@ -22,7 +22,7 @@ namespace Wordania.Features.Combat.Core
     {
         private readonly IAssetRegistry<ProjectileData> _projectileRegistry;
         private readonly AABBTargetableService _aabbService;
-        private readonly IEventBusSession _eventBus;
+        private readonly IEventBus _eventBus;
         private readonly IEntityRegistry _entities;
 
         private readonly Queue<(ProjectileRuntimeData data, ProjectileView view)> _spawnQueue = new();
@@ -38,7 +38,7 @@ namespace Wordania.Features.Combat.Core
             (
             IAssetRegistry<ProjectileData> projectileRegistry,
             AABBTargetableService aabbService,
-            IEventBusSession eventBus,
+            IEventBus eventBus,
             IWorldCollisionJobService world,
             IEntityRegistry entities
             )

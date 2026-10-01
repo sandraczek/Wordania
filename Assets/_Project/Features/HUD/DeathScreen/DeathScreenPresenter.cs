@@ -13,10 +13,10 @@ namespace Wordania.Features.HUD.DeathScreen
     public class DeathScreenPresenter : IStartable, IDisposable
     {
         private readonly DeathScreenView _view;
-        private readonly IEventBusSession _bus;
+        private readonly IEventBus _bus;
         private readonly PlayerProvider _player;
 
-        public DeathScreenPresenter(DeathScreenView view, IEventBusSession bus, PlayerProvider player)
+        public DeathScreenPresenter(DeathScreenView view, IEventBus bus, PlayerProvider player)
         {
             _view = view;
             _bus = bus;

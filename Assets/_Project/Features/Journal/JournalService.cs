@@ -24,7 +24,7 @@ namespace Wordania.Features.Journal
     /// </summary>
     public sealed class JournalService : IJournalService, IStartable, IDisposable, ISaveable
     {
-        private readonly IEventBusSession _bus;
+        private readonly IEventBus _bus;
         private readonly ISaveService _save;
         private readonly IJournalMilestoneService _milestones;
         private readonly IEntityRegistry _entities;
@@ -39,7 +39,7 @@ namespace Wordania.Features.Journal
         private Dictionary<AssetId, int>[] _loadedCategories;
         //private bool _loadingFromSave = false;
 
-        public JournalService(IEventBusSession eventBus, ISaveService save, IJournalMilestoneService milestones, IEntityRegistry entities)
+        public JournalService(IEventBus eventBus, ISaveService save, IJournalMilestoneService milestones, IEntityRegistry entities)
         {
             _bus = eventBus;
             _save = save;

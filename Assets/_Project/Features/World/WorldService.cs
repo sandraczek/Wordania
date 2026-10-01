@@ -34,7 +34,7 @@ namespace Wordania.Features.World
 
         [Header("Data")]
         public WorldData Data { get; private set; }
-        private readonly IEventBusSession _eventBus;
+        private readonly IEventBus _eventBus;
 
         private readonly Dictionary<InstanceId, Dictionary<AssetId, int>> _pendingDestructions = new();
         private readonly List<BlockMineRecord> _reusableBatchList = new(32);
@@ -47,7 +47,7 @@ namespace Wordania.Features.World
             WorldSettings settings,
             IWorldGenerator generator,
             ISaveService saveService,
-            IEventBusSession eventBus
+            IEventBus eventBus
             )
         {
             _blockDatabase = blockDatabase;

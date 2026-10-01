@@ -13,7 +13,7 @@ namespace Wordania.Features.Combat
     [RequireComponent(typeof(StatsComponent))]
     public sealed class HealthComponent : MonoBehaviour, IReadOnlyHealth
     {
-        private IEventBusSession _eventBus;
+        private IEventBus _eventBus;
 
         [Header("Configuration")]
         private CharacterStat _healthStat;
@@ -29,7 +29,7 @@ namespace Wordania.Features.Combat
         public event Action<DamageResult> OnDamageTaken;
         public event Action OnDeath;
 
-        public void Construct(IEventBusSession eventBus)
+        public void Construct(IEventBus eventBus)
         {
             _eventBus = eventBus;
         }

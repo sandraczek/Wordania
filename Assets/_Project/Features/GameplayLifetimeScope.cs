@@ -111,7 +111,6 @@ namespace Wordania.Features
                 .WithParameter(true)
                 .WithParameter(PersistentId.New());
             builder.Register<JsonSaveService>(Lifetime.Singleton).As<ISaveService>();
-            builder.Register<SessionEventBus>(Lifetime.Scoped).As<IEventBusSession>();
             builder.RegisterInstance<ICameraService>(_cameraService);
 
             //markers
@@ -253,7 +252,7 @@ TODOS:
 - prewarming
 - refactor Invincibility so health component uses it
 - FIX: go through all journal milestones when loading save
-- refactor inventory. Why does player - factory needs it?
+- refactor inventory. Why does players - factory need it?
 - inventoryDisplay component is on Canvas.
 - clean directories
 
@@ -282,10 +281,7 @@ maybe optimization:
 
 -- currently
 try get feature
-unify event bus
 saving
-inventory to multiplayer
-
 
 
 

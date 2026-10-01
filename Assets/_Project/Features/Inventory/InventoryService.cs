@@ -22,7 +22,7 @@ namespace Wordania.Features.Player
     public sealed class InventoryService : IInventoryService, IDisposable, IStartable, ISaveable
     {
         private readonly IAssetRegistry<ItemData> _database;
-        private readonly IEventBusSession _bus;
+        private readonly IEventBus _bus;
         private readonly ISaveService _saveService;
         private readonly IEntityRegistry _entities;
         private readonly PlayerProvider _playerProvider;
@@ -31,7 +31,7 @@ namespace Wordania.Features.Player
 
         public event Action OnInventoryChanged;
 
-        public InventoryService(IAssetRegistry<ItemData> database, IEventBusSession eventBus, ISaveService saveService, IEntityRegistry entities, PlayerProvider playerProvider)
+        public InventoryService(IAssetRegistry<ItemData> database, IEventBus eventBus, ISaveService saveService, IEntityRegistry entities, PlayerProvider playerProvider)
         {
             _database = database;
             _bus = eventBus;

@@ -15,11 +15,11 @@ namespace Wordania.Features.Journal.Milestones
 {
     public class JournalMilestoneService : IJournalMilestoneService, IStartable, IDisposable
     {
-        private readonly IEventBusSession _eventBus;
+        private readonly IEventBus _eventBus;
         private readonly IAssetRegistry<JournalEntry> _entryRegistry;
         private readonly IEntityRegistry _entities;
 
-        public JournalMilestoneService(IEventBusSession eventBus, IAssetRegistry<JournalEntry> entryRegistry, IEntityRegistry entities)
+        public JournalMilestoneService(IEventBus eventBus, IAssetRegistry<JournalEntry> entryRegistry, IEntityRegistry entities)
         {
             _eventBus = eventBus;
             _entryRegistry = entryRegistry;

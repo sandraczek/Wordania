@@ -20,7 +20,7 @@ namespace Wordania.Features.Player.Loadout
 
         private IInputReader _inputs;
         private PlayerContext _player;
-        private IEventBusSession _bus;
+        private IEventBus _bus;
         private IAssetRegistry<WeaponData> _weaponRegistry;
 
         private readonly List<ILoadoutSlot> _hotbarSlots = new(10);
@@ -33,7 +33,7 @@ namespace Wordania.Features.Player.Loadout
         private bool _isSecondaryActionHeld;
 
         [Inject]
-        public void Construct(IInputReader inputs, PlayerContext playerContext, IEventBusSession bus, IAssetRegistry<WeaponData> weaponRegistry)
+        public void Construct(IInputReader inputs, PlayerContext playerContext, IEventBus bus, IAssetRegistry<WeaponData> weaponRegistry)
         {
             _inputs = inputs;
             _player = playerContext;

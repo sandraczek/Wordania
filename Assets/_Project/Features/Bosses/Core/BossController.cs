@@ -20,11 +20,11 @@ namespace Wordania.Features.Bosses.Core
     public abstract class BossController<TTemplate> : BossController
         where TTemplate : BossTemplate
     {
-        private IEventBusSession _eventBus;
+        private IEventBus _eventBus;
         protected TTemplate _template;
 
         [Inject]
-        public void Construct(IEventBusSession eventBus)
+        public void Construct(IEventBus eventBus)
         {
             _eventBus = eventBus;
         }

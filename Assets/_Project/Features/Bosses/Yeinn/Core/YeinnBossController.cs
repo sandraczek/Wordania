@@ -19,7 +19,7 @@ namespace Wordania.Features.Bosses.Yeinn.Core
     public sealed class YeinnBossController : BossController<YeinnTemplate>
     {
         [Header("Dependencies")]
-        private IEventBusSession _eventBus;
+        private IEventBus _eventBus;
         private IEntityRegistry _entities;
 
 
@@ -43,7 +43,7 @@ namespace Wordania.Features.Bosses.Yeinn.Core
         public bool AreBothHandsDefeated => _leftHand.IsDefeated && _rightHand.IsDefeated;
 
         [Inject]
-        public void Construct(IEventBusSession eventBus, IEntityRegistry entities)
+        public void Construct(IEventBus eventBus, IEntityRegistry entities)
         {
             _eventBus = eventBus;
             _entities = entities;
