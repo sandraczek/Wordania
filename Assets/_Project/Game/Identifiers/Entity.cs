@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Wordania.Combat;
-using Wordania.Gameplay;
 
 namespace Wordania.Identifiers
 {
@@ -12,48 +10,17 @@ namespace Wordania.Identifiers
         private readonly Dictionary<Type, object> _features = new();
         public Transform Transform => transform;
 
-        private void Awake()
-        {
-            TryRegister<IDamageable>();
-            TryRegister<ITrackable>();
-            TryRegister<IEnemy>();
-            TryRegister<IPersistent>();
-            TryRegister<IReadOnlyHealth>();
-        }
-
-        private void RegisterFeature<T>(T feature) where T : class
-        {
-            if (feature != null)
-            {
-                _features[typeof(T)] = feature;
-            }
-        }
-
-        private void TryRegister<T>() where T : class
-        {
-            if (TryGetComponent(out T component))
-            {
-                RegisterFeature(component);
-            }
-        }
-
         public bool TryGetFeature<T>(out T feature) where T : class
         {
-            if (_features.TryGetValue(typeof(T), out var obj))
+            if (!_features.TryGetValue(typeof(T), out var obj))
             {
-                feature = (T)obj;
-                return true;
+                TryGetComponent(out T component);
+                obj = component;
+                _features[typeof(T)] = obj;
             }
-#if UNITY_EDITOR
-            else if (TryGetComponent(out T c))
-            {
-                feature = c;
-                RegisterFeature(c);
-                return true;
-            }
-#endif
-            feature = null;
-            return false;
+
+            feature = obj as T;
+            return feature != null;
         }
     }
 }
