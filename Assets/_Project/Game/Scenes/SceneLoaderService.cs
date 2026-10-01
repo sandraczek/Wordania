@@ -1,0 +1,27 @@
+using Cysharp.Threading.Tasks;
+using UnityEngine.SceneManagement;
+
+namespace Wordania.Scenes
+{
+    public sealed class SceneLoaderService : ISceneLoaderService
+    {
+        private const string SCENE_MENU = "MainMenu";
+        private const string SCENE_GAMEPLAY = "Gameplay";
+        private const string SCENE_WORLD = "World";
+
+        public async UniTask LoadMenuAsync()
+        {
+            await SceneManager.LoadSceneAsync(SCENE_MENU).ToUniTask();
+            // Here Loading Screen (Fade Out)
+        }
+
+        public async UniTask LoadGameplayAsync()
+        {
+            await SceneManager.LoadSceneAsync(SCENE_GAMEPLAY).ToUniTask();
+        }
+        public async UniTask LoadWorldAsync()
+        {
+            await SceneManager.LoadSceneAsync(SCENE_WORLD).ToUniTask();
+        }
+    }
+}
