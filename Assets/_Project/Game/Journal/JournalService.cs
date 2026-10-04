@@ -13,6 +13,7 @@ using Wordania.Services;
 using Wordania.Bosses.Events;
 using Wordania.Journal.Entries;
 using Wordania.Journal.Milestones;
+using Wordania.Player.Events;
 using Wordania.World.Events;
 
 namespace Wordania.Journal
@@ -31,12 +32,6 @@ namespace Wordania.Journal
 
         private readonly List<BlockMineRecordedRecord> _cashedMinedBlocksRecords = new();
 
-
-        // For now, when there is only one player
-
-        private Dictionary<AssetId, int>[] _loadedCategories;
-        //private bool _loadingFromSave = false;
-
         public JournalService(IEventBus eventBus, ISaveService save, IJournalMilestoneService milestones, IEntityRegistry entities)
         {
             _bus = eventBus;
@@ -50,6 +45,7 @@ namespace Wordania.Journal
             _bus.Subscribe<DeathEvent>(HandleDeathEvent);
             _bus.Subscribe<BossDeathEvent>(HandleBossDeathEvent);
             _bus.Subscribe<BlocksMinedBatchEvent>(HandleBlocksMinedBatchEvent);
+            _bus.Subscribe<PlayerSpawnedEvent>(HandlePlayerSpawned);
             _save.Register(this);
         }
 
@@ -58,6 +54,7 @@ namespace Wordania.Journal
             _bus?.Unsubscribe<DeathEvent>(HandleDeathEvent);
             _bus?.Unsubscribe<BossDeathEvent>(HandleBossDeathEvent);
             _bus?.Unsubscribe<BlocksMinedBatchEvent>(HandleBlocksMinedBatchEvent);
+            _bus?.Unsubscribe<PlayerSpawnedEvent>(HandlePlayerSpawned);
             _save.Unregister(this);
         }
         private IPlayerJournal GetPlayerJournal(PersistentId persistentId)
@@ -183,45 +180,73 @@ namespace Wordania.Journal
             }
         }
 
+        private void HandlePlayerSpawned(PlayerSpawnedEvent e)
+        {
+            // Re-apply milestone rewards (journal state outlives the player entity, mechanics don't)
+            if (_journals.TryGetValue(e.PersistentId, out IPlayerJournal journal))
+            {
+                _milestones.ApplyEarnedMilestones(e.PersistentId, journal.GetDictionary(JournalCategory.Enemies));
+            }
+        }
+
         public void CaptureState(GameSaveData saveData)
         {
-            // IPlayerJournal journal = _journals.Values.FirstOrDefault();
-            // for (int cat = 0; cat < (int)JournalCategory.COUNT; cat++)
-            // {
-            //     saveData.Journal.Categories[cat] = new();
-            //     foreach (var entry in journal.GetDictionary((JournalCategory)cat))
-            //     {
-            //         if (entry.Value <= 0) continue;
-            //         saveData.Journal.Categories[cat].Entries.Add(new(entry.Key.Hash, entry.Value));
-            //     }
-            // }
+            saveData.Journals.Clear();
+
+            int catCount = (int)JournalCategory.COUNT;
+            foreach (var kvp in _journals)
+            {
+                var journalSave = new JournalSaveData
+                {
+                    PersistentId = kvp.Key,
+                    Categories = new JournalCategoryDto[catCount]
+                };
+
+                for (int cat = 0; cat < catCount; cat++)
+                {
+                    var categoryDto = new JournalCategoryDto();
+                    foreach (var entry in kvp.Value.GetDictionary((JournalCategory)cat))
+                    {
+                        if (entry.Value <= 0) continue;
+                        categoryDto.Entries.Add(new JournalEntryDto(entry.Key.Hash, entry.Value));
+                    }
+                    journalSave.Categories[cat] = categoryDto;
+                }
+
+                saveData.Journals.Add(journalSave);
+            }
         }
 
         public void RestoreState(GameSaveData saveData)
         {
-            // int catCount = (int)JournalCategory.COUNT;
-            // _loadedCategories = new Dictionary<AssetId, int>[catCount];
+            _journals.Clear();
+            if (saveData.Journals == null) return;
 
-            // List<(AssetId, int)> loadedPairs = new();
+            int catCount = (int)JournalCategory.COUNT;
+            foreach (var journalSave in saveData.Journals)
+            {
+                if (journalSave == null || journalSave.PersistentId.IsEmpty) continue;
 
-            // for (int cat = 0; cat < catCount; cat++)
-            // {
-            //     _loadedCategories[cat] = new();
-            // }
-            // for (int cat = 0; cat < saveData.Journal.Categories.Length; cat++)
-            // {
-            //     var entries = saveData.Journal.Categories[cat].Entries;
-            //     foreach (var entry in entries)
-            //     {
-            //         AssetId id = new(entry.Id);
-            //         _loadedCategories[cat].Add(id, entry.Count);
-            //         loadedPairs.Add((id, entry.Count));
-            //     }
-            // }
+                var categories = new Dictionary<AssetId, int>[catCount];
+                for (int cat = 0; cat < catCount; cat++)
+                {
+                    categories[cat] = new(16);
 
-            // _milestones.CheckAllMilestones(loadedPairs);
+                    if (journalSave.Categories == null || cat >= journalSave.Categories.Length) continue;
+                    var entries = journalSave.Categories[cat]?.Entries;
+                    if (entries == null) continue;
 
-            // _loadingFromSave = true;
+                    foreach (var entry in entries)
+                    {
+                        if (entry.Id == 0 || entry.Count <= 0) continue;
+                        categories[cat][new AssetId(entry.Id)] = entry.Count;
+                    }
+                }
+
+                var journal = new PlayerJournal(journalSave.PersistentId);
+                journal.SetInitial(categories);
+                _journals[journalSave.PersistentId] = journal;
+            }
         }
     }
 }

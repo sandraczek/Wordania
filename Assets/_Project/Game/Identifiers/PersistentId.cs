@@ -1,6 +1,7 @@
 namespace Wordania.Identifiers
 {
     using System;
+    using Newtonsoft.Json;
 
     public readonly struct PersistentId : IEquatable<PersistentId>
     {
@@ -10,6 +11,8 @@ namespace Wordania.Identifiers
 
         public readonly bool IsEmpty => Value == Guid.Empty;
 
+        // Newtonsoft can't assign readonly fields; without this attribute loaded ids would be Empty.
+        [JsonConstructor]
         public PersistentId(Guid value)
         {
             Value = value;

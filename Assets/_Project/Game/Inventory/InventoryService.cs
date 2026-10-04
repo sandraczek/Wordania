@@ -114,31 +114,52 @@ namespace Wordania.Inventory
 
         public void CaptureState(GameSaveData saveData)
         {
-            // IEnumerable<InventoryEntry> allHeldItems = GetAllEntries();
-            // int itemsLength = _data._content.Count;
-            // saveData.PlayerInventory.items = new ItemSaveData[itemsLength];
+            saveData.Inventories.Clear();
 
-            // int slot = 0;
-            // foreach (InventoryEntry item in allHeldItems)
-            // {
-            //     ItemSaveData itemSave = new(item.Data.Id.Hash, item.Quantity);
-            //     saveData.PlayerInventory.items[slot++] = itemSave;
-            // }
+            foreach (var kvp in _inventories)
+            {
+                var inventory = kvp.Value;
+                var items = new List<ItemSaveData>(inventory.Dictionary.Count);
+                foreach (var itemKvp in inventory.Dictionary)
+                {
+                    if (itemKvp.Value.Count > 0)
+                        items.Add(new ItemSaveData(itemKvp.Key.Hash, itemKvp.Value.Count));
+                }
+
+                saveData.Inventories.Add(new InventorySaveData
+                {
+                    PersistentId = kvp.Key,
+                    items = items.ToArray()
+                });
+            }
         }
 
         public void RestoreState(GameSaveData saveData)
         {
-            // ClearInventory();
+            _inventories.Clear();
 
-            // if (saveData.PlayerInventory.items == null) return;
+            if (saveData.Inventories != null)
+            {
+                foreach (var inventorySave in saveData.Inventories)
+                {
+                    if (inventorySave == null || inventorySave.PersistentId.IsEmpty) continue;
 
-            // foreach (ItemSaveData itemSave in saveData.PlayerInventory.items)
-            // {
-            //     if (itemSave.Id != 0 && itemSave.Quantity > 0)
-            //     {
-            //         AddItem(new AssetId(itemSave.Id), itemSave.Quantity);
-            //     }
-            // }
+                    var inventory = GetInventory(inventorySave.PersistentId);
+                    if (inventorySave.items == null) continue;
+
+                    foreach (ItemSaveData itemSave in inventorySave.items)
+                    {
+                        if (itemSave.Id == 0 || itemSave.Quantity <= 0) continue;
+
+                        var item = _database.Get(new AssetId(itemSave.Id));
+                        if (item == null) continue;
+
+                        inventory.Add(item, itemSave.Quantity);
+                    }
+                }
+            }
+
+            OnInventoryChanged?.Invoke();
         }
     }
 }

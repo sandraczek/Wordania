@@ -51,25 +51,22 @@ namespace Wordania.Journal.Milestones
             }
         }
 
-        // public IEnumerable<AssetId> GetEarnedMechanics(IReadOnlyList<(AssetId, int)> currentStats)
-        // {
-        //     var earnedMechanicIds = new List<AssetId>();
+        public void ApplyEarnedMilestones(PersistentId persistentId, IReadOnlyDictionary<AssetId, int> enemyKills)
+        {
+            if (!_entities.Entities.TryGetValue(_entities.GetInstanceId(persistentId), out var entity)
+                || !entity.TryGetFeature(out MechanicsComponent mechanics)) return;
 
-        //     for (int i = 0; i < currentStats.Count; i++)
-        //     {
-        //         var entry = _entryRegistry.Get(currentStats[i].Item1);
-        //         if (entry == null) continue;
+            foreach (var kill in enemyKills)
+            {
+                var entry = _entryRegistry.Get(kill.Key);
+                if (entry == null) continue;
 
-        //         foreach (var milestone in entry.Milestones)
-        //         {
-        //             if (currentStats[i].Item2 >= milestone.TargetThreshold)
-        //             {
-        //                 earnedMechanicIds.Add(milestone.Mechanic.Id);
-        //             }
-        //         }
-        //     }
-
-        //     return earnedMechanicIds;
-        // }
+                foreach (var milestone in entry.Milestones)
+                {
+                    if (kill.Value >= milestone.TargetThreshold)
+                        mechanics.EnableMechanic(milestone.Mechanic.Id, InstanceId.Journal);
+                }
+            }
+        }
     }
 }

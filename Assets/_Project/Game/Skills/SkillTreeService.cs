@@ -11,6 +11,8 @@ using Wordania.Services;
 using Wordania.Stats;
 using Wordania.Mechanics;
 using Wordania.Player;
+using Wordania.Player.Events;
+using Wordania.Events;
 
 namespace Wordania.Skills
 {
@@ -20,6 +22,7 @@ namespace Wordania.Skills
         private readonly ISaveService _save;
         private readonly IEntityRegistry _entities;
         private readonly PlayerProvider _playerProvider;
+        private readonly IEventBus _bus;
 
         private readonly Dictionary<PersistentId, PlayerSkillTree> _dictionary = new();
 
@@ -27,20 +30,23 @@ namespace Wordania.Skills
         public event Action<AssetId> OnLocalSkillUnlocked;
         public event Action<AssetId> OnLocalSkillLocked;
 
-        public SkillTreeService(IAssetRegistry<SkillData> registry, ISaveService save, PlayerProvider playerProvider, IEntityRegistry entities)
+        public SkillTreeService(IAssetRegistry<SkillData> registry, ISaveService save, PlayerProvider playerProvider, IEntityRegistry entities, IEventBus bus)
         {
             _registry = registry;
             _save = save;
             _playerProvider = playerProvider;
             _entities = entities;
+            _bus = bus;
         }
         public void Start()
         {
             _save.Register(this);
+            _bus.Subscribe<PlayerSpawnedEvent>(HandlePlayerSpawned);
         }
         public void Dispose()
         {
             _save?.Unregister(this);
+            _bus?.Unsubscribe<PlayerSpawnedEvent>(HandlePlayerSpawned);
         }
 
         private PlayerSkillTree GetSkills(PersistentId persistentId)
@@ -158,23 +164,67 @@ namespace Wordania.Skills
             }
         }
 
+        private void HandlePlayerSpawned(PlayerSpawnedEvent e)
+        {
+            // Skill state outlives the player entity; stat modifiers/mechanics must be re-applied to the new one.
+            if (!_dictionary.TryGetValue(e.PersistentId, out var skills)) return;
+
+            skills.AppliedSkillStats.Clear();
+            foreach (var skillId in skills.UnlockedSkills)
+            {
+                ApplySkillEffects(e.PersistentId, _registry.Get(skillId));
+            }
+
+            if (_playerProvider.IsLocalPlayer(e.PersistentId))
+            {
+                OnLocalPointsChanged?.Invoke(skills.SkillPoints);
+            }
+        }
+
         public void CaptureState(GameSaveData saveData)
         {
-            // for (int i = 0; i < SkillPoints.Length; i++)
-            //     saveData.Skills.SkillPoints.Add((i, SkillPoints[i]));
+            saveData.Skills.Clear();
 
-            // saveData.Skills.UnlockedSkills = _unlockedSkills.Select(s => s.Hash).ToList(); ;
+            foreach (var kvp in _dictionary)
+            {
+                saveData.Skills.Add(new SkillSaveData
+                {
+                    PersistentId = kvp.Key,
+                    SkillPoints = (int[])kvp.Value.SkillPoints.Clone(),
+                    UnlockedSkills = kvp.Value.UnlockedSkills.Select(s => s.Hash).ToList()
+                });
+            }
         }
 
         public void RestoreState(GameSaveData saveData)
         {
-            // SkillPoints = new int[(int)SkillPointsType.Count];
-            // foreach (var sp in saveData.Skills.SkillPoints)
-            //     SkillPoints[sp.Item1] = sp.Item2;
-            // OnPointsChanged?.Invoke(SkillPoints);
+            _dictionary.Clear();
+            if (saveData.Skills == null) return;
 
-            // if (saveData.Skills.UnlockedSkills != null)
-            //     _unlockedSkills = saveData.Skills.UnlockedSkills.Select(s => new AssetId(s)).ToHashSet();
+            foreach (var skillSave in saveData.Skills)
+            {
+                if (skillSave == null || skillSave.PersistentId.IsEmpty) continue;
+
+                var skills = new PlayerSkillTree();
+
+                if (skillSave.SkillPoints != null)
+                {
+                    int count = Math.Min(skillSave.SkillPoints.Length, skills.SkillPoints.Length);
+                    Array.Copy(skillSave.SkillPoints, skills.SkillPoints, count);
+                }
+
+                if (skillSave.UnlockedSkills != null)
+                {
+                    foreach (int hash in skillSave.UnlockedSkills)
+                    {
+                        var id = new AssetId(hash);
+                        if (_registry.Get(id) != null)
+                            skills.UnlockedSkills.Add(id);
+                    }
+                }
+
+                _dictionary[skillSave.PersistentId] = skills;
+            }
         }
 
         public void ApplySkillEffects(PersistentId persistentId, SkillData skill)

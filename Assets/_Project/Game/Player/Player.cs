@@ -204,7 +204,10 @@ namespace Wordania.Player
 
         public PlayerSaveData GetSaveData()
         {
-            PlayerSaveData data = new();
+            PlayerSaveData data = new()
+            {
+                PersistentId = PersistentId
+            };
             data.Position[0] = _controller.Position.x;
             data.Position[1] = _controller.Position.y;
             data.CurrentHealth = _health.CurrentHealth;

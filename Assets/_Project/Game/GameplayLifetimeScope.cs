@@ -106,7 +106,7 @@ namespace Wordania
             builder.Register<SessionConfig>(Lifetime.Scoped)
                 .WithParameter(_saveSlot)
                 .WithParameter(true)
-                .WithParameter(PersistentId.New());
+                .WithParameter(LocalPlayerIdentity.GetOrCreate());
             builder.Register<JsonSaveService>(Lifetime.Singleton).As<ISaveService>();
             builder.RegisterInstance<ICameraService>(_cameraService);
 
@@ -158,7 +158,7 @@ namespace Wordania
             builder.RegisterEntryPoint<InventoryService>(Lifetime.Scoped).As<IInventoryService>();
 
             //player
-            builder.Register<PlayerStateService>(Lifetime.Scoped).AsSelf();
+            builder.RegisterEntryPoint<PlayerSaveService>(Lifetime.Scoped).AsSelf();
             builder.Register<PlayerSpawnPointService>(Lifetime.Scoped).As<IPlayerSpawnPointService>();
             builder.Register<PlayerContext>(Lifetime.Scoped);
             builder.Register<PlayerSpawnerService>(Lifetime.Scoped)

@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json;
 using Wordania.Identifiers;
 
 namespace Wordania.SaveSystem.Data
@@ -16,6 +17,7 @@ namespace Wordania.SaveSystem.Data
         public readonly int Id;
         public readonly int Quantity;
 
+        [JsonConstructor]
         public ItemSaveData(int id, int quantity)
         {
             Id = id;

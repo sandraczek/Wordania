@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Wordania.Constants;
 using Wordania.Identifiers;
 
@@ -19,6 +20,7 @@ namespace Wordania.SaveSystem.Data
         public readonly int Id;
         public readonly int Count;
 
+        [JsonConstructor]
         public JournalEntryDto(int id, int count)
         {
             Id = id;

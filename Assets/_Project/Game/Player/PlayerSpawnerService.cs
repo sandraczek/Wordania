@@ -1,46 +1,51 @@
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
+using Wordania.Events;
 using Wordania.Identifiers;
 using Wordania.Services;
 using Wordania.Markers;
+using Wordania.Player.Events;
 
 namespace Wordania.Player
 {
     public sealed class PlayerSpawnerService
     {
         private readonly IObjectResolver _resolver;
-        private readonly PlayerStateService _stateService;
+        private readonly PlayerSaveService _playerSaveService;
         private readonly PlayerProvider _localProvider;
         private readonly IEntityRegistry _entities;
         private readonly IInstanceIdProvider _idProvider;
         private readonly IPlayerSpawnPointService _spawnPointService;
+        private readonly IEventBus _bus;
         private readonly Transform _parent;
         private readonly GameObject _playerPrefab;
 
         public PlayerSpawnerService(
             IObjectResolver resolver,
-            PlayerStateService stateService,
+            PlayerSaveService stateService,
             PlayerProvider localProvider,
             IEntityRegistry registry,
             IInstanceIdProvider idProvider,
             IPlayerSpawnPointService spawnPointService,
+            IEventBus bus,
             MarkerEntityParent playerParent,
             GameObject playerPrefab)
         {
             _resolver = resolver;
-            _stateService = stateService;
+            _playerSaveService = stateService;
             _localProvider = localProvider;
             _entities = registry;
             _idProvider = idProvider;
             _spawnPointService = spawnPointService;
+            _bus = bus;
             _parent = playerParent.transform;
             _playerPrefab = playerPrefab;
         }
 
         public Player SpawnPlayer(PersistentId persistentId, bool isLocalClient)
         {
-            var savedState = _stateService.GetState(persistentId);
+            var savedState = _playerSaveService.GetState(persistentId);
 
             Vector2 position = savedState != null
                 ? new Vector2(savedState.Position[0], savedState.Position[1])
@@ -72,6 +77,8 @@ namespace Wordania.Player
                 _localProvider.SetPlayer(player);
             }
 
+            _bus.Publish(new PlayerSpawnedEvent(player.InstanceId, persistentId));
+
             return player;
         }
 
@@ -79,7 +86,7 @@ namespace Wordania.Player
         {
             if (player == null) return;
 
-            _stateService.UpdateState(player.PersistentId, player.GetSaveData());
+            _playerSaveService.UpdateState(player.PersistentId, player.GetSaveData());
 
             _entities.Unregister(player.InstanceId);
 
