@@ -1,5 +1,4 @@
 using UnityEngine;
-using Wordania.Inputs;
 using Wordania.Inventory;
 using Wordania.Player.FSM.States;
 
@@ -15,14 +14,14 @@ namespace Wordania.Player.FSM
         public PlayerBaseState Hurt { get; }
         public PlayerBaseState Spectate { get; }
         // TODO: maybe switch to DI
-        public PlayerStateFactory(PlayerContext context, IInputReader inputs, IInventoryService inventoryService)
+        public PlayerStateFactory(PlayerContext context, IInventoryService inventoryService)
         {
-            Idle = new PlayerIdleState(context, inputs, this);
-            Run = new PlayerRunState(context, inputs, this);
-            Jump = new PlayerJumpState(context, inputs, this);
-            Fall = new PlayerFallState(context, inputs, this);
-            Hurt = new PlayerHurtState(context, inputs, this);
-            Spectate = new PlayerSpectateState(context, inputs, this);
+            Idle = new PlayerIdleState(context, this);
+            Run = new PlayerRunState(context, this);
+            Jump = new PlayerJumpState(context, this);
+            Fall = new PlayerFallState(context, this);
+            Hurt = new PlayerHurtState(context, this);
+            Spectate = new PlayerSpectateState(context, this);
 
             InitialState = Idle;
         }

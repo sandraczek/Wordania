@@ -1,5 +1,4 @@
 using UnityEngine;
-using Wordania.Inputs;
 using Wordania.Stats;
 
 namespace Wordania.Player.FSM.States
@@ -8,7 +7,7 @@ namespace Wordania.Player.FSM.States
     {
         public override bool CanPerformActions => true;
         public override bool CanSetSlot => true;
-        public PlayerActiveState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory) { }
+        public PlayerActiveState(PlayerContext context, PlayerStateFactory playerStateFactory) : base(context, playerStateFactory) { }
 
         public override void CheckSwitchStates()
         {
@@ -47,7 +46,7 @@ namespace Wordania.Player.FSM.States
             float newVelocityX = Mathf.MoveTowards(
                 _context.Controller.VelocityX,
                 targetSpeed,
-                currentAccel * Time.fixedDeltaTime
+                currentAccel * _context.Clock.FixedDeltaTime
             );
 
             _context.Controller.VelocityX = newVelocityX;

@@ -1,17 +1,15 @@
-using UnityEngine;
 using Unity.Mathematics;
-using Wordania.Inputs;
 
 namespace Wordania.Player.FSM.States
 {
     public sealed class PlayerJumpState : PlayerAirState
     {
-        public PlayerJumpState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory) { }
+        public PlayerJumpState(PlayerContext context, PlayerStateFactory playerStateFactory) : base(context, playerStateFactory) { }
 
         public override void CheckSwitchStates()
         {
             base.CheckSwitchStates();
-            if (Time.time >= _context.Controller.LastJumpTime + _context.Config.MinJumpDuration && _context.Controller.VelocityY < 0f)
+            if (_context.Clock.Now >= _context.Controller.LastJumpTime + _context.Config.MinJumpDuration && _context.Controller.VelocityY < 0f)
             {
                 _context.StateMachine.SwitchState(_factory.Fall);
                 return;
@@ -24,7 +22,7 @@ namespace Wordania.Player.FSM.States
             _context.Controller.VelocityY = _context.Config.JumpForce;
 
             _inputs.ConsumeJump();
-            _context.Controller.LastJumpTime = Time.time;
+            _context.Controller.LastJumpTime = _context.Clock.Now;
         }
 
         public override void Exit()

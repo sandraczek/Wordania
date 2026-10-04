@@ -1,12 +1,11 @@
 using UnityEngine;
 using Unity.Mathematics;
-using Wordania.Inputs;
 
 namespace Wordania.Player.FSM.States
 {
     public sealed class PlayerSpectateState : PlayerBaseState
     {
-        public PlayerSpectateState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory){}
+        public PlayerSpectateState(PlayerContext context, PlayerStateFactory playerStateFactory) : base(context, playerStateFactory) { }
 
         public override void CheckSwitchStates()
         {
@@ -37,19 +36,19 @@ namespace Wordania.Player.FSM.States
         private void ApplyFlyingMovement()
         {
             Vector2 targetSpeed = _inputs.MovementInput * _context.Config.FlySpeed;
-            
+
             float xAcceleration = (Mathf.Abs(targetSpeed.x) > 0.1f) ? _context.Config.FlyAcceleration : _context.Config.FlyDeceleration;
             float yAcceleration = (Mathf.Abs(targetSpeed.y) > 0.1f) ? _context.Config.FlyAcceleration : _context.Config.FlyDeceleration;
 
             float newVelocityX = Mathf.MoveTowards(
-                _context.Controller.VelocityX, 
-                targetSpeed.x, 
-                xAcceleration * Time.fixedDeltaTime
+                _context.Controller.VelocityX,
+                targetSpeed.x,
+                xAcceleration * _context.Clock.FixedDeltaTime
             );
             float newVelocityY = Mathf.MoveTowards(
-                _context.Controller.VelocityY, 
-                targetSpeed.y, 
-                yAcceleration * Time.fixedDeltaTime
+                _context.Controller.VelocityY,
+                targetSpeed.y,
+                yAcceleration * _context.Clock.FixedDeltaTime
             );
 
             _context.Controller.VelocityX = newVelocityX;

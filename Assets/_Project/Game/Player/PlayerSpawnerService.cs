@@ -72,6 +72,8 @@ namespace Wordania.Player
 
             _entities.Register(player.GetComponent<Entity>(), player.InstanceId);
 
+            player.SetLocalControl(isLocalClient);
+
             if (isLocalClient)
             {
                 _localProvider.SetPlayer(player);

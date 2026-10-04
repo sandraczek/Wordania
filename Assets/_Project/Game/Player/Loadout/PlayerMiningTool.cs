@@ -28,16 +28,19 @@ namespace Wordania.Player.Loadout
         private float _lastActionTime = float.MinValue;
 
         [Inject]
-        void Construct(IWorldService worldService, IInventoryService playerInventory, PlayerContext context, MechanicIds mechanicIds)
+        void Construct(IWorldService worldService, IInventoryService playerInventory, MechanicIds mechanicIds)
         {
             _world = worldService;
             _inventory = playerInventory;
-            _player = context;
             _mechanicIds = mechanicIds;
+        }
+        private void Awake()
+        {
+            _player = GetComponent<Player>().Context;
         }
         public bool ExecutePrimaryAction(Vector2 targetWorldPos, InstanceId instigatorId)
         {
-            if (Time.time < _lastActionTime + _actionRate) return false;
+            if (_player.Clock.Now < _lastActionTime + _actionRate) return false;
 
             float deltaRoundX = Mathf.Abs(Mathf.Round(targetWorldPos.x - 0.5f) - Mathf.Round(transform.position.x));
             float deltaRoundY = Mathf.Abs(Mathf.Round(targetWorldPos.y - 0.5f) - 2f - Mathf.Round(transform.position.y)); // distance from arms so -2f
@@ -45,7 +48,7 @@ namespace Wordania.Player.Loadout
 
             if (!TryMine(targetWorldPos)) return false;
 
-            _lastActionTime = Time.time;
+            _lastActionTime = _player.Clock.Now;
             return true;
         }
         public bool ExecuteSecondaryAction(Vector2 targetWorldPos, InstanceId instigatorId) { return false; }

@@ -1,5 +1,4 @@
 using UnityEngine;
-using Wordania.Inputs;
 
 namespace Wordania.Player.FSM.States
 {
@@ -8,17 +7,17 @@ namespace Wordania.Player.FSM.States
         public override bool CanSetSlot => true;
         private float _hitTime;
 
-        public PlayerHurtState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory) { }
+        public PlayerHurtState(PlayerContext context, PlayerStateFactory playerStateFactory) : base(context, playerStateFactory) { }
         public override void CheckSwitchStates()
         {
-            if (Time.time >= _context.Config.HitStunDuration + _hitTime)
+            if (_context.Clock.Now >= _context.Config.HitStunDuration + _hitTime)
             {
                 DetermineNextState();
             }
         }
         public override void Enter()
         {
-            _hitTime = Time.time;
+            _hitTime = _context.Clock.Now;
 
         }
 

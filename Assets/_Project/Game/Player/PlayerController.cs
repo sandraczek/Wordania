@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using VContainer;
 using Wordania.Identifiers;
-using Wordania.Inputs;
+using Wordania.Services;
 using Wordania.SFM;
 using Wordania.Movement;
 
@@ -17,7 +17,7 @@ namespace Wordania.Player
         private Collider2D _col;
 
         [Header("Dependencies")]
-        private IInputReader _inputs;
+        private IGameClock _clock;
         private PlayerConfig _config;
 
         [HideInInspector] public float LastJumpTime = float.MinValue;
@@ -56,10 +56,10 @@ namespace Wordania.Player
 
         [Inject]
         public void Construct(
-            IInputReader inputReader,
+            IGameClock clock,
             PlayerConfig config)
         {
-            _inputs = inputReader;
+            _clock = clock;
             _config = config;
         }
         private void Awake()
@@ -79,7 +79,7 @@ namespace Wordania.Player
             if (IsGrounded)
             {
 
-                LastGroundedTime = Time.time;
+                LastGroundedTime = _clock.Now;
 
                 if (!wasGrounded)
                 {
@@ -107,11 +107,6 @@ namespace Wordania.Player
             _rb.linearVelocity = Vector2.zero;
 
             OnPlayerWarped?.Invoke(delta);
-        }
-
-        public Vector2 GetWorldAimPosition()
-        {
-            return Camera.main.ScreenToWorldPoint(_inputs.CursorScreenPosition);
         }
 
         private bool CheckGrounded()
@@ -145,7 +140,7 @@ namespace Wordania.Player
 
             float direction = Mathf.Sign(horizontalInput);
 
-            float lookDistance = _config.StepLookMargin + Mathf.Abs(VelocityX) * Time.fixedDeltaTime;
+            float lookDistance = _config.StepLookMargin + Mathf.Abs(VelocityX) * _clock.FixedDeltaTime;
 
             Vector2 rayOrigin = new(
                 _col.bounds.center.x + (direction * _col.bounds.extents.x),

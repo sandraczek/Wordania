@@ -20,6 +20,7 @@ using Wordania.Player.Events;
 using Wordania.Player.FSM;
 using Wordania.Player.View;
 using Wordania.Player.FSM.States;
+using Wordania.Services;
 
 namespace Wordania.Player
 {
@@ -29,6 +30,7 @@ namespace Wordania.Player
     [RequireComponent(typeof(StatsComponent))]
     [RequireComponent(typeof(InvincibilityController))]
     [RequireComponent(typeof(DamageMitigator))]
+    [DefaultExecutionOrder(-50)] // pulls local input before loadout/other components read it
     public sealed class Player : MonoBehaviour, IPersistent, IDamageable, ITrackable
     {
         [Header("Components")]
@@ -45,9 +47,15 @@ namespace Wordania.Player
         private PlayerStateFactory _factory;
         private PlayerConfig _config;
         private MechanicIds _mechanicIds;
-        private PlayerContext _context;
         private IPlayerSpawnPointService _spawnPointService;
         private IEventBus _bus;
+        private IInputReader _inputReader;
+        private IGameClock _clock;
+        private LocalPlayerInputSource _localInput;
+
+        /// <summary>Per-player state shared with sibling components (loadout, tools). One instance per Player.</summary>
+        public PlayerContext Context { get; } = new();
+        public bool IsLocal => _localInput != null;
         public Bounds Hitbox => _controller.GetBounds();
         public Vector2 Position => _controller.GetBounds().center;
         public InstanceId InstanceId { get; private set; }
@@ -58,7 +66,7 @@ namespace Wordania.Player
         public void Construct(
             PlayerConfig config,
             IInputReader inputs,
-            PlayerContext context,
+            IGameClock clock,
             IInventoryService inventory,
             MechanicIds mechanicIds,
             IPlayerSpawnPointService spawnService,
@@ -76,11 +84,30 @@ namespace Wordania.Player
 
             _config = config;
             _mechanicIds = mechanicIds;
-            _context = context;
+            _inputReader = inputs;
+            _clock = clock;
 
             _stateMachine = new StateMachine<PlayerBaseState>();
 
-            _factory = new(context, inputs, inventory);
+            _factory = new(Context, inventory);
+        }
+
+        /// <summary>
+        /// Marks this player as controlled by the local machine: its PlayerInputState is fed from the local InputReader.
+        /// Remote players never call this; their PlayerInputState will be fed from the network.
+        /// </summary>
+        public void SetLocalControl(bool isLocal)
+        {
+            if (isLocal)
+            {
+                _localInput ??= new LocalPlayerInputSource(_inputReader, Context.Input);
+                if (isActiveAndEnabled) _localInput.Enable();
+            }
+            else if (_localInput != null)
+            {
+                _localInput.Disable();
+                _localInput = null;
+            }
         }
         public void InitializeNew(InstanceId instanceId, PersistentId persistentId)
         {
@@ -100,7 +127,7 @@ namespace Wordania.Player
         }
         private void Init()
         {
-            _context.Bind(PersistentId, InstanceId, _stateMachine, _controller, _health, _stats, _config, _mechanics, transform);
+            Context.Bind(PersistentId, InstanceId, _stateMachine, _controller, _health, _stats, _config, _mechanics, transform, _clock);
             // ---
             _stateMachine.SwitchState(_factory.InitialState);
 
@@ -132,6 +159,7 @@ namespace Wordania.Player
         }
         private void OnEnable()
         {
+            _localInput?.Enable();
             _health.OnDamageTaken += Handlehurt;
             _health.OnDamageTaken += HandleHurtVisuals;
             _health.OnDeath += HandleDeath;
@@ -141,6 +169,7 @@ namespace Wordania.Player
 
         private void OnDisable()
         {
+            _localInput?.Disable();
             _health.OnDamageTaken -= Handlehurt;
             _health.OnDamageTaken -= HandleHurtVisuals; //TODO: make visuals listen to health
             _health.OnDeath -= HandleDeath;
@@ -149,6 +178,7 @@ namespace Wordania.Player
         }
         private void Update()
         {
+            _localInput?.Pull();
             _stateMachine.Update();
         }
         private void FixedUpdate()

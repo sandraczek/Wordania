@@ -147,6 +147,7 @@ namespace Wordania
 
             //registry
             builder.Register<EntityRegistry>(Lifetime.Scoped).As<IEntityRegistry>();
+            builder.Register<UnityGameClock>(Lifetime.Singleton).As<IGameClock>();
 
             //combat
             builder.Register<WeaponFactory>(Lifetime.Scoped).As<IWeaponFactory>();
@@ -160,7 +161,6 @@ namespace Wordania
             //player
             builder.RegisterEntryPoint<PlayerSaveService>(Lifetime.Scoped).AsSelf();
             builder.Register<PlayerSpawnPointService>(Lifetime.Scoped).As<IPlayerSpawnPointService>();
-            builder.Register<PlayerContext>(Lifetime.Scoped);
             builder.Register<PlayerSpawnerService>(Lifetime.Scoped)
                 .AsSelf()
                 .WithParameter(_playerPrefab); // FUCK YOU

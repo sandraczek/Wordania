@@ -4,7 +4,6 @@ using VContainer;
 using Wordania.Data;
 using Wordania.Events;
 using Wordania.Identifiers;
-using Wordania.Inputs;
 using Wordania.Combat.Data;
 using Wordania.WeaponStore;
 
@@ -18,7 +17,6 @@ namespace Wordania.Player.Loadout
     {
         [SerializeField] private WeaponData[] _weapons; //temporary
 
-        private IInputReader _inputs;
         private PlayerContext _player;
         private IEventBus _bus;
         private IAssetRegistry<WeaponData> _weaponRegistry;
@@ -29,20 +27,17 @@ namespace Wordania.Player.Loadout
         private PlayerBuildingTool _builderTool;
         private PlayerMiningTool _minerTool;
 
-        private bool _isPrimaryActionHeld;
-        private bool _isSecondaryActionHeld;
-
         [Inject]
-        public void Construct(IInputReader inputs, PlayerContext playerContext, IEventBus bus, IAssetRegistry<WeaponData> weaponRegistry)
+        public void Construct(IEventBus bus, IAssetRegistry<WeaponData> weaponRegistry)
         {
-            _inputs = inputs;
-            _player = playerContext;
             _bus = bus;
             _weaponRegistry = weaponRegistry;
         }
 
         private void Awake()
         {
+            _player = GetComponent<Player>().Context;
+
             _weaponTool = GetComponent<PlayerWeaponTool>();
             _builderTool = GetComponent<PlayerBuildingTool>();
             _minerTool = GetComponent<PlayerMiningTool>();
@@ -52,23 +47,15 @@ namespace Wordania.Player.Loadout
 
         private void OnEnable()
         {
-            _inputs.OnHotbarSlotPressed += HandleHotbarSlotPressed;
-            _inputs.OnCycleActionSettings += HandleCycleToolSetting;
-            _inputs.OnPrimaryActionHeld += SetPrimaryActionHeld;
-            _inputs.OnSecondaryActionHeld += SetSecondaryActionHeld;
+            _player.Input.OnHotbarSlotPressed += HandleHotbarSlotPressed;
+            _player.Input.OnCycleActionSettings += HandleCycleToolSetting;
             _bus.Subscribe<WeaponBoughtEvent>(HandleWeaponBought);
         }
 
         private void OnDisable()
         {
-            if (_inputs != null)
-            {
-
-                _inputs.OnHotbarSlotPressed -= HandleHotbarSlotPressed;
-                _inputs.OnCycleActionSettings -= HandleCycleToolSetting;
-                _inputs.OnPrimaryActionHeld -= SetPrimaryActionHeld;
-                _inputs.OnSecondaryActionHeld -= SetSecondaryActionHeld;
-            }
+            _player.Input.OnHotbarSlotPressed -= HandleHotbarSlotPressed;
+            _player.Input.OnCycleActionSettings -= HandleCycleToolSetting;
 
             _bus?.Unsubscribe<WeaponBoughtEvent>(HandleWeaponBought);
         }
@@ -77,15 +64,15 @@ namespace Wordania.Player.Loadout
         {
             if (_activeSlot?.Executor == null || !_player.StateMachine.CurrentState.CanPerformActions) return;
 
-            Vector2 aimPosition = _player.Controller.GetWorldAimPosition();
+            Vector2 aimPosition = _player.Input.AimWorldPosition;
             InstanceId entityId = _player.InstanceId;
 
-            if (_isPrimaryActionHeld) // skipping execute return
+            if (_player.Input.PrimaryActionHeld) // skipping execute return
             {
                 _activeSlot.Executor.ExecutePrimaryAction(aimPosition, entityId);
             }
 
-            if (_isSecondaryActionHeld)
+            if (_player.Input.SecondaryActionHeld)
             {
                 _activeSlot.Executor.ExecuteSecondaryAction(aimPosition, entityId);
             }
@@ -134,8 +121,5 @@ namespace Wordania.Player.Loadout
         {
             _hotbarSlots.Add(new WeaponLoadoutSlot(_weaponTool, _weaponRegistry.Get(e.Id)));
         }
-
-        private void SetPrimaryActionHeld(bool isHeld) => _isPrimaryActionHeld = isHeld;
-        private void SetSecondaryActionHeld(bool isHeld) => _isSecondaryActionHeld = isHeld;
     }
 }

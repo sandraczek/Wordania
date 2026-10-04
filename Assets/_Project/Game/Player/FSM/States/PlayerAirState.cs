@@ -1,17 +1,15 @@
 using System;
-using UnityEngine;
-using Wordania.Inputs;
 
 namespace Wordania.Player.FSM.States
 {
     public class PlayerAirState : PlayerActiveState
     {
-        public PlayerAirState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory) { }
+        public PlayerAirState(PlayerContext context, PlayerStateFactory playerStateFactory) : base(context, playerStateFactory) { }
 
         public override void CheckSwitchStates()
         {
             base.CheckSwitchStates();
-            if (Time.time >= _context.Controller.LastJumpTime + _context.Config.MinJumpDuration && _context.Controller.IsGrounded)
+            if (_context.Clock.Now >= _context.Controller.LastJumpTime + _context.Config.MinJumpDuration && _context.Controller.IsGrounded)
             {
                 if (Math.Abs(_inputs.MovementInput.x) > 0.1f)
                 {

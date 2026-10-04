@@ -1,12 +1,11 @@
 using UnityEngine;
 using Unity.Mathematics;
-using Wordania.Inputs;
 
 namespace Wordania.Player.FSM.States
 {
     public sealed class PlayerFallState : PlayerAirState
     {
-        public PlayerFallState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory){}
+        public PlayerFallState(PlayerContext context, PlayerStateFactory playerStateFactory) : base(context, playerStateFactory) { }
 
         public override void CheckSwitchStates()
         {

@@ -1,21 +1,20 @@
 using UnityEngine;
-using Wordania.Inputs;
 
 namespace Wordania.Player.FSM.States
 {
     public class PlayerGroundState : PlayerActiveState
     {
-        public PlayerGroundState(PlayerContext context, IInputReader inputs, PlayerStateFactory playerStateFactory) : base(context, inputs, playerStateFactory) { }
+        public PlayerGroundState(PlayerContext context, PlayerStateFactory playerStateFactory) : base(context, playerStateFactory) { }
 
         public override void CheckSwitchStates()
         {
             base.CheckSwitchStates();
-            if (Time.time < _inputs.JumpPressedTime + _context.Config.JumpBuffor)
+            if (_context.Clock.Now < _inputs.JumpPressedTime + _context.Config.JumpBuffor)
             {
                 _context.StateMachine.SwitchState(_factory.Jump);
                 return;
             }
-            if (Time.time > _context.Controller.LastGroundedTime + _context.Config.CoyoteTime)
+            if (_context.Clock.Now > _context.Controller.LastGroundedTime + _context.Config.CoyoteTime)
             {
                 _context.StateMachine.SwitchState(_factory.Fall);
                 return;
