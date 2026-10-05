@@ -104,9 +104,11 @@ namespace Wordania
 
         {
             builder.Register<SessionConfig>(Lifetime.Scoped)
-                .WithParameter(_saveSlot)
-                .WithParameter(true)
-                .WithParameter(LocalPlayerIdentity.GetOrCreate());
+                .WithParameter("saveSlot", _saveSlot)
+                .WithParameter("isHost", true)
+                .WithParameter("isSinglePlayer", true)
+                .WithParameter("localPersistentId", LocalPlayerIdentity.GetOrCreate());
+            builder.Register<PauseService>(Lifetime.Scoped).As<IPauseService>();
             builder.Register<JsonSaveService>(Lifetime.Singleton).As<ISaveService>();
             builder.RegisterInstance<ICameraService>(_cameraService);
 
@@ -248,7 +250,6 @@ TODOS:
 - fix magic color in light shader graph
 - prewarming
 - refactor Invincibility so health component uses it
-- FIX: go through all journal milestones when loading save
 - refactor inventory. Why does players - factory need it?
 - inventoryDisplay component is on Canvas.
 
@@ -273,14 +274,6 @@ maybe optimization:
 - EntityContext (GetComponentsInChildren)
 -* skills view goes through every node every point changed.
 - can put events in f.e. InventoryView to disable when hiding window
-
-
--- currently
-saving
-
-
-
-
 
 
 */

@@ -160,7 +160,6 @@ namespace Wordania.Inputs
 
         public void SetGameplayMode()
         {
-            Time.timeScale = 1f;
             _inputActions.UI.Disable();
             _inputActions.Player.Enable();
 
@@ -169,7 +168,6 @@ namespace Wordania.Inputs
         }
         public void SetHUDMode()
         {
-            Time.timeScale = 0f;
             _inputActions.Player.Disable();
             _inputActions.UI.Enable();
 

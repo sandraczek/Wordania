@@ -2,18 +2,21 @@ using System;
 using VContainer;
 using VContainer.Unity;
 using Wordania.Inputs;
+using Wordania.Services;
 
 namespace Wordania.HUD
 {
     public class HUDStateManager : IHUDStateManager, IStartable, IDisposable
     {
         private readonly IInputReader _inputs;
+        private readonly IPauseService _pause;
         private IHUDWindow _activeWindow;
 
         [Inject]
-        public HUDStateManager(IInputReader inputs)
+        public HUDStateManager(IInputReader inputs, IPauseService pause)
         {
             _inputs = inputs;
+            _pause = pause;
         }
 
         public void Start()
@@ -39,6 +42,7 @@ namespace Wordania.HUD
             if (wasEmpty)
             {
                 _inputs.SetHUDMode();
+                _pause.SetPaused(true);
             }
         }
 
@@ -48,6 +52,7 @@ namespace Wordania.HUD
 
             _activeWindow = null;
             _inputs.SetGameplayMode();
+            _pause.SetPaused(false);
         }
 
         private void HandleExit()

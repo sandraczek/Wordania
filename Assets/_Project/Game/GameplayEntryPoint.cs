@@ -113,8 +113,6 @@ namespace Wordania
             await _worldRenderer.RenderInitialWorldAsync(cancellation);
             await UniTask.WaitForFixedUpdate();
 
-            Time.timeScale = 0f;
-
             _worldCollisionJob.InitializeCollisionArray();
             await _map.RenderInitialMapAsync(cancellation);
 
