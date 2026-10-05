@@ -20,10 +20,11 @@ using Wordania.Identifiers;
 using UnityEditor.VersionControl;
 using Wordania.Events;
 using Wordania.World.Events;
+using Wordania.World.Editing;
 
 namespace Wordania.World
 {
-    public sealed class WorldService : IWorldService, IStartable, IDisposable, ISaveable, ILateTickable
+    public sealed class WorldService : IWorldService, IStartable, IDisposable, ISaveable
     {
         [Header("References")]
         private readonly IBlockRegistry _blockDatabase;
@@ -34,10 +35,8 @@ namespace Wordania.World
 
         [Header("Data")]
         public WorldData Data { get; private set; }
-        private readonly IEventBus _eventBus;
 
-        private readonly Dictionary<InstanceId, Dictionary<AssetId, int>> _pendingDestructions = new();
-        private readonly List<BlockMineRecord> _reusableBatchList = new(32);
+        private readonly Dictionary<Vector2Int, WorldLayer> _changedChunks = new();
 
         public event Action<Vector2Int, WorldLayer> OnChunkChanged;
         public event Action<Vector2Int, WorldLayer> OnBlockChanged;
@@ -46,15 +45,13 @@ namespace Wordania.World
             IBlockRegistry blockDatabase,
             WorldSettings settings,
             IWorldGenerator generator,
-            ISaveService saveService,
-            IEventBus eventBus
+            ISaveService saveService
             )
         {
             _blockDatabase = blockDatabase;
             _settings = settings;
             _generator = generator;
             _save = saveService;
-            _eventBus = eventBus;
         }
         public void Start()
         {
@@ -65,26 +62,6 @@ namespace Wordania.World
             _save.Unregister(this);
         }
 
-        public void LateTick()
-        {
-            if (_pendingDestructions.Count == 0) return;
-
-            foreach (var kvp in _pendingDestructions)
-            {
-                InstanceId instigator = kvp.Key;
-                Dictionary<AssetId, int> blocks = kvp.Value;
-
-                _reusableBatchList.Clear();
-                foreach (var blockData in blocks)
-                {
-                    _reusableBatchList.Add(new BlockMineRecord(blockData.Key, blockData.Value));
-                }
-
-                _eventBus.Publish(new BlocksMinedBatchEvent(instigator, _reusableBatchList));
-
-                blocks.Clear();
-            }
-        }
         public void RandomizeSeed()
         {
             _settings.Seed = Mathf.Abs(Guid.NewGuid().GetHashCode()) % WorldSettings.MaxSeed;
@@ -95,125 +72,30 @@ namespace Wordania.World
             Debug.Assert(_settings.Width % _settings.ChunkSize == 0 && _settings.Height % _settings.ChunkSize == 0);
             Data = await _generator.GenerateWorldAsync(token);
         }
-        public bool TryDamageSingleBlock(Vector3 worldPosition, float damagePower, InstanceId instigatorId)
+        public void ApplyChanges(IReadOnlyList<TileChange> changes)
         {
-            Vector2Int pos = _settings.WorldToGrid(worldPosition);
-            if (!_settings.WithinBoundaries(pos.x, pos.y)) return false;
-            WorldLayer result = DamageTile(pos.x, pos.y, damagePower, instigatorId);
-            if (result == WorldLayer.None) return false;
+            _changedChunks.Clear();
 
-            Vector2Int coord = GetChunkCoord(pos.x, pos.y);
-            OnChunkChanged?.Invoke(coord, result);
-            return true;
-        }
-        public WorldLayer DamageTile(int x, int y, float damagePower, InstanceId instigatorId)
-        {
-            if (!_settings.WithinBoundaries(x, y)) return WorldLayer.None;
-            BlockData data = _blockDatabase.Get(Data.GetTile(x, y).Main);
-            if (data == null) return WorldLayer.None;
-            Data.GetTile(x, y).Damage += damagePower / data.Hardness;
-            WorldLayer changedLayers;
-            if (Data.GetTile(x, y).Damage >= 1f)
+            for (int i = 0; i < changes.Count; i++)
             {
-                Data.GetTile(x, y).Main = new(0);
-                Data.GetTile(x, y).Damage = 0f;
+                TileChange change = changes[i];
+                if (!_settings.WithinBoundaries(change.X, change.Y)) continue;
 
-                OnBlockChanged?.Invoke(new(x, y), WorldLayer.Main);
+                ref TileData tile = ref Data.GetTile(change.X, change.Y);
+                tile.Main = change.Main;
+                tile.Damage = change.Damage;
 
-                RegisterBlockDestroyed(instigatorId, data.Id);
+                if ((change.Layers & WorldLayer.Main) != 0)
+                    OnBlockChanged?.Invoke(new Vector2Int(change.X, change.Y), WorldLayer.Main);
 
-                //DROPPING LOOT
-                _eventBus.Publish(new LootEvent(instigatorId, data.loot.Id, data.lootAmount));
-
-                changedLayers = WorldLayer.Main | WorldLayer.Damage;
-            }
-            else
-            {
-                changedLayers = WorldLayer.Damage;
-            }
-            return changedLayers;
-        }
-        public bool TryDamageCircle(Vector2 worldPos, float radius, float damagePower, InstanceId instigatorId)
-        {
-            int minX = Mathf.FloorToInt(worldPos.x - radius);
-            int maxX = Mathf.CeilToInt(worldPos.x + radius);
-            int minY = Mathf.FloorToInt(worldPos.y - radius);
-            int maxY = Mathf.CeilToInt(worldPos.y + radius);
-
-            Dictionary<Vector2Int, WorldLayer> chunksToUpdate = new();
-
-            bool hitAnything = false;
-
-            for (int x = minX; x <= maxX; x++)
-            {
-                for (int y = minY; y <= maxY; y++)
-                {
-                    if (!_settings.WithinBoundaries(x, y)) continue;
-
-                    float closestX = Mathf.Clamp(worldPos.x, x, x + 1f);
-                    float closestY = Mathf.Clamp(worldPos.y, y, y + 1f);
-                    float distSq = (worldPos.x - closestX) * (worldPos.x - closestX) +
-                                (worldPos.y - closestY) * (worldPos.y - closestY);
-
-                    if (distSq <= radius * radius)
-                    {
-                        WorldLayer result = DamageTile(x, y, damagePower, instigatorId);
-
-                        if (result != WorldLayer.None)
-                        {
-                            hitAnything = true;
-                            Vector2Int coord = GetChunkCoord(x, y);
-
-                            if (!chunksToUpdate.ContainsKey(coord))
-                                chunksToUpdate[coord] = result;
-                            else
-                                chunksToUpdate[coord] |= result;
-                        }
-                    }
-                }
+                Vector2Int chunk = GetChunkCoord(change.X, change.Y);
+                _changedChunks.TryGetValue(chunk, out WorldLayer layers);
+                _changedChunks[chunk] = layers | change.Layers;
             }
 
-            if (hitAnything)
+            foreach (var entry in _changedChunks)
             {
-                foreach (var entry in chunksToUpdate)
-                {
-                    OnChunkChanged?.Invoke(entry.Key, entry.Value);
-                }
-            }
-
-            return hitAnything;
-        }
-
-        public bool TryPlaceBlock(Vector3 worldPosition, AssetId blockID)
-        {
-            Vector2Int pos = _settings.WorldToGrid(worldPosition);
-
-            if (!_settings.WithinBoundaries(pos.x, pos.y)) return false;
-            if (_blockDatabase.Get(Data.GetTile(pos.x, pos.y).Main) != null) return false;
-
-
-            Data.GetTile(pos.x, pos.y).Main = blockID;
-            Vector2Int coord = GetChunkCoord(pos.x, pos.y);
-            OnChunkChanged?.Invoke(coord, WorldLayer.Main);
-            OnBlockChanged?.Invoke(pos, WorldLayer.Main);
-            return true;
-        }
-
-        public void RegisterBlockDestroyed(InstanceId instigator, AssetId blockId)
-        {
-            if (!_pendingDestructions.TryGetValue(instigator, out var playerBatch))
-            {
-                playerBatch = new Dictionary<AssetId, int>();
-                _pendingDestructions.Add(instigator, playerBatch);
-            }
-
-            if (playerBatch.ContainsKey(blockId))
-            {
-                playerBatch[blockId]++;
-            }
-            else
-            {
-                playerBatch.Add(blockId, 1);
+                OnChunkChanged?.Invoke(entry.Key, entry.Value);
             }
         }
 

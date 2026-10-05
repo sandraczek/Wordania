@@ -29,6 +29,7 @@ using Wordania.Bosses.Data;
 using Wordania.Bosses.Core;
 using Wordania.World.Config;
 using Wordania.World.Data;
+using Wordania.World.Editing;
 using Wordania.World.Passes;
 using UnityEngine.UI;
 using Wordania.World.Lighting;
@@ -129,6 +130,8 @@ namespace Wordania
             builder.RegisterComponentInHierarchy<Grid>();
 
             builder.RegisterEntryPoint<WorldService>(Lifetime.Scoped).As<IWorldService>();
+            builder.Register<WorldEditSimulation>(Lifetime.Scoped);
+            builder.RegisterEntryPoint<LocalWorldEditAuthority>(Lifetime.Scoped).As<IWorldEditAuthority>();
             builder.RegisterEntryPoint<WorldCollisionJobService>(Lifetime.Scoped).As<IWorldCollisionJobService>();
 
             builder.Register<ChunkFactory>(Lifetime.Scoped)

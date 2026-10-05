@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using System.Threading;
-using Wordania.Identifiers;
 using Wordania.World.Data;
+using Wordania.World.Editing;
 
 namespace Wordania.World
 {
@@ -16,11 +17,9 @@ namespace Wordania.World
 
         public void RandomizeSeed();
         public UniTask GenerateWorldAsync(CancellationToken token);
-        public bool TryDamageSingleBlock(Vector3 worldPosition, float damagePower, InstanceId instigatorId);
-        public WorldLayer DamageTile(int x, int y, float damagePower, InstanceId instigatorId);
-        public bool TryDamageCircle(Vector2 worldPos, float radius, float damagePower, InstanceId instigatorId);
 
-        public bool TryPlaceBlock(Vector3 worldPosition, AssetId blockId);
+        /// <summary>Applies an authoritative batch of tile changes. Contains no game rules.</summary>
+        public void ApplyChanges(IReadOnlyList<TileChange> changes);
         public Vector2 GetCellCenter(Vector2 worldPosition);
 
         public TileBase GetTileBase(int x, int y, WorldLayer layer);

@@ -6,16 +6,14 @@ using VContainer;
 using Wordania.Identifiers;
 using Wordania.Inventory;
 using Wordania.Mechanics.Data;
-using Wordania.World;
 using Wordania.World.Data;
-using Wordania.Inventory.Data;
+using Wordania.World.Editing;
 
 namespace Wordania.Player.Loadout
 {
     public class PlayerBuildingTool : MonoBehaviour, IToolActionExecutor // on player's hand. Later - POCO
     {
-        private IWorldService _world;
-        private IInventoryService _inventory;
+        private IWorldEditAuthority _world;
         private PlayerContext _player;
         private MechanicIds _mechanicIds;
         [SerializeField] private int _currentBlockIndex;
@@ -27,10 +25,9 @@ namespace Wordania.Player.Loadout
         private float _lastActionTime = float.MinValue;
 
         [Inject]
-        public void Construct(IWorldService worldService, IInventoryService playerInventory, MechanicIds mechanicIds)
+        public void Construct(IWorldEditAuthority worldEdits, MechanicIds mechanicIds)
         {
-            _world = worldService;
-            _inventory = playerInventory;
+            _world = worldEdits;
             _mechanicIds = mechanicIds;
         }
         private void Awake()
@@ -72,26 +69,9 @@ namespace Wordania.Player.Loadout
             if (!_player.Mechanics.HasMechanic(_mechanicIds.Building)) return false;
 
             if (_buildingBlocks[_currentBlockIndex] == null) return false;
-            if (_inventory != null)
-            {
-                foreach (Ingredient ingredient in _buildingBlocks[_currentBlockIndex].recipe.Requirements)
-                {
-                    if (!_inventory.HasItems(_player.PersistentId, ingredient.item.Id, ingredient.amount)) return false;
-                }
-            }
 
-            Vector2 cellCenter = _world.GetCellCenter(targetWorldPos);
-
-            Collider2D hit = Physics2D.OverlapBox(cellCenter, _player.Config.BuildingPreventCheckSize, 0f, _player.Config.PreventBuildingLayer);
-            if (hit != null) return false;
-
-            if (!_world.TryPlaceBlock(targetWorldPos, _buildingBlocks[_currentBlockIndex].Id)) return false;
-
-            foreach (Ingredient ingredient in _buildingBlocks[_currentBlockIndex].recipe.Requirements)
-            {
-                _inventory.RemoveItem(_player.PersistentId, ingredient.item.Id, ingredient.amount);
-            }
-
+            // Placement rules (free cell, ingredients, no overlapping entities) are validated by the authority.
+            _world.RequestPlace(new PlaceRequest(_player.InstanceId, _player.PersistentId, targetWorldPos, _buildingBlocks[_currentBlockIndex].Id));
             return true;
         }
     }

@@ -6,14 +6,13 @@ using VContainer;
 using Wordania.Identifiers;
 using Wordania.Inventory;
 using Wordania.Mechanics.Data;
-using Wordania.World;
+using Wordania.World.Editing;
 
 namespace Wordania.Player.Loadout
 {
     public class PlayerMiningTool : MonoBehaviour, IToolActionExecutor // on player's hand. Later - POCO
     {
-        private IWorldService _world;
-        private IInventoryService _inventory;
+        private IWorldEditAuthority _world;
         private PlayerContext _player;
         private MechanicIds _mechanicIds;
 
@@ -28,10 +27,9 @@ namespace Wordania.Player.Loadout
         private float _lastActionTime = float.MinValue;
 
         [Inject]
-        void Construct(IWorldService worldService, IInventoryService playerInventory, MechanicIds mechanicIds)
+        void Construct(IWorldEditAuthority worldEdits, MechanicIds mechanicIds)
         {
-            _world = worldService;
-            _inventory = playerInventory;
+            _world = worldEdits;
             _mechanicIds = mechanicIds;
         }
         private void Awake()
@@ -92,14 +90,7 @@ namespace Wordania.Player.Loadout
         {
             if (!_player.Mechanics.HasMechanic(_mechanicIds.Mining)) return false;
 
-            if (!_areaMine)
-            {
-                if (!_world.TryDamageSingleBlock(targetWorldPos, _minePower, _player.InstanceId)) return false;
-            }
-            else
-            {
-                if (!_world.TryDamageCircle(targetWorldPos, _areaRadius, _minePower, _player.InstanceId)) return false;
-            }
+            _world.RequestMine(new MineRequest(_player.InstanceId, targetWorldPos, _minePower, _areaMine, _areaRadius));
             return true;
         }
     }
