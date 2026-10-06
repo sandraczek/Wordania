@@ -1,49 +1,16 @@
-using System.Collections.Generic;
 using UnityEngine;
-using VContainer;
 using Wordania.Combat.Data;
-using Wordania.Combat.FireStrategies;
-using Wordania.Combat.Events;
-using Wordania.Events;
 
 namespace Wordania.Combat.Core
 {
+    /// <summary>Weapon view held in the player's hand. Firing is resolved by ICombatAuthority, not here.</summary>
     public class WeaponController : MonoBehaviour
     {
         [HideInInspector] public WeaponData Data;
-        private IWeaponFireStrategy _strategy;
-        private IEventBus _eventBus;
 
-        private float _lastFiredTime = float.MinValue;
-
-        private readonly List<ProjectileSpawnData> _spawnBuffer = new(capacity: 20);
-
-        [Inject]
-        public void Construct(IEventBus eventBus)
-        {
-            _eventBus = eventBus;
-        }
-        public void Initialize(WeaponData data, IWeaponFireStrategy strategy)
+        public void Initialize(WeaponData data)
         {
             Data = data;
-            _strategy = strategy;
-        }
-        public bool Fire(WeaponFireContext context)
-        {
-            if (Time.time < _lastFiredTime + Data.FireData.FireRate) return false;
-
-            _lastFiredTime = Time.time;
-            _spawnBuffer.Clear();
-
-
-            int projectilesToSpawn = _strategy.CalculateFireData(context, Data.FireData, _spawnBuffer);
-
-            for (int i = 0; i < projectilesToSpawn; i++)
-            {
-                _eventBus.PublishReplicated(new ProjectileFiredEvent(_spawnBuffer[i]));
-            }
-
-            return true;
         }
 
 

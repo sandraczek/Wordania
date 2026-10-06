@@ -16,6 +16,7 @@ namespace Wordania.Gameplay
         InstanceId InstanceId { get; }
         Vector2 Position { get; }
         Bounds Hitbox { get; }
+        /// <summary>Stable identity of the entity. Never changes at runtime (used to derive who it may attack).</summary>
         EntityFaction Faction { get; }
     }
 }

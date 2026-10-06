@@ -60,7 +60,7 @@ namespace Wordania.Player
         public Vector2 Position => _controller.GetBounds().center;
         public InstanceId InstanceId { get; private set; }
         public PersistentId PersistentId { get; private set; }
-        public EntityFaction Faction { get; private set; } = EntityFaction.Player;
+        public EntityFaction Faction => EntityFaction.Player;
 
         [Inject]
         public void Construct(
@@ -163,8 +163,6 @@ namespace Wordania.Player
             _health.OnDamageTaken += Handlehurt;
             _health.OnDamageTaken += HandleHurtVisuals;
             _health.OnDeath += HandleDeath;
-            _invincibility.Started += OnInvincibilityStarted;
-            _invincibility.Ended += OnInvincibilityEnded;
         }
 
         private void OnDisable()
@@ -173,8 +171,6 @@ namespace Wordania.Player
             _health.OnDamageTaken -= Handlehurt;
             _health.OnDamageTaken -= HandleHurtVisuals; //TODO: make visuals listen to health
             _health.OnDeath -= HandleDeath;
-            _invincibility.Started -= OnInvincibilityStarted;
-            _invincibility.Ended -= OnInvincibilityEnded;
         }
         private void Update()
         {
@@ -188,7 +184,6 @@ namespace Wordania.Player
         public void ApplyDamage(DamagePayload payload)
         {
             if (_health.IsDead) return;
-            if (_invincibility != null && _invincibility.IsInvincible) return;
 
             DamageResult damageResult = _mitigation.ProcessDamage(payload);
             _health.ApplyDamage(damageResult);
@@ -244,14 +239,6 @@ namespace Wordania.Player
 
 
             return data;
-        }
-        private void OnInvincibilityStarted()
-        {
-            Faction = 0;
-        }
-        private void OnInvincibilityEnded()
-        {
-            Faction = EntityFaction.Player;
         }
 
 #if UNITY_EDITOR

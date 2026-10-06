@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using System;
 using VContainer.Unity;
+using Wordania.Combat.Authority;
 using Wordania.Combat.Events;
 using Wordania.Services;
 using Wordania.Gameplay;
@@ -17,10 +18,8 @@ namespace Wordania.Combat.Core
 {
     public sealed class ProjectileSimulationService : IProjectileSimulationService, IDisposable, ITickable, ILateTickable
     {
-        private readonly IAssetRegistry<ProjectileData> _projectileRegistry;
         private readonly AABBTargetableService _aabbService;
-        private readonly IEventBus _eventBus;
-        private readonly IEntityRegistry _entities;
+        private readonly ICombatAuthority _combat;
 
         private readonly Queue<(ProjectileRuntimeData data, ProjectileView view)> _spawnQueue = new();
         private NativeList<ProjectileRuntimeData> _projectilesData = new(1000, Allocator.Persistent);
@@ -33,18 +32,14 @@ namespace Wordania.Combat.Core
 
         public ProjectileSimulationService
             (
-            IAssetRegistry<ProjectileData> projectileRegistry,
             AABBTargetableService aabbService,
-            IEventBus eventBus,
             IWorldCollisionJobService world,
-            IEntityRegistry entities
+            ICombatAuthority combat
             )
         {
-            _projectileRegistry = projectileRegistry;
             _aabbService = aabbService;
-            _eventBus = eventBus;
             _world = world;
-            _entities = entities;
+            _combat = combat;
         }
         public void Dispose()
         {
@@ -144,28 +139,12 @@ namespace Wordania.Combat.Core
             }
         }
 
+        // Projectiles are simulated on every machine (for visuals); only the authority turns hits into damage.
         private void ProcessHitEvents()
         {
             while (_hitEventsQueue.TryDequeue(out ProjectileHitData hitEvent))
             {
-                if (!_entities.Entities.TryGetValue(hitEvent.HitEntityId, out Entity entity) || !entity.TryGetFeature(out IDamageable damageable)) continue;
-
-                var data = _projectileRegistry.Get(new AssetId(hitEvent.ProjectileDataId));
-                if (data == null) Debug.LogError("Data is null. Try refreshing projectile database");
-                float damage = data.BaseDamage * hitEvent.DamageMultiplier;
-                Vector2 knockback = new(data.Knockback.x * Mathf.Sign(hitEvent.Direction.x), data.Knockback.y);
-
-                DamagePayload damagePayload = new
-                    (
-                    damage, data.damageType,
-                    HealthChangeSource.Generic,
-                    hitEvent.InstigatorId,
-                    hitEvent.HitPosition,
-                    knockback
-                    );
-                damageable.ApplyDamage(damagePayload);
-
-                _eventBus.PublishReplicated(new HitRegisteredEvent(hitEvent));
+                _combat.RequestProjectileHit(hitEvent);
             }
         }
     }

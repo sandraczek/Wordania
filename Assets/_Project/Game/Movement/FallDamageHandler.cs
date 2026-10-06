@@ -1,27 +1,36 @@
 using UnityEngine;
 using VContainer;
 using Wordania.Combat;
+using Wordania.Combat.Authority;
+using Wordania.Gameplay;
 using Wordania.Identifiers;
 
 namespace Wordania.Movement
 {
     [RequireComponent(typeof(ICharacterMovement))]
     [RequireComponent(typeof(IDamageable))]
+    [RequireComponent(typeof(ITrackable))]
     public sealed class FallDamageHandler : MonoBehaviour
     {
         [Header("Dependencies")]
         private ICharacterMovement _movement;
-        private IDamageable _damageable;
+        private ITrackable _self;
+        private ICombatAuthority _combat;
 
         [Header("Configuration")]
         private float _minVelocityForDamage = float.MaxValue;
         private float _damageMultiplier = 0f;
         [SerializeField] private Vector2 _feetPosition;
 
+        [Inject]
+        public void Construct(ICombatAuthority combat)
+        {
+            _combat = combat;
+        }
         private void Awake()
         {
             _movement = GetComponent<ICharacterMovement>();
-            _damageable = GetComponent<IDamageable>();
+            _self = GetComponent<ITrackable>();
 
             if (_movement == null)
             {
@@ -61,7 +70,8 @@ namespace Wordania.Movement
                 hitPoint: _feetPosition,
                 knockback: Vector2.zero
             );
-            _damageable.ApplyDamage(payload);
+            // TODO(net): for remote players only the owning client sees the landing, so it must report this to the host.
+            _combat.RequestDamage(_self.InstanceId, payload);
         }
     }
 }

@@ -15,6 +15,7 @@ namespace Wordania.Combat
 
         [Header("Configuration")]
         private CharacterStat _healthStat;
+        private InvincibilityController _invincibility; // optional; when present and active, incoming damage is ignored
 
         [SerializeField] private float _currentHealth;
 
@@ -48,6 +49,7 @@ namespace Wordania.Combat
         {
             var stats = GetComponent<StatsComponent>();
             _healthStat = stats.GetStat(StatType.MaxHealth);
+            TryGetComponent(out _invincibility);
         }
         public void InitializeSpawn()
         {
@@ -63,6 +65,7 @@ namespace Wordania.Combat
         public void ApplyDamage(DamageResult damage)
         {
             if (IsDead) return;
+            if (_invincibility != null && _invincibility.IsInvincible) return;
 
             SetCurrentHealth(_currentHealth - damage.FinalDamage);
             LastAttackerId = damage.Payload.InstigatorId;

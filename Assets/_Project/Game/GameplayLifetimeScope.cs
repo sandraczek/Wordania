@@ -19,6 +19,7 @@ using Wordania.Enemies.Spawning;
 using Wordania.Mapping;
 using Wordania.HUD.Mapping;
 using Wordania.Combat.Core;
+using Wordania.Combat.Authority;
 using Wordania.Combat.Events;
 using Wordania.Combat.Data;
 using Wordania.Combat.FireStrategies;
@@ -158,6 +159,7 @@ namespace Wordania
             builder.Register<UnityGameClock>(Lifetime.Singleton).As<IGameClock>();
 
             //combat
+            builder.Register<LocalCombatAuthority>(Lifetime.Scoped).As<ICombatAuthority>();
             builder.Register<WeaponFactory>(Lifetime.Scoped).As<IWeaponFactory>();
             builder.RegisterEntryPoint<AABBTargetableService>(Lifetime.Scoped).AsSelf();
             builder.RegisterEntryPoint<ProjectileSimulationService>(Lifetime.Scoped).As<IProjectileSimulationService>();
@@ -256,7 +258,6 @@ TODOS:
 
 - fix magic color in light shader graph
 - prewarming
-- refactor Invincibility so health component uses it
 - refactor inventory. Why does players - factory need it?
 - inventoryDisplay component is on Canvas.
 
