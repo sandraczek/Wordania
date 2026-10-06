@@ -48,7 +48,7 @@ namespace Wordania.Bosses.Core
 
             bossInstance.Initialize(template, _idProvider.Next());
 
-            _eventBus.Publish(new BossSpawnedEvent(bossInstance));
+            _eventBus.PublishSimulation(new BossSpawnedEvent(bossInstance));
 
             return bossInstance;
         }

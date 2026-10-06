@@ -17,7 +17,7 @@ namespace Wordania.World.Events
         }
     }
 
-    public readonly struct BlocksMinedBatchEvent : IGameEvent
+    public readonly struct BlocksMinedBatchEvent : ISimulationEvent
     {
         public readonly InstanceId InstigatorId;
 

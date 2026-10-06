@@ -3,7 +3,7 @@ using Wordania.Identifiers;
 
 namespace Wordania.Combat.Events
 {
-    public struct BossKillRecordedEvent : IGameEvent
+    public struct BossKillRecordedEvent : ISimulationEvent
     {
         public PersistentId PersistentId;
         public AssetId BossId;

@@ -16,7 +16,7 @@ namespace Wordania.Combat.Events
         public InstanceId InstigatorId;
     }
 
-    public struct HitRegisteredEvent : IGameEvent
+    public struct HitRegisteredEvent : IReplicatedEvent
     {
         public HitRegisteredEvent(ProjectileHitData hitData)
         {

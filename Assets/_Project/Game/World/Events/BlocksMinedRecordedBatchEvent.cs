@@ -19,7 +19,7 @@ namespace Wordania.World.Events
             CurrentCount = currentCount;
         }
     }
-    public readonly struct BlocksMinedRecordedBatchEvent : IGameEvent
+    public readonly struct BlocksMinedRecordedBatchEvent : ISimulationEvent
     {
         public readonly PersistentId PersistentId;
 

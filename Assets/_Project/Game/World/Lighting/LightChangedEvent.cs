@@ -3,7 +3,7 @@ using Wordania.Events;
 
 namespace Wordania.World.Lighting
 {
-    public struct LightChangedEvent : IGameEvent
+    public struct LightChangedEvent : ILocalEvent
     {
 
     }

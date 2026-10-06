@@ -195,7 +195,7 @@ namespace Wordania.World.Lighting
                     }
                 }
             }
-            _eventBus.Publish(new LightChangedEvent());
+            _eventBus.PublishLocal(new LightChangedEvent());
         }
         private void HandleBlockChanged(Vector2Int pos, WorldLayer layer)
         {

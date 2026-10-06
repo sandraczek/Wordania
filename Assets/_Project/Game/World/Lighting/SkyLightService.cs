@@ -132,7 +132,7 @@ namespace Wordania.World.Lighting
         private void PropagateLight()
         {
             ProcessLightQueue();
-            _eventBus.Publish(new LightChangedEvent());
+            _eventBus.PublishLocal(new LightChangedEvent());
         }
         private async UniTask PropagateLightAsync(CancellationToken token, int batchSize)
         {
@@ -141,7 +141,7 @@ namespace Wordania.World.Lighting
                 ProcessLightQueue(batchSize);
                 await UniTask.Yield();
             }
-            _eventBus.Publish(new LightChangedEvent());
+            _eventBus.PublishLocal(new LightChangedEvent());
         }
         public void UpdateLightAt(int x, int y)
         {

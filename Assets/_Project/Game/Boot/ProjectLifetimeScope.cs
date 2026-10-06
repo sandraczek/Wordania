@@ -93,8 +93,6 @@ namespace Wordania.Boot
 
             builder.Register<SceneLoaderService>(Lifetime.Singleton).As<ISceneLoaderService>();
 
-            builder.Register<EventBus>(Lifetime.Singleton).As<IEventBus>();
-
             builder.RegisterEntryPoint<DebugService>(Lifetime.Singleton).As<IDebugService>();
 
             builder.RegisterInstance(_inputReader).As<IGameplayInput, IUIInput, IDebugInput>();

@@ -165,7 +165,7 @@ namespace Wordania.Combat.Core
                     );
                 damageable.ApplyDamage(damagePayload);
 
-                _eventBus.Publish(new HitRegisteredEvent(hitEvent));
+                _eventBus.PublishReplicated(new HitRegisteredEvent(hitEvent));
             }
         }
     }

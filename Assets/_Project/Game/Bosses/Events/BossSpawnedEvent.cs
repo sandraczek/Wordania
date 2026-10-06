@@ -4,7 +4,8 @@ using Wordania.Bosses.Core;
 
 namespace Wordania.Bosses.Events
 {
-    public struct BossSpawnedEvent : IGameEvent
+    // Simulation, not replicated: holds a scene reference (BossController) that cannot cross the network.
+    public struct BossSpawnedEvent : ISimulationEvent
     {
         public BossSpawnedEvent(BossController controller)
         {

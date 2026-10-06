@@ -25,7 +25,7 @@ namespace Wordania.WeaponStore
         {
             if (!CanBuy(buyer, id)) return false;
 
-            _bus.Publish(new WeaponBoughtEvent(buyer, id));
+            _bus.PublishReplicated(new WeaponBoughtEvent(buyer, id));
             return true;
         }
 

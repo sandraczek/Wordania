@@ -40,7 +40,7 @@ namespace Wordania.Combat.Core
 
             for (int i = 0; i < projectilesToSpawn; i++)
             {
-                _eventBus.Publish(new ProjectileFiredEvent(_spawnBuffer[i]));
+                _eventBus.PublishReplicated(new ProjectileFiredEvent(_spawnBuffer[i]));
             }
 
             return true;

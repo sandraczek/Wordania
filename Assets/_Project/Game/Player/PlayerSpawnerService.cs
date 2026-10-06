@@ -71,7 +71,7 @@ namespace Wordania.Player
 
             player.SetLocalControl(isLocalClient);
 
-            _bus.Publish(new PlayerSpawnedEvent(player.InstanceId, persistentId));
+            _bus.PublishSimulation(new PlayerSpawnedEvent(player.InstanceId, persistentId));
 
             return player;
         }

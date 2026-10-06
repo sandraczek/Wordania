@@ -210,7 +210,7 @@ namespace Wordania.Player
         {
             _stateMachine.SwitchState(_factory.Spectate);
 
-            _bus.Publish(new PlayerDeathEvent(InstanceId));
+            _bus.PublishReplicated(new PlayerDeathEvent(InstanceId));
         }
         public void Revive()
         {

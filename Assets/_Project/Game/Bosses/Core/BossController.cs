@@ -45,7 +45,7 @@ namespace Wordania.Bosses.Core
         protected abstract void OnInitialize(TTemplate template);
         public virtual void OnDeathSequenceComplete()
         {
-            _eventBus.Publish(new BossDeathEvent(_template.Id));
+            _eventBus.PublishSimulation(new BossDeathEvent(_template.Id));
         }
     }
 }

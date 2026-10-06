@@ -129,7 +129,7 @@ namespace Wordania.World.Editing
                     _reusableRecords.Add(new BlockMineRecord(block.Key, block.Value));
                 }
 
-                _bus.Publish(new BlocksMinedBatchEvent(kvp.Key, _reusableRecords));
+                _bus.PublishSimulation(new BlocksMinedBatchEvent(kvp.Key, _reusableRecords));
                 kvp.Value.Clear();
             }
         }
@@ -149,7 +149,7 @@ namespace Wordania.World.Editing
 
             Stage(x, y, new AssetId(0), 0f, WorldLayer.Main | WorldLayer.Damage);
             RegisterBlockDestroyed(instigator, data.Id);
-            _bus.Publish(new LootEvent(instigator, data.loot.Id, data.lootAmount));
+            _bus.PublishSimulation(new LootEvent(instigator, data.loot.Id, data.lootAmount));
         }
 
         private void ReadTile(int x, int y, out AssetId main, out float damage)

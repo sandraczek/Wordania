@@ -263,7 +263,7 @@ namespace Wordania.Enemies.Core
         }
         private void HandleDeath()
         {
-            _eventBus.Publish(new DeathEvent(Data.Id, _health.LastAttackerId));
+            _eventBus.PublishSimulation(new DeathEvent(Data.Id, _health.LastAttackerId));
             _onDeathFactoryAction.Invoke();
         }
         public void Remove()

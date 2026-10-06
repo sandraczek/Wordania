@@ -77,7 +77,7 @@ namespace Wordania.Journal
             if (journal == null) return;
 
             int newCount = journal.Increment(JournalCategory.Enemies, e.VictimAssetId);
-            _bus.Publish(new EnemyKillRecordedEvent
+            _bus.PublishSimulation(new EnemyKillRecordedEvent
             {
                 PersistentId = persistentId,
                 EnemyId = e.VictimAssetId,
@@ -93,7 +93,7 @@ namespace Wordania.Journal
                 if (journal == null) return;
 
                 int newCount = journal.Increment(JournalCategory.Bosses, e.Id);
-                _bus.Publish(new BossKillRecordedEvent
+                _bus.PublishSimulation(new BossKillRecordedEvent
                 {
                     PersistentId = persistentId,
                     BossId = e.Id,
@@ -124,7 +124,7 @@ namespace Wordania.Journal
                 _cashedMinedBlocksRecords.Add(new(block.Id, oldCount, oldCount + block.Count));
             }
 
-            _bus.Publish(new BlocksMinedRecordedBatchEvent(persistentId, _cashedMinedBlocksRecords));
+            _bus.PublishSimulation(new BlocksMinedRecordedBatchEvent(persistentId, _cashedMinedBlocksRecords));
         }
         private PlayerJournal CreateJournalForPlayer(PersistentId persistentId)
         {

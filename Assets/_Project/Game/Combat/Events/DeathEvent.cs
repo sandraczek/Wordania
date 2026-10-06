@@ -4,7 +4,7 @@ using Wordania.Identifiers;
 
 namespace Wordania.Combat.Events
 {
-    public struct DeathEvent : IGameEvent
+    public struct DeathEvent : ISimulationEvent
     {
         public AssetId VictimAssetId;
         public InstanceId InstigatorId;

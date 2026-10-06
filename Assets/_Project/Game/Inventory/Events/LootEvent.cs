@@ -6,7 +6,7 @@ using Wordania.Identifiers;
 
 namespace Wordania.Inventory.Events
 {
-    public readonly struct LootEvent : IGameEvent
+    public readonly struct LootEvent : ISimulationEvent
     {
         public readonly InstanceId InstanceId;
         public readonly AssetId ItemId;

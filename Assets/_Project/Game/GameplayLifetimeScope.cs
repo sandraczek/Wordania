@@ -111,6 +111,8 @@ namespace Wordania
                 .WithParameter("isSinglePlayer", true)
                 .WithParameter("localPersistentId", LocalPlayerIdentity.GetOrCreate());
             builder.Register<PauseService>(Lifetime.Scoped).As<IPauseService>();
+            builder.Register<NullEventTransport>(Lifetime.Scoped).As<IEventTransport>();
+            builder.Register<EventBus>(Lifetime.Scoped).As<IEventBus>();
             builder.Register<JsonSaveService>(Lifetime.Singleton).As<ISaveService>();
             builder.RegisterInstance<ICameraService>(_cameraService);
 

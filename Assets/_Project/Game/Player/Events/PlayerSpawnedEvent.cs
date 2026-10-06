@@ -3,7 +3,7 @@ using Wordania.Identifiers;
 
 namespace Wordania.Player.Events
 {
-    public readonly struct PlayerSpawnedEvent : IGameEvent
+    public readonly struct PlayerSpawnedEvent : ISimulationEvent
     {
         public readonly InstanceId InstanceId;
         public readonly PersistentId PersistentId;
