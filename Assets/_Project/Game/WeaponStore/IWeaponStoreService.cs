@@ -9,7 +9,8 @@ namespace Wordania.WeaponStore
 {
     public interface IWeaponStoreService
     {
-        bool CanBuy(AssetId id);
-        void Buy(AssetId id);
+        bool CanBuy(PersistentId buyer, AssetId id);
+        /// <summary>Validates and buys. Returns false if requirements are not met.</summary>
+        bool Buy(PersistentId buyer, AssetId id);
     }
 }

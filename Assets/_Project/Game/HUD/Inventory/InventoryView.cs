@@ -5,6 +5,7 @@ using VContainer;
 using Wordania.Inventory;
 using Wordania.Player;
 using Wordania.Data;
+using Wordania.Identifiers;
 using Wordania.Inventory.Data;
 
 namespace Wordania.HUD.Inventory
@@ -13,7 +14,7 @@ namespace Wordania.HUD.Inventory
     {
         [Header("Dependencies")]
         private IInventoryService _inventory;
-        private PlayerProvider _playerProvider;
+        private ILocalPlayer _local;
         private IAssetRegistry<ItemData> _registry;
 
         [Header("UI Setup")]
@@ -24,11 +25,11 @@ namespace Wordania.HUD.Inventory
         private readonly List<InventorySlotUI> _activeSlots = new();
 
         [Inject]
-        public void Construct(IInventoryService inventoryService, InventorySlotUI inventorySlotPrefab, PlayerProvider playerProvider, IAssetRegistry<ItemData> registry)
+        public void Construct(IInventoryService inventoryService, InventorySlotUI inventorySlotPrefab, ILocalPlayer local, IAssetRegistry<ItemData> registry)
         {
             _inventory = inventoryService;
             _slotPrefab = inventorySlotPrefab;
-            _playerProvider = playerProvider;
+            _local = local;
             _registry = registry;
         }
         private void Awake()
@@ -56,13 +57,18 @@ namespace Wordania.HUD.Inventory
 
         private void OnEnable()
         {
-            _inventory.OnInventoryChanged += RefreshUI;
+            _inventory.OnInventoryChanged += HandleInventoryChanged;
             RefreshUI();
         }
 
         private void OnDisable()
         {
-            _inventory.OnInventoryChanged -= RefreshUI;
+            _inventory.OnInventoryChanged -= HandleInventoryChanged;
+        }
+
+        private void HandleInventoryChanged(PersistentId owner)
+        {
+            if (_local.Is(owner)) RefreshUI();
         }
 
         private void RefreshUI()
@@ -73,7 +79,7 @@ namespace Wordania.HUD.Inventory
             }
             _activeSlots.Clear();
 
-            foreach (var (id, entry) in _inventory.GetAllEntries(_playerProvider.PersistentId))
+            foreach (var (id, entry) in _inventory.GetAllEntries(_local.PersistentId))
             {
                 InventorySlotUI slot = _pool.Get();
 

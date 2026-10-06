@@ -8,12 +8,12 @@ namespace Wordania.HUD
 {
     public class HUDStateManager : IHUDStateManager, IStartable, IDisposable
     {
-        private readonly IInputReader _inputs;
+        private readonly IUIInput _inputs;
         private readonly IPauseService _pause;
         private IHUDWindow _activeWindow;
 
         [Inject]
-        public HUDStateManager(IInputReader inputs, IPauseService pause)
+        public HUDStateManager(IUIInput inputs, IPauseService pause)
         {
             _inputs = inputs;
             _pause = pause;

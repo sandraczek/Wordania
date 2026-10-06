@@ -1,23 +1,25 @@
 using UnityEngine;
 using Wordania.Inputs;
+using Wordania.Services;
 
 namespace Wordania.Player
 {
     /// <summary>
-    /// Copies the local machine's input (IInputReader) into the player's own <see cref="PlayerInputState"/>.
+    /// Copies the local machine's input (IGameplayInput) into the player's own <see cref="PlayerInputState"/>.
     /// Only the locally controlled player gets one of these.
     /// </summary>
     public sealed class LocalPlayerInputSource
     {
-        private readonly IInputReader _reader;
+        private readonly IGameplayInput _reader;
+        private readonly IGameClock _clock;
         private readonly PlayerInputState _target;
 
-        private float _lastSeenJumpPressedTime = float.MinValue;
         private bool _enabled;
 
-        public LocalPlayerInputSource(IInputReader reader, PlayerInputState target)
+        public LocalPlayerInputSource(IGameplayInput reader, IGameClock clock, PlayerInputState target)
         {
             _reader = reader;
+            _clock = clock;
             _target = target;
         }
 
@@ -26,6 +28,7 @@ namespace Wordania.Player
             if (_enabled) return;
             _enabled = true;
 
+            _reader.OnJumpPressed += HandleJumpPressed;
             _reader.OnHotbarSlotPressed += _target.PressHotbarSlot;
             _reader.OnCycleActionSettings += _target.PressCycleActionSettings;
             _reader.OnPrimaryActionHeld += SetPrimaryHeld;
@@ -37,6 +40,7 @@ namespace Wordania.Player
             if (!_enabled) return;
             _enabled = false;
 
+            _reader.OnJumpPressed -= HandleJumpPressed;
             _reader.OnHotbarSlotPressed -= _target.PressHotbarSlot;
             _reader.OnCycleActionSettings -= _target.PressCycleActionSettings;
             _reader.OnPrimaryActionHeld -= SetPrimaryHeld;
@@ -51,14 +55,6 @@ namespace Wordania.Player
             _target.MovementInput = _reader.MovementInput;
             _target.JumpInput = _reader.JumpInput;
 
-            // The reader keeps the last press time forever; the state may consume it, so only copy new presses.
-            float jumpPressedTime = _reader.JumpPressedTime;
-            if (jumpPressedTime != _lastSeenJumpPressedTime)
-            {
-                _lastSeenJumpPressedTime = jumpPressedTime;
-                _target.JumpPressedTime = jumpPressedTime;
-            }
-
             Camera cam = Camera.main;
             if (cam != null)
             {
@@ -66,6 +62,8 @@ namespace Wordania.Player
             }
         }
 
+        // Timestamped with the game clock (same one the FSM compares against for jump buffering).
+        private void HandleJumpPressed() => _target.JumpPressedTime = _clock.Now;
         private void SetPrimaryHeld(bool isHeld) => _target.PrimaryActionHeld = isHeld;
         private void SetSecondaryHeld(bool isHeld) => _target.SecondaryActionHeld = isHeld;
     }

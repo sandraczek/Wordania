@@ -10,44 +10,42 @@ namespace Wordania.HUD.Health
 {
     public sealed class HealthBarPresenter : IStartable, IDisposable
     {
-        private PlayerProvider _playerProvider;
-        private IHUDHealthBarService _healthBar;
+        private readonly ILocalPlayer _local;
+        private readonly IHUDHealthBarService _healthBar;
+        private IReadOnlyHealth _subscribed;
 
-        public HealthBarPresenter(PlayerProvider playerPrivder, IHUDHealthBarService healthBar)
+        public HealthBarPresenter(ILocalPlayer local, IHUDHealthBarService healthBar)
         {
-            _playerProvider = playerPrivder;
+            _local = local;
             _healthBar = healthBar;
         }
         public void Start()
         {
-            if (_playerProvider.IsSpawned)
-                HandlePlayerRegistered();
+            if (_local.IsSpawned)
+                HandleSpawned();
 
-            _playerProvider.OnPlayerRegistered += HandlePlayerRegistered;
-            _playerProvider.OnPlayerUnregistered += UnsubscribeFromCurrent;
+            _local.Spawned += HandleSpawned;
+            _local.Despawned += UnsubscribeFromCurrent;
         }
-        private void SubscribeToHealth()
+        private void HandleSpawned()
         {
             UnsubscribeFromCurrent();
-            _playerProvider.ReadOnlyHealth.OnHealthChange += HandleHealthChange;
-        }
-        private void HandlePlayerRegistered()
-        {
-            SubscribeToHealth();
-            _healthBar.UpdateBarInstant(
-                _playerProvider.ReadOnlyHealth.CurrentHealth,
-                _playerProvider.ReadOnlyHealth.MaxHealth
-                );
+
+            _subscribed = _local.Health;
+            _subscribed.OnHealthChange += HandleHealthChange;
+            _healthBar.UpdateBarInstant(_subscribed.CurrentHealth, _subscribed.MaxHealth);
         }
         private void UnsubscribeFromCurrent()
         {
-            if (_playerProvider != null && _playerProvider.ReadOnlyHealth != null)
-                _playerProvider.ReadOnlyHealth.OnHealthChange -= HandleHealthChange;
+            // The local player is already cleared on Despawned, so keep our own reference to unsubscribe.
+            if (_subscribed != null)
+                _subscribed.OnHealthChange -= HandleHealthChange;
+            _subscribed = null;
         }
         public void Dispose()
         {
-            _playerProvider.OnPlayerRegistered -= HandlePlayerRegistered;
-            _playerProvider.OnPlayerUnregistered -= UnsubscribeFromCurrent;
+            _local.Spawned -= HandleSpawned;
+            _local.Despawned -= UnsubscribeFromCurrent;
             UnsubscribeFromCurrent();
         }
 

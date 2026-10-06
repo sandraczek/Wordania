@@ -7,14 +7,14 @@ namespace Wordania.HUD.Skills
     [RequireComponent(typeof(CanvasGroup))]
     public sealed class SkillTreeDisplay : MonoBehaviour, IHUDWindow
     {
-        private IInputReader _inputs;
+        private IUIInput _inputs;
         private IHUDStateManager _hud;
 
         private CanvasGroup _canvasGroup;
         private bool _isOpen = false;
 
         [Inject]
-        public void Construct(IInputReader inputs, IHUDStateManager hudManager)
+        public void Construct(IUIInput inputs, IHUDStateManager hudManager)
         {
             _inputs = inputs;
             _hud = hudManager;
@@ -33,7 +33,7 @@ namespace Wordania.HUD.Skills
         {
             if (_inputs != null)
             {
-                _inputs.OnToggleMap -= HandleSkillTreeToggle;
+                _inputs.OnToggleSkillTree -= HandleSkillTreeToggle;
             }
         }
 

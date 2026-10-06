@@ -21,20 +21,18 @@ namespace Wordania.Skills
         private readonly IAssetRegistry<SkillData> _registry;
         private readonly ISaveService _save;
         private readonly IEntityRegistry _entities;
-        private readonly PlayerProvider _playerProvider;
         private readonly IEventBus _bus;
 
         private readonly Dictionary<PersistentId, PlayerSkillTree> _dictionary = new();
 
-        public event Action<int[]> OnLocalPointsChanged;
-        public event Action<AssetId> OnLocalSkillUnlocked;
-        public event Action<AssetId> OnLocalSkillLocked;
+        public event Action<PersistentId, int[]> OnPointsChanged;
+        public event Action<PersistentId, AssetId> OnSkillUnlocked;
+        public event Action<PersistentId, AssetId> OnSkillLocked;
 
-        public SkillTreeService(IAssetRegistry<SkillData> registry, ISaveService save, PlayerProvider playerProvider, IEntityRegistry entities, IEventBus bus)
+        public SkillTreeService(IAssetRegistry<SkillData> registry, ISaveService save, IEntityRegistry entities, IEventBus bus)
         {
             _registry = registry;
             _save = save;
-            _playerProvider = playerProvider;
             _entities = entities;
             _bus = bus;
         }
@@ -120,11 +118,8 @@ namespace Wordania.Skills
 
             ApplySkillEffects(persistentId, skill);
 
-            if (_playerProvider.IsLocalPlayer(persistentId))
-            {
-                OnLocalPointsChanged?.Invoke(skills.SkillPoints);
-                OnLocalSkillUnlocked?.Invoke(skillId);
-            }
+            OnPointsChanged?.Invoke(persistentId, skills.SkillPoints);
+            OnSkillUnlocked?.Invoke(persistentId, skillId);
         }
         public void LockSkill(PersistentId persistentId, AssetId skillId)
         {
@@ -143,11 +138,8 @@ namespace Wordania.Skills
 
             RevertSkillEffects(persistentId, skill);
 
-            if (_playerProvider.IsLocalPlayer(persistentId))
-            {
-                OnLocalPointsChanged?.Invoke(skills.SkillPoints);
-                OnLocalSkillLocked?.Invoke(skillId);
-            }
+            OnPointsChanged?.Invoke(persistentId, skills.SkillPoints);
+            OnSkillLocked?.Invoke(persistentId, skillId);
         }
 
         public void AddPoints(PersistentId persistentId, SkillPointsType type, int points)
@@ -158,10 +150,7 @@ namespace Wordania.Skills
 
             skills.SkillPoints[(int)type] += points;
 
-            if (_playerProvider.IsLocalPlayer(persistentId))
-            {
-                OnLocalPointsChanged?.Invoke(skills.SkillPoints);
-            }
+            OnPointsChanged?.Invoke(persistentId, skills.SkillPoints);
         }
 
         private void HandlePlayerSpawned(PlayerSpawnedEvent e)
@@ -175,10 +164,7 @@ namespace Wordania.Skills
                 ApplySkillEffects(e.PersistentId, _registry.Get(skillId));
             }
 
-            if (_playerProvider.IsLocalPlayer(e.PersistentId))
-            {
-                OnLocalPointsChanged?.Invoke(skills.SkillPoints);
-            }
+            OnPointsChanged?.Invoke(e.PersistentId, skills.SkillPoints);
         }
 
         public void CaptureState(GameSaveData saveData)

@@ -14,6 +14,7 @@ namespace Wordania.HUD.Health
         [SerializeField] private Image _ghostFillImage;
         private HUDConfig _config;
         private Coroutine _ghostUpdateCoroutine;
+        private Coroutine _primaryUpdateCoroutine;
 
         [Inject]
         public void Construct(HUDConfig config)
@@ -22,38 +23,51 @@ namespace Wordania.HUD.Health
         }
         public void UpdateBar(HealthChangeData data)
         {
-            if(data.PreviousAmount > data.CurrentAmount)
+            if (data.PreviousAmount > data.CurrentAmount)
             {
                 UpdateBarWithGhost(data.CurrentAmount, data.MaxAmount);
             }
             else
             {
-                UpdateBarSmooth(data.CurrentAmount,data.MaxAmount);
+                UpdateBarSmooth(data.CurrentAmount, data.MaxAmount);
             }
         }
         private void UpdateBarWithGhost(float current, float max)
         {
             float normalizedValue = Mathf.Clamp01(current / max);
 
+            // A heal animation still running would drag the bar back up after the damage.
+            StopRoutine(ref _primaryUpdateCoroutine);
             _primaryFillImage.fillAmount = normalizedValue;
             TriggerGhostEffect(normalizedValue);
         }
         private void UpdateBarSmooth(float current, float max)
         {
             float normalizedValue = Mathf.Clamp01(current / max);
-            StartCoroutine(SmoothFillRoutine(normalizedValue));
+
+            StopRoutine(ref _ghostUpdateCoroutine);
+            StopRoutine(ref _primaryUpdateCoroutine);
+            _primaryUpdateCoroutine = StartCoroutine(SmoothFillRoutine(normalizedValue));
         }
         public void UpdateBarInstant(float current, float max)
         {
             float normalizedValue = Mathf.Clamp01(current / max);
 
+            StopRoutine(ref _ghostUpdateCoroutine);
+            StopRoutine(ref _primaryUpdateCoroutine);
             _primaryFillImage.fillAmount = normalizedValue;
             _ghostFillImage.fillAmount = normalizedValue;
         }
 
+        private void StopRoutine(ref Coroutine routine)
+        {
+            if (routine != null) StopCoroutine(routine);
+            routine = null;
+        }
+
         private void TriggerGhostEffect(float target)
         {
-            if (_ghostUpdateCoroutine != null) StopCoroutine(_ghostUpdateCoroutine);
+            StopRoutine(ref _ghostUpdateCoroutine);
             _ghostUpdateCoroutine = StartCoroutine(GhostFillRoutine(target));
         }
 
@@ -64,8 +78,8 @@ namespace Wordania.HUD.Health
             while (Mathf.Abs(_ghostFillImage.fillAmount - target) > 0.001f)
             {
                 _ghostFillImage.fillAmount = Mathf.MoveTowards(
-                    _ghostFillImage.fillAmount, 
-                    target, 
+                    _ghostFillImage.fillAmount,
+                    target,
                     _config.healthGhostShrinkSpeed * Time.deltaTime
                 );
                 yield return null;

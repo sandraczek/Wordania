@@ -22,7 +22,7 @@ namespace Wordania.HUD.Journal
         private IAssetRegistry<JournalEntry> _registry;
         private HUDConfig _config;
         private IObjectResolver _resolver;
-        private PlayerProvider _playerProvider;
+        private ILocalPlayer _local;
 
         [SerializeField] private GameObject _page;
         [SerializeField] private JournalEnemyEntryView _enemyEntryPrefab;
@@ -66,7 +66,7 @@ namespace Wordania.HUD.Journal
             IAssetRegistry<JournalEntry> registry,
             HUDConfig config,
             IObjectResolver resolver,
-            PlayerProvider playerProvider
+            ILocalPlayer local
             )
         {
             _sorter = sorter;
@@ -74,7 +74,7 @@ namespace Wordania.HUD.Journal
             _registry = registry;
             _config = config;
             _resolver = resolver;
-            _playerProvider = playerProvider;
+            _local = local;
         }
         public void SwitchCategory(JournalCategory category)
         {
@@ -111,7 +111,7 @@ namespace Wordania.HUD.Journal
 
             int prev = _currentPage * _entriesNumberOnPage;
             int max = Mathf.Min(_entriesNumberOnPage, _currentAssetCount - prev);
-            var dict = _journal.GetDictionary(_playerProvider.PersistentId, _currentCategory);
+            var dict = _journal.GetDictionary(_local.PersistentId, _currentCategory);
 
             //Debug.Log($"Journal: {_pagesNumber} pages, {_entriesNumberOnPage} entries on page and {_currentAssetCount} assets. Loading page with {max} entries, from {prev}.");
 

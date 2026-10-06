@@ -13,7 +13,6 @@ namespace Wordania.Player
     {
         private readonly IObjectResolver _resolver;
         private readonly PlayerSaveService _playerSaveService;
-        private readonly PlayerProvider _localProvider;
         private readonly IEntityRegistry _entities;
         private readonly IInstanceIdProvider _idProvider;
         private readonly IPlayerSpawnPointService _spawnPointService;
@@ -24,7 +23,6 @@ namespace Wordania.Player
         public PlayerSpawnerService(
             IObjectResolver resolver,
             PlayerSaveService stateService,
-            PlayerProvider localProvider,
             IEntityRegistry registry,
             IInstanceIdProvider idProvider,
             IPlayerSpawnPointService spawnPointService,
@@ -34,7 +32,6 @@ namespace Wordania.Player
         {
             _resolver = resolver;
             _playerSaveService = stateService;
-            _localProvider = localProvider;
             _entities = registry;
             _idProvider = idProvider;
             _spawnPointService = spawnPointService;
@@ -74,11 +71,6 @@ namespace Wordania.Player
 
             player.SetLocalControl(isLocalClient);
 
-            if (isLocalClient)
-            {
-                _localProvider.SetPlayer(player);
-            }
-
             _bus.Publish(new PlayerSpawnedEvent(player.InstanceId, persistentId));
 
             return player;
@@ -91,11 +83,6 @@ namespace Wordania.Player
             _playerSaveService.UpdateState(player.PersistentId, player.GetSaveData());
 
             _entities.Unregister(player.InstanceId);
-
-            if (_localProvider.IsLocalPlayer(player.InstanceId))
-            {
-                _localProvider.ClearPlayer();
-            }
 
             Object.Destroy(player.gameObject);
         }

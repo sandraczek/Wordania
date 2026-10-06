@@ -10,13 +10,13 @@ namespace Wordania.HUD.Inventory
     {
         [Header("Dependencies")]
         private IInventoryView _view;
-        private IInputReader _inputs;
+        private IUIInput _inputs;
         private IHUDStateManager _hud;
 
         private bool _isOpen = false;
 
         [Inject]
-        public void Construct(IInventoryView inventoryView, IInputReader inputs, IHUDStateManager HUDManager)
+        public void Construct(IInventoryView inventoryView, IUIInput inputs, IHUDStateManager HUDManager)
         {
             _view = inventoryView;
             _inputs = inputs;

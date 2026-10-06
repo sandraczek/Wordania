@@ -97,7 +97,7 @@ namespace Wordania.Boot
 
             builder.RegisterEntryPoint<DebugService>(Lifetime.Singleton).As<IDebugService>();
 
-            builder.RegisterInstance<IInputReader>(_inputReader);
+            builder.RegisterInstance(_inputReader).As<IGameplayInput, IUIInput, IDebugInput>();
             _inputReader.Initialize();
 
             builder.Register<InstanceIdProvider>(Lifetime.Singleton).As<IInstanceIdProvider>();

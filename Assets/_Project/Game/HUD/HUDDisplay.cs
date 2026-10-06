@@ -8,7 +8,7 @@ namespace Wordania.HUD
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class HUDDisplay<T> : MonoBehaviour, IHUDWindow where T : MonoBehaviour
     {
-        protected IInputReader _inputs;
+        protected IUIInput _inputs;
         private IHUDStateManager _hud;
 
         protected T _view;
@@ -16,7 +16,7 @@ namespace Wordania.HUD
         private bool _isOpen = false;
 
         [Inject]
-        public void Construct(IInputReader inputs, IHUDStateManager hudManager)
+        public void Construct(IUIInput inputs, IHUDStateManager hudManager)
         {
             _inputs = inputs;
             _hud = hudManager;

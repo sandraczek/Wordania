@@ -49,7 +49,7 @@ namespace Wordania.Player
         private MechanicIds _mechanicIds;
         private IPlayerSpawnPointService _spawnPointService;
         private IEventBus _bus;
-        private IInputReader _inputReader;
+        private IGameplayInput _gameplayInput;
         private IGameClock _clock;
         private LocalPlayerInputSource _localInput;
 
@@ -65,7 +65,7 @@ namespace Wordania.Player
         [Inject]
         public void Construct(
             PlayerConfig config,
-            IInputReader inputs,
+            IGameplayInput inputs,
             IGameClock clock,
             IInventoryService inventory,
             MechanicIds mechanicIds,
@@ -84,7 +84,7 @@ namespace Wordania.Player
 
             _config = config;
             _mechanicIds = mechanicIds;
-            _inputReader = inputs;
+            _gameplayInput = inputs;
             _clock = clock;
 
             _stateMachine = new StateMachine<PlayerBaseState>();
@@ -93,14 +93,14 @@ namespace Wordania.Player
         }
 
         /// <summary>
-        /// Marks this player as controlled by the local machine: its PlayerInputState is fed from the local InputReader.
+        /// Marks this player as controlled by the local machine: its PlayerInputState is fed from the local IGameplayInput.
         /// Remote players never call this; their PlayerInputState will be fed from the network.
         /// </summary>
         public void SetLocalControl(bool isLocal)
         {
             if (isLocal)
             {
-                _localInput ??= new LocalPlayerInputSource(_inputReader, Context.Input);
+                _localInput ??= new LocalPlayerInputSource(_gameplayInput, _clock, Context.Input);
                 if (isActiveAndEnabled) _localInput.Enable();
             }
             else if (_localInput != null)

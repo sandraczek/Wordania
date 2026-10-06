@@ -9,6 +9,6 @@ namespace Wordania.WeaponStore
 {
     public interface IWeaponRequirementService
     {
-        bool CheckRequirements(AssetId id);
+        bool CheckRequirements(PersistentId player, AssetId id);
     }
 }

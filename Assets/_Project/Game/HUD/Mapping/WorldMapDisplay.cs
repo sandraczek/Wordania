@@ -10,12 +10,12 @@ namespace Wordania.HUD.Mapping
     {
         private CanvasGroup _canvasGroup;
 
-        private IInputReader _inputs;
+        private IUIInput _inputs;
         private IHUDStateManager _hud;
         private bool _isOpen = false;
 
         [Inject]
-        public void Construct(IInputReader inputs, IHUDStateManager hudManager)
+        public void Construct(IUIInput inputs, IHUDStateManager hudManager)
         {
             _inputs = inputs;
             _hud = hudManager;

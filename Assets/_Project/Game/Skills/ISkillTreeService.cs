@@ -12,7 +12,9 @@ namespace Wordania.Skills
         void UnlockSkill(PersistentId persistentId, AssetId skillId);
         void AddPoints(PersistentId persistentId, SkillPointsType type, int points);
 
-        event Action<int[]> OnLocalPointsChanged;
-        event Action<AssetId> OnLocalSkillUnlocked;
+        // Raised for ANY player; UI filters by its local PersistentId.
+        event Action<PersistentId, int[]> OnPointsChanged;
+        event Action<PersistentId, AssetId> OnSkillUnlocked;
+        event Action<PersistentId, AssetId> OnSkillLocked;
     }
 }

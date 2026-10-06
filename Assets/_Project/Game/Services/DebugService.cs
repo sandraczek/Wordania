@@ -8,7 +8,7 @@ namespace Wordania.Services
 {
     public sealed class DebugService : IDebugService, IStartable, IDisposable
     {
-        private readonly IInputReader _inputReader;
+        private readonly IDebugInput _inputReader;
         private readonly DebugSettings _settings;
 
         private bool _showChunks = false;
@@ -19,7 +19,7 @@ namespace Wordania.Services
         public event Action<bool> OnShowChunksChanged;
         public event Action<bool> OnGodModeChanged;
 
-        public DebugService(IInputReader inputReader, DebugSettings settings)
+        public DebugService(IDebugInput inputReader, DebugSettings settings)
         {
             _inputReader = inputReader;
             _settings = settings;

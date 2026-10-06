@@ -25,19 +25,17 @@ namespace Wordania.Inventory
         private readonly IEventBus _bus;
         private readonly ISaveService _saveService;
         private readonly IEntityRegistry _entities;
-        private readonly PlayerProvider _playerProvider;
 
         private readonly Dictionary<PersistentId, InventoryData> _inventories = new();
 
-        public event Action OnInventoryChanged;
+        public event Action<PersistentId> OnInventoryChanged;
 
-        public InventoryService(IAssetRegistry<ItemData> database, IEventBus eventBus, ISaveService saveService, IEntityRegistry entities, PlayerProvider playerProvider)
+        public InventoryService(IAssetRegistry<ItemData> database, IEventBus eventBus, ISaveService saveService, IEntityRegistry entities)
         {
             _database = database;
             _bus = eventBus;
             _saveService = saveService;
             _entities = entities;
-            _playerProvider = playerProvider;
         }
         public void Start()
         {
@@ -71,8 +69,7 @@ namespace Wordania.Inventory
 
             int leftovers = inventory.Add(item, count); // return unused
 
-            if (_playerProvider.IsLocalPlayer(persistentId))
-                OnInventoryChanged?.Invoke();
+            OnInventoryChanged?.Invoke(persistentId);
         }
 
         public void RemoveItem(PersistentId persistentId, AssetId id, int count)
@@ -86,8 +83,7 @@ namespace Wordania.Inventory
 
             inventory.Remove(item, count);
 
-            if (_playerProvider.IsLocalPlayer(persistentId))
-                OnInventoryChanged?.Invoke();
+            OnInventoryChanged?.Invoke(persistentId);
         }
         public bool HasItems(PersistentId persistentId, AssetId id, int count)
         {
@@ -159,7 +155,8 @@ namespace Wordania.Inventory
                 }
             }
 
-            OnInventoryChanged?.Invoke();
+            foreach (var persistentId in _inventories.Keys)
+                OnInventoryChanged?.Invoke(persistentId);
         }
     }
 }

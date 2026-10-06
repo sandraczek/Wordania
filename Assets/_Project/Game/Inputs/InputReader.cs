@@ -11,7 +11,9 @@ namespace Wordania.Inputs
         GameInput.IPlayerActions,
         GameInput.IDebugActions,
         GameInput.IHUDActions,
-        IInputReader,
+        IGameplayInput,
+        IUIInput,
+        IDebugInput,
         IDisposable
     {
         private GameInput _inputActions;
@@ -20,9 +22,9 @@ namespace Wordania.Inputs
         [field: SerializeField] public Vector2 MovementInput { get; private set; }
         [field: SerializeField] public Vector2 CursorScreenPosition { get; private set; }
         public bool JumpInput { get; private set; }
-        public float JumpPressedTime { get; private set; } = float.MinValue;
 
         // --- Events ---
+        public event Action OnJumpPressed;
         public event Action<int> OnHotbarSlotPressed;
         public event Action<bool> OnPrimaryActionHeld;
         public event Action<bool> OnSecondaryActionHeld;
@@ -100,7 +102,7 @@ namespace Wordania.Inputs
             if (context.performed)
             {
                 JumpInput = true;
-                JumpPressedTime = (float)context.startTime;
+                OnJumpPressed?.Invoke();
             }
             if (context.canceled)
             {
@@ -142,11 +144,6 @@ namespace Wordania.Inputs
         public void OnShowWeaponStore(InputAction.CallbackContext context)
         {
             if (context.performed) OnToggleWeaponStore?.Invoke();
-        }
-
-        public void ConsumeJump()
-        {
-            JumpPressedTime = float.MinValue;
         }
 
         public void OnShowChunks(InputAction.CallbackContext context)

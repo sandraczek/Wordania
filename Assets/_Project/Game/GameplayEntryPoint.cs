@@ -29,8 +29,10 @@ namespace Wordania
         private readonly IWorldService _world;
         private readonly IWorldRenderer _worldRenderer;
         private readonly PlayerSpawnerService _playerSpawner;
-        private readonly PlayerProvider _playerProvider;
-        private readonly IInputReader _inputReader;
+        private readonly ILocalPlayer _localPlayer;
+        private readonly IEntityRegistry _entities;
+        private readonly IPlayerSpawnPointService _spawnPoints;
+        private readonly IUIInput _uiInput;
         private readonly ICameraService _camera;
         private readonly ILoadingScreenView _loadingScreen;
         private readonly IJournalView _journalView;
@@ -49,8 +51,10 @@ namespace Wordania
             IWorldService worldService,
             IWorldRenderer worldRenderer,
             PlayerSpawnerService playerSpawner,
-            PlayerProvider playerProvider,
-            IInputReader inputReader,
+            ILocalPlayer localPlayer,
+            IEntityRegistry entities,
+            IPlayerSpawnPointService spawnPoints,
+            IUIInput uiInput,
             ICameraService camera,
             ILoadingScreenView loadingScreen,
             IJournalView journalView,
@@ -70,8 +74,10 @@ namespace Wordania
             _world = worldService;
             _worldRenderer = worldRenderer;
             _playerSpawner = playerSpawner;
-            _playerProvider = playerProvider;
-            _inputReader = inputReader;
+            _localPlayer = localPlayer;
+            _entities = entities;
+            _spawnPoints = spawnPoints;
+            _uiInput = uiInput;
             _camera = camera;
             _loadingScreen = loadingScreen;
             _journalView = journalView;
@@ -90,7 +96,7 @@ namespace Wordania
         {
             Debug.Log("<color=green>[GAMEPLAY] Start Sequence Initiated...</color>");
 
-            _inputReader.DisableAllInput();
+            _uiInput.DisableAllInput();
 
             _loadingScreen.Show();
             _loadingScreen.UpdateProgress(0f, "Loading");
@@ -128,16 +134,20 @@ namespace Wordania
             _playerSpawner.SpawnPlayer(_sessionConfig.LocalPersistentId, true);
 
             _loadingScreen.UpdateProgress(0.9f, "Setting Camera");
-            _camera.FollowTarget(_playerProvider.PlayerTransform);
+            _camera.FollowTarget(_localPlayer.Player.transform);
 
             _loadingScreen.UpdateProgress(1f, "Ready");
             await _loadingScreen.Hide();
 
-            _inputReader.SetGameplayMode();
+            _uiInput.SetGameplayMode();
 
             await UniTask.WaitForSeconds(50);
 
-            _bossSpawner.SpawnBoss(_bossToSpawn, (Vector2)_playerProvider.PlayerTransform.position + new Vector2(5f, 5f));
+            // Any player will do (the boss targets all of them); fall back to the world spawn if nobody is alive.
+            Vector2 bossAnchor = _entities.Players.Count > 0
+                ? (Vector2)_entities.Players[0].transform.position
+                : _spawnPoints.GetWorldSpawn();
+            _bossSpawner.SpawnBoss(_bossToSpawn, bossAnchor + new Vector2(5f, 5f));
         }
     }
 }

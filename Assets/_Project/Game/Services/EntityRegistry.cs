@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Wordania.Gameplay;
@@ -12,18 +13,23 @@ namespace Wordania.Services
         IReadOnlyCollection<Entity> Enemies { get; }
         IReadOnlyCollection<ITrackable> Trackables { get; }
 
+        event Action<Player.Player> PlayerAdded;
+        event Action<Player.Player> PlayerRemoved;
+
         void Register(Entity entity, InstanceId instanceId);
         void Unregister(InstanceId id);
 
         bool TryGetPersistentId(InstanceId instanceId, out PersistentId persistentId);
         InstanceId GetInstanceId(PersistentId persistentId);
         bool IsPlayer(InstanceId instanceId);
+        bool TryGetPlayer(PersistentId persistentId, out Player.Player player);
     }
 
     public class EntityRegistry : IEntityRegistry
     {
         private readonly Dictionary<InstanceId, Entity> _entities = new();
         private readonly List<Entity> _players = new();
+        private readonly Dictionary<PersistentId, Player.Player> _playersById = new();
         private readonly HashSet<Entity> _enemies = new();
         private readonly HashSet<ITrackable> _trackables = new();
 
@@ -35,6 +41,9 @@ namespace Wordania.Services
         public IReadOnlyCollection<Entity> Enemies => _enemies;
         public IReadOnlyCollection<ITrackable> Trackables => _trackables;
 
+        public event Action<Player.Player> PlayerAdded;
+        public event Action<Player.Player> PlayerRemoved;
+
         public void Register(Entity entity, InstanceId instanceId)
         {
             _entities[instanceId] = entity;
@@ -45,9 +54,11 @@ namespace Wordania.Services
                 _instanceMap[persistentEntity.PersistentId] = instanceId;
             }
 
-            if (entity.TryGetFeature<Player.Player>(out _))
+            if (entity.TryGetFeature<Player.Player>(out var player))
             {
                 _players.Add(entity);
+                _playersById[player.PersistentId] = player;
+                PlayerAdded?.Invoke(player);
             }
             if (entity.TryGetFeature<IEnemy>(out _))
             {
@@ -71,7 +82,15 @@ namespace Wordania.Services
                 if (entity.TryGetFeature(out ITrackable t))
                     _trackables.Remove(t);
                 _persistentMap.Remove(id);
+
+                if (entity.TryGetFeature(out Player.Player player) && _playersById.Remove(player.PersistentId))
+                    PlayerRemoved?.Invoke(player);
             }
+        }
+
+        public bool TryGetPlayer(PersistentId persistentId, out Player.Player player)
+        {
+            return _playersById.TryGetValue(persistentId, out player);
         }
 
         public bool TryGetPersistentId(InstanceId instanceId, out PersistentId persistentId)

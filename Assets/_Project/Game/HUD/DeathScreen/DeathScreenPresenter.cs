@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer.Unity;
+using Wordania.Commands;
 using Wordania.Events;
 using Wordania.Player;
 using Wordania.Player.Events;
@@ -12,13 +13,15 @@ namespace Wordania.HUD.DeathScreen
     {
         private readonly DeathScreenView _view;
         private readonly IEventBus _bus;
-        private readonly PlayerProvider _player;
+        private readonly ILocalPlayer _local;
+        private readonly IPlayerCommands _commands;
 
-        public DeathScreenPresenter(DeathScreenView view, IEventBus bus, PlayerProvider player)
+        public DeathScreenPresenter(DeathScreenView view, IEventBus bus, ILocalPlayer local, IPlayerCommands commands)
         {
             _view = view;
             _bus = bus;
-            _player = player;
+            _local = local;
+            _commands = commands;
         }
 
         public void Start()
@@ -38,12 +41,12 @@ namespace Wordania.HUD.DeathScreen
         {
             _view.gameObject.SetActive(false);
 
-            _player.CurrentPlayer.Revive();
+            _commands.RequestRevive(_local.PersistentId);
         }
 
         private void HandlePlayerDeath(PlayerDeathEvent e)
         {
-            if (!_player.IsLocalPlayer(e.Id)) return;
+            if (!_local.Is(e.Id)) return;
 
             _view.gameObject.SetActive(true);
         }

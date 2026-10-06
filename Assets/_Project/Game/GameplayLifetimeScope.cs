@@ -30,6 +30,7 @@ using Wordania.Bosses.Core;
 using Wordania.World.Config;
 using Wordania.World.Data;
 using Wordania.World.Editing;
+using Wordania.Commands;
 using Wordania.World.Passes;
 using UnityEngine.UI;
 using Wordania.World.Lighting;
@@ -169,7 +170,8 @@ namespace Wordania
             builder.Register<PlayerSpawnerService>(Lifetime.Scoped)
                 .AsSelf()
                 .WithParameter(_playerPrefab); // FUCK YOU
-            builder.Register<PlayerProvider>(Lifetime.Scoped);
+            builder.Register<LocalPlayer>(Lifetime.Scoped).As<ILocalPlayer>();
+            builder.Register<LocalPlayerCommands>(Lifetime.Scoped).As<IPlayerCommands>();
 
             //skills
             builder.Register<MechanicFactory>(Lifetime.Scoped).As<IMechanicFactory>();

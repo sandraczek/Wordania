@@ -119,6 +119,8 @@ namespace Wordania.Player.Loadout
 
         private void HandleWeaponBought(WeaponBoughtEvent e)
         {
+            if (e.Buyer != _player.PersistentId) return;
+
             _hotbarSlots.Add(new WeaponLoadoutSlot(_weaponTool, _weaponRegistry.Get(e.Id)));
         }
     }

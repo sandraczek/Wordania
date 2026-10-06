@@ -21,14 +21,17 @@ namespace Wordania.WeaponStore
             _bus = bus;
         }
 
-        public void Buy(AssetId id)
+        public bool Buy(PersistentId buyer, AssetId id)
         {
-            _bus.Publish(new WeaponBoughtEvent(id));
+            if (!CanBuy(buyer, id)) return false;
+
+            _bus.Publish(new WeaponBoughtEvent(buyer, id));
+            return true;
         }
 
-        public bool CanBuy(AssetId id)
+        public bool CanBuy(PersistentId buyer, AssetId id)
         {
-            return _requirements.CheckRequirements(id);
+            return _requirements.CheckRequirements(buyer, id);
         }
     }
 }

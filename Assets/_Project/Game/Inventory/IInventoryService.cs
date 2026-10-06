@@ -8,7 +8,8 @@ namespace Wordania.Inventory
 {
     public interface IInventoryService
     {
-        event Action OnInventoryChanged;
+        /// <summary>Raised for ANY player's inventory; UI filters by its local PersistentId.</summary>
+        event Action<PersistentId> OnInventoryChanged;
 
         void AddItem(PersistentId persistentId, AssetId itemId, int amount);
         void RemoveItem(PersistentId persistentId, AssetId itemId, int amount);
