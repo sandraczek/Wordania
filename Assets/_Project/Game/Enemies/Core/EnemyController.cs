@@ -96,7 +96,10 @@ namespace Wordania.Enemies.Core
 
             // Client proxy: AI does not run, the body is moved by host snapshots only.
             if (!_session.IsHost)
+            {
                 _rb.bodyType = RigidbodyType2D.Kinematic;
+                _rb.interpolation = RigidbodyInterpolation2D.None; // pose is written directly from snapshots
+            }
 
             List<(StatType, float)> startingStats = new()
             {
@@ -123,6 +126,12 @@ namespace Wordania.Enemies.Core
             InstanceId = instanceId;
             if (Data == null) Debug.LogError($"{transform.name}: No data was set in prefab");
             _onDeathFactoryAction = onDeath;
+
+            // transform.position alone leaves the body at its previous (pooled / prefab) pose until the next physics
+            // step; snapshots read rb.position, so they would report the stale spot and the enemy would jump there.
+            _rb.position = transform.position;
+            _rb.linearVelocity = Vector2.zero;
+            _rb.angularVelocity = 0f;
 
             _stats.InitializeSpawn();
             _health.InitializeSpawn();
