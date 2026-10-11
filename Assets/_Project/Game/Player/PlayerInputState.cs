@@ -16,6 +16,9 @@ namespace Wordania.Player
         public Vector2 AimWorldPosition { get; set; }
         public bool PrimaryActionHeld { get; set; }
         public bool SecondaryActionHeld { get; set; }
+        /// <summary>Remote player on the host: where the owner's weapon muzzle was (host copy of the body lags behind).</summary>
+        public bool HasMuzzleOverride { get; set; }
+        public Vector2 MuzzlePosition { get; set; }
 
         // Monotonic press counters (wrap around). Lets a remote copy detect presses even if input frames are lost or duplicated.
         public ushort JumpPressCount { get; private set; }

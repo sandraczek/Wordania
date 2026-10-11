@@ -51,7 +51,9 @@ namespace Wordania.Player
         private bool _isFacingRight = true;
         private bool _isSteppingUp = false;
         private bool _isProxy;
-        private RigidbodyType2D _simulatedBodyType;
+        private bool _hostDriven;
+        private Vector2 _remoteVelocity;
+        private RigidbodyType2D _requestedBodyType;
         private RigidbodyInterpolation2D _simulatedInterpolation;
 
         public event Action<Vector3> OnPlayerWarped;
@@ -69,7 +71,7 @@ namespace Wordania.Player
         {
             _rb = GetComponent<Rigidbody2D>();
             _col = GetComponent<Collider2D>();
-            _simulatedBodyType = _rb.bodyType;
+            _requestedBodyType = _rb.bodyType;
             _simulatedInterpolation = _rb.interpolation;
         }
         public void Start()
@@ -77,24 +79,46 @@ namespace Wordania.Player
             SetGravity(_config.GravityScale);
         }
         /// <summary>
-        /// Proxy = the body is moved by host snapshots only (no physics, no grounding/landing). Used for remote players
-        /// on clients. The local player on a client is simulated (predicted) like on the host.
+        /// Proxy = the body is not simulated here; its pose comes from the owner (directly on the host via
+        /// <see cref="DriveRemote"/>, through host snapshots on other clients).
         /// </summary>
-        public void SetProxy(bool isProxy)
+        public void SetProxy(bool isProxy, bool keepInterpolation)
         {
             _isProxy = isProxy;
-            // Proxy poses are written through the transform; Rigidbody2D interpolation would overwrite them
-            // with its own (stale) physics pose every frame and make the body flicker.
-            _rb.bodyType = isProxy ? RigidbodyType2D.Kinematic : _simulatedBodyType;
-            _rb.interpolation = isProxy ? RigidbodyInterpolation2D.None : _simulatedInterpolation;
+            _hostDriven = isProxy && keepInterpolation;
+            _remoteVelocity = Vector2.zero;
+            _rb.bodyType = isProxy ? RigidbodyType2D.Kinematic : _requestedBodyType;
+            // Snapshot-driven proxies are written through the transform; Rigidbody2D interpolation would overwrite
+            // them with its own (stale) physics pose every frame and make the body flicker.
+            _rb.interpolation = isProxy && !keepInterpolation ? RigidbodyInterpolation2D.None : _simulatedInterpolation;
+            // A kinematic body gets no collision/trigger callbacks against other kinematic bodies by default. Bosses
+            // (and any MovePosition-driven enemy) are kinematic, so without this a host-driven remote player would
+            // never be hit by their ContactDamageDealer (OnCollisionStay2D / OnTriggerStay2D).
+            _rb.useFullKinematicContacts = isProxy && keepInterpolation;
             _rb.linearVelocity = Vector2.zero;
         }
 
-        /// <summary>Small position correction toward the host's pose (client prediction). Keeps the velocity.</summary>
-        public void Nudge(Vector2 delta) => _rb.position += delta;
+        public bool IsFacingRight => _isFacingRight;
+
+        /// <summary>Host: applies the pose its owner reported for one physics step.</summary>
+        public void DriveRemote(Vector2 position, Vector2 velocity, bool facingRight)
+        {
+            _remoteVelocity = velocity;
+            _rb.MovePosition(position);
+            if (facingRight != _isFacingRight)
+            {
+                _isFacingRight = facingRight;
+                transform.rotation = Quaternion.Euler(0, facingRight ? 0 : 180, 0);
+            }
+        }
+
+        // Owner-reported velocity of a host-driven proxy (its kinematic body has none); used for landing detection.
+        private float CurrentVelocityY => _isProxy ? _remoteVelocity.y : VelocityY;
+
         private void FixedUpdate()
         {
-            if (_isProxy) return;
+            // Landing (fall damage) is detected where the host can see it: own players and host-driven proxies.
+            if (_isProxy && !_hostDriven) return;
 
             bool wasGrounded = IsGrounded;
             IsGrounded = CheckGrounded();
@@ -106,7 +130,7 @@ namespace Wordania.Player
 
                 if (!wasGrounded)
                 {
-                    OnLanded?.Invoke(Mathf.Max(Mathf.Abs(_maxFallSpeed), Mathf.Abs(VelocityY)));
+                    OnLanded?.Invoke(Mathf.Max(Mathf.Abs(_maxFallSpeed), Mathf.Abs(CurrentVelocityY)));
                     _maxFallSpeed = 0;
                 }
                 if (_isSteppingUp)
@@ -116,9 +140,9 @@ namespace Wordania.Player
             }
             else
             {
-                if (VelocityY < _maxFallSpeed)
+                if (CurrentVelocityY < _maxFallSpeed)
                 {
-                    _maxFallSpeed = VelocityY;
+                    _maxFallSpeed = CurrentVelocityY;
                 }
             }
         }
@@ -206,7 +230,8 @@ namespace Wordania.Player
         }
         public void SetBodyType(RigidbodyType2D type)
         {
-            _rb.bodyType = type;
+            _requestedBodyType = type;
+            if (!_isProxy) _rb.bodyType = type; // proxies stay kinematic (e.g. spectate exit on the host)
         }
         public Bounds GetBounds() => _col.bounds;
         private void OnDrawGizmos()

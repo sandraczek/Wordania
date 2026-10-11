@@ -36,7 +36,7 @@ namespace Wordania.Networking.Transport
     /// </summary>
     public static class NetCodec
     {
-        public const int ProtocolVersion = 3;
+        public const int ProtocolVersion = 5;
 
         private static readonly Dictionary<Type, (ushort Id, Delegate Write)> Writers = new();
         private static readonly Dictionary<ushort, Action<BinaryReader, IEventBus>> Readers = new();
@@ -127,6 +127,10 @@ namespace Wordania.Networking.Transport
             w.Write(f.HotbarPressCount);
             w.Write(f.LastHotbarSlot);
             w.Write(f.CyclePressCount);
+            Write(w, f.Position);
+            Write(w, f.Velocity);
+            w.Write(f.FacingRight);
+            Write(w, f.MuzzlePosition);
         }
 
         public static PlayerInputFrame ReadInput(BinaryReader r) => new(
@@ -139,7 +143,11 @@ namespace Wordania.Networking.Transport
             r.ReadUInt16(),
             r.ReadUInt16(),
             r.ReadInt32(),
-            r.ReadUInt16());
+            r.ReadUInt16(),
+            ReadVector2(r),
+            ReadVector2(r),
+            r.ReadBoolean(),
+            ReadVector2(r));
 
         public static void WriteCommand(BinaryWriter w, in PlayerCommand c)
         {
@@ -288,7 +296,6 @@ namespace Wordania.Networking.Transport
                 Write(w, s.Id);
                 Write(w, s.Position);
                 w.Write(s.Rotation.x); w.Write(s.Rotation.y); w.Write(s.Rotation.z); w.Write(s.Rotation.w);
-                w.Write(s.InputAck);
             }
         }
 
@@ -302,8 +309,7 @@ namespace Wordania.Networking.Transport
                 snapshots[i] = new EntitySnapshot(
                     ReadInstanceId(r),
                     ReadVector2(r),
-                    new Quaternion(r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle()),
-                    r.ReadUInt32());
+                    new Quaternion(r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle()));
             }
             return new EntitySnapshotBatchEvent(tick, hostTime, snapshots);
         }

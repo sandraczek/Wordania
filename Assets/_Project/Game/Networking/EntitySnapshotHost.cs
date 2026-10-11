@@ -14,18 +14,16 @@ namespace Wordania.Networking
         private readonly IEventBus _bus;
         private readonly IGameClock _clock;
         private readonly SessionConfig _session;
-        private readonly RemoteInputApplier _input;
 
         private float _nextSendTime;
         private uint _tick;
 
-        public EntitySnapshotHost(IEntityRegistry entities, IEventBus bus, IGameClock clock, SessionConfig session, RemoteInputApplier input)
+        public EntitySnapshotHost(IEntityRegistry entities, IEventBus bus, IGameClock clock, SessionConfig session)
         {
             _entities = entities;
             _bus = bus;
             _clock = clock;
             _session = session;
-            _input = input;
         }
 
         public void LateTick()
@@ -40,10 +38,9 @@ namespace Wordania.Networking
             foreach (var pair in _entities.Entities)
             {
                 var t = pair.Value.Transform;
-                // Physics pose, not the interpolated transform: predicting clients compare against their own body.
+                // Physics pose, not the interpolated transform.
                 Vector2 position = pair.Value.TryGetComponent(out Rigidbody2D rb) ? rb.position : (Vector2)t.position;
-                uint ack = _entities.TryGetPersistentId(pair.Key, out PersistentId owner) ? _input.LastSequence(owner) : 0;
-                snapshots[i++] = new EntitySnapshot(pair.Key, position, t.rotation, ack);
+                snapshots[i++] = new EntitySnapshot(pair.Key, position, t.rotation);
             }
 
             _bus.PublishReplicated(new EntitySnapshotBatchEvent(++_tick, Time.fixedTime, snapshots));

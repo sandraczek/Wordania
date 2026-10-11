@@ -18,6 +18,8 @@ namespace Wordania.Player.Loadout
         private float _nextFireTime = float.MinValue;
         [SerializeField] private Transform _attachmentPoint;
 
+        public Vector2 MuzzlePosition => _attachmentPoint.position;
+
         [Inject]
         public void Construct(IWeaponFactory weaponFactory, ICombatAuthority combat)
         {
@@ -37,7 +39,7 @@ namespace Wordania.Player.Loadout
             if (now < _nextFireTime) return false;
             _nextFireTime = now + _currentWeapon.Data.FireData.FireRate;
 
-            Vector2 origin = _attachmentPoint.position;
+            Vector2 origin = _player.Input.HasMuzzleOverride ? _player.Input.MuzzlePosition : (Vector2)_attachmentPoint.position;
             Vector2 aimDirection = (targetWorldPos - origin).normalized;
 
             _combat.RequestFire(new FireRequest(instigatorId, _currentWeapon.Data.Id, origin, aimDirection));

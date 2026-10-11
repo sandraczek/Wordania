@@ -54,6 +54,12 @@ namespace Wordania.Enemies.Spawning
             Vector2 origin = _entities.Players[UnityEngine.Random.Range(0, playerCount)].Transform.position;
             Vector2 candidatePosition = GetRandomPointInAnnulus(origin, _settings.InnerViewportRadius, _settings.OuterSpawnRadius);
 
+            for (int i = 0; i < playerCount; i++)
+            {
+                Vector2 playerPos = _entities.Players[i].Transform.position;
+
+                if ((playerPos - candidatePosition).SqrMagnitude() < _settings.InnerViewportRadius * _settings.InnerViewportRadius) return false;
+            }
             foreach (var validator in _validators)
             {
                 if (!validator.IsValid(_enemyToSpawn, candidatePosition))

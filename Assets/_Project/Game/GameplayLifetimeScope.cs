@@ -347,7 +347,6 @@ nature (trees, water)
 chests
 status effect (fire, poison)
 chat
-multiplayer
 
 maybe optimization:
 - now checking every milestone for every mined block every frame.

@@ -59,7 +59,15 @@ namespace Wordania.Player
         public PlayerContext Context { get; } = new();
         public bool IsLocal => _localInput != null;
         /// <summary>Runs FSM and physics here: everything on the host, only the own (predicted) player on a client.</summary>
-        public bool IsSimulated => _session.IsHost || IsLocal;
+        /// <summary>
+        /// Movement is owner-authoritative (like Terraria): only the machine that controls a player simulates its
+        /// movement; everyone else gets the owner's pose. The host still decides health, damage and death.
+        /// </summary>
+        public bool IsSimulated => IsLocal;
+        /// <summary>
+        /// Host-side source of a remote player's input and pose; advanced once per physics step (set by RemoteInputApplier).
+        /// </summary>
+        public IPlayerInputFeed InputFeed { get; set; }
         public Bounds Hitbox => _controller.GetBounds();
         public Vector2 Position => _controller.GetBounds().center;
         public InstanceId InstanceId { get; private set; }
@@ -114,7 +122,9 @@ namespace Wordania.Player
                 _localInput.Disable();
                 _localInput = null;
             }
-            _controller.SetProxy(!IsSimulated);
+            // Host: remote players are moved with MovePosition each physics step, so Rigidbody2D interpolation keeps
+            // them smooth. Client: proxies are written through the transform by snapshots (interpolation off).
+            _controller.SetProxy(!IsSimulated, keepInterpolation: _session.IsHost);
         }
         public void InitializeNew(InstanceId instanceId, PersistentId persistentId)
         {
@@ -135,7 +145,6 @@ namespace Wordania.Player
         private void Init()
         {
             Context.Bind(PersistentId, InstanceId, _stateMachine, _controller, _health, _stats, _config, _mechanics, transform, _clock);
-            _controller.SetProxy(!IsSimulated);
             // ---
             _stateMachine.SwitchState(_factory.InitialState);
 
@@ -185,12 +194,13 @@ namespace Wordania.Player
         private void Update()
         {
             _localInput?.Pull(); // clients too: the input uplink reads this state
-            if (!IsSimulated) return; // remote player on a client: proxy moved by host snapshots
+            if (!IsSimulated) return; // remote player: pose comes from its owner
 
             _stateMachine.Update();
         }
         private void FixedUpdate()
         {
+            InputFeed?.Advance(); // host: remote player's input + pose
             if (!IsSimulated) return;
 
             _stateMachine.FixedUpdate();
@@ -204,7 +214,10 @@ namespace Wordania.Player
         }
         private void Handlehurt(DamageResult damage)
         {
-            if (!IsSimulated) return; // knockback / hurt state are simulation; proxies only play visuals
+            if (_session.IsHost && !_health.IsDead)
+                _invincibility.StartInvincibility(InvincibilitySource.HitRecovery, _config.InvincibilityDuration);
+
+            if (!IsSimulated) return; // knockback / hurt state belong to the owner's movement
 
             //Applying knockback even if fatal
             _controller.VelocityX = damage.Payload.Knockback.x;
@@ -212,7 +225,8 @@ namespace Wordania.Player
 
             if (_health.IsDead) return;
 
-            _invincibility.StartInvincibility(InvincibilitySource.HitRecovery, _config.InvincibilityDuration);
+            if (!_session.IsHost)
+                _invincibility.StartInvincibility(InvincibilitySource.HitRecovery, _config.InvincibilityDuration);
 
             _stateMachine.SwitchState(_factory.Hurt);
         }
@@ -236,7 +250,11 @@ namespace Wordania.Player
         {
             if (_session.IsHost) return;
             if (data.PreviousAmount <= 0f && data.CurrentAmount > 0f)
+            {
+                // The owner moves its player, so it also performs the respawn teleport.
+                if (IsLocal) _controller.Warp(_spawnPointService.GetSpawn(InstanceId));
                 _stateMachine.SwitchState(_factory.InitialState);
+            }
         }
         private void HandleHurtVisuals(DamageResult payload)
         {

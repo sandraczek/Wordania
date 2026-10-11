@@ -10,15 +10,12 @@ namespace Wordania.Networking
         public readonly InstanceId Id;
         public readonly Vector2 Position;
         public readonly Quaternion Rotation;
-        /// <summary>Players only: last input sequence the host applied for this player (0 = none). Used for prediction.</summary>
-        public readonly uint InputAck;
 
-        public EntitySnapshot(InstanceId id, Vector2 position, Quaternion rotation, uint inputAck)
+        public EntitySnapshot(InstanceId id, Vector2 position, Quaternion rotation)
         {
             Id = id;
             Position = position;
             Rotation = rotation;
-            InputAck = inputAck;
         }
     }
 
