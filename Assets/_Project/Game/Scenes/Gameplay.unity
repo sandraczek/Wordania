@@ -398,7 +398,7 @@ MonoBehaviour:
   _saveSlot: 0
   _enemyToPrewarm: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}
   _bossToSpawn: {fileID: 11400000, guid: d58728627ae204fcda8e9a698aabdb95, type: 2}
-  _networkMode: 0
+  _networkMode: 1
   _hostAddress: 127.0.0.1
   _port: 7777
   _temporaryIdentity: 0

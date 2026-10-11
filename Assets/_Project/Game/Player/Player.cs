@@ -58,6 +58,8 @@ namespace Wordania.Player
         /// <summary>Per-player state shared with sibling components (loadout, tools). One instance per Player.</summary>
         public PlayerContext Context { get; } = new();
         public bool IsLocal => _localInput != null;
+        /// <summary>Runs FSM and physics here: everything on the host, only the own (predicted) player on a client.</summary>
+        public bool IsSimulated => _session.IsHost || IsLocal;
         public Bounds Hitbox => _controller.GetBounds();
         public Vector2 Position => _controller.GetBounds().center;
         public InstanceId InstanceId { get; private set; }
@@ -112,6 +114,7 @@ namespace Wordania.Player
                 _localInput.Disable();
                 _localInput = null;
             }
+            _controller.SetProxy(!IsSimulated);
         }
         public void InitializeNew(InstanceId instanceId, PersistentId persistentId)
         {
@@ -132,7 +135,7 @@ namespace Wordania.Player
         private void Init()
         {
             Context.Bind(PersistentId, InstanceId, _stateMachine, _controller, _health, _stats, _config, _mechanics, transform, _clock);
-            if (!_session.IsHost) _controller.MakeProxy();
+            _controller.SetProxy(!IsSimulated);
             // ---
             _stateMachine.SwitchState(_factory.InitialState);
 
@@ -182,13 +185,13 @@ namespace Wordania.Player
         private void Update()
         {
             _localInput?.Pull(); // clients too: the input uplink reads this state
-            if (!_session.IsHost) return; // client: proxy, the host simulates this player from its input
+            if (!IsSimulated) return; // remote player on a client: proxy moved by host snapshots
 
             _stateMachine.Update();
         }
         private void FixedUpdate()
         {
-            if (!_session.IsHost) return;
+            if (!IsSimulated) return;
 
             _stateMachine.FixedUpdate();
         }
@@ -201,7 +204,7 @@ namespace Wordania.Player
         }
         private void Handlehurt(DamageResult damage)
         {
-            if (!_session.IsHost) return; // knockback / hurt state are simulation; clients only play visuals
+            if (!IsSimulated) return; // knockback / hurt state are simulation; proxies only play visuals
 
             //Applying knockback even if fatal
             _controller.VelocityX = damage.Payload.Knockback.x;

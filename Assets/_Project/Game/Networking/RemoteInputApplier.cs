@@ -72,6 +72,9 @@ namespace Wordania.Networking
             _last[sender] = last;
         }
 
+        /// <summary>Last applied input sequence of a remote player (0 = none yet).</summary>
+        public uint LastSequence(PersistentId sender) => _last.TryGetValue(sender, out Last last) ? last.Sequence : 0;
+
         /// <summary>Releases all held input of a player whose connection is gone.</summary>
         public void Forget(PersistentId sender)
         {

@@ -10,12 +10,15 @@ namespace Wordania.Networking
         public readonly InstanceId Id;
         public readonly Vector2 Position;
         public readonly Quaternion Rotation;
+        /// <summary>Players only: last input sequence the host applied for this player (0 = none). Used for prediction.</summary>
+        public readonly uint InputAck;
 
-        public EntitySnapshot(InstanceId id, Vector2 position, Quaternion rotation)
+        public EntitySnapshot(InstanceId id, Vector2 position, Quaternion rotation, uint inputAck)
         {
             Id = id;
             Position = position;
             Rotation = rotation;
+            InputAck = inputAck;
         }
     }
 
@@ -27,11 +30,14 @@ namespace Wordania.Networking
     public readonly struct EntitySnapshotBatchEvent : IReplicatedEvent
     {
         public readonly uint Tick;
+        /// <summary>Host physics time (Time.fixedTime) the poses belong to; clients interpolate along it.</summary>
+        public readonly float HostTime;
         public readonly EntitySnapshot[] Snapshots;
 
-        public EntitySnapshotBatchEvent(uint tick, EntitySnapshot[] snapshots)
+        public EntitySnapshotBatchEvent(uint tick, float hostTime, EntitySnapshot[] snapshots)
         {
             Tick = tick;
+            HostTime = hostTime;
             Snapshots = snapshots;
         }
     }

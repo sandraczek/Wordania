@@ -1,3 +1,4 @@
+using UnityEngine;
 using VContainer.Unity;
 using Wordania.Events;
 using Wordania.Identifiers;
@@ -13,33 +14,39 @@ namespace Wordania.Networking
         private readonly IEventBus _bus;
         private readonly IGameClock _clock;
         private readonly SessionConfig _session;
+        private readonly RemoteInputApplier _input;
 
         private float _nextSendTime;
         private uint _tick;
 
-        public EntitySnapshotHost(IEntityRegistry entities, IEventBus bus, IGameClock clock, SessionConfig session)
+        public EntitySnapshotHost(IEntityRegistry entities, IEventBus bus, IGameClock clock, SessionConfig session, RemoteInputApplier input)
         {
             _entities = entities;
             _bus = bus;
             _clock = clock;
             _session = session;
+            _input = input;
         }
 
         public void LateTick()
         {
             if (_session.IsSinglePlayer) return;
             if (_clock.Now < _nextSendTime) return;
-            _nextSendTime = _clock.Now + NetworkSettings.SnapshotInterval;
+            // Advance from the schedule (not from now) so frame-time quantization does not stretch the rate.
+            _nextSendTime = Mathf.Max(_nextSendTime + NetworkSettings.SnapshotInterval, _clock.Now);
 
             var snapshots = new EntitySnapshot[_entities.Entities.Count];
             int i = 0;
             foreach (var pair in _entities.Entities)
             {
                 var t = pair.Value.Transform;
-                snapshots[i++] = new EntitySnapshot(pair.Key, t.position, t.rotation);
+                // Physics pose, not the interpolated transform: predicting clients compare against their own body.
+                Vector2 position = pair.Value.TryGetComponent(out Rigidbody2D rb) ? rb.position : (Vector2)t.position;
+                uint ack = _entities.TryGetPersistentId(pair.Key, out PersistentId owner) ? _input.LastSequence(owner) : 0;
+                snapshots[i++] = new EntitySnapshot(pair.Key, position, t.rotation, ack);
             }
 
-            _bus.PublishReplicated(new EntitySnapshotBatchEvent(++_tick, snapshots));
+            _bus.PublishReplicated(new EntitySnapshotBatchEvent(++_tick, Time.fixedTime, snapshots));
         }
     }
 }

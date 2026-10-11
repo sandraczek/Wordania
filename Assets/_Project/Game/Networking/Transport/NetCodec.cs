@@ -36,7 +36,7 @@ namespace Wordania.Networking.Transport
     /// </summary>
     public static class NetCodec
     {
-        public const int ProtocolVersion = 1;
+        public const int ProtocolVersion = 3;
 
         private static readonly Dictionary<Type, (ushort Id, Delegate Write)> Writers = new();
         private static readonly Dictionary<ushort, Action<BinaryReader, IEventBus>> Readers = new();
@@ -281,27 +281,31 @@ namespace Wordania.Networking.Transport
         private static void WriteSnapshots(BinaryWriter w, EntitySnapshotBatchEvent e)
         {
             w.Write(e.Tick);
+            w.Write(e.HostTime);
             w.Write(e.Snapshots.Length);
             foreach (EntitySnapshot s in e.Snapshots)
             {
                 Write(w, s.Id);
                 Write(w, s.Position);
                 w.Write(s.Rotation.x); w.Write(s.Rotation.y); w.Write(s.Rotation.z); w.Write(s.Rotation.w);
+                w.Write(s.InputAck);
             }
         }
 
         private static EntitySnapshotBatchEvent ReadSnapshots(BinaryReader r)
         {
             uint tick = r.ReadUInt32();
+            float hostTime = r.ReadSingle();
             var snapshots = new EntitySnapshot[ReadCount(r)];
             for (int i = 0; i < snapshots.Length; i++)
             {
                 snapshots[i] = new EntitySnapshot(
                     ReadInstanceId(r),
                     ReadVector2(r),
-                    new Quaternion(r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle()));
+                    new Quaternion(r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle()),
+                    r.ReadUInt32());
             }
-            return new EntitySnapshotBatchEvent(tick, snapshots);
+            return new EntitySnapshotBatchEvent(tick, hostTime, snapshots);
         }
 
         private static void WriteTileChanges(BinaryWriter w, TileChangesEvent e)

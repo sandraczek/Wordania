@@ -51,6 +51,8 @@ namespace Wordania.Player
         private bool _isFacingRight = true;
         private bool _isSteppingUp = false;
         private bool _isProxy;
+        private RigidbodyType2D _simulatedBodyType;
+        private RigidbodyInterpolation2D _simulatedInterpolation;
 
         public event Action<Vector3> OnPlayerWarped;
         public event Action<float> OnLanded;
@@ -67,18 +69,29 @@ namespace Wordania.Player
         {
             _rb = GetComponent<Rigidbody2D>();
             _col = GetComponent<Collider2D>();
+            _simulatedBodyType = _rb.bodyType;
+            _simulatedInterpolation = _rb.interpolation;
         }
         public void Start()
         {
             SetGravity(_config.GravityScale);
         }
-        /// <summary>Client: the body is moved by host snapshots only (no physics, no grounding/landing).</summary>
-        public void MakeProxy()
+        /// <summary>
+        /// Proxy = the body is moved by host snapshots only (no physics, no grounding/landing). Used for remote players
+        /// on clients. The local player on a client is simulated (predicted) like on the host.
+        /// </summary>
+        public void SetProxy(bool isProxy)
         {
-            _isProxy = true;
-            _rb.bodyType = RigidbodyType2D.Kinematic;
+            _isProxy = isProxy;
+            // Proxy poses are written through the transform; Rigidbody2D interpolation would overwrite them
+            // with its own (stale) physics pose every frame and make the body flicker.
+            _rb.bodyType = isProxy ? RigidbodyType2D.Kinematic : _simulatedBodyType;
+            _rb.interpolation = isProxy ? RigidbodyInterpolation2D.None : _simulatedInterpolation;
             _rb.linearVelocity = Vector2.zero;
         }
+
+        /// <summary>Small position correction toward the host's pose (client prediction). Keeps the velocity.</summary>
+        public void Nudge(Vector2 delta) => _rb.position += delta;
         private void FixedUpdate()
         {
             if (_isProxy) return;
