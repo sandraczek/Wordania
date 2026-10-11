@@ -10,6 +10,7 @@ using System;
 using UnityEngine.UIElements;
 using Wordania.Stats;
 using System.Collections.Generic;
+using Wordania.Session;
 
 namespace Wordania.Bosses.Core
 {
@@ -22,7 +23,7 @@ namespace Wordania.Bosses.Core
     public abstract class BossPartController<T> : MonoBehaviour, IDamageable, ITrackable where T : BossPartData
     {
         [Header("Dependencies")]
-        private IInstanceIdProvider _idProvider;
+        private SessionConfig _session;
         protected IEntityRegistry _entities;
 
         protected T _data;
@@ -48,21 +49,26 @@ namespace Wordania.Bosses.Core
         public Vector2 Position => _rb.position;
 
         [Inject]
-        public void Construct(IEntityRegistry entities, IInstanceIdProvider idProvider)
+        public void Construct(IEntityRegistry entities, SessionConfig session)
         {
             _entities = entities;
-            _idProvider = idProvider;
+            _session = session;
 
             _health = GetComponent<HealthComponent>();
             _col = GetComponent<Collider2D>();
             _rb = GetComponent<Rigidbody2D>();
             _stats = GetComponent<StatsComponent>();
             _mitigation = GetComponent<DamageMitigator>();
+
+            // Client proxy: moved by host snapshots only.
+            if (!_session.IsHost)
+                _rb.bodyType = RigidbodyType2D.Kinematic;
         }
-        public virtual void Initialize(T data)
+        /// <param name="instanceId">Assigned by the owning boss (see BossController.PartCount) so it matches on every machine.</param>
+        public virtual void Initialize(T data, InstanceId instanceId)
         {
             _data = data;
-            InstanceId = _idProvider.Next();
+            InstanceId = instanceId;
 
             _stateMachine = new StateMachine<IState>();
 
@@ -103,13 +109,13 @@ namespace Wordania.Bosses.Core
 
         private void Update()
         {
-            if (IsDefeated) return;
+            if (IsDefeated || !_session.IsHost) return;
 
             _stateMachine.Update();
         }
         private void FixedUpdate()
         {
-            if (IsDefeated) return;
+            if (IsDefeated || !_session.IsHost) return;
 
             _stateMachine.FixedUpdate();
 

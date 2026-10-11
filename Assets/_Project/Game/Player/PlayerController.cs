@@ -50,6 +50,7 @@ namespace Wordania.Player
         }
         private bool _isFacingRight = true;
         private bool _isSteppingUp = false;
+        private bool _isProxy;
 
         public event Action<Vector3> OnPlayerWarped;
         public event Action<float> OnLanded;
@@ -71,8 +72,17 @@ namespace Wordania.Player
         {
             SetGravity(_config.GravityScale);
         }
+        /// <summary>Client: the body is moved by host snapshots only (no physics, no grounding/landing).</summary>
+        public void MakeProxy()
+        {
+            _isProxy = true;
+            _rb.bodyType = RigidbodyType2D.Kinematic;
+            _rb.linearVelocity = Vector2.zero;
+        }
         private void FixedUpdate()
         {
+            if (_isProxy) return;
+
             bool wasGrounded = IsGrounded;
             IsGrounded = CheckGrounded();
 

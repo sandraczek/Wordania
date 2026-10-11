@@ -15,9 +15,8 @@ namespace Wordania.Combat.Authority
     /// <summary>
     /// Single-player / host authority. Owns combat rules: fire cooldowns, projectile spawning, damage and healing.
     /// Resolves requests immediately.
-    /// TODO(net): clients get a different implementation that sends RequestFire for the local player to the host
-    /// and ignores hit/damage/heal requests (the host detects those itself), except fall damage of the local player,
-    /// which only the owning client can detect.
+    /// Clients use <see cref="ClientCombatAuthority"/>: the host simulates every player from replicated input,
+    /// so all requests (also those of remote players) are raised and resolved here.
     /// </summary>
     public sealed class LocalCombatAuthority : ICombatAuthority
     {

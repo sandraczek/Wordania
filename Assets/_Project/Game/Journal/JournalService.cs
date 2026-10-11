@@ -15,13 +15,14 @@ using Wordania.Journal.Entries;
 using Wordania.Journal.Milestones;
 using Wordania.Player.Events;
 using Wordania.World.Events;
+using Wordania.Networking;
 
 namespace Wordania.Journal
 {
     /// <summary>
     /// Currently, only players have journals (see HandleEvents, checking IsPlayer)
     /// </summary>
-    public sealed class JournalService : IJournalService, IStartable, IDisposable, ISaveable
+    public sealed class JournalService : IJournalService, IStartable, IDisposable, ISaveable, IReplicatedPlayerData<JournalSaveData>
     {
         private readonly IEventBus _bus;
         private readonly ISaveService _save;
@@ -31,6 +32,8 @@ namespace Wordania.Journal
         private readonly Dictionary<PersistentId, IPlayerJournal> _journals = new();
 
         private readonly List<BlockMineRecordedRecord> _cashedMinedBlocksRecords = new();
+
+        public event Action<PersistentId> OnJournalChanged;
 
         public JournalService(IEventBus eventBus, ISaveService save, IJournalMilestoneService milestones, IEntityRegistry entities)
         {
@@ -77,6 +80,7 @@ namespace Wordania.Journal
             if (journal == null) return;
 
             int newCount = journal.Increment(JournalCategory.Enemies, e.VictimAssetId);
+            OnJournalChanged?.Invoke(persistentId);
             _bus.PublishSimulation(new EnemyKillRecordedEvent
             {
                 PersistentId = persistentId,
@@ -88,11 +92,12 @@ namespace Wordania.Journal
         {
             foreach (var player in _entities.Players) // giving it all to (every active) player
             {
-                if (!_entities.TryGetPersistentId(player.InstanceId, out PersistentId persistentId)) return;
+                if (!_entities.TryGetPersistentId(player.InstanceId, out PersistentId persistentId)) continue;
                 IPlayerJournal journal = GetPlayerJournal(persistentId);
-                if (journal == null) return;
+                if (journal == null) continue;
 
                 int newCount = journal.Increment(JournalCategory.Bosses, e.Id);
+                OnJournalChanged?.Invoke(persistentId);
                 _bus.PublishSimulation(new BossKillRecordedEvent
                 {
                     PersistentId = persistentId,
@@ -125,6 +130,7 @@ namespace Wordania.Journal
             }
 
             _bus.PublishSimulation(new BlocksMinedRecordedBatchEvent(persistentId, _cashedMinedBlocksRecords));
+            OnJournalChanged?.Invoke(persistentId);
         }
         private PlayerJournal CreateJournalForPlayer(PersistentId persistentId)
         {
@@ -193,28 +199,8 @@ namespace Wordania.Journal
         {
             saveData.Journals.Clear();
 
-            int catCount = (int)JournalCategory.COUNT;
             foreach (var kvp in _journals)
-            {
-                var journalSave = new JournalSaveData
-                {
-                    PersistentId = kvp.Key,
-                    Categories = new JournalCategoryDto[catCount]
-                };
-
-                for (int cat = 0; cat < catCount; cat++)
-                {
-                    var categoryDto = new JournalCategoryDto();
-                    foreach (var entry in kvp.Value.GetDictionary((JournalCategory)cat))
-                    {
-                        if (entry.Value <= 0) continue;
-                        categoryDto.Entries.Add(new JournalEntryDto(entry.Key.Hash, entry.Value));
-                    }
-                    journalSave.Categories[cat] = categoryDto;
-                }
-
-                saveData.Journals.Add(journalSave);
-            }
+                saveData.Journals.Add(Capture(kvp.Key, kvp.Value));
         }
 
         public void RestoreState(GameSaveData saveData)
@@ -222,31 +208,69 @@ namespace Wordania.Journal
             _journals.Clear();
             if (saveData.Journals == null) return;
 
-            int catCount = (int)JournalCategory.COUNT;
             foreach (var journalSave in saveData.Journals)
             {
                 if (journalSave == null || journalSave.PersistentId.IsEmpty) continue;
-
-                var categories = new Dictionary<AssetId, int>[catCount];
-                for (int cat = 0; cat < catCount; cat++)
-                {
-                    categories[cat] = new(16);
-
-                    if (journalSave.Categories == null || cat >= journalSave.Categories.Length) continue;
-                    var entries = journalSave.Categories[cat]?.Entries;
-                    if (entries == null) continue;
-
-                    foreach (var entry in entries)
-                    {
-                        if (entry.Id == 0 || entry.Count <= 0) continue;
-                        categories[cat][new AssetId(entry.Id)] = entry.Count;
-                    }
-                }
-
-                var journal = new PlayerJournal(journalSave.PersistentId);
-                journal.SetInitial(categories);
-                _journals[journalSave.PersistentId] = journal;
+                _journals[journalSave.PersistentId] = Build(journalSave);
             }
+        }
+
+        public JournalSaveData CapturePlayer(PersistentId persistentId) => Capture(persistentId, GetPlayerJournal(persistentId));
+
+        /// <summary>Client: replaces the player's journal with the host's. Milestone rewards stay host-side.</summary>
+        public void RestorePlayer(JournalSaveData data)
+        {
+            if (data == null || data.PersistentId.IsEmpty) return;
+
+            _journals[data.PersistentId] = Build(data);
+            OnJournalChanged?.Invoke(data.PersistentId);
+        }
+
+        private static JournalSaveData Capture(PersistentId persistentId, IPlayerJournal journal)
+        {
+            int catCount = (int)JournalCategory.COUNT;
+            var journalSave = new JournalSaveData
+            {
+                PersistentId = persistentId,
+                Categories = new JournalCategoryDto[catCount]
+            };
+
+            for (int cat = 0; cat < catCount; cat++)
+            {
+                var categoryDto = new JournalCategoryDto();
+                foreach (var entry in journal.GetDictionary((JournalCategory)cat))
+                {
+                    if (entry.Value <= 0) continue;
+                    categoryDto.Entries.Add(new JournalEntryDto(entry.Key.Hash, entry.Value));
+                }
+                journalSave.Categories[cat] = categoryDto;
+            }
+
+            return journalSave;
+        }
+
+        private static PlayerJournal Build(JournalSaveData journalSave)
+        {
+            int catCount = (int)JournalCategory.COUNT;
+            var categories = new Dictionary<AssetId, int>[catCount];
+            for (int cat = 0; cat < catCount; cat++)
+            {
+                categories[cat] = new(16);
+
+                if (journalSave.Categories == null || cat >= journalSave.Categories.Length) continue;
+                var entries = journalSave.Categories[cat]?.Entries;
+                if (entries == null) continue;
+
+                foreach (var entry in entries)
+                {
+                    if (entry.Id == 0 || entry.Count <= 0) continue;
+                    categories[cat][new AssetId(entry.Id)] = entry.Count;
+                }
+            }
+
+            var journal = new PlayerJournal(journalSave.PersistentId);
+            journal.SetInitial(categories);
+            return journal;
         }
     }
 }

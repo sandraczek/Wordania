@@ -7,6 +7,7 @@ using Wordania.Identifiers;
 using Wordania.Bosses.Data;
 using Wordania.Bosses.Events;
 using Wordania.Markers;
+using Wordania.Networking;
 
 namespace Wordania.Bosses.Core
 {
@@ -44,12 +45,27 @@ namespace Wordania.Bosses.Core
                 return null;
             }
 
-            BossController bossInstance = _resolver.Instantiate(template.Prefab, position, Quaternion.identity, _parent);
-
-            bossInstance.Initialize(template, _idProvider.Next());
+            InstanceId id = _idProvider.NextBlock(1 + template.Prefab.PartCount);
+            BossController bossInstance = Create(template, position, id);
 
             _eventBus.PublishSimulation(new BossSpawnedEvent(bossInstance));
+            _eventBus.PublishReplicated(EntitySpawnedEvent.Of(id, EntityKind.Boss, bossId, default, position, null));
 
+            return bossInstance;
+        }
+
+        public BossController SpawnReplica(AssetId bossId, Vector2 position, InstanceId instanceId)
+        {
+            BossTemplate template = _registry.Get(bossId);
+            if (template.Prefab == null) return null;
+
+            return Create(template, position, instanceId);
+        }
+
+        private BossController Create(BossTemplate template, Vector2 position, InstanceId instanceId)
+        {
+            BossController bossInstance = _resolver.Instantiate(template.Prefab, position, Quaternion.identity, _parent);
+            bossInstance.Initialize(template, instanceId);
             return bossInstance;
         }
     }

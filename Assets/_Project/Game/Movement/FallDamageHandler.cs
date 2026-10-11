@@ -70,7 +70,6 @@ namespace Wordania.Movement
                 hitPoint: _feetPosition,
                 knockback: Vector2.zero
             );
-            // TODO(net): for remote players only the owning client sees the landing, so it must report this to the host.
             _combat.RequestDamage(_self.InstanceId, payload);
         }
     }

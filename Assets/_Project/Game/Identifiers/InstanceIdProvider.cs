@@ -7,6 +7,12 @@ namespace Wordania.Identifiers
         /// Starts from value 1001 to preserve reserved system identifiers (0-1000).
         /// </summary>
         InstanceId Next();
+
+        /// <summary>
+        /// Reserves <paramref name="count"/> consecutive ids and returns the first one. Used by multi-entity spawns
+        /// (boss + parts) so clients can derive the part ids from the root id alone.
+        /// </summary>
+        InstanceId NextBlock(int count);
     }
 
     public class InstanceIdProvider : IInstanceIdProvider
@@ -18,6 +24,15 @@ namespace Wordania.Identifiers
         {
             _currentCounter++;
             return new InstanceId(_currentCounter);
+        }
+
+        public InstanceId NextBlock(int count)
+        {
+            if (count < 1) count = 1;
+
+            InstanceId first = new(_currentCounter + 1);
+            _currentCounter += (ulong)count;
+            return first;
         }
     }
 }

@@ -15,6 +15,8 @@ namespace Wordania.Services
 
         event Action<Player.Player> PlayerAdded;
         event Action<Player.Player> PlayerRemoved;
+        event Action<InstanceId, Entity> EntityRegistered;
+        event Action<InstanceId, Entity> EntityUnregistered;
 
         void Register(Entity entity, InstanceId instanceId);
         void Unregister(InstanceId id);
@@ -43,6 +45,8 @@ namespace Wordania.Services
 
         public event Action<Player.Player> PlayerAdded;
         public event Action<Player.Player> PlayerRemoved;
+        public event Action<InstanceId, Entity> EntityRegistered;
+        public event Action<InstanceId, Entity> EntityUnregistered;
 
         public void Register(Entity entity, InstanceId instanceId)
         {
@@ -68,6 +72,8 @@ namespace Wordania.Services
             {
                 _trackables.Add(trackable);
             }
+
+            EntityRegistered?.Invoke(instanceId, entity);
         }
 
         public void Unregister(InstanceId id)
@@ -85,6 +91,8 @@ namespace Wordania.Services
 
                 if (entity.TryGetFeature(out Player.Player player) && _playersById.Remove(player.PersistentId))
                     PlayerRemoved?.Invoke(player);
+
+                EntityUnregistered?.Invoke(id, entity);
             }
         }
 

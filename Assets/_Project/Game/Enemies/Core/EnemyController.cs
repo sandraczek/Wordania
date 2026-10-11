@@ -16,6 +16,7 @@ using Wordania.Enemies.Movement;
 using Wordania.Mechanics;
 using Wordania.Movement;
 using Wordania.Enemies.FSM.States;
+using Wordania.Session;
 
 namespace Wordania.Enemies.Core
 {
@@ -31,6 +32,7 @@ namespace Wordania.Enemies.Core
     {
         public EnemyTemplate Data;
         private IEventBus _eventBus;
+        private SessionConfig _session;
 
         public Entity Entity;
         private HealthComponent _health;
@@ -74,9 +76,10 @@ namespace Wordania.Enemies.Core
         public event Action<float> OnLanded;
 
         [Inject]
-        public void Construct(IEventBus eventBus)
+        public void Construct(IEventBus eventBus, SessionConfig session)
         {
             _eventBus = eventBus;
+            _session = session;
 
             Entity = GetComponent<Entity>();
             _health = GetComponent<HealthComponent>();
@@ -91,6 +94,10 @@ namespace Wordania.Enemies.Core
             _stateMachine = new();
             _stateFactory = new(this, _stateMachine);
 
+            // Client proxy: AI does not run, the body is moved by host snapshots only.
+            if (!_session.IsHost)
+                _rb.bodyType = RigidbodyType2D.Kinematic;
+
             List<(StatType, float)> startingStats = new()
             {
                 { (StatType.MaxHealth, Data.Stats.MaxHealth) },
@@ -99,6 +106,7 @@ namespace Wordania.Enemies.Core
             _stats.Initialize(startingStats);
 
             _health.Initialize();
+            _health.DamageIgnoresInvincibility = true; // enemies take damage during i-frames; only knockback/hurt state is suppressed
 
             if (TryGetComponent(out FallDamageHandler fall))
             {
@@ -151,10 +159,14 @@ namespace Wordania.Enemies.Core
         }
         private void Update()
         {
+            if (!_session.IsHost) return;
+
             _stateMachine.Update();
         }
         private void FixedUpdate()
         {
+            if (!_session.IsHost) return;
+
             bool wasGrounded = IsGrounded;
             IsGrounded = CheckGrounded();
 
@@ -263,7 +275,8 @@ namespace Wordania.Enemies.Core
         }
         private void HandleDeath()
         {
-            _eventBus.PublishSimulation(new DeathEvent(Data.Id, _health.LastAttackerId));
+            if (_session.IsHost)
+                _eventBus.PublishSimulation(new DeathEvent(Data.Id, _health.LastAttackerId));
             _onDeathFactoryAction.Invoke();
         }
         public void Remove()
@@ -281,6 +294,7 @@ namespace Wordania.Enemies.Core
         }
         private void Handlehurt(DamageResult damage)
         {
+            if (!_session.IsHost) return; // knockback / hurt state are simulation; clients only play visuals
             if (_invincibility != null && _invincibility.IsInvincible) return;
 
             //Applying knockback even if fatal

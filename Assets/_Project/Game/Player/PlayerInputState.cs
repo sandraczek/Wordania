@@ -17,11 +17,31 @@ namespace Wordania.Player
         public bool PrimaryActionHeld { get; set; }
         public bool SecondaryActionHeld { get; set; }
 
+        // Monotonic press counters (wrap around). Lets a remote copy detect presses even if input frames are lost or duplicated.
+        public ushort JumpPressCount { get; private set; }
+        public ushort HotbarPressCount { get; private set; }
+        public int LastHotbarSlot { get; private set; }
+        public ushort CyclePressCount { get; private set; }
+
         public event Action<int> OnHotbarSlotPressed;
         public event Action OnCycleActionSettings;
 
-        public void PressHotbarSlot(int slot) => OnHotbarSlotPressed?.Invoke(slot);
-        public void PressCycleActionSettings() => OnCycleActionSettings?.Invoke();
+        public void PressJump(float time)
+        {
+            JumpPressCount++;
+            JumpPressedTime = time;
+        }
+        public void PressHotbarSlot(int slot)
+        {
+            HotbarPressCount++;
+            LastHotbarSlot = slot;
+            OnHotbarSlotPressed?.Invoke(slot);
+        }
+        public void PressCycleActionSettings()
+        {
+            CyclePressCount++;
+            OnCycleActionSettings?.Invoke();
+        }
         public void ConsumeJump() => JumpPressedTime = float.MinValue;
     }
 }

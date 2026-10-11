@@ -28,6 +28,12 @@ namespace Wordania
         [ContextMenu("Save")]
         public async void Save()
         {
+            if (!_sessionConfig.IsHost)
+            {
+                Debug.LogWarning("Only the host saves the game.");
+                return;
+            }
+
             try
             {
                 await _saveService.SaveGameAsync(_saveService.DefaultPrefix + _saveSlot.ToString());

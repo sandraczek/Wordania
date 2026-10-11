@@ -1,4 +1,3 @@
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Wordania.SFM;
 using Wordania.Enemies.Core;
@@ -12,14 +11,14 @@ namespace Wordania.Enemies.FSM.States
 
         public EnemyPatrolState(EnemyController controller, StateMachine<EnemyBaseState> states, EnemyStateFactory factory) : base(controller, states, factory)
         {
-            
+
         }
 
         public override void Enter()
         {
             _timer = 0f;
             _direction = Mathf.Sign(UnityEngine.Random.value);
-            if(_direction == 0f) _direction = 1f;
+            if (_direction == 0f) _direction = 1f;
         }
         public override void Update()
         {
@@ -29,8 +28,8 @@ namespace Wordania.Enemies.FSM.States
         {
             var mov = _controller.Data.Movement;
 
-            _timer+= Time.fixedDeltaTime;
-            if(_timer > mov.PatrolIntervalTime)
+            _timer += Time.fixedDeltaTime;
+            if (_timer > mov.PatrolIntervalTime)
             {
                 _timer -= mov.PatrolIntervalTime;
                 _direction *= -1f;
@@ -49,27 +48,27 @@ namespace Wordania.Enemies.FSM.States
                 mov.PatrolSpeed
                 );
 
-            if(_controller.IsGrounded)
+            if (_controller.IsGrounded)
                 _controller.TryStepUp(_direction);
         }
         public override void Exit()
         {
-            
+
         }
         public override void CheckSwitchStates()
         {
 
         }
-        
+
         private void ApplyStandardMovement(float direction, float acceleration, float deceleration, float speed)
         {
             float targetSpeed = direction * speed;
-            
+
             float currentAccel = (Mathf.Abs(direction) > 0.1f) ? acceleration : deceleration;
 
             float newVelocityX = Mathf.MoveTowards(
-                _controller.VelocityX, 
-                targetSpeed, 
+                _controller.VelocityX,
+                targetSpeed,
                 currentAccel * Time.fixedDeltaTime
             );
 

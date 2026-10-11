@@ -41,6 +41,9 @@ namespace Wordania.Bosses.Yeinn.Core
 
         public bool AreBothHandsDefeated => _leftHand.IsDefeated && _rightHand.IsDefeated;
 
+        // Head, left hand, right hand. Order defines the part ids (boss id + 1, + 2, + 3); keep it stable.
+        public override int PartCount => 3;
+
         [Inject]
         public void Construct(IEventBus eventBus, IEntityRegistry entities)
         {
@@ -51,9 +54,9 @@ namespace Wordania.Bosses.Yeinn.Core
         {
             _template = template;
 
-            _head.Initialize(template.Head);
-            _leftHand.Initialize(template.LeftHand, _leftHandAnchor);
-            _rightHand.Initialize(template.RightHand, _rightHandAnchor);
+            _head.Initialize(template.Head, PartId(1));
+            _leftHand.Initialize(template.LeftHand, PartId(2), _leftHandAnchor);
+            _rightHand.Initialize(template.RightHand, PartId(3), _rightHandAnchor);
 
             _phaseStateMachine = new StateMachine<IState>();
 
@@ -67,10 +70,14 @@ namespace Wordania.Bosses.Yeinn.Core
 
         private void Update()
         {
+            if (!IsSimulated) return;
+
             _phaseStateMachine.Update();
         }
         private void FixedUpdate()
         {
+            if (!IsSimulated) return;
+
             bool allPlayersDead = true;
             for (int i = 0; i < _entities.Players.Count; i++)
             {

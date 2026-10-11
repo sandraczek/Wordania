@@ -22,9 +22,9 @@ namespace Wordania.Bosses.Yeinn.Parts
         private IState _swipeState;
         private IState _slamState;
 
-        public void Initialize(YeinnHandData handData, Transform restAnchor)
+        public void Initialize(YeinnHandData handData, InstanceId instanceId, Transform restAnchor)
         {
-            base.Initialize(handData);
+            base.Initialize(handData, instanceId);
 
             _idleState = new YeinnHandIdleState(_data.Idle, this, _entities, restAnchor);
             _swipeState = new YeinnHandSwipeState(_data.Swipe, this, _entities);

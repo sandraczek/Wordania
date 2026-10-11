@@ -50,8 +50,6 @@ namespace Wordania.World
         }
         public void LateTick()
         {
-            if (_job == null) Debug.LogError("Job is Uninitialized");
-
             if (_pendingModifications.Count > 0)
             {
                 _job.Complete();

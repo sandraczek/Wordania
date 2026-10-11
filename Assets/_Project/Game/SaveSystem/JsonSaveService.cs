@@ -35,19 +35,19 @@ namespace Wordania.SaveSystem
             await UniTask.RunOnThreadPool(() =>
             {
                 string json = JsonConvert.SerializeObject(CurrentData, Formatting.None);
-                
+
                 File.WriteAllText(path, json);
             });
 
             await UniTask.SwitchToMainThread();
-            
+
             OnSavingFinished?.Invoke();
         }
 
         public async UniTask LoadGameAsync(string slotName)
         {
             string path = GetSavePath(slotName);
-            
+
             if (!File.Exists(path))
             {
                 Debug.LogWarning("No Save File");
@@ -63,6 +63,25 @@ namespace Wordania.SaveSystem
 
             CurrentData = loadedData;
 
+            foreach (var savable in _saveables)
+            {
+                savable.RestoreState(CurrentData);
+            }
+        }
+
+        public GameSaveData CaptureSnapshot()
+        {
+            var data = new GameSaveData();
+            foreach (var saveable in _saveables)
+            {
+                saveable.CaptureState(data);
+            }
+            return data;
+        }
+
+        public void RestoreSnapshot(GameSaveData data)
+        {
+            CurrentData = data ?? new GameSaveData();
             foreach (var savable in _saveables)
             {
                 savable.RestoreState(CurrentData);

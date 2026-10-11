@@ -13,7 +13,7 @@ namespace Wordania.Combat.FireStrategies
             {
                 Position = context.position,
                 Direction = context.direction,
-                Data = data.Projectile,
+                ProjectileId = data.Projectile.Id,
                 DamageMultiplier = context.damageMultiplier,
                 SpeedMultiplier = 1f,
                 LifetimeMultiplier = 1f,

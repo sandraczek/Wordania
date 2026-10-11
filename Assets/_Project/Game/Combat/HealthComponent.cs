@@ -18,11 +18,15 @@ namespace Wordania.Combat
         private InvincibilityController _invincibility; // optional; when present and active, incoming damage is ignored
 
         [SerializeField] private float _currentHealth;
+        private float? _replicatedMax; // client: host's max health overrides the local stat
 
         public float CurrentHealth => _currentHealth;
-        public float MaxHealth => _healthStat.Value;
+        public float MaxHealth => _replicatedMax ?? _healthStat.Value;
         public bool IsDead => _currentHealth <= 0f;
         public InstanceId LastAttackerId;
+
+        /// <summary>When true, damage is applied even while invincible (invincibility then only affects knockback/hurt reactions).</summary>
+        public bool DamageIgnoresInvincibility { get; set; }
 
         public event Action<HealthChangeData> OnHealthChange;
         public event Action<DamageResult> OnDamageTaken;
@@ -65,7 +69,7 @@ namespace Wordania.Combat
         public void ApplyDamage(DamageResult damage)
         {
             if (IsDead) return;
-            if (_invincibility != null && _invincibility.IsInvincible) return;
+            if (!DamageIgnoresInvincibility && _invincibility != null && _invincibility.IsInvincible) return;
 
             SetCurrentHealth(_currentHealth - damage.FinalDamage);
             LastAttackerId = damage.Payload.InstigatorId;
@@ -81,6 +85,32 @@ namespace Wordania.Combat
             SetCurrentHealth(targetHealth);
         }
 
+        /// <summary>
+        /// Client only: mirrors the host's health and max health. From now on the local MaxHealth stat is ignored.
+        /// Raises OnHealthChange / OnDeath like a local change.
+        /// </summary>
+        public void ApplyReplicatedHealth(float current, float max)
+        {
+            bool maxChanged = !_replicatedMax.HasValue || !Mathf.Approximately(_replicatedMax.Value, max);
+            _replicatedMax = max;
+
+            if (!maxChanged || !Mathf.Approximately(_currentHealth, current))
+            {
+                SetCurrentHealth(current);
+                return;
+            }
+
+            // Only the max changed: SetCurrentHealth would early-out, but the HUD still needs the new max.
+            OnHealthChange?.Invoke(new(_currentHealth, _currentHealth, MaxHealth));
+        }
+
+        /// <summary>Client only: replays a hit resolved by the host (health itself arrives via ApplyReplicatedHealth).</summary>
+        public void ApplyReplicatedDamage(DamageResult damage)
+        {
+            LastAttackerId = damage.Payload.InstigatorId;
+            OnDamageTaken?.Invoke(damage);
+        }
+
         private void SetCurrentHealth(float targetHealth)
         {
             if (Mathf.Approximately(_currentHealth, targetHealth)) return;
@@ -94,6 +124,8 @@ namespace Wordania.Combat
         }
         private void HandleMaxHealthChange()
         {
+            if (_replicatedMax.HasValue) return; // client: max comes from the host
+
             _currentHealth = MaxHealth;
             OnHealthChange?.Invoke(new(_currentHealth, _currentHealth, MaxHealth));
 

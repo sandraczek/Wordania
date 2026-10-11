@@ -63,7 +63,7 @@ namespace Wordania.Player
         }
 
         // Timestamped with the game clock (same one the FSM compares against for jump buffering).
-        private void HandleJumpPressed() => _target.JumpPressedTime = _clock.Now;
+        private void HandleJumpPressed() => _target.PressJump(_clock.Now);
         private void SetPrimaryHeld(bool isHeld) => _target.PrimaryActionHeld = isHeld;
         private void SetSecondaryHeld(bool isHeld) => _target.SecondaryActionHeld = isHeld;
     }

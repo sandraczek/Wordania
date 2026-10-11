@@ -20,6 +20,7 @@ using Wordania.Mapping;
 using Wordania.HUD.Mapping;
 using Wordania.Combat.Core;
 using Wordania.Combat.Authority;
+using Wordania.Combat.Replication;
 using Wordania.Combat.Events;
 using Wordania.Combat.Data;
 using Wordania.Combat.FireStrategies;
@@ -53,6 +54,9 @@ using Wordania.Session;
 using Wordania.Identifiers;
 using Wordania.World.Chunks;
 using Wordania.Inventory.Data;
+using Wordania.Networking;
+using Wordania.Networking.Transport;
+using Wordania.SaveSystem.Data;
 
 namespace Wordania
 {
@@ -103,16 +107,32 @@ namespace Wordania
         [SerializeField] private EnemyTemplate _enemyToPrewarm;
         [SerializeField] private BossTemplate _bossToSpawn;
 
+        [Header("Network (overridable: -netmode host|client|single -address -port -newid)")]
+        [SerializeField] private NetworkMode _networkMode = NetworkMode.SinglePlayer;
+        [SerializeField] private string _hostAddress = "127.0.0.1";
+        [SerializeField] private int _port = NetworkLaunchOptions.DefaultPort;
+        [Tooltip("Random player id for this run (two instances on one machine share PlayerPrefs).")]
+        [SerializeField] private bool _temporaryIdentity;
+
         protected override void Configure(IContainerBuilder builder)
 
         {
+            var network = new NetworkLaunchOptions(_networkMode, _hostAddress, _port, _temporaryIdentity).WithCommandLine();
+            bool isHost = network.IsHost;
+            bool isSinglePlayer = network.IsSinglePlayer;
+            Debug.Log($"[GAMEPLAY] Network mode: {network.Mode}");
+
+            builder.RegisterInstance(network);
             builder.Register<SessionConfig>(Lifetime.Scoped)
                 .WithParameter("saveSlot", _saveSlot)
-                .WithParameter("isHost", true)
-                .WithParameter("isSinglePlayer", true)
-                .WithParameter("localPersistentId", LocalPlayerIdentity.GetOrCreate());
+                .WithParameter("isHost", isHost)
+                .WithParameter("isSinglePlayer", isSinglePlayer)
+                .WithParameter("localPersistentId", network.UseTemporaryIdentity ? PersistentId.New() : LocalPlayerIdentity.GetOrCreate());
             builder.Register<PauseService>(Lifetime.Scoped).As<IPauseService>();
-            builder.Register<NullEventTransport>(Lifetime.Scoped).As<IEventTransport>();
+            if (network.Mode == NetworkMode.Host)
+                builder.Register<TcpHostTransport>(Lifetime.Scoped).As<IEventTransport>().AsSelf();
+            else
+                builder.Register<NullEventTransport>(Lifetime.Scoped).As<IEventTransport>();
             builder.Register<EventBus>(Lifetime.Scoped).As<IEventBus>();
             builder.Register<JsonSaveService>(Lifetime.Singleton).As<ISaveService>();
             builder.RegisterInstance<ICameraService>(_cameraService);
@@ -134,8 +154,15 @@ namespace Wordania
             builder.RegisterComponentInHierarchy<Grid>();
 
             builder.RegisterEntryPoint<WorldService>(Lifetime.Scoped).As<IWorldService>();
-            builder.Register<WorldEditSimulation>(Lifetime.Scoped);
-            builder.RegisterEntryPoint<LocalWorldEditAuthority>(Lifetime.Scoped).As<IWorldEditAuthority>();
+            if (isHost)
+            {
+                builder.Register<WorldEditSimulation>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<LocalWorldEditAuthority>(Lifetime.Scoped).As<IWorldEditAuthority>();
+            }
+            else
+            {
+                builder.RegisterEntryPoint<ClientWorldEditAuthority>(Lifetime.Scoped).As<IWorldEditAuthority>();
+            }
             builder.RegisterEntryPoint<WorldCollisionJobService>(Lifetime.Scoped).As<IWorldCollisionJobService>();
 
             builder.Register<ChunkFactory>(Lifetime.Scoped)
@@ -159,14 +186,23 @@ namespace Wordania
             builder.Register<UnityGameClock>(Lifetime.Singleton).As<IGameClock>();
 
             //combat
-            builder.Register<LocalCombatAuthority>(Lifetime.Scoped).As<ICombatAuthority>();
+            if (isHost)
+            {
+                builder.Register<LocalCombatAuthority>(Lifetime.Scoped).As<ICombatAuthority>();
+                builder.RegisterEntryPoint<HealthReplicationHost>(Lifetime.Scoped);
+            }
+            else
+            {
+                builder.Register<ClientCombatAuthority>(Lifetime.Scoped).As<ICombatAuthority>();
+                builder.RegisterEntryPoint<HealthReplicationClient>(Lifetime.Scoped);
+            }
             builder.Register<WeaponFactory>(Lifetime.Scoped).As<IWeaponFactory>();
             builder.RegisterEntryPoint<AABBTargetableService>(Lifetime.Scoped).AsSelf();
             builder.RegisterEntryPoint<ProjectileSimulationService>(Lifetime.Scoped).As<IProjectileSimulationService>();
             builder.RegisterEntryPoint<ProjectileFactory>(Lifetime.Scoped).As<IProjectileFactory>();
 
             //inventory
-            builder.RegisterEntryPoint<InventoryService>(Lifetime.Scoped).As<IInventoryService>();
+            builder.RegisterEntryPoint<InventoryService>(Lifetime.Scoped).As<IInventoryService>().As<IReplicatedPlayerData<InventorySaveData>>();
 
             //player
             builder.RegisterEntryPoint<PlayerSaveService>(Lifetime.Scoped).AsSelf();
@@ -175,28 +211,35 @@ namespace Wordania
                 .AsSelf()
                 .WithParameter(_playerPrefab); // FUCK YOU
             builder.Register<LocalPlayer>(Lifetime.Scoped).As<ILocalPlayer>();
-            builder.Register<LocalPlayerCommands>(Lifetime.Scoped).As<IPlayerCommands>();
+            if (isHost)
+                builder.Register<LocalPlayerCommands>(Lifetime.Scoped).As<IPlayerCommands>();
+            else
+                builder.Register<ClientPlayerCommands>(Lifetime.Scoped).As<IPlayerCommands>();
 
             //skills
             builder.Register<MechanicFactory>(Lifetime.Scoped).As<IMechanicFactory>();
-            builder.RegisterEntryPoint<SkillTreeService>(Lifetime.Scoped).As<ISkillTreeService>();
-            builder.RegisterEntryPoint<KillSkillPointService>(Lifetime.Scoped);
+            builder.RegisterEntryPoint<SkillTreeService>(Lifetime.Scoped).As<ISkillTreeService>().As<IReplicatedPlayerData<SkillSaveData>>();
+            if (isHost)
+                builder.RegisterEntryPoint<KillSkillPointService>(Lifetime.Scoped);
 
             //enemies
             builder.RegisterEntryPoint<EnemyFactory>(Lifetime.Scoped).As<IEnemyFactory>();
 
-            builder.Register<GroundCollisionValidator>(Lifetime.Scoped).As<ISpawnValidator>();
-            builder.Register<SpaceClearanceValidator>(Lifetime.Scoped).As<ISpawnValidator>();
+            if (isHost)
+            {
+                builder.Register<GroundCollisionValidator>(Lifetime.Scoped).As<ISpawnValidator>();
+                builder.Register<SpaceClearanceValidator>(Lifetime.Scoped).As<ISpawnValidator>();
 
-            builder.RegisterEntryPoint<EnemySpawnSystem>(Lifetime.Scoped).WithParameter(_enemyToPrewarm);
-            builder.RegisterEntryPoint<EnemyCullingSystem>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<EnemySpawnSystem>(Lifetime.Scoped).WithParameter(_enemyToPrewarm);
+                builder.RegisterEntryPoint<EnemyCullingSystem>(Lifetime.Scoped);
+            }
 
             //bosses
             builder.Register<BossSpawnerService>(Lifetime.Scoped).As<IBossSpawnerService>();
 
             //journal
             builder.RegisterEntryPoint<JournalMilestoneService>(Lifetime.Scoped).As<IJournalMilestoneService>();
-            builder.RegisterEntryPoint<JournalService>(Lifetime.Scoped).As<IJournalService>();
+            builder.RegisterEntryPoint<JournalService>(Lifetime.Scoped).As<IJournalService>().As<IReplicatedPlayerData<JournalSaveData>>();
 
             //weapon store
             builder.RegisterEntryPoint<WeaponRequirementService>(Lifetime.Scoped).As<IWeaponRequirementService>();
@@ -238,14 +281,43 @@ namespace Wordania
             builder.RegisterComponent(_deathScreenView);
             builder.RegisterEntryPoint<DeathScreenPresenter>(Lifetime.Scoped);
 
+            //networking
+            if (isHost)
+            {
+                builder.RegisterEntryPoint<EntityReplicationHost>(Lifetime.Scoped).AsSelf();
+                builder.RegisterEntryPoint<EntitySnapshotHost>(Lifetime.Scoped);
+                builder.Register<RemoteInputApplier>(Lifetime.Scoped);
+                builder.Register<HostInbox>(Lifetime.Scoped).As<IHostInbox>();
+                builder.Register<HostSession>(Lifetime.Scoped).As<IHostSession>();
+                builder.RegisterEntryPoint<PlayerProgressReplicationHost>(Lifetime.Scoped);
+                if (network.Mode == NetworkMode.Host)
+                    builder.RegisterEntryPoint<HostNetworkService>(Lifetime.Scoped);
+            }
+            else
+            {
+                builder.RegisterEntryPoint<TcpClientConnection>(Lifetime.Scoped).As<IHostConnection>().As<IClientUplink>();
+                builder.RegisterEntryPoint<ClientInputUplink>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<EntityReplicationClient>(Lifetime.Scoped).AsSelf();
+                builder.RegisterEntryPoint<EntitySnapshotClient>(Lifetime.Scoped);
+                builder.RegisterEntryPoint<PlayerProgressReplicationClient>(Lifetime.Scoped);
+            }
+
             //
             //DEBUG
             if (TryGetComponent(out DebugSaveComponent saveComponent))
                 builder.RegisterComponent(saveComponent);
 
-            builder.RegisterEntryPoint<GameplayEntryPoint>(Lifetime.Scoped)
-            .WithParameter(_enemyToPrewarm) //
-            .WithParameter(_bossToSpawn);
+            if (isHost)
+            {
+                builder.RegisterEntryPoint<GameplayEntryPoint>(Lifetime.Scoped)
+                .WithParameter(_enemyToPrewarm) //
+                .WithParameter(_bossToSpawn);
+            }
+            else
+            {
+                builder.RegisterEntryPoint<ClientGameplayEntryPoint>(Lifetime.Scoped)
+                .WithParameter(_enemyToPrewarm);
+            }
         }
     }
 

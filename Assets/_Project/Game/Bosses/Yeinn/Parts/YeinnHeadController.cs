@@ -21,9 +21,9 @@ namespace Wordania.Bosses.Yeinn.Parts
         private IState _chaseState;
         private IState _slamState;
 
-        public override void Initialize(YeinnHeadData headData)
+        public override void Initialize(YeinnHeadData headData, InstanceId instanceId)
         {
-            base.Initialize(headData);
+            base.Initialize(headData, instanceId);
 
             _hoverState = new YeinnHeadHoverState(_data.Hover, this, _entities);
             _chaseState = new YeinnHeadChaseState(_data.Chase, this, _entities);

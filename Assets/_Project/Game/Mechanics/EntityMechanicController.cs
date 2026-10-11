@@ -31,6 +31,11 @@ namespace Wordania.Mechanics
 
         public void EnableMechanic(AssetId mechanicId, InstanceId source)
         {
+            if (_entity == null)
+            {
+                _entity = GetComponent<Entity>();
+            }
+
             if (!_activeMechanics.TryGetValue(mechanicId, out MechanicTracker tracker))
             {
                 tracker = GetTrackerFromPool();

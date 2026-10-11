@@ -9,6 +9,7 @@ using VContainer.Unity;
 using Wordania.Identifiers;
 using Wordania.Combat.Data;
 using Wordania.Combat.Events;
+using Wordania.Data;
 using Wordania.Events;
 using Wordania.Markers;
 
@@ -18,6 +19,7 @@ namespace Wordania.Combat.Core
     {
         private readonly IObjectResolver _resolver;
         private readonly IProjectileSimulationService _simulationService;
+        private readonly IAssetRegistry<ProjectileData> _projectiles;
         private readonly IEventBus _eventBus;
         private readonly Transform _parent;
         private readonly Dictionary<AssetId, IObjectPool<ProjectileView>> _pools = new();
@@ -29,12 +31,14 @@ namespace Wordania.Combat.Core
             IObjectResolver resolver,
             IEventBus eventBus,
             IProjectileSimulationService simulationService,
+            IAssetRegistry<ProjectileData> projectiles,
             MarkerDynamicParent projectileParent
             )
         {
             _resolver = resolver;
             _eventBus = eventBus;
             _simulationService = simulationService;
+            _projectiles = projectiles;
             _parent = projectileParent.transform;
         }
 
@@ -60,11 +64,17 @@ namespace Wordania.Combat.Core
         public void Get(ProjectileFiredEvent firedEvent)
         {
             ProjectileSpawnData spawnData = firedEvent.SpawnData;
-
-            if (!_pools.TryGetValue(spawnData.Data.Id, out IObjectPool<ProjectileView> pool))
+            ProjectileData data = _projectiles.Get(spawnData.ProjectileId);
+            if (data == null)
             {
-                pool = CreatePool(spawnData.Data);
-                _pools[spawnData.Data.Id] = pool;
+                Debug.LogError("[ProjectileFactory] Unknown projectile id. Try refreshing projectile database");
+                return;
+            }
+
+            if (!_pools.TryGetValue(data.Id, out IObjectPool<ProjectileView> pool))
+            {
+                pool = CreatePool(data);
+                _pools[data.Id] = pool;
             }
 
             ProjectileView view = pool.Get();
@@ -72,16 +82,16 @@ namespace Wordania.Combat.Core
                 spawnData.Position,
                 CalculateRotationFromDirection(spawnData.Direction)
                 );
-            view.DataId = spawnData.Data.Id;
+            view.DataId = data.Id;
 
             float2 initialPosition = new(spawnData.Position.x, spawnData.Position.y);
-            float2 velocity = spawnData.Data.Speed * spawnData.SpeedMultiplier * new float2(spawnData.Direction.x, spawnData.Direction.y);
+            float2 velocity = data.Speed * spawnData.SpeedMultiplier * new float2(spawnData.Direction.x, spawnData.Direction.y);
 
             var runtimeData = new ProjectileRuntimeData
             {
                 IsActive = true,
                 ViewInstanceId = view.gameObject.GetInstanceID(),
-                DataId = spawnData.Data.Id.Hash,
+                DataId = data.Id.Hash,
                 InstigatorId = spawnData.InstigatorId,
                 TargetFactionMask = (int)spawnData.TargetFactionMask,
 
@@ -89,11 +99,11 @@ namespace Wordania.Combat.Core
                 PreviousPosition = initialPosition,
                 Velocity = velocity,
 
-                RemainingLifetime = spawnData.Data.Lifetime * spawnData.LifetimeMultiplier,
-                CurrentSpeed = spawnData.Data.Speed,
-                GravityMultiplier = spawnData.Data.GravityScale,
+                RemainingLifetime = data.Lifetime * spawnData.LifetimeMultiplier,
+                CurrentSpeed = data.Speed,
+                GravityMultiplier = data.GravityScale,
 
-                RemainingPierces = spawnData.Data.Piercing,
+                RemainingPierces = data.Piercing,
                 DamageMultiplier = spawnData.DamageMultiplier
             };
 

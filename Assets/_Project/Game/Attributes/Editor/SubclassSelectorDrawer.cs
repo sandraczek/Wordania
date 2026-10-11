@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System;
 using System.Linq;
 using UnityEditor;
@@ -155,3 +156,4 @@ namespace Wordania.Attributes.Editor
         }
     }
 }
+#endif

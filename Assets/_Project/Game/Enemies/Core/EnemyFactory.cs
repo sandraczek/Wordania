@@ -10,6 +10,9 @@ using Wordania.Identifiers;
 using Wordania.Services;
 using Wordania.Enemies.Data;
 using Wordania.Markers;
+using Wordania.Combat;
+using Wordania.Events;
+using Wordania.Networking;
 
 namespace Wordania.Enemies.Core
 {
@@ -18,18 +21,20 @@ namespace Wordania.Enemies.Core
         private readonly IObjectResolver _resolver;
         private readonly IEntityRegistry _entities;
         private readonly IInstanceIdProvider _idProvider;
+        private readonly IEventBus _bus;
         private readonly Transform _parent;
         private readonly Dictionary<AssetId, IObjectPool<EnemyController>> _pools = new();
         private readonly int _defaultPoolSize = 20;
         private readonly int _maxPoolSize = 100;
         private readonly int _prewarmBatchSize = 5;
 
-        public EnemyFactory(IObjectResolver resolver, MarkerEntityParent enemiesParent, IEntityRegistry entities, IInstanceIdProvider idProvider)
+        public EnemyFactory(IObjectResolver resolver, MarkerEntityParent enemiesParent, IEntityRegistry entities, IInstanceIdProvider idProvider, IEventBus bus)
         {
             _resolver = resolver;
             _parent = enemiesParent.transform;
             _entities = entities;
             _idProvider = idProvider;
+            _bus = bus;
         }
 
         public void Dispose()
@@ -43,6 +48,19 @@ namespace Wordania.Enemies.Core
 
         public IEnemy CreateEnemy(EnemyTemplate template, Vector3 position)
         {
+            EnemyController enemy = Create(template, position, _idProvider.Next());
+
+            enemy.Entity.TryGetFeature(out HealthComponent health);
+            _bus.PublishReplicated(EntitySpawnedEvent.Of(enemy.InstanceId, EntityKind.Enemy, template.Id, default, position, health));
+
+            return enemy;
+        }
+
+        public IEnemy CreateReplica(EnemyTemplate template, Vector3 position, InstanceId instanceId) =>
+            Create(template, position, instanceId);
+
+        private EnemyController Create(EnemyTemplate template, Vector3 position, InstanceId instanceId)
+        {
             if (!_pools.TryGetValue(template.Id, out IObjectPool<EnemyController> pool))
             {
                 pool = CreatePool(template.Prefab);
@@ -51,7 +69,7 @@ namespace Wordania.Enemies.Core
 
             EnemyController enemy = pool.Get();
             enemy.transform.position = position;
-            enemy.InitializeSpawn(_idProvider.Next(), () =>
+            enemy.InitializeSpawn(instanceId, () =>
                 {
                     _entities.Unregister(enemy.InstanceId);
                     pool.Release(enemy);

@@ -46,6 +46,7 @@ namespace Wordania
         private readonly IBossSpawnerService _bossSpawner; // for testing
         private readonly AssetId _bossToSpawn; // for testing
         private readonly SessionConfig _sessionConfig;
+        private readonly Networking.IHostSession _hostSession;
         public GameplayEntryPoint(
             ISaveService saveService,
             IWorldService worldService,
@@ -67,7 +68,8 @@ namespace Wordania
             BossTemplate bossToSpawn, // for testing
             ISkyLightService skyLightService,
             IStaticLightingService staticLightingService,
-            SessionConfig sessionConfig
+            SessionConfig sessionConfig,
+            Networking.IHostSession hostSession
             )
         {
             _save = saveService;
@@ -91,6 +93,7 @@ namespace Wordania
             _skyLightService = skyLightService;
             _staticLightingService = staticLightingService;
             _sessionConfig = sessionConfig;
+            _hostSession = hostSession;
         }
         public async UniTask StartAsync(System.Threading.CancellationToken cancellation)
         {
@@ -132,6 +135,7 @@ namespace Wordania
 
             _loadingScreen.UpdateProgress(0.75f, "Spawning Player");
             _playerSpawner.SpawnPlayer(_sessionConfig.LocalPersistentId, true);
+            _hostSession.Open(); // clients that connected during loading join now
 
             _loadingScreen.UpdateProgress(0.9f, "Setting Camera");
             _camera.FollowTarget(_localPlayer.Player.transform);

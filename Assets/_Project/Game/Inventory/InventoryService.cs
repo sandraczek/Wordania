@@ -13,13 +13,14 @@ using Wordania.Events;
 using Wordania.Services;
 using Wordania.Player;
 using Wordania.Inventory.Data;
+using Wordania.Networking;
 
 namespace Wordania.Inventory
 {
     /// <summary>
     /// Currently, only players have inventories (see HandleEvents, checking IsPlayer)
     /// </summary>
-    public sealed class InventoryService : IInventoryService, IDisposable, IStartable, ISaveable
+    public sealed class InventoryService : IInventoryService, IDisposable, IStartable, ISaveable, IReplicatedPlayerData<InventorySaveData>
     {
         private readonly IAssetRegistry<ItemData> _database;
         private readonly IEventBus _bus;
@@ -113,21 +114,7 @@ namespace Wordania.Inventory
             saveData.Inventories.Clear();
 
             foreach (var kvp in _inventories)
-            {
-                var inventory = kvp.Value;
-                var items = new List<ItemSaveData>(inventory.Dictionary.Count);
-                foreach (var itemKvp in inventory.Dictionary)
-                {
-                    if (itemKvp.Value.Count > 0)
-                        items.Add(new ItemSaveData(itemKvp.Key.Hash, itemKvp.Value.Count));
-                }
-
-                saveData.Inventories.Add(new InventorySaveData
-                {
-                    PersistentId = kvp.Key,
-                    items = items.ToArray()
-                });
-            }
+                saveData.Inventories.Add(Capture(kvp.Key, kvp.Value));
         }
 
         public void RestoreState(GameSaveData saveData)
@@ -139,24 +126,55 @@ namespace Wordania.Inventory
                 foreach (var inventorySave in saveData.Inventories)
                 {
                     if (inventorySave == null || inventorySave.PersistentId.IsEmpty) continue;
-
-                    var inventory = GetInventory(inventorySave.PersistentId);
-                    if (inventorySave.items == null) continue;
-
-                    foreach (ItemSaveData itemSave in inventorySave.items)
-                    {
-                        if (itemSave.Id == 0 || itemSave.Quantity <= 0) continue;
-
-                        var item = _database.Get(new AssetId(itemSave.Id));
-                        if (item == null) continue;
-
-                        inventory.Add(item, itemSave.Quantity);
-                    }
+                    _inventories[inventorySave.PersistentId] = Build(inventorySave);
                 }
             }
 
             foreach (var persistentId in _inventories.Keys)
                 OnInventoryChanged?.Invoke(persistentId);
+        }
+
+        public InventorySaveData CapturePlayer(PersistentId persistentId) => Capture(persistentId, GetInventory(persistentId));
+
+        public void RestorePlayer(InventorySaveData data)
+        {
+            if (data == null || data.PersistentId.IsEmpty) return;
+
+            _inventories[data.PersistentId] = Build(data);
+            OnInventoryChanged?.Invoke(data.PersistentId);
+        }
+
+        private static InventorySaveData Capture(PersistentId persistentId, InventoryData inventory)
+        {
+            var items = new List<ItemSaveData>(inventory.Dictionary.Count);
+            foreach (var itemKvp in inventory.Dictionary)
+            {
+                if (itemKvp.Value.Count > 0)
+                    items.Add(new ItemSaveData(itemKvp.Key.Hash, itemKvp.Value.Count));
+            }
+
+            return new InventorySaveData
+            {
+                PersistentId = persistentId,
+                items = items.ToArray()
+            };
+        }
+
+        private InventoryData Build(InventorySaveData inventorySave)
+        {
+            var inventory = new InventoryData();
+            if (inventorySave.items == null) return inventory;
+
+            foreach (ItemSaveData itemSave in inventorySave.items)
+            {
+                if (itemSave.Id == 0 || itemSave.Quantity <= 0) continue;
+
+                var item = _database.Get(new AssetId(itemSave.Id));
+                if (item == null) continue;
+
+                inventory.Add(item, itemSave.Quantity);
+            }
+            return inventory;
         }
     }
 }

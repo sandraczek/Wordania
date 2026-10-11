@@ -21,6 +21,7 @@ using Wordania.Player.FSM;
 using Wordania.Player.View;
 using Wordania.Player.FSM.States;
 using Wordania.Services;
+using Wordania.Session;
 
 namespace Wordania.Player
 {
@@ -51,6 +52,7 @@ namespace Wordania.Player
         private IEventBus _bus;
         private IGameplayInput _gameplayInput;
         private IGameClock _clock;
+        private SessionConfig _session;
         private LocalPlayerInputSource _localInput;
 
         /// <summary>Per-player state shared with sibling components (loadout, tools). One instance per Player.</summary>
@@ -70,7 +72,8 @@ namespace Wordania.Player
             IInventoryService inventory,
             MechanicIds mechanicIds,
             IPlayerSpawnPointService spawnService,
-            IEventBus bus
+            IEventBus bus,
+            SessionConfig session
             )
         {
             _controller = GetComponent<PlayerController>();
@@ -81,6 +84,7 @@ namespace Wordania.Player
             _mechanics = GetComponent<MechanicsComponent>();
             _spawnPointService = spawnService;
             _bus = bus;
+            _session = session;
 
             _config = config;
             _mechanicIds = mechanicIds;
@@ -128,6 +132,7 @@ namespace Wordania.Player
         private void Init()
         {
             Context.Bind(PersistentId, InstanceId, _stateMachine, _controller, _health, _stats, _config, _mechanics, transform, _clock);
+            if (!_session.IsHost) _controller.MakeProxy();
             // ---
             _stateMachine.SwitchState(_factory.InitialState);
 
@@ -163,6 +168,7 @@ namespace Wordania.Player
             _health.OnDamageTaken += Handlehurt;
             _health.OnDamageTaken += HandleHurtVisuals;
             _health.OnDeath += HandleDeath;
+            _health.OnHealthChange += HandleHealthChange;
         }
 
         private void OnDisable()
@@ -171,14 +177,19 @@ namespace Wordania.Player
             _health.OnDamageTaken -= Handlehurt;
             _health.OnDamageTaken -= HandleHurtVisuals; //TODO: make visuals listen to health
             _health.OnDeath -= HandleDeath;
+            _health.OnHealthChange -= HandleHealthChange;
         }
         private void Update()
         {
-            _localInput?.Pull();
+            _localInput?.Pull(); // clients too: the input uplink reads this state
+            if (!_session.IsHost) return; // client: proxy, the host simulates this player from its input
+
             _stateMachine.Update();
         }
         private void FixedUpdate()
         {
+            if (!_session.IsHost) return;
+
             _stateMachine.FixedUpdate();
         }
         public void ApplyDamage(DamagePayload payload)
@@ -190,6 +201,8 @@ namespace Wordania.Player
         }
         private void Handlehurt(DamageResult damage)
         {
+            if (!_session.IsHost) return; // knockback / hurt state are simulation; clients only play visuals
+
             //Applying knockback even if fatal
             _controller.VelocityX = damage.Payload.Knockback.x;
             _controller.VelocityY = damage.Payload.Knockback.y;
@@ -205,13 +218,22 @@ namespace Wordania.Player
         {
             _stateMachine.SwitchState(_factory.Spectate);
 
-            _bus.PublishReplicated(new PlayerDeathEvent(InstanceId));
+            // Clients die from replicated health; the host's event reaches them over the network.
+            if (_session.IsHost)
+                _bus.PublishReplicated(new PlayerDeathEvent(InstanceId));
         }
         public void Revive()
         {
             _controller.Warp(_spawnPointService.GetSpawn(InstanceId));
             _health.InitializeSpawn();
             _stateMachine.SwitchState(_factory.InitialState);
+        }
+        // Client: the host's Revive() arrives only as health going back up; leave the spectate state locally.
+        private void HandleHealthChange(HealthChangeData data)
+        {
+            if (_session.IsHost) return;
+            if (data.PreviousAmount <= 0f && data.CurrentAmount > 0f)
+                _stateMachine.SwitchState(_factory.InitialState);
         }
         private void HandleHurtVisuals(DamageResult payload)
         {
