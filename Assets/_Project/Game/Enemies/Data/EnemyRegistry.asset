@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: EnemyRegistry
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Enemies.Data.EnemyRegistry
   _assets:
+  - {fileID: 11400000, guid: 49940fc1a5a5c4046afdbcc7af2ce320, type: 2}
   - {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}

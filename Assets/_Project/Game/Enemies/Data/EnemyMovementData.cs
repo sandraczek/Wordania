@@ -11,8 +11,6 @@ namespace Wordania.Enemies.Data
         [SerializeField] public float Deceleration = 30f;
         [SerializeField] public float PatrolSpeed { get; private set; } = 2f;
         [SerializeField] public float PatrolIntervalTime = 5f;
-        [SerializeField] public float ChaseSpeed { get; private set; } = 4.5f; // to change to one moveSpeed and multipliers
-        [SerializeField] public float JumpForce { get; private set; } = 10f;
 
         //Ground Check
         [SerializeField] public LayerMask GroundLayer;

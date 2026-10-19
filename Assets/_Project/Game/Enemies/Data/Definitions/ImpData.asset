@@ -19,8 +19,6 @@ MonoBehaviour:
   <DisplayName>k__BackingField: Imp
   <Stats>k__BackingField:
     <MaxHealth>k__BackingField: 100
-    <TouchDamage>k__BackingField: 10
-    <KnockbackResistance>k__BackingField: 0
   <Movement>k__BackingField:
     GravityScale: 5
     Acceleration: 50
@@ -43,8 +41,6 @@ MonoBehaviour:
   <Combat>k__BackingField:
     <DetectionRadius>k__BackingField: 10
     <LoseTargetRadius>k__BackingField: 15
-    <AttackRange>k__BackingField: 1.5
-    <AttackCooldown>k__BackingField: 2
     ContactDamage: 26
     Knockback: {x: 15, y: 7}
     DamageType: 0
@@ -70,4 +66,3 @@ MonoBehaviour:
       Multiplier: 0.5
     - KillsBefore: 10
       Multiplier: 0.2
-  <Loot>k__BackingField: {fileID: 11400000, guid: 98d0304250b7249699c37fdd4046cfc2, type: 2}

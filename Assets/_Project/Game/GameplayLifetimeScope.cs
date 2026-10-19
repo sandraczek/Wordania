@@ -332,6 +332,7 @@ TODOS:
 - prewarming
 - refactor inventory. Why does players - factory need it?
 - inventoryDisplay component is on Canvas.
+- test targetting
 
 large TODOS:
 
@@ -343,7 +344,7 @@ boss spawning
 block builder picker soon? later?
 pause menu
 binary world saving
-nature (trees, water)
+nature (trees, water)       --- fuck this for now, lets make it playable
 chests
 status effect (fire, poison)
 chat
@@ -354,8 +355,6 @@ maybe optimization:
 -* skills view goes through every node every point changed.
 - can put events in f.e. InventoryView to disable when hiding window
 
-now:
-- test the aggro
 
 
 */

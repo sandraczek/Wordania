@@ -13,7 +13,7 @@ namespace Wordania.Enemies.Data
     public sealed class EnemyTemplate : DataAsset
     {
         [field: Header("Prefab")]
-        [field: SerializeField] public EnemyController Prefab;
+        public EnemyController Prefab;
 
         [field: SerializeField] public string DisplayName { get; private set; } = "Unknown Enemy";
         [field: Space(10)]
@@ -23,8 +23,6 @@ namespace Wordania.Enemies.Data
         [field: SerializeField] public EnemyCombatData Combat { get; private set; }
         [field: SerializeField] public EnemySpawnData Spawn { get; private set; }
         [field: SerializeField] public RewardData Reward { get; private set; }
-
-        [field: SerializeField] public ItemData Loot { get; private set; }
 
 
 #if UNITY_EDITOR

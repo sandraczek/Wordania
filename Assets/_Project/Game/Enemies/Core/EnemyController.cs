@@ -34,7 +34,7 @@ namespace Wordania.Enemies.Core
         private IEventBus _eventBus;
         private SessionConfig _session;
 
-        public Entity Entity;
+        [HideInInspector] public Entity Entity;
         private HealthComponent _health;
         private StatsComponent _stats;
         private MechanicsComponent _mechanics;

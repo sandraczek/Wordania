@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b49493b7ffcd44c0f8b3d3e295b654f3, type: 3}
+  m_Name: Bandit
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Enemies.Data.EnemyData
+  _id:
+    _editorId: bandit_enemy
+    _hash: -1838367216
+  Prefab: {fileID: 6478214868119159596, guid: 35f3440e31598457a8ed74408dd69643, type: 3}
+  <DisplayName>k__BackingField: Bandit
+  <Stats>k__BackingField:
+    <MaxHealth>k__BackingField: 50
+  <Movement>k__BackingField:
+    GravityScale: 5
+    Acceleration: 50
+    Deceleration: 30
+    PatrolIntervalTime: 5
+    GroundLayer:
+      serializedVersion: 2
+      m_Bits: 8
+    GroundCheckSizeY: 0.1
+    GroundCheckDistance: 0.2
+    MaxStepHeight: 1.1
+    StepLookMargin: 0.01
+    StepPerformMargin: 0.05
+    SkinWidth: 0.02
+    FallDamageThreshold: 35
+    FallDamageMultiplier: 3
+    EnableCliffAvoidance: 1
+    CliffDetectionOffset: 0.1
+    CliffDetectionDepth: 4
+  <Combat>k__BackingField:
+    <DetectionRadius>k__BackingField: 10
+    <LoseTargetRadius>k__BackingField: 15
+    ContactDamage: 15
+    Knockback: {x: 15, y: 7}
+    DamageType: 0
+    DamageSource: 0
+    HitStunDuration: 0.2
+    InvincibilityDuration: 0.2
+    GeneralResistance: 0.1
+    PhysicalResistance: 0
+    MagicalResistance: 0
+    EnvironmentalResistance: 0
+    FallResistance: 0
+  <Spawn>k__BackingField:
+    RequiresGround: 1
+    MaxDistanceToGround: 1.5
+    RequiredClearanceSize: {x: 1.973877, y: 4.8129272}
+    RequiredGroundSize: 2
+  <Reward>k__BackingField:
+    _skillPoints:
+    - Type: 0
+      Value: 50
+    _skillPointsThresholds:
+    - KillsBefore: 5
+      Multiplier: 0.5
+    - KillsBefore: 10
+      Multiplier: 0.2

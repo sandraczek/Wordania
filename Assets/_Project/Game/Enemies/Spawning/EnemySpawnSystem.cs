@@ -8,6 +8,7 @@ using Wordania.Services;
 using Wordania.Enemies.Config;
 using Wordania.Enemies.Core;
 using Wordania.Enemies.Data;
+using Wordania.Data;
 
 namespace Wordania.Enemies.Spawning
 {
@@ -21,16 +22,16 @@ namespace Wordania.Enemies.Spawning
         private float _timeSinceLastSpawn;
 
         //DEBUG
-        private readonly EnemyTemplate _enemyToSpawn;
+        private readonly IAssetRegistry<EnemyTemplate> _enemyRegistry;
 
-        public EnemySpawnSystem(EnemySystemSettings settings, IEnemyFactory enemyFactory, IEntityRegistry entities, IReadOnlyList<ISpawnValidator> validators, /*DEBUG*/EnemyTemplate enemyTemplate)
+        public EnemySpawnSystem(EnemySystemSettings settings, IEnemyFactory enemyFactory, IEntityRegistry entities, IReadOnlyList<ISpawnValidator> validators, /*DEBUG*/IAssetRegistry<EnemyTemplate> enemyRegistry)
         {
             _settings = settings;
             _factory = enemyFactory;
             _entities = entities;
             _validators = validators;
 
-            _enemyToSpawn = enemyTemplate; //DEBUG
+            _enemyRegistry = enemyRegistry;
         }
         public void Tick()
         {
@@ -48,6 +49,9 @@ namespace Wordania.Enemies.Spawning
         }
         private bool AttemptSpawn()
         {
+            /*DEBUG*/
+            EnemyTemplate _enemyToSpawn = _enemyRegistry.Assets[UnityEngine.Random.Range(0, _enemyRegistry.Assets.Count)];
+
             int playerCount = _entities.Players.Count;
             if (playerCount == 0) return false;
 
