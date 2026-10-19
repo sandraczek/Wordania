@@ -354,6 +354,9 @@ maybe optimization:
 -* skills view goes through every node every point changed.
 - can put events in f.e. InventoryView to disable when hiding window
 
+now:
+- test the aggro
+
 
 */
 

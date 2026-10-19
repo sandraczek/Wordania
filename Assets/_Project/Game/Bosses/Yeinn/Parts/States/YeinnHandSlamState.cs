@@ -1,7 +1,8 @@
-using System.Linq;
 using UnityEngine;
-using Wordania.Services;
 using Wordania.SFM;
+using Wordania.Combat;
+using Wordania.Identifiers;
+using Wordania.Bosses.Core;
 using Wordania.Bosses.Data.SharedAttacks;
 
 namespace Wordania.Bosses.Yeinn.Parts.States
@@ -16,17 +17,18 @@ namespace Wordania.Bosses.Yeinn.Parts.States
         }
         private readonly SlamPlayerAttack _data;
         private readonly YeinnHandController _hand;
-        private readonly IEntityRegistry _entities;
+        private readonly IBossTarget _target;
+        private Entity _victim;
 
         private Vector2 _slamStartPos;
         private AttackStep _currentStep;
 
         private float _recoveryTimer;
 
-        public YeinnHandSlamState(SlamPlayerAttack slam, YeinnHandController hand, IEntityRegistry entities)
+        public YeinnHandSlamState(SlamPlayerAttack slam, YeinnHandController hand, IBossTarget target)
         {
             _hand = hand;
-            _entities = entities;
+            _target = target;
             _data = slam;
         }
 
@@ -38,7 +40,8 @@ namespace Wordania.Bosses.Yeinn.Parts.States
         {
             _recoveryTimer = _data.RecoveryDuration;
 
-            _slamStartPos = (Vector2)_entities.Players.FirstOrDefault().Transform.position + Vector2.up * _data.LiftHeight;
+            _victim = _target.Acquire(_data.Threat, _hand.Position);
+            _slamStartPos = VictimPosition() + Vector2.up * _data.LiftHeight;
             float speed = float.MaxValue;
             if (_data.TimeToAttack > 0f)
             {
@@ -75,6 +78,11 @@ namespace Wordania.Bosses.Yeinn.Parts.States
         {
 
         }
+        // This attack keeps its own victim, so a retarget by another part mid-attack does not move the slam.
+        private Vector2 VictimPosition()
+        {
+            return ThreatAttacker.IsAlive(_victim) ? (Vector2)_victim.Transform.position : _target.Position;
+        }
         private void ExecuteNextStep()
         {
             switch (_currentStep)
@@ -82,7 +90,7 @@ namespace Wordania.Bosses.Yeinn.Parts.States
                 case AttackStep.Windup:
                     _currentStep = AttackStep.Smashing;
 
-                    Vector2 target = new(_slamStartPos.x, _entities.Players.FirstOrDefault().Transform.position.y - _data.MaxDistanceBelowDynamicPlayer);
+                    Vector2 target = new(_slamStartPos.x, VictimPosition().y - _data.MaxDistanceBelowDynamicPlayer);
                     _hand.CommandMoveTo(target, _data.SlamSpeed);
                     _hand.SetRotation(-90f); //TODO: make a method for smooth rotation
                     break;

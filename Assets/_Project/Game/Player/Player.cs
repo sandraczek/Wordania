@@ -125,6 +125,7 @@ namespace Wordania.Player
             // Host: remote players are moved with MovePosition each physics step, so Rigidbody2D interpolation keeps
             // them smooth. Client: proxies are written through the transform by snapshots (interpolation off).
             _controller.SetProxy(!IsSimulated, keepInterpolation: _session.IsHost);
+            if (TryGetComponent(out PlayerDebugHandler debug)) debug.Refresh();
         }
         public void InitializeNew(InstanceId instanceId, PersistentId persistentId)
         {

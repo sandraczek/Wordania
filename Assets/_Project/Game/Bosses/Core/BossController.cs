@@ -6,6 +6,7 @@ using Wordania.Bosses.Data;
 using Wordania.Bosses.Events;
 using Wordania.Session;
 using Wordania.Networking;
+using Wordania.Combat;
 
 namespace Wordania.Bosses.Core
 {
@@ -13,10 +14,14 @@ namespace Wordania.Bosses.Core
     {
         void Initialize(BossTemplate template, InstanceId instanceId);
     }
+    [RequireComponent(typeof(ThreatAttacker))]
     public abstract class BossController : MonoBehaviour, IBossController
     {
         public InstanceId InstanceId { get; protected set; }
         public AssetId TemplateId { get; protected set; }
+
+        /// <summary>One target for the whole boss, shared by all parts. Set before OnInitialize runs.</summary>
+        public IBossTarget Target { get; protected set; }
 
         /// <summary>
         /// Number of registered parts. The spawner reserves 1 + PartCount consecutive ids: the boss takes the first,
@@ -48,6 +53,9 @@ namespace Wordania.Bosses.Core
         {
             InstanceId = instanceId;
             TemplateId = template.Id;
+            Target = new BossTarget(GetComponent<ThreatAttacker>(), transform.position);
+            if (!TryGetComponent<ThreatAttacker>(out _))
+                Debug.LogError($"[BossSystem] {gameObject.name} has no ThreatAttacker on its root; add it to the prefab and save it. Parts will not pick targets.", this);
             if (template is TTemplate typedTemplate)
             {
                 OnInitialize(typedTemplate);

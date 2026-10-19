@@ -52,5 +52,9 @@ namespace Wordania.Combat
         {
             _generalResistance = res;
         }
+        public float GetResistance(DamageType type)
+        {
+            return _resistances[(int)type];
+        }
     }
 }

@@ -22,13 +22,13 @@ namespace Wordania.Bosses.Yeinn.Parts
         private IState _swipeState;
         private IState _slamState;
 
-        public void Initialize(YeinnHandData handData, InstanceId instanceId, Transform restAnchor)
+        public void Initialize(YeinnHandData handData, InstanceId instanceId, IBossTarget target, Transform restAnchor)
         {
-            base.Initialize(handData, instanceId);
+            base.Initialize(handData, instanceId, target);
 
             _idleState = new YeinnHandIdleState(_data.Idle, this, _entities, restAnchor);
-            _swipeState = new YeinnHandSwipeState(_data.Swipe, this, _entities);
-            _slamState = new YeinnHandSlamState(_data.Slam, this, _entities);
+            _swipeState = new YeinnHandSwipeState(_data.Swipe, this, _target);
+            _slamState = new YeinnHandSlamState(_data.Slam, this, _target);
 
             SwitchState(_idleState);
 

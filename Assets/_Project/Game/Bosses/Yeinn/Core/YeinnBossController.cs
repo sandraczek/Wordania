@@ -54,9 +54,9 @@ namespace Wordania.Bosses.Yeinn.Core
         {
             _template = template;
 
-            _head.Initialize(template.Head, PartId(1));
-            _leftHand.Initialize(template.LeftHand, PartId(2), _leftHandAnchor);
-            _rightHand.Initialize(template.RightHand, PartId(3), _rightHandAnchor);
+            _head.Initialize(template.Head, PartId(1), Target);
+            _leftHand.Initialize(template.LeftHand, PartId(2), Target, _leftHandAnchor);
+            _rightHand.Initialize(template.RightHand, PartId(3), Target, _rightHandAnchor);
 
             _phaseStateMachine = new StateMachine<IState>();
 
@@ -127,6 +127,19 @@ namespace Wordania.Bosses.Yeinn.Core
         public void Remove()
         {
             Destroy(gameObject);
+        }
+
+        // TEMP DEBUG: red line + sphere on the current target. Remove me.
+        private void OnDrawGizmos()
+        {
+            if (!Application.isPlaying || Target == null || _head == null) return;
+
+            var target = Target.Current;
+            if (target == null) return;
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(_head.transform.position, target.Transform.position);
+            Gizmos.DrawWireSphere(target.Transform.position, 1f);
         }
     }
 }

@@ -1,7 +1,6 @@
 using UnityEngine;
-using Wordania.Combat;
-using Wordania.Services;
 using Wordania.SFM;
+using Wordania.Bosses.Core;
 using Wordania.Bosses.Data.SharedAttacks;
 
 namespace Wordania.Bosses.Yeinn.Parts.States
@@ -10,13 +9,12 @@ namespace Wordania.Bosses.Yeinn.Parts.States
     {
         private readonly HoverOverPlayerAttack _data;
         private readonly YeinnHeadController _head;
-        private readonly IEntityRegistry _entities;
-        private Vector2 _lastPlayerPos;
+        private readonly IBossTarget _target;
 
-        public YeinnHeadHoverState(HoverOverPlayerAttack hover, YeinnHeadController head, IEntityRegistry entities)
+        public YeinnHeadHoverState(HoverOverPlayerAttack hover, YeinnHeadController head, IBossTarget target)
         {
             _head = head;
-            _entities = entities;
+            _target = target;
             _data = hover;
         }
 
@@ -26,7 +24,7 @@ namespace Wordania.Bosses.Yeinn.Parts.States
         }
         public void Enter()
         {
-
+            _target.Acquire(_data.Threat, _head.Position);
         }
 
         public void Update()
@@ -45,15 +43,9 @@ namespace Wordania.Bosses.Yeinn.Parts.States
         }
         private void SetTarget()
         {
-            foreach (var entity in _entities.Players)
-            {
-                if (entity.TryGetFeature(out IReadOnlyHealth health) && !health.IsDead)
-                {
-                    _lastPlayerPos = entity.Transform.position;
-                    continue;
-                }
-            }
-            Vector2 overPlayer = _lastPlayerPos + _data.VectorFromPlayer;
+            _target.Refresh(_data.Threat, BossTarget.RetargetInterval, _head.Position);
+
+            Vector2 overPlayer = _target.Position + _data.VectorFromPlayer;
             Vector3 distance = _data.MaxDistanceFromPlayer * Random.value * Vector3.right;
             Vector2 target = overPlayer + (Vector2)(Random.rotation * distance);
 

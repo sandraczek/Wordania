@@ -27,6 +27,7 @@ namespace Wordania.Bosses.Core
         protected IEntityRegistry _entities;
 
         protected T _data;
+        protected IBossTarget _target;
         private StateMachine<IState> _stateMachine;
         private HealthComponent _health;
         private StatsComponent _stats;
@@ -63,11 +64,14 @@ namespace Wordania.Bosses.Core
             // Client proxy: moved by host snapshots only.
             if (!_session.IsHost)
                 _rb.bodyType = RigidbodyType2D.Kinematic;
+            else
+                _rb.sleepMode = RigidbodySleepMode2D.NeverSleep; // sleeping bodies get no OnCollisionStay2D -> no contact damage
         }
         /// <param name="instanceId">Assigned by the owning boss (see BossController.PartCount) so it matches on every machine.</param>
-        public virtual void Initialize(T data, InstanceId instanceId)
+        public virtual void Initialize(T data, InstanceId instanceId, IBossTarget target)
         {
             _data = data;
+            _target = target;
             InstanceId = instanceId;
 
             _stateMachine = new StateMachine<IState>();

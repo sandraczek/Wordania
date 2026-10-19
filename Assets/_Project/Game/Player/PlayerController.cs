@@ -95,6 +95,9 @@ namespace Wordania.Player
             // (and any MovePosition-driven enemy) are kinematic, so without this a host-driven remote player would
             // never be hit by their ContactDamageDealer (OnCollisionStay2D / OnTriggerStay2D).
             _rb.useFullKinematicContacts = isProxy && keepInterpolation;
+            // A kinematic body that is not moved falls asleep and then gets no OnCollisionStay2D, so a standing
+            // remote player would never be hurt by a boss that also stopped.
+            _rb.sleepMode = isProxy && keepInterpolation ? RigidbodySleepMode2D.NeverSleep : RigidbodySleepMode2D.StartAwake;
             _rb.linearVelocity = Vector2.zero;
         }
 

@@ -1,7 +1,6 @@
-using System.Linq;
 using UnityEngine;
-using Wordania.Services;
 using Wordania.SFM;
+using Wordania.Bosses.Core;
 using Wordania.Bosses.Data.SharedAttacks;
 
 namespace Wordania.Bosses.Yeinn.Parts.States
@@ -15,15 +14,15 @@ namespace Wordania.Bosses.Yeinn.Parts.States
         }
         private readonly SwipePlayerAttack _data;
         private readonly YeinnHandController _hand;
-        private readonly IEntityRegistry _entities;
+        private readonly IBossTarget _target;
 
         private AttackStep _currentStep;
         private float _currentDirection;
         private Vector2 _startingPos;
-        public YeinnHandSwipeState(SwipePlayerAttack swipe, YeinnHandController hand, IEntityRegistry entities)
+        public YeinnHandSwipeState(SwipePlayerAttack swipe, YeinnHandController hand, IBossTarget target)
         {
             _hand = hand;
-            _entities = entities;
+            _target = target;
             _data = swipe;
         }
 
@@ -76,8 +75,9 @@ namespace Wordania.Bosses.Yeinn.Parts.States
         }
         private Vector2 GetStartingPos()
         {
+            _target.Acquire(_data.Threat, _hand.Position);
             _currentDirection = Mathf.Sign(Random.value - 0.5f);
-            return (Vector2)_entities.Players.FirstOrDefault().Transform.position - _data.DistanceFromPlayer * _currentDirection * Vector2.right;
+            return _target.Position - _data.DistanceFromPlayer * _currentDirection * Vector2.right;
         }
     }
 }
