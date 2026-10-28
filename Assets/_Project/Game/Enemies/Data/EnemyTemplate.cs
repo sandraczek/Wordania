@@ -6,6 +6,7 @@ using Wordania.Identifiers;
 using Wordania.Enemies.Core;
 using Wordania.Skills;
 using Wordania.Inventory.Data;
+using Wordania.Enemies.AI;
 
 namespace Wordania.Enemies.Data
 {
@@ -23,6 +24,8 @@ namespace Wordania.Enemies.Data
         [field: SerializeField] public EnemyCombatData Combat { get; private set; }
         [field: SerializeField] public EnemySpawnData Spawn { get; private set; }
         [field: SerializeField] public RewardData Reward { get; private set; }
+        [field: Tooltip("AI behaviour. Empty = legacy wander (Idle -> Patrol).")]
+        [field: SerializeField] public EnemyBehaviourProfile Behaviour { get; private set; }
 
 
 #if UNITY_EDITOR

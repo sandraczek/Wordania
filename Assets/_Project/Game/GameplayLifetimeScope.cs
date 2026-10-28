@@ -57,6 +57,7 @@ using Wordania.Inventory.Data;
 using Wordania.Networking;
 using Wordania.Networking.Transport;
 using Wordania.SaveSystem.Data;
+using Wordania.Encounters;
 
 namespace Wordania
 {
@@ -83,6 +84,8 @@ namespace Wordania
         [SerializeField] private Chunk _chunkPrefab;
         [SerializeField] private CameraService _cameraService;
         [SerializeField] private JournalEntryRegistry _journalEntryRegistry;
+        [Tooltip("Set piece placed at the world spawn on a new game (burning pyre + bandits). Optional.")]
+        [SerializeField] private EncounterInstance _startingEncounter;
 
         [SerializeField] private HealthBarUI _healthBarUI;
         [SerializeField] private InventoryDisplay _inventoryView;
@@ -232,6 +235,9 @@ namespace Wordania
 
                 builder.RegisterEntryPoint<EnemySpawnSystem>(Lifetime.Scoped).WithParameter(_enemyToPrewarm);
                 builder.RegisterEntryPoint<EnemyCullingSystem>(Lifetime.Scoped);
+
+                builder.Register<EncounterService>(Lifetime.Scoped).As<IEncounterService>()
+                    .WithParameter(_startingEncounter);
             }
 
             //bosses

@@ -24,6 +24,7 @@ MonoBehaviour:
     Acceleration: 50
     Deceleration: 30
     PatrolIntervalTime: 5
+    ChaseSpeed: 10
     GroundLayer:
       serializedVersion: 2
       m_Bits: 8
@@ -39,8 +40,8 @@ MonoBehaviour:
     CliffDetectionOffset: 0.1
     CliffDetectionDepth: 4
   <Combat>k__BackingField:
-    <DetectionRadius>k__BackingField: 10
-    <LoseTargetRadius>k__BackingField: 15
+    <DetectionRadius>k__BackingField: 25
+    <LoseTargetRadius>k__BackingField: 40
     ContactDamage: 15
     Knockback: {x: 15, y: 7}
     DamageType: 0
@@ -52,6 +53,15 @@ MonoBehaviour:
     MagicalResistance: 0
     EnvironmentalResistance: 0
     FallResistance: 0
+    Melee:
+      Damage: 20
+      Knockback: {x: 12, y: 6}
+      DamageType: 0
+      DamageSource: 0
+      WindupDuration: 0.35
+      RecoveryDuration: 0.5
+      HitboxOffset: {x: 0.9, y: 0}
+      HitboxSize: {x: 1.4, y: 1.6}
   <Spawn>k__BackingField:
     RequiresGround: 1
     MaxDistanceToGround: 1.5
@@ -66,3 +76,4 @@ MonoBehaviour:
       Multiplier: 0.5
     - KillsBefore: 10
       Multiplier: 0.2
+  <Behaviour>k__BackingField: {fileID: 11400000, guid: 0ba16ab338af7427890d524e6e35c9b3, type: 2}

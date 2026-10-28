@@ -13,6 +13,7 @@ using Wordania.Markers;
 using Wordania.Combat;
 using Wordania.Events;
 using Wordania.Networking;
+using Wordania.Enemies.AI;
 
 namespace Wordania.Enemies.Core
 {
@@ -46,9 +47,9 @@ namespace Wordania.Enemies.Core
             _pools.Clear();
         }
 
-        public IEnemy CreateEnemy(EnemyTemplate template, Vector3 position)
+        public IEnemy CreateEnemy(EnemyTemplate template, Vector3 position, EnemySpawnContext context = default)
         {
-            EnemyController enemy = Create(template, position, _idProvider.Next());
+            EnemyController enemy = Create(template, position, _idProvider.Next(), context);
 
             enemy.Entity.TryGetFeature(out HealthComponent health);
             _bus.PublishReplicated(EntitySpawnedEvent.Of(enemy.InstanceId, EntityKind.Enemy, template.Id, default, position, health));
@@ -57,9 +58,9 @@ namespace Wordania.Enemies.Core
         }
 
         public IEnemy CreateReplica(EnemyTemplate template, Vector3 position, InstanceId instanceId) =>
-            Create(template, position, instanceId);
+            Create(template, position, instanceId, EnemySpawnContext.None);
 
-        private EnemyController Create(EnemyTemplate template, Vector3 position, InstanceId instanceId)
+        private EnemyController Create(EnemyTemplate template, Vector3 position, InstanceId instanceId, in EnemySpawnContext context)
         {
             if (!_pools.TryGetValue(template.Id, out IObjectPool<EnemyController> pool))
             {
@@ -69,7 +70,7 @@ namespace Wordania.Enemies.Core
 
             EnemyController enemy = pool.Get();
             enemy.transform.position = position;
-            enemy.InitializeSpawn(instanceId, () =>
+            enemy.InitializeSpawn(instanceId, context, () =>
                 {
                     _entities.Unregister(enemy.InstanceId);
                     pool.Release(enemy);

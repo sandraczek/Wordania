@@ -11,12 +11,13 @@ using Wordania.Identifiers;
 using Wordania.SFM;
 using Wordania.Stats;
 using Wordania.Enemies.Data;
-using Wordania.Enemies.FSM;
+using Wordania.Enemies.AI;
 using Wordania.Enemies.Movement;
 using Wordania.Mechanics;
 using Wordania.Movement;
-using Wordania.Enemies.FSM.States;
 using Wordania.Session;
+using Wordania.Services;
+using Wordania.Combat.Authority;
 
 namespace Wordania.Enemies.Core
 {
@@ -41,8 +42,9 @@ namespace Wordania.Enemies.Core
         private Rigidbody2D _rb;
         private Collider2D _col;
         public Bounds Hitbox => _col.bounds;
-        private StateMachine<EnemyBaseState> _stateMachine;
-        private EnemyStateFactory _stateFactory;
+        public HealthComponent Health => _health;
+        private EnemyBrain _brain;
+        private SpriteRenderer _sprite;
         private DamageMitigator _mitigation;
         private InvincibilityController _invincibility;
         private ContactDamageDealer _contactDamage;
@@ -70,13 +72,14 @@ namespace Wordania.Enemies.Core
         [field: SerializeField] public bool IsGrounded { get; private set; }
         private float _maxFallSpeed = 0f;
         private bool _isFacingRight = true;
+        public bool IsFacingRight => _isFacingRight;
         private bool _isSteppingUp = false;
 
         private Action _onDeathFactoryAction;
         public event Action<float> OnLanded;
 
         [Inject]
-        public void Construct(IEventBus eventBus, SessionConfig session)
+        public void Construct(IEventBus eventBus, SessionConfig session, IEntityRegistry entities, IGameClock clock, ICombatAuthority combat)
         {
             _eventBus = eventBus;
             _session = session;
@@ -89,10 +92,9 @@ namespace Wordania.Enemies.Core
             _mechanics = GetComponent<MechanicsComponent>();
             _mitigation = GetComponent<DamageMitigator>();
             _invincibility = GetComponent<InvincibilityController>();
+            _sprite = GetComponentInChildren<SpriteRenderer>();
 
-
-            _stateMachine = new();
-            _stateFactory = new(this, _stateMachine);
+            _brain = new EnemyBrain(this, Data.Behaviour, entities, clock, combat);
 
             // Client proxy: AI does not run, the body is moved by host snapshots only.
             if (!_session.IsHost)
@@ -121,7 +123,7 @@ namespace Wordania.Enemies.Core
             }
         }
 
-        public void InitializeSpawn(InstanceId instanceId, Action onDeath)
+        public void InitializeSpawn(InstanceId instanceId, in EnemySpawnContext context, Action onDeath)
         {
             InstanceId = instanceId;
             if (Data == null) Debug.LogError($"{transform.name}: No data was set in prefab");
@@ -140,7 +142,8 @@ namespace Wordania.Enemies.Core
             _maxFallSpeed = 0f;
             SetGravity(Data.Movement.GravityScale);
 
-            _stateMachine.SwitchState(_stateFactory.InitialState);
+            SetTint(Color.white);
+            _brain.Reset(context);
 
             List<(DamageType, float)> resistances = new()
             {
@@ -170,7 +173,7 @@ namespace Wordania.Enemies.Core
         {
             if (!_session.IsHost) return;
 
-            _stateMachine.Update();
+            _brain.Tick();
         }
         private void FixedUpdate()
         {
@@ -200,7 +203,7 @@ namespace Wordania.Enemies.Core
                 }
             }
 
-            _stateMachine.FixedUpdate();
+            _brain.FixedTick();
         }
         private bool CheckGrounded()
         {
@@ -282,6 +285,23 @@ namespace Wordania.Enemies.Core
         {
             _rb.gravityScale = scale;
         }
+
+        /// <summary>Accelerate towards direction * speed (direction 0 = brake) and climb single steps. Call from FixedUpdate.</summary>
+        public void Move(float direction, float speed)
+        {
+            bool moving = Mathf.Abs(direction) > 0.1f;
+            float accel = moving ? Data.Movement.Acceleration : Data.Movement.Deceleration;
+            VelocityX = Mathf.MoveTowards(VelocityX, direction * speed, accel * Time.fixedDeltaTime);
+
+            if (moving && IsGrounded)
+                TryStepUp(Mathf.Sign(direction));
+        }
+        public void Stop() => Move(0f, 0f);
+
+        public void SetTint(Color color)
+        {
+            if (_sprite != null) _sprite.color = color;
+        }
         private void HandleDeath()
         {
             if (_session.IsHost)
@@ -314,7 +334,7 @@ namespace Wordania.Enemies.Core
 
             _invincibility.StartInvincibility(InvincibilitySource.HitRecovery, Data.Combat.InvincibilityDuration);
 
-            _stateMachine.SwitchState(_stateFactory.Hurt);
+            _brain.OnDamaged(damage.Payload.InstigatorId);
         }
 
         private void DrawPosition()

@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 672ea8d6cbc7a4946b9619550f0c98ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Enemies.Core.EnemyController
-  Data: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}
+  Data: {fileID: 11400000, guid: 49940fc1a5a5c4046afdbcc7af2ce320, type: 2}
   Entity: {fileID: 0}
   <IsGrounded>k__BackingField: 0
 --- !u!114 &7718802555013657188

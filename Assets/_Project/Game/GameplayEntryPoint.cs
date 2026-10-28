@@ -20,6 +20,7 @@ using Wordania.World.Lighting;
 using Wordania.HUD.Journal;
 using Wordania.HUD.WeaponStore;
 using Wordania.Session;
+using Wordania.Encounters;
 
 namespace Wordania
 {
@@ -47,6 +48,7 @@ namespace Wordania
         private readonly AssetId _bossToSpawn; // for testing
         private readonly SessionConfig _sessionConfig;
         private readonly Networking.IHostSession _hostSession;
+        private readonly IEncounterService _encounters;
         public GameplayEntryPoint(
             ISaveService saveService,
             IWorldService worldService,
@@ -69,7 +71,8 @@ namespace Wordania
             ISkyLightService skyLightService,
             IStaticLightingService staticLightingService,
             SessionConfig sessionConfig,
-            Networking.IHostSession hostSession
+            Networking.IHostSession hostSession,
+            IEncounterService encounters
             )
         {
             _save = saveService;
@@ -94,6 +97,7 @@ namespace Wordania
             _staticLightingService = staticLightingService;
             _sessionConfig = sessionConfig;
             _hostSession = hostSession;
+            _encounters = encounters;
         }
         public async UniTask StartAsync(System.Threading.CancellationToken cancellation)
         {
@@ -134,6 +138,8 @@ namespace Wordania
             await _weaponStorePresenter.InitializeAsync(cancellation);
 
             _loadingScreen.UpdateProgress(0.75f, "Spawning Player");
+            if (_sessionConfig.SaveSlot == 0)
+                _encounters.StartStartingEncounter(_spawnPoints.GetWorldSpawn()); // the player wakes up on the pyre
             _playerSpawner.SpawnPlayer(_sessionConfig.LocalPersistentId, true);
             _hostSession.Open(); // clients that connected during loading join now
 

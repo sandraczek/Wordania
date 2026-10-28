@@ -1,18 +1,15 @@
 using UnityEngine;
-using Wordania.SFM;
-using Wordania.Enemies.Core;
+using Wordania.Enemies.AI;
 
 namespace Wordania.Enemies.FSM.States
 {
+    /// <summary>Walk back and forth, turning at cliffs and every PatrolIntervalTime.</summary>
     public sealed class EnemyPatrolState : EnemyBaseState
     {
         private float _timer = 0f;
         private float _direction = 1f;
 
-        public EnemyPatrolState(EnemyController controller, StateMachine<EnemyBaseState> states, EnemyStateFactory factory) : base(controller, states, factory)
-        {
-
-        }
+        public EnemyPatrolState(EnemyBrain brain) : base(brain) { }
 
         public override void Enter()
         {
@@ -41,38 +38,7 @@ namespace Wordania.Enemies.FSM.States
                 _timer = 0f;
             }
 
-            ApplyStandardMovement(
-                _direction,
-                mov.Acceleration,
-                mov.Deceleration,
-                mov.PatrolSpeed
-                );
-
-            if (_controller.IsGrounded)
-                _controller.TryStepUp(_direction);
-        }
-        public override void Exit()
-        {
-
-        }
-        public override void CheckSwitchStates()
-        {
-
-        }
-
-        private void ApplyStandardMovement(float direction, float acceleration, float deceleration, float speed)
-        {
-            float targetSpeed = direction * speed;
-
-            float currentAccel = (Mathf.Abs(direction) > 0.1f) ? acceleration : deceleration;
-
-            float newVelocityX = Mathf.MoveTowards(
-                _controller.VelocityX,
-                targetSpeed,
-                currentAccel * Time.fixedDeltaTime
-            );
-
-            _controller.VelocityX = newVelocityX;
+            _controller.Move(_direction, mov.PatrolSpeed);
         }
     }
 }

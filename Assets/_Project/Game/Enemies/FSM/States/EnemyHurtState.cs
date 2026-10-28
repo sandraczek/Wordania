@@ -1,40 +1,22 @@
 using UnityEngine;
-using Wordania.SFM;
-using Wordania.Enemies.Core;
+using Wordania.Enemies.AI;
 
 namespace Wordania.Enemies.FSM.States
 {
+    /// <summary>Hit stun: knockback velocity is left alone, finishes after HitStunDuration.</summary>
     public sealed class EnemyHurtState : EnemyBaseState
     {
-        private float _hitTime;
-        public EnemyHurtState(EnemyController controller, StateMachine<EnemyBaseState> states, EnemyStateFactory factory) : base(controller, states, factory)
-        {
-            
-        }
+        public EnemyHurtState(EnemyBrain brain) : base(brain) { }
+
+        public override bool IsFinished => _brain.TimeInState >= _controller.Data.Combat.HitStunDuration;
 
         public override void Enter()
         {
-            _hitTime = Time.time;
-            _controller.GetComponentInChildren<SpriteRenderer>().color = Color.red;
-        }
-        public override void Update()
-        {
-            
-        }
-        public override void FixedUpdate()
-        {
-            
+            _controller.SetTint(Color.red);
         }
         public override void Exit()
         {
-            _controller.GetComponentInChildren<SpriteRenderer>().color = Color.white;
-        }
-        public override void CheckSwitchStates()
-        {
-            if (Time.time >= _controller.Data.Combat.HitStunDuration + _hitTime)
-            {
-                _states.SwitchState(_factory.Idle);
-            }
+            _controller.SetTint(Color.white);
         }
     }
 }
