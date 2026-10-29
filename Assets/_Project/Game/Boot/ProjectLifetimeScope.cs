@@ -25,6 +25,7 @@ using Wordania.Data;
 using Wordania.Mechanics.Data;
 using Wordania.Combat.FireStrategies;
 using Wordania.Inventory.Data;
+using Wordania.Structures;
 
 namespace Wordania.Boot
 {
@@ -47,6 +48,7 @@ namespace Wordania.Boot
         [SerializeField] private WeaponRequirementRegistry _weaponRequirementRegistry;
         [SerializeField] private EnemyRegistry _enemyRegistry;
         [SerializeField] private JournalEntryRegistry _journalEntryRegistry;
+        [SerializeField] private StructureRegistry _structureRegistry;
 
         [SerializeField] private InputReader _inputReader;
 
@@ -81,6 +83,8 @@ namespace Wordania.Boot
             builder.RegisterInstance<IAssetRegistry<EnemyTemplate>>(_enemyRegistry);
             _journalEntryRegistry.Initialize();
             builder.RegisterInstance<IAssetRegistry<JournalEntry>>(_journalEntryRegistry);
+            _structureRegistry.Initialize();
+            builder.RegisterInstance<IAssetRegistry<StructureTemplate>>(_structureRegistry);
             _weaponRequirementRegistry.Initialize();
             builder.RegisterInstance<IAssetRegistry<WeaponRequirement>>(_weaponRequirementRegistry);
 

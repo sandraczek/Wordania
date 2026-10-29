@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework.Constraints;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Wordania.Structures;
 using Wordania.World.Config;
 
 namespace Wordania.World.Data
@@ -13,6 +15,8 @@ namespace Wordania.World.Data
         public readonly int Height;
         public readonly BiomePalette[] BiomeMap;
         public readonly TileData[] Tiles;
+        /// <summary>Structures stamped into this world (gameplay state: cleared, defeated enemies).</summary>
+        public readonly List<PlacedStructure> Structures = new();
         public WorldData(int width, int height)
         {
             Tiles = new TileData[width * height];

@@ -47,6 +47,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ac2e6dc4b81884de1bec820e48ea8cf3, type: 2}
   DirtStoneScale: 0.06
   DirtStoneThreshold: 0.35
+  StructureConfig: {fileID: 11400000, guid: 19b2629894314c49997cd629ee04307a, type: 2}
   MainLayerName: Main
   BackgroundLayerName: Background
   DamageLayerName: Damage

@@ -131,6 +131,7 @@ namespace Wordania
             await _loadingScreen.Hide();
 
             _uiInput.SetGameplayMode();
+
         }
 
         private void FollowLocalPlayer()

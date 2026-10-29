@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Wordania.Attributes;
 using Wordania.Identifiers;
+using Wordania.Structures;
 using Wordania.World.Data;
 
 namespace Wordania.World.Config
@@ -58,6 +59,9 @@ namespace Wordania.World.Config
         [HideInInspector] public readonly HashSet<AssetId> ReplaceableBlockIds = new();
         public float DirtStoneScale; // = 0.04f;
         public float DirtStoneThreshold; // = 0.05f;
+
+        [Header("Structures")]
+        public WorldStructureConfiguration StructureConfig;
 
         [Header("Other")]
         public string MainLayerName = "Main";

@@ -1,6 +1,6 @@
 using UnityEngine;
 using Wordania.Combat;
-using Wordania.Encounters;
+using Wordania.Gameplay;
 using Wordania.Identifiers;
 
 namespace Wordania.Enemies.AI
@@ -13,7 +13,7 @@ namespace Wordania.Enemies.AI
     {
         // --- spawn / world context ---
         public Vector2 HomePosition;
-        public ZoneArea GuardZone;
+        public WorldZone GuardZone;
 
         // --- perception (written by sensors every physics step) ---
         public Entity NearestPlayer;

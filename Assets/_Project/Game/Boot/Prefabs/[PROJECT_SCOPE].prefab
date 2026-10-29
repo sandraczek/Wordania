@@ -64,5 +64,6 @@ MonoBehaviour:
   _weaponRequirementRegistry: {fileID: 11400000, guid: 053bc4f1b64084ee2849fcd66d325d2f, type: 2}
   _enemyRegistry: {fileID: 11400000, guid: 16ef457c17f9b46ea94d3e022ea21977, type: 2}
   _journalEntryRegistry: {fileID: 11400000, guid: ef67b2bb24c63427ba56404045a978cb, type: 2}
+  _structureRegistry: {fileID: 11400000, guid: f0588e4abc834e3aa2ea9e8f0d66e522, type: 2}
   _inputReader: {fileID: 11400000, guid: a11841e574549405c9a1f21b54e85d9d, type: 2}
   _startSettings: {fileID: 11400000, guid: a8bb4bfbada7e43969ce941374418759, type: 2}

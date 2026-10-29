@@ -18,6 +18,7 @@ using Wordania.World.Config;
 using Wordania.World.Data;
 using Wordania.Identifiers;
 using Wordania.Events;
+using Wordania.Structures;
 using Wordania.World.Events;
 using Wordania.World.Editing;
 
@@ -173,6 +174,20 @@ namespace Wordania.World
             saveData.World.SpawnPoint = new int[2];
             saveData.World.SpawnPoint[0] = Data.SpawnPoint.x;
             saveData.World.SpawnPoint[1] = Data.SpawnPoint.y;
+
+            saveData.World.Structures = new StructureSaveData[Data.Structures.Count];
+            for (int i = 0; i < Data.Structures.Count; i++)
+            {
+                PlacedStructure structure = Data.Structures[i];
+                saveData.World.Structures[i] = new StructureSaveData
+                {
+                    Template = structure.TemplateId.Hash,
+                    X = structure.Origin.x,
+                    Y = structure.Origin.y,
+                    Cleared = structure.Cleared,
+                    Defeated = new List<int>(structure.DefeatedSpawns).ToArray(),
+                };
+            }
         }
 
         public void RestoreState(GameSaveData saveData)
@@ -206,6 +221,17 @@ namespace Wordania.World
             }
 
             Data.SpawnPoint = new Vector2Int(saveData.World.SpawnPoint[0], saveData.World.SpawnPoint[1]);
+
+            if (saveData.World.Structures == null) return;
+            foreach (StructureSaveData saved in saveData.World.Structures)
+            {
+                var structure = new PlacedStructure(new AssetId(saved.Template), new Vector2Int(saved.X, saved.Y))
+                {
+                    Cleared = saved.Cleared,
+                };
+                if (saved.Defeated != null) structure.DefeatedSpawns.UnionWith(saved.Defeated);
+                Data.Structures.Add(structure);
+            }
         }
     }
 }

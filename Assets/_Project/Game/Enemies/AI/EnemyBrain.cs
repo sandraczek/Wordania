@@ -17,7 +17,8 @@ namespace Wordania.Enemies.AI
     public sealed class EnemyBrain
     {
         public EnemyController Controller { get; }
-        public EnemyBehaviourProfile Profile { get; }
+        /// <summary>Active behaviour: the template's default or the spawn context's override.</summary>
+        public EnemyBehaviourProfile Profile { get; private set; }
         public EnemyBlackboard Blackboard { get; } = new();
         public IEntityRegistry Entities { get; }
         public IGameClock Clock { get; }
@@ -31,11 +32,13 @@ namespace Wordania.Enemies.AI
         private readonly StateMachine<EnemyBaseState> _machine = new();
         private readonly EnemyStateFactory _states;
         private readonly List<IEnemySensor> _sensors;
+        private readonly EnemyBehaviourProfile _defaultProfile;
 
         public EnemyBrain(EnemyController controller, EnemyBehaviourProfile profile, IEntityRegistry entities, IGameClock clock, ICombatAuthority combat)
         {
             Controller = controller;
-            Profile = profile != null ? profile : EnemyBehaviourProfile.LegacyDefault;
+            _defaultProfile = profile != null ? profile : EnemyBehaviourProfile.LegacyDefault;
+            Profile = _defaultProfile;
             Entities = entities;
             Clock = clock;
             Combat = combat;
@@ -46,6 +49,7 @@ namespace Wordania.Enemies.AI
 
         public void Reset(in EnemySpawnContext context)
         {
+            Profile = context.Behaviour != null ? context.Behaviour : _defaultProfile; // pooled: reset every spawn
             Blackboard.Reset(Controller.Position, context);
             SwitchTo(Profile.InitialState);
         }

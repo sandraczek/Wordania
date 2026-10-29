@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6bc80890e1041368a069cf24b31a66a, type: 3}
+  m_Name: StartingCross
+  m_EditorClassIdentifier: Wordania::Wordania.Structures.StructureTemplate
+  _id:
+    _editorId: structure_starting_cross
+    _hash: -108597040
+  _rows:
+  - ............#............
+  - ....z......###...........
+  - ...........####..........
+  - ...........###...........
+  - ............#............
+  - .........P..#....i.......
+  - .B..........#.......z..B.
+  - '#########################'
+  _legend:
+  - Symbol: '#'
+    Main: {fileID: 11400000, guid: 28948730022624828ac5373b290d985d, type: 2}
+    Background: {fileID: 0}
+    Marker: 
+  - Symbol: P
+    Main: {fileID: 0}
+    Background: {fileID: 0}
+    Marker: player
+  - Symbol: B
+    Main: {fileID: 0}
+    Background: {fileID: 0}
+    Marker: bandit
+  - Symbol: z
+    Main: {fileID: 0}
+    Background: {fileID: 0}
+    Marker: camp
+  - Symbol: i
+    Main: {fileID: 0}
+    Background: {fileID: 0}
+    Marker: imp
+  _foundation: {fileID: 11400000, guid: 28948730022624828ac5373b290d985d, type: 2}
+  _maxFoundationDepth: 12
+  _playerSpawnMarker: player
+  _enemies:
+  - Enemy: {fileID: 11400000, guid: 49940fc1a5a5c4046afdbcc7af2ce320, type: 2}
+    AtMarker: bandit
+    GuardZoneMarker: camp
+    Behaviour: {fileID: 11400000, guid: d64f3c7e81e649859b0d16e6c1aa5b38, type: 2}
+  - Enemy: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}
+    AtMarker: imp
+    GuardZoneMarker: bandit
+    Behaviour: {fileID: 11400000, guid: d64f3c7e81e649859b0d16e6c1aa5b38, type: 2}
+  _activationRadius: 50

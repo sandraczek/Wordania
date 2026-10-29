@@ -11,6 +11,17 @@ namespace Wordania.SaveSystem.Data
         public int Seed;
         public int[] SpawnPoint;
         public TileSaveData[] Tiles;
+        public StructureSaveData[] Structures; // null in saves made before structures existed
+    }
+
+    [Serializable]
+    public sealed class StructureSaveData
+    {
+        public int Template;
+        public int X;
+        public int Y;
+        public bool Cleared;
+        public int[] Defeated;
     }
 
     [Serializable]

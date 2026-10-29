@@ -1,4 +1,4 @@
-using Wordania.Encounters;
+using Wordania.Gameplay;
 
 namespace Wordania.Enemies.AI
 {
@@ -11,11 +11,18 @@ namespace Wordania.Enemies.AI
         public static EnemySpawnContext None => default;
 
         /// <summary>Area the enemy guards / waits around (e.g. the burning pyre). May be null.</summary>
-        public readonly ZoneArea GuardZone;
+        public readonly WorldZone GuardZone;
 
-        public EnemySpawnContext(ZoneArea guardZone)
+        /// <summary>
+        /// Replaces the template's default behaviour for this spawn (same enemy, different role,
+        /// e.g. a bandit that guards a camp instead of wandering). Null = template default.
+        /// </summary>
+        public readonly EnemyBehaviourProfile Behaviour;
+
+        public EnemySpawnContext(WorldZone guardZone, EnemyBehaviourProfile behaviour = null)
         {
             GuardZone = guardZone;
+            Behaviour = behaviour;
         }
     }
 }

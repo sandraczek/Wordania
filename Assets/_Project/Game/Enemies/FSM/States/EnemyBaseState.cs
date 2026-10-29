@@ -22,6 +22,9 @@ namespace Wordania.Enemies.FSM.States
         /// <summary>True when the state completed its job (read by StateFinishedCondition).</summary>
         public virtual bool IsFinished => false;
 
+        /// <summary>Short human-readable reason shown above the enemy in the Scene view (debug only).</summary>
+        public virtual string DebugStatus => string.Empty;
+
         public virtual void Enter() { }
         /// <summary>Frame rate: facing, visuals.</summary>
         public virtual void Update() { }

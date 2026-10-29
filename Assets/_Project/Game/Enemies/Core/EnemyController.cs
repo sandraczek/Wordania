@@ -342,6 +342,17 @@ namespace Wordania.Enemies.Core
             Debug.DrawRay(Position + Vector2.up * 0.2f, Vector2.down * 0.4f);
             Debug.DrawRay(Position + Vector2.right * 0.2f, Vector2.left * 0.4f);
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            if (_brain == null || !Application.isPlaying) return;
+
+            string text = $"{_brain.CurrentStateId}  {_brain.CurrentState?.DebugStatus}\n" +
+                          $"target: {(_brain.Blackboard.HasTarget ? "yes" : "NO")}  grounded: {IsGrounded}  vx: {VelocityX:0.0}";
+            UnityEditor.Handles.Label(Position + Vector2.up * 2.5f, text);
+        }
+#endif
         private void HandleHurtVisuals(DamageResult damage)
         {
 
