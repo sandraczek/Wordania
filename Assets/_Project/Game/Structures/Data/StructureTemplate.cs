@@ -10,16 +10,19 @@ using Wordania.World.Data;
 namespace Wordania.Structures
 {
     /// <summary>
-    /// A hand-authored piece of the world drawn as ASCII art: blocks + named markers (player spawn, enemy posts,
-    /// zone corners). Pure data - it is stamped into <see cref="WorldData"/> during world generation and its
-    /// enemies are spawned at runtime by <see cref="StructureService"/>.
-    /// Local coordinates: x from the left, y from the BOTTOM row (row list is written top to bottom).
+    /// A hand-made piece of the world: blocks, named markers (zones, points) and enemy posts.
+    /// Drawn in a <c>StructureAuthoring</c> prefab (Tilemaps + marker objects) and BAKED into this asset - the
+    /// baked fields are never edited by hand. At runtime it is pure data: stamped into <see cref="WorldData"/>
+    /// during world generation, its enemies spawned by <see cref="StructureService"/>.
+    /// Local coordinates: (0,0) = bottom-left cell, x to the right, y up.
     /// </summary>
     [CreateAssetMenu(fileName = "NewStructure", menuName = "World/Structure")]
     public sealed class StructureTemplate : DataAsset
     {
-        public const char AirSymbol = '.';
-        public const char KeepSymbol = '-';
+        // Baked cell codes; codes >= FirstBlockCode index the palette (FirstBlockCode + index).
+        public const int KeepCode = 0;
+        public const int AirCode = 1;
+        public const int FirstBlockCode = 2;
 
         public enum CellKind : byte
         {
@@ -46,223 +49,136 @@ namespace Wordania.Structures
             }
         }
 
+        /// <summary>Named area of cells (a zone, or a single point when 1x1).</summary>
         [Serializable]
-        public struct LegendEntry
+        public struct Marker
         {
-            [Tooltip("Single character used in the rows.")]
-            public string Symbol;
-            [Tooltip("Main layer block. Empty = air.")]
-            public BlockData Main;
-            [Tooltip("Background wall. Empty = keep the existing background.")]
-            public BlockData Background;
-            [Tooltip("Optional marker name. Every cell with this symbol becomes a point of the marker.")]
-            public string Marker;
+            public string Name;
+            public Vector2Int Position;
+            public Vector2Int Size;
+
+            public RectInt Area => new(Position, Size);
         }
 
+        /// <summary>One enemy post. Its index in <see cref="Enemies"/> is what saves remember as defeated.</summary>
         [Serializable]
         public struct EnemySlot
         {
             public EnemyTemplate Enemy;
-            [Tooltip("One enemy is spawned on every cell of this marker (standing on the cell below).")]
-            public string AtMarker;
-            [Tooltip("Marker whose bounding box becomes the enemy's GuardZone. Empty = none.")]
+            /// <summary>Cell the enemy stands in (feet on its bottom edge).</summary>
+            public Vector2Int Cell;
+            /// <summary>Marker whose area becomes the enemy's GuardZone. Empty = none.</summary>
             public string GuardZoneMarker;
-            [Tooltip("Overrides the enemy's default behaviour for this structure. Empty = template default.")]
+            /// <summary>Overrides the enemy's default behaviour. Null = template default.</summary>
             public EnemyBehaviourProfile Behaviour;
         }
 
-        /// <summary>One enemy to spawn. Its index in <see cref="SpawnPoints"/> is what saves remember as defeated.</summary>
-        public readonly struct SpawnPoint
-        {
-            public readonly int SlotIndex;
-            public readonly Vector2Int Cell;
-
-            public SpawnPoint(int slotIndex, Vector2Int cell)
-            {
-                SlotIndex = slotIndex;
-                Cell = cell;
-            }
-        }
-
-        [Header("Shape")]
-        [Tooltip("Rows from TOP to bottom. '.' = air (clears terrain), '-' = keep terrain, other characters come from " +
-                 "the legend. Surface structures: the bottom row replaces the surface row.")]
-        [SerializeField] private List<string> _rows = new();
-        [SerializeField] private List<LegendEntry> _legend = new();
+        [Header("Ground")]
         [Tooltip("Fills the gap under solid cells of the bottom row down to the ground. Empty = no foundation.")]
         [SerializeField] private BlockData _foundation;
         [SerializeField, Min(0)] private int _maxFoundationDepth = 16;
 
         [Header("Gameplay")]
-        [Tooltip("Marker where a new player appears (used by the starting structure). Empty = none.")]
-        [SerializeField] private string _playerSpawnMarker;
-        [SerializeField] private List<EnemySlot> _enemies = new();
         [Tooltip("Enemies spawn when a player gets this close (world units) to the structure's center.")]
         [SerializeField, Min(1f)] private float _activationRadius = 50f;
 
+        // ---- Baked from the authoring prefab (see StructureBaker). Do not edit by hand. ----
+        [SerializeField, HideInInspector] private int _width;
+        [SerializeField, HideInInspector] private int _height;
+        [SerializeField, HideInInspector] private List<BlockData> _palette = new();
+        /// <summary>Per cell (x + y * width): KeepCode, AirCode or FirstBlockCode + palette index.</summary>
+        [SerializeField, HideInInspector] private int[] _main = Array.Empty<int>();
+        /// <summary>Per cell: KeepCode or FirstBlockCode + palette index.</summary>
+        [SerializeField, HideInInspector] private int[] _background = Array.Empty<int>();
+        [SerializeField, HideInInspector] private List<Marker> _markers = new();
+        [SerializeField, HideInInspector] private List<EnemySlot> _enemies = new();
+        [SerializeField, HideInInspector] private string _playerSpawnMarker;
+
         public BlockData Foundation => _foundation;
         public int MaxFoundationDepth => _maxFoundationDepth;
-        public string PlayerSpawnMarker => _playerSpawnMarker;
-        public IReadOnlyList<EnemySlot> Enemies => _enemies;
         public float ActivationRadius => _activationRadius;
 
-        public int Width { get { EnsureParsed(); return _width; } }
-        public int Height { get { EnsureParsed(); return _height; } }
-        public IReadOnlyList<SpawnPoint> SpawnPoints { get { EnsureParsed(); return _spawnPoints; } }
-
-        // Parsed cache (rebuilt lazily; invalidated on every inspector change).
-        [NonSerialized] private bool _parsed;
-        [NonSerialized] private int _width;
-        [NonSerialized] private int _height;
-        [NonSerialized] private Cell[] _cells;
-        [NonSerialized] private Dictionary<string, List<Vector2Int>> _markers;
-        [NonSerialized] private List<SpawnPoint> _spawnPoints;
+        public int Width => _width;
+        public int Height => _height;
+        public IReadOnlyList<Marker> Markers => _markers;
+        public IReadOnlyList<EnemySlot> Enemies => _enemies;
+        public string PlayerSpawnMarker => _playerSpawnMarker;
 
         public Cell GetCell(int x, int y)
         {
-            EnsureParsed();
-            return _cells[x + y * _width];
-        }
+            int i = x + y * _width;
+            BlockData background = Decode(_background[i]);
+            AssetId backgroundId = background != null ? background.Id : default;
 
-        public bool TryGetLegend(char symbol, out LegendEntry entry)
-        {
-            foreach (LegendEntry e in _legend)
+            switch (_main[i])
             {
-                if (!string.IsNullOrEmpty(e.Symbol) && e.Symbol[0] == symbol)
-                {
-                    entry = e;
-                    return true;
-                }
+                case KeepCode: return new Cell(CellKind.Keep, default, backgroundId);
+                case AirCode: return new Cell(CellKind.Air, default, backgroundId);
             }
 
-            entry = default;
-            return false;
+            BlockData main = Decode(_main[i]);
+            return main != null
+                ? new Cell(CellKind.Block, main.Id, backgroundId)
+                : new Cell(CellKind.Keep, default, backgroundId); // block asset missing from the palette
         }
 
-        /// <summary>Raw symbol at a local cell (for editor previews).</summary>
-        public char GetSymbol(int x, int y)
-        {
-            EnsureParsed();
-            string row = _rows[_height - 1 - y] ?? string.Empty;
-            return x < row.Length ? row[x] : KeepSymbol;
-        }
+        /// <summary>Main layer block at a local cell; null for keep/air.</summary>
+        public BlockData GetMainBlock(int x, int y) => Decode(_main[x + y * _width]);
 
-        public bool TryGetMarkerCells(string marker, out IReadOnlyList<Vector2Int> cells)
-        {
-            EnsureParsed();
-            cells = null;
-            if (string.IsNullOrEmpty(marker) || !_markers.TryGetValue(marker, out List<Vector2Int> list)) return false;
+        /// <summary>Background block at a local cell; null = keep the existing background.</summary>
+        public BlockData GetBackgroundBlock(int x, int y) => Decode(_background[x + y * _width]);
 
-            cells = list;
-            return true;
-        }
-
-        /// <summary>Bounding box (in cells) of every cell of the marker, e.g. two corner cells define a zone.</summary>
         public bool TryGetMarkerBounds(string marker, out RectInt bounds)
         {
             bounds = default;
-            if (!TryGetMarkerCells(marker, out IReadOnlyList<Vector2Int> cells)) return false;
+            if (string.IsNullOrEmpty(marker)) return false;
 
-            Vector2Int min = cells[0];
-            Vector2Int max = cells[0];
-            for (int i = 1; i < cells.Count; i++)
+            foreach (Marker m in _markers)
             {
-                min = Vector2Int.Min(min, cells[i]);
-                max = Vector2Int.Max(max, cells[i]);
+                if (m.Name != marker) continue;
+                bounds = m.Area;
+                return true;
             }
-
-            bounds = new RectInt(min, max - min + Vector2Int.one);
-            return true;
+            return false;
         }
 
-        private void EnsureParsed()
+        /// <summary>Cell where a new player appears (bottom-left cell of the player spawn marker).</summary>
+        public bool TryGetPlayerSpawn(out Vector2Int cell)
         {
-            if (_parsed) return;
-            _parsed = true;
-
-            _height = _rows.Count;
-            _width = 0;
-            foreach (string row in _rows)
-                _width = Mathf.Max(_width, row?.Length ?? 0);
-
-            _cells = new Cell[_width * _height];
-            _markers = new Dictionary<string, List<Vector2Int>>();
-            _spawnPoints = new List<SpawnPoint>();
-
-            for (int r = 0; r < _height; r++)
-            {
-                string row = _rows[r] ?? string.Empty;
-                int y = _height - 1 - r; // rows are written top to bottom
-
-                for (int x = 0; x < _width; x++)
-                {
-                    char symbol = x < row.Length ? row[x] : KeepSymbol;
-                    _cells[x + y * _width] = ParseCell(symbol, new Vector2Int(x, y));
-                }
-            }
-
-            for (int slot = 0; slot < _enemies.Count; slot++)
-            {
-                if (!_markers.TryGetValue(_enemies[slot].AtMarker ?? string.Empty, out List<Vector2Int> cells)) continue;
-                foreach (Vector2Int cell in cells)
-                    _spawnPoints.Add(new SpawnPoint(slot, cell));
-            }
+            bool found = TryGetMarkerBounds(_playerSpawnMarker, out RectInt bounds);
+            cell = bounds.position;
+            return found;
         }
 
-        private Cell ParseCell(char symbol, Vector2Int position)
+        private BlockData Decode(int code)
         {
-            if (symbol == AirSymbol) return new Cell(CellKind.Air, default, default);
-            if (!TryGetLegend(symbol, out LegendEntry entry)) return new Cell(CellKind.Keep, default, default);
-
-            if (!string.IsNullOrEmpty(entry.Marker))
-            {
-                if (!_markers.TryGetValue(entry.Marker, out List<Vector2Int> cells))
-                    _markers[entry.Marker] = cells = new List<Vector2Int>();
-                cells.Add(position);
-            }
-
-            AssetId background = entry.Background != null ? entry.Background.Id : default;
-            return entry.Main != null
-                ? new Cell(CellKind.Block, entry.Main.Id, background)
-                : new Cell(CellKind.Air, default, background);
+            int index = code - FirstBlockCode;
+            return index >= 0 && index < _palette.Count ? _palette[index] : null;
         }
 
 #if UNITY_EDITOR
+        /// <summary>Editor only: called by the baker.</summary>
+        public void EditorSetBaked(int width, int height, List<BlockData> palette, int[] main, int[] background,
+            List<Marker> markers, List<EnemySlot> enemies, string playerSpawnMarker)
+        {
+            _width = width;
+            _height = height;
+            _palette = palette;
+            _main = main;
+            _background = background;
+            _markers = markers;
+            _enemies = enemies;
+            _playerSpawnMarker = playerSpawnMarker;
+        }
+
         protected override void OnValidate()
         {
             base.OnValidate();
-            _parsed = false;
 
-            for (int i = 0; i < _rows.Count; i++)
-            {
-                string row = _rows[i] ?? string.Empty;
-                if (_rows.Count > 0 && row.Length != (_rows[0]?.Length ?? 0))
-                    Debug.LogWarning($"[Structure] {name}: row {i} has {row.Length} chars, row 0 has {_rows[0]?.Length ?? 0}. Missing cells = keep terrain.", this);
-
-                foreach (char c in row)
-                {
-                    if (c != AirSymbol && c != KeepSymbol && !TryGetLegend(c, out _))
-                        Debug.LogWarning($"[Structure] {name}: symbol '{c}' (row {i}) is not in the legend. Treated as keep terrain.", this);
-                }
-            }
-
-            for (int i = 0; i < _legend.Count; i++)
-            {
-                string symbol = _legend[i].Symbol;
-                if (string.IsNullOrEmpty(symbol) || symbol.Length != 1 || symbol[0] == AirSymbol || symbol[0] == KeepSymbol)
-                    Debug.LogWarning($"[Structure] {name}: legend entry {i} needs exactly one character other than '{AirSymbol}' and '{KeepSymbol}'.", this);
-            }
-
-            foreach (EnemySlot slot in _enemies)
-            {
-                if (!TryGetMarkerCells(slot.AtMarker, out _))
-                    Debug.LogWarning($"[Structure] {name}: enemy marker '{slot.AtMarker}' does not exist in the rows.", this);
-                if (!string.IsNullOrEmpty(slot.GuardZoneMarker) && !TryGetMarkerCells(slot.GuardZoneMarker, out _))
-                    Debug.LogWarning($"[Structure] {name}: guard zone marker '{slot.GuardZoneMarker}' does not exist in the rows.", this);
-            }
-
-            if (!string.IsNullOrEmpty(_playerSpawnMarker) && !TryGetMarkerCells(_playerSpawnMarker, out _))
-                Debug.LogWarning($"[Structure] {name}: player spawn marker '{_playerSpawnMarker}' does not exist in the rows.", this);
+            int cells = _width * _height;
+            if (_main.Length != cells || _background.Length != cells)
+                Debug.LogWarning($"[Structure] {name}: baked data is corrupted ({_width}x{_height}, main {_main.Length}, " +
+                                 $"background {_background.Length}). Bake the authoring prefab again.", this);
         }
 #endif
     }

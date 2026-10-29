@@ -62,8 +62,6 @@ namespace Wordania.Structures
                         case StructureTemplate.CellKind.Block:
                             tile.Main = cell.Main;
                             break;
-                        default:
-                            continue; // Keep: also keeps the background
                     }
 
                     if (!cell.Background.IsEmpty) tile.Background = cell.Background;

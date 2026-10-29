@@ -13,7 +13,7 @@ namespace Wordania.Structures
         public readonly AssetId TemplateId;
         /// <summary>World tile of the template's bottom-left cell.</summary>
         public readonly Vector2Int Origin;
-        /// <summary>Indices into <see cref="StructureTemplate.SpawnPoints"/> whose enemy was killed (never respawns).</summary>
+        /// <summary>Indices into <see cref="StructureTemplate.Enemies"/> whose enemy was killed (never respawns).</summary>
         public readonly HashSet<int> DefeatedSpawns = new();
         /// <summary>Every enemy defeated - the structure is safe for good.</summary>
         public bool Cleared;

@@ -16,14 +16,14 @@ MonoBehaviour:
   Spacing: 8
   Rules:
   - Template: {fileID: 11400000, guid: f85f9b27279ad4ab8ba3c191f009d66b, type: 2}
-    Count: 10
+    Count: 5
     Placement: 0
     MinDistanceFromSpawn: 10
     MaxSurfaceVariation: 10
     MinDepth: 0
     MaxDepth: 0
   - Template: {fileID: 11400000, guid: f85f9b27279ad4ab8ba3c191f009d66b, type: 2}
-    Count: 50
+    Count: 10
     Placement: 1
     MinDistanceFromSpawn: 10
     MaxSurfaceVariation: 10

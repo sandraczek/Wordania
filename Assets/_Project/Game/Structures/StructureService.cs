@@ -80,16 +80,16 @@ namespace Wordania.Structures
             var zones = new Dictionary<string, WorldZone>();
             int alive = 0;
 
-            IReadOnlyList<StructureTemplate.SpawnPoint> spawns = template.SpawnPoints;
-            for (int i = 0; i < spawns.Count; i++)
+            IReadOnlyList<StructureTemplate.EnemySlot> slots = template.Enemies;
+            for (int i = 0; i < slots.Count; i++)
             {
                 if (structure.DefeatedSpawns.Contains(i)) continue;
 
-                StructureTemplate.EnemySlot slot = template.Enemies[spawns[i].SlotIndex];
+                StructureTemplate.EnemySlot slot = slots[i];
                 if (slot.Enemy == null) continue;
 
                 var context = new EnemySpawnContext(GetZone(structure, template, slot.GuardZoneMarker, zones), slot.Behaviour);
-                IEnemy enemy = _enemies.CreateEnemy(slot.Enemy, GetFeetPosition(structure, spawns[i].Cell, slot), context);
+                IEnemy enemy = _enemies.CreateEnemy(slot.Enemy, GetFeetPosition(structure, slot), context);
 
                 _owners[enemy.InstanceId] = (structure, i);
                 alive++;
@@ -117,7 +117,7 @@ namespace Wordania.Structures
             _active.Remove(owner.Structure);
 
             StructureTemplate template = _templates.Get(owner.Structure.TemplateId);
-            if (template != null && owner.Structure.DefeatedSpawns.Count >= template.SpawnPoints.Count)
+            if (template != null && owner.Structure.DefeatedSpawns.Count >= template.Enemies.Count)
             {
                 owner.Structure.Cleared = true;
                 Debug.Log($"[Structures] '{template.name}' at {owner.Structure.Origin} cleared.");
@@ -152,10 +152,11 @@ namespace Wordania.Structures
             return zone;
         }
 
-        /// <summary>Enemy center standing on the bottom edge of the marker cell.</summary>
-        private static Vector2 GetFeetPosition(PlacedStructure structure, Vector2Int cell, StructureTemplate.EnemySlot slot)
+        /// <summary>Enemy center standing on the bottom edge of its cell.</summary>
+        private static Vector2 GetFeetPosition(PlacedStructure structure, StructureTemplate.EnemySlot slot)
         {
             const float size = WorldSettings.TileSize;
+            Vector2Int cell = slot.Cell;
             float halfHeight = slot.Enemy.Spawn != null ? slot.Enemy.Spawn.RequiredClearanceSize.y * 0.5f : 0.5f;
             return new Vector2((structure.Origin.x + cell.x + 0.5f) * size, (structure.Origin.y + cell.y) * size + halfHeight + 0.05f);
         }

@@ -68,8 +68,8 @@ namespace Wordania.World.Passes
             StructureStamper.Stamp(data, template, origin);
             occupied.Add(GetFootprint(template, origin, config.Spacing));
 
-            if (template.TryGetMarkerCells(template.PlayerSpawnMarker, out IReadOnlyList<Vector2Int> cells))
-                data.SpawnPoint = origin + cells[0] + 2 * Vector2Int.up; // 2 tiles above
+            if (template.TryGetPlayerSpawn(out Vector2Int cell))
+                data.SpawnPoint = origin + cell;
         }
 
         private static void TryPlaceRandom(WorldData data, WorldStructureConfiguration config,
