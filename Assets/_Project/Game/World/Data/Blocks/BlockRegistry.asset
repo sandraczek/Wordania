@@ -26,6 +26,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8c0f76d7db33746ce978ed1c0004c8f0, type: 2}
   - {fileID: 11400000, guid: 28948730022624828ac5373b290d985d, type: 2}
   - {fileID: 11400000, guid: 415dd3c6a0d774725b9cadcddcb9a2f5, type: 2}
+  - {fileID: 11400000, guid: 6212ae7a98df54df7bd842f90d3082d6, type: 2}
   _crackTiles:
   - {fileID: 11400000, guid: b3a3d2ce4e4414cc99833c1c4b698bd1, type: 2}
   - {fileID: 11400000, guid: e9edc5fe4a75145e980d0b2327024f0e, type: 2}
