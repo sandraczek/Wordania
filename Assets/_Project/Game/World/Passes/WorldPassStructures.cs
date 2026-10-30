@@ -66,7 +66,8 @@ namespace Wordania.World.Passes
 
             var origin = new Vector2Int(originX, surface);
             StructureStamper.Stamp(data, template, origin);
-            occupied.Add(GetFootprint(template, origin, config.Spacing));
+            StructureStamper.BlendTerrain(data, template, origin);
+            occupied.Add(GetFootprint(template, origin, config.Spacing, template.TerrainBlendWidth));
 
             if (template.TryGetPlayerSpawn(out Vector2Int cell))
                 data.SpawnPoint = origin + cell;
@@ -88,10 +89,13 @@ namespace Wordania.World.Passes
                 if (!TryFindOriginY(data, rule, originX, random, out int originY)) continue;
 
                 var origin = new Vector2Int(originX, originY);
-                RectInt footprint = GetFootprint(template, origin, config.Spacing);
+                bool surface = rule.Placement == WorldStructureConfiguration.Placement.Surface;
+                int blend = surface ? template.TerrainBlendWidth : 0;
+                RectInt footprint = GetFootprint(template, origin, config.Spacing, blend);
                 if (Overlaps(footprint, occupied)) continue;
 
                 StructureStamper.Stamp(data, template, origin);
+                if (surface) StructureStamper.BlendTerrain(data, template, origin);
                 occupied.Add(footprint);
                 return;
             }
@@ -131,11 +135,13 @@ namespace Wordania.World.Passes
         }
 
         /// <summary>
-        /// Area a structure claims: its bounds grown by <paramref name="spacing"/> on every side. Structures may sit
-        /// above each other (e.g. a dungeon under a village) as long as these areas do not overlap.
+        /// Area a structure claims: its bounds grown by <paramref name="spacing"/> on every side, plus the terrain
+        /// blend zone on the left and right. Structures may sit above each other (e.g. a dungeon under a village) as
+        /// long as these areas do not overlap.
         /// </summary>
-        private static RectInt GetFootprint(StructureTemplate template, Vector2Int origin, int spacing) =>
-            new(origin.x - spacing, origin.y - spacing, template.Width + spacing * 2, template.Height + spacing * 2);
+        private static RectInt GetFootprint(StructureTemplate template, Vector2Int origin, int spacing, int blend) =>
+            new(origin.x - spacing - blend, origin.y - spacing,
+                template.Width + (spacing + blend) * 2, template.Height + spacing * 2);
 
         private static bool Overlaps(RectInt rect, List<RectInt> others)
         {

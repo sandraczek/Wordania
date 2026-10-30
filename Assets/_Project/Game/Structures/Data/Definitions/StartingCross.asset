@@ -15,8 +15,9 @@ MonoBehaviour:
   _id:
     _editorId: structure_starting_cross
     _hash: -108597040
-  _foundation: {fileID: 11400000, guid: 28948730022624828ac5373b290d985d, type: 2}
+  _foundation: {fileID: 11400000, guid: 5d154869ac4e94c23997e3d3d5cfbe3f, type: 2}
   _maxFoundationDepth: 12
+  _terrainBlendWidth: 16
   _activationRadius: 50
   _width: 31
   _height: 19

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Wood
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.Tilemaps.Tile
   m_Sprite: {fileID: 6087057004831310022, guid: 64180abf35a3443f4af39af87af3fb6d, type: 3}
-  m_Color: {r: 0.5, g: 0.19167796, b: 0.077830195, a: 1}
+  m_Color: {r: 0.5188679, g: 0.30729833, b: 0.10524208, a: 1}
   m_Transform:
     e00: 1
     e01: 0

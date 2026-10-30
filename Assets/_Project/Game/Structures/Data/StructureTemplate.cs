@@ -77,6 +77,9 @@ namespace Wordania.Structures
         [Tooltip("Fills the gap under solid cells of the bottom row down to the ground. Empty = no foundation.")]
         [SerializeField] private BlockData _foundation;
         [SerializeField, Min(0)] private int _maxFoundationDepth = 16;
+        [Tooltip("Surface placement only: over this many columns on each side the terrain is raised or cut so it " +
+                 "meets the structure's floor at its edge (highest block with painted air above it; bottom row if none). 0 = off.")]
+        [SerializeField, Min(0)] private int _terrainBlendWidth = 8;
 
         [Header("Gameplay")]
         [Tooltip("Enemies spawn when a player gets this close (world units) to the structure's center.")]
@@ -96,6 +99,7 @@ namespace Wordania.Structures
 
         public BlockData Foundation => _foundation;
         public int MaxFoundationDepth => _maxFoundationDepth;
+        public int TerrainBlendWidth => _terrainBlendWidth;
         public float ActivationRadius => _activationRadius;
 
         public int Width => _width;
