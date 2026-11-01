@@ -19,7 +19,7 @@ MonoBehaviour:
   MapColor:
     serializedVersion: 2
     rgba: 4278249983
-  Hardness: 20
+  Hardness: 15
   _lightEmission: 31
   _lightOpacity: 1
   recipe: {fileID: 11400000, guid: 2e74a605193254c4cb4db206391da6ea, type: 2}

@@ -28,6 +28,17 @@ namespace Wordania.World.Config
         [field: Tooltip("Indestructible block used to frame the world boundaries (End of the map).")]
         [field: SerializeField] public BlockData BarrierBlock { get; private set; }
 
+        public BlockData Get(BiomeBlock slot) => slot switch
+        {
+            BiomeBlock.Surface => SurfaceBlock,
+            BiomeBlock.SurfaceWall => SurfaceWall,
+            BiomeBlock.SubSurface => SubSurfaceBlock,
+            BiomeBlock.SubSurfaceWall => SubSurfaceWall,
+            BiomeBlock.Underground => UndergroundBlock,
+            BiomeBlock.UndergroundWall => UndergroundWall,
+            _ => null,
+        };
+
 #if UNITY_EDITOR
         private void OnValidate()
         {

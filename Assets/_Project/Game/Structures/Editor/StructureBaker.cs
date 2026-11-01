@@ -7,6 +7,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Wordania.Structures.Authoring;
+using Wordania.World.Config;
 using Wordania.World.Data;
 using Object = UnityEngine.Object;
 
@@ -94,6 +95,7 @@ namespace Wordania.Structures.Editor
             foreach (KeyValuePair<Vector2Int, TileBase> pair in mainTiles)
             {
                 if (pair.Value is StructureAirTile) main[Index(pair.Key)] = StructureTemplate.AirCode;
+                else if (pair.Value is StructureBiomeTile biomeTile) main[Index(pair.Key)] = StructureTemplate.BiomeCode(biomeTile.Slot);
                 else if (blocks.TryGetValue(pair.Value, out BlockData block)) main[Index(pair.Key)] = BlockCode(block);
                 else errors.Add($"Main {pair.Key}: tile '{pair.Value.name}' is not the Tile of any BlockData.");
             }
@@ -103,6 +105,7 @@ namespace Wordania.Structures.Editor
             {
                 if (pair.Value is StructureAirTile)
                     Debug.LogWarning($"[Structures] {authoring.name}: Background {pair.Key} has the air tile - the background can only be kept or replaced, ignored.", authoring);
+                else if (pair.Value is StructureBiomeTile biomeTile) background[Index(pair.Key)] = StructureTemplate.BiomeCode(biomeTile.Slot);
                 else if (blocks.TryGetValue(pair.Value, out BlockData block)) background[Index(pair.Key)] = BlockCode(block);
                 else errors.Add($"Background {pair.Key}: tile '{pair.Value.name}' is not the Tile of any BlockData.");
             }
@@ -195,6 +198,13 @@ namespace Wordania.Structures.Editor
             string folder = Path.GetDirectoryName(AssetDatabase.GetAssetPath(template));
             string path = AssetDatabase.GenerateUniqueAssetPath($"{folder}/{template.name}_Authoring.prefab");
             StructureAirTile air = FindAirTile();
+            Dictionary<BiomeBlock, StructureBiomeTile> biomeTiles = FindBiomeTiles();
+            TileBase BiomeTile(BiomeBlock slot)
+            {
+                if (biomeTiles.TryGetValue(slot, out StructureBiomeTile tile)) return tile;
+                Debug.LogWarning($"[Structures] No StructureBiomeTile for '{slot}' (Create > World > Structure Biome Tile); its cells are left empty.");
+                return null;
+            }
 
             var root = new GameObject(template.name, typeof(Grid), typeof(StructureAuthoring));
             try
@@ -213,8 +223,16 @@ namespace Wordania.Structures.Editor
                                 main.SetTile(position, air);
                                 break;
                             case StructureTemplate.CellKind.Block:
-                                main.SetTile(position, template.GetMainBlock(x, y).Tile);
+                                main.SetTile(position, template.TryGetMainBiomeSlot(x, y, out BiomeBlock slot)
+                                    ? BiomeTile(slot)
+                                    : template.GetMainBlock(x, y).Tile);
                                 break;
+                        }
+
+                        if (template.TryGetBackgroundBiomeSlot(x, y, out BiomeBlock wallSlot))
+                        {
+                            background.SetTile(position, BiomeTile(wallSlot));
+                            continue;
                         }
 
                         BlockData wall = template.GetBackgroundBlock(x, y);
@@ -264,6 +282,28 @@ namespace Wordania.Structures.Editor
                 return null;
             }
             return AssetDatabase.LoadAssetAtPath<StructureAirTile>(AssetDatabase.GUIDToAssetPath(guids[0]));
+        }
+
+        private static Dictionary<BiomeBlock, StructureBiomeTile> FindBiomeTiles()
+        {
+            var tiles = new Dictionary<BiomeBlock, StructureBiomeTile>();
+            foreach (string guid in AssetDatabase.FindAssets($"t:{nameof(StructureBiomeTile)}"))
+            {
+                var tile = AssetDatabase.LoadAssetAtPath<StructureBiomeTile>(AssetDatabase.GUIDToAssetPath(guid));
+                if (tile != null) tiles.TryAdd(tile.Slot, tile);
+            }
+            return tiles;
+        }
+
+        /// <summary>Biome used to preview biome slots in the editor: the world's default biome.</summary>
+        public static BiomePalette FindPreviewBiome()
+        {
+            foreach (string guid in AssetDatabase.FindAssets($"t:{nameof(WorldBiomeConfiguration)}"))
+            {
+                var config = AssetDatabase.LoadAssetAtPath<WorldBiomeConfiguration>(AssetDatabase.GUIDToAssetPath(guid));
+                if (config != null && config.DefaultFallbackBiome != null) return config.DefaultFallbackBiome;
+            }
+            return null;
         }
 
         /// <summary>Child placed in the middle of a cell (Grid cell size 1), so rounding never picks a neighbour.</summary>

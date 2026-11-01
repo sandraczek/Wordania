@@ -5,6 +5,7 @@ using Wordania.Data;
 using Wordania.Enemies.AI;
 using Wordania.Enemies.Data;
 using Wordania.Identifiers;
+using Wordania.World.Config;
 using Wordania.World.Data;
 
 namespace Wordania.Structures
@@ -19,10 +20,13 @@ namespace Wordania.Structures
     [CreateAssetMenu(fileName = "NewStructure", menuName = "World/Structure")]
     public sealed class StructureTemplate : DataAsset
     {
-        // Baked cell codes; codes >= FirstBlockCode index the palette (FirstBlockCode + index).
+        // Baked cell codes; codes >= FirstBlockCode index the palette (FirstBlockCode + index),
+        // negative codes are biome slots (BiomeCode) resolved by the biome where the cell is stamped.
         public const int KeepCode = 0;
         public const int AirCode = 1;
         public const int FirstBlockCode = 2;
+
+        public static int BiomeCode(BiomeBlock slot) => -1 - (int)slot;
 
         public enum CellKind : byte
         {
@@ -73,8 +77,22 @@ namespace Wordania.Structures
             public EnemyBehaviourProfile Behaviour;
         }
 
+        public enum FoundationMode : byte
+        {
+            /// <summary>No foundation: the structure may hang over gaps.</summary>
+            None,
+            /// <summary>A block of the local biome (see Foundation Slot).</summary>
+            Biome,
+            /// <summary>One fixed block in every biome (see Foundation Block).</summary>
+            Fixed,
+        }
+
         [Header("Ground")]
-        [Tooltip("Fills the gap under solid cells of the bottom row down to the ground. Empty = no foundation.")]
+        [Tooltip("What fills the gap under solid cells of the bottom row down to the ground.")]
+        [SerializeField] private FoundationMode _foundationMode = FoundationMode.Biome;
+        [Tooltip("Mode Biome: which block of the local biome palette is used (e.g. SubSurface = dirt, sand in a desert).")]
+        [SerializeField] private BiomeBlock _foundationSlot = BiomeBlock.SubSurface;
+        [Tooltip("Mode Fixed: the block used in every biome.")]
         [SerializeField] private BlockData _foundation;
         [SerializeField, Min(0)] private int _maxFoundationDepth = 16;
         [Tooltip("Surface placement only: over this many columns on each side the terrain is raised or cut so it " +
@@ -89,15 +107,27 @@ namespace Wordania.Structures
         [SerializeField, HideInInspector] private int _width;
         [SerializeField, HideInInspector] private int _height;
         [SerializeField, HideInInspector] private List<BlockData> _palette = new();
-        /// <summary>Per cell (x + y * width): KeepCode, AirCode or FirstBlockCode + palette index.</summary>
+        /// <summary>Per cell (x + y * width): KeepCode, AirCode, FirstBlockCode + palette index or a BiomeCode.</summary>
         [SerializeField, HideInInspector] private int[] _main = Array.Empty<int>();
-        /// <summary>Per cell: KeepCode or FirstBlockCode + palette index.</summary>
+        /// <summary>Per cell: KeepCode, FirstBlockCode + palette index or a BiomeCode.</summary>
         [SerializeField, HideInInspector] private int[] _background = Array.Empty<int>();
         [SerializeField, HideInInspector] private List<Marker> _markers = new();
         [SerializeField, HideInInspector] private List<EnemySlot> _enemies = new();
         [SerializeField, HideInInspector] private string _playerSpawnMarker;
 
-        public BlockData Foundation => _foundation;
+        /// <summary>Block filling the gap under the structure in a biome; empty id = no foundation.</summary>
+        public AssetId GetFoundation(BiomePalette biome)
+        {
+            BlockData block = _foundationMode switch
+            {
+                FoundationMode.Biome => biome != null ? biome.Get(_foundationSlot) : null,
+                FoundationMode.Fixed => _foundation,
+                _ => null,
+            };
+            return block != null ? block.Id : default;
+        }
+
+        public bool HasFoundation => _foundationMode != FoundationMode.None;
         public int MaxFoundationDepth => _maxFoundationDepth;
         public int TerrainBlendWidth => _terrainBlendWidth;
         public float ActivationRadius => _activationRadius;
@@ -108,10 +138,11 @@ namespace Wordania.Structures
         public IReadOnlyList<EnemySlot> Enemies => _enemies;
         public string PlayerSpawnMarker => _playerSpawnMarker;
 
-        public Cell GetCell(int x, int y)
+        /// <param name="biome">Biome at the cell, resolves biome slots. Null = biome cells have an empty block (Kind is still right).</param>
+        public Cell GetCell(int x, int y, BiomePalette biome = null)
         {
             int i = x + y * _width;
-            BlockData background = Decode(_background[i]);
+            BlockData background = Resolve(_background[i], biome);
             AssetId backgroundId = background != null ? background.Id : default;
 
             switch (_main[i])
@@ -120,17 +151,26 @@ namespace Wordania.Structures
                 case AirCode: return new Cell(CellKind.Air, default, backgroundId);
             }
 
-            BlockData main = Decode(_main[i]);
+            BlockData main = Resolve(_main[i], biome);
+            if (_main[i] < 0) return new Cell(CellKind.Block, main != null ? main.Id : default, backgroundId); // biome slot
+
             return main != null
                 ? new Cell(CellKind.Block, main.Id, backgroundId)
                 : new Cell(CellKind.Keep, default, backgroundId); // block asset missing from the palette
         }
 
-        /// <summary>Main layer block at a local cell; null for keep/air.</summary>
-        public BlockData GetMainBlock(int x, int y) => Decode(_main[x + y * _width]);
+        /// <summary>Main layer block at a local cell; null for keep/air (and biome slots without <paramref name="biome"/>).</summary>
+        public BlockData GetMainBlock(int x, int y, BiomePalette biome = null) => Resolve(_main[x + y * _width], biome);
 
         /// <summary>Background block at a local cell; null = keep the existing background.</summary>
-        public BlockData GetBackgroundBlock(int x, int y) => Decode(_background[x + y * _width]);
+        public BlockData GetBackgroundBlock(int x, int y, BiomePalette biome = null) => Resolve(_background[x + y * _width], biome);
+
+        /// <summary>True when the structure sets this cell's background (a block or a biome slot).</summary>
+        public bool HasBackground(int x, int y) => _background[x + y * _width] != KeepCode;
+
+        public bool TryGetMainBiomeSlot(int x, int y, out BiomeBlock slot) => TryGetBiomeSlot(_main[x + y * _width], out slot);
+
+        public bool TryGetBackgroundBiomeSlot(int x, int y, out BiomeBlock slot) => TryGetBiomeSlot(_background[x + y * _width], out slot);
 
         public bool TryGetMarkerBounds(string marker, out RectInt bounds)
         {
@@ -154,10 +194,19 @@ namespace Wordania.Structures
             return found;
         }
 
-        private BlockData Decode(int code)
+        private BlockData Resolve(int code, BiomePalette biome)
         {
+            if (code < 0)
+                return biome != null && TryGetBiomeSlot(code, out BiomeBlock slot) ? biome.Get(slot) : null;
+
             int index = code - FirstBlockCode;
             return index >= 0 && index < _palette.Count ? _palette[index] : null;
+        }
+
+        private static bool TryGetBiomeSlot(int code, out BiomeBlock slot)
+        {
+            slot = (BiomeBlock)(-1 - code);
+            return code < 0;
         }
 
 #if UNITY_EDITOR

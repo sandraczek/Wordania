@@ -52,7 +52,7 @@ namespace Wordania.Structures
                     int wy = origin.y + y;
                     if (!IsInterior(data, wx, wy)) continue; // never overwrite the world barrier
 
-                    StructureTemplate.Cell cell = template.GetCell(x, y);
+                    StructureTemplate.Cell cell = template.GetCell(x, y, data.BiomeMap[wx + wy * data.Width]);
                     ref TileData tile = ref data.GetTile(wx, wy);
 
                     switch (cell.Kind)
@@ -78,7 +78,7 @@ namespace Wordania.Structures
 
         private static void StampFoundation(WorldData data, StructureTemplate template, Vector2Int origin)
         {
-            if (template.Foundation == null) return;
+            if (!template.HasFoundation) return;
 
             for (int x = 0; x < template.Width; x++)
             {
@@ -92,7 +92,9 @@ namespace Wordania.Structures
 
                     ref TileData tile = ref data.GetTile(wx, wy);
                     if (tile.Main.Hash != 0) break; // reached the ground
-                    tile.Main = template.Foundation.Id;
+
+                    // Biome of the cell itself, like the structure's own biome blocks.
+                    tile.Main = template.GetFoundation(data.BiomeMap[wx + wy * data.Width]);
                 }
             }
         }
@@ -142,7 +144,7 @@ namespace Wordania.Structures
                 for (int y = data.Height - 2; y > 0 && y >= lowest; y--)
                 {
                     int ly = y - origin.y;
-                    if (ly >= 0 && ly < template.Height && template.GetBackgroundBlock(lx, ly) != null) continue; // painted
+                    if (ly >= 0 && ly < template.Height && template.HasBackground(lx, ly)) continue; // painted
 
                     ref TileData tile = ref data.GetTile(x, y);
                     if (y > wallTop)

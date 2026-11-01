@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
+using Wordania.World.Config;
 using Wordania.World.Data;
 
 namespace Wordania.Structures.Editor
@@ -16,10 +17,16 @@ namespace Wordania.Structures.Editor
         private static readonly Color AirColor = new(0.55f, 0.75f, 0.95f, 0.35f);
         private static readonly Color BlockFallbackColor = new(0.5f, 0.5f, 0.5f, 1f);
         private static readonly Color EnemyColor = new(1f, 0.3f, 0.25f, 1f);
+        private static readonly Color BiomeTint = new(1f, 0.6f, 1f, 1f);
 
         private GameObject _authoring;
+        private BiomePalette _previewBiome;
 
-        private void OnEnable() => _authoring = StructureBaker.FindAuthoringPrefab((StructureTemplate)target);
+        private void OnEnable()
+        {
+            _authoring = StructureBaker.FindAuthoringPrefab((StructureTemplate)target);
+            _previewBiome = StructureBaker.FindPreviewBiome();
+        }
 
         public override void OnInspectorGUI()
         {
@@ -37,7 +44,9 @@ namespace Wordania.Structures.Editor
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField($"Baked  {template.Width} x {template.Height}  (x → , y ↑ from bottom-left)", EditorStyles.boldLabel);
-            DrawPreview(template);
+            if (_previewBiome != null)
+                EditorGUILayout.LabelField($"Pink = biome block, previewed as '{_previewBiome.name}'.", EditorStyles.miniLabel);
+            DrawPreview(template, _previewBiome);
             DrawEnemyList(template);
         }
 
@@ -58,14 +67,14 @@ namespace Wordania.Structures.Editor
             GUIUtility.ExitGUI();
         }
 
-        private static void DrawPreview(StructureTemplate template)
+        private static void DrawPreview(StructureTemplate template, BiomePalette biome)
         {
             float cell = Mathf.Clamp((EditorGUIUtility.currentViewWidth - 40f) / template.Width, 6f, 18f);
             Rect area = GUILayoutUtility.GetRect(template.Width * cell, template.Height * cell, GUILayout.ExpandWidth(false));
 
             for (int y = 0; y < template.Height; y++)
                 for (int x = 0; x < template.Width; x++)
-                    EditorGUI.DrawRect(CellRect(area, cell, template.Height, x, y), GetColor(template, x, y));
+                    EditorGUI.DrawRect(CellRect(area, cell, template.Height, x, y), GetColor(template, biome, x, y));
 
             var labelStyle = new GUIStyle(EditorStyles.miniBoldLabel);
             foreach (StructureTemplate.Marker marker in template.Markers)
@@ -101,14 +110,18 @@ namespace Wordania.Structures.Editor
             }
         }
 
-        private static Color GetColor(StructureTemplate template, int x, int y)
+        private static Color GetColor(StructureTemplate template, BiomePalette biome, int x, int y)
         {
-            BlockData wall = template.GetBackgroundBlock(x, y);
+            BlockData wall = template.GetBackgroundBlock(x, y, biome);
+            Color wallColor = template.TryGetBackgroundBiomeSlot(x, y, out _) ? MapColor(wall) * BiomeTint : MapColor(wall);
+
             switch (template.GetCell(x, y).Kind)
             {
-                case StructureTemplate.CellKind.Block: return MapColor(template.GetMainBlock(x, y));
-                case StructureTemplate.CellKind.Air: return wall != null ? MapColor(wall) * 0.6f : AirColor;
-                default: return wall != null ? MapColor(wall) * 0.6f : KeepColor;
+                case StructureTemplate.CellKind.Block:
+                    Color color = MapColor(template.GetMainBlock(x, y, biome));
+                    return template.TryGetMainBiomeSlot(x, y, out _) ? color * BiomeTint : color;
+                case StructureTemplate.CellKind.Air: return template.HasBackground(x, y) ? wallColor * 0.6f : AirColor;
+                default: return template.HasBackground(x, y) ? wallColor * 0.6f : KeepColor;
             }
         }
 
