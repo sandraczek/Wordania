@@ -38,10 +38,14 @@ namespace Wordania.World.Lighting
 
             NativeArray<Color32> textureData = _lightmapTexture.GetRawTextureData<Color32>();
 
+            int floor = _settings.FullBright
+                ? 255
+                : Mathf.Max(_settings.MinimumLight, Mathf.RoundToInt(Mathf.Clamp01(_settings.Brightness) * 255f));
+
             for (int i = 0; i < tiles.Length; i++)
             {
-                byte light = (byte)(_settings.MinimumLight + (255 - _settings.MinimumLight) * tiles[i].Light / 31);
-                byte skyLight = (byte)(_settings.MinimumLight + (255 - _settings.MinimumLight) * tiles[i].SkyLight / 31);
+                byte light = (byte)(floor + (255 - floor) * tiles[i].Light / 31);
+                byte skyLight = (byte)(floor + (255 - floor) * tiles[i].SkyLight / 31);
 
                 textureData[i] = new Color32(light, skyLight, 0, 255);
             }

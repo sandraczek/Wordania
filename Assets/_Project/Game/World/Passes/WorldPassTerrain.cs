@@ -144,24 +144,7 @@ namespace Wordania.World.Passes
 
         private int CalculateFractalHeight(int x, float surfaceFrequency, int octaves, float persistence, float lacunarity, float heightMultiplier, int surfaceOffset, int seed, int height)
         {
-            float total = 0;
-            float frequency = surfaceFrequency;
-            float amplitude = 1f;
-            float maxValue = 0;
-
-            for (int i = 0; i < octaves; i++)
-            {
-                float sampleX = (x + seed) * frequency + (i * 1000);
-                float noiseValue = Mathf.PerlinNoise(sampleX, 0);
-
-                total += noiseValue * amplitude;
-                maxValue += amplitude;
-
-                amplitude *= persistence;
-                frequency *= lacunarity;
-            }
-
-            float normalizedHeight = total / maxValue;
+            float normalizedHeight = GenerationNoise.Fbm1D(x + seed, surfaceFrequency, octaves, persistence, lacunarity);
             int finalHeight = Mathf.FloorToInt(normalizedHeight * heightMultiplier) + surfaceOffset;
 
             return Mathf.Clamp(finalHeight, 0, height - 1);

@@ -144,9 +144,12 @@ namespace Wordania
             builder.RegisterComponent(_chunksParent);
 
             //world
+            builder.Register<WorldPassCastleLayout>(Lifetime.Scoped).As<IWorldGenerationPass>();
             builder.Register<WorldPassBiomeMap>(Lifetime.Scoped).As<IWorldGenerationPass>();
             builder.Register<WorldPassTerrain>(Lifetime.Scoped).As<IWorldGenerationPass>();
             builder.Register<WorldPassCave>(Lifetime.Scoped).As<IWorldGenerationPass>();
+            builder.Register<WorldPassCastleInterior>(Lifetime.Scoped).As<IWorldGenerationPass>();
+            builder.Register<WorldPassCastleWall>(Lifetime.Scoped).As<IWorldGenerationPass>();
             builder.Register<WorldPassFeature>(Lifetime.Scoped).As<IWorldGenerationPass>();
             builder.Register<WorldPassStones>(Lifetime.Scoped).As<IWorldGenerationPass>();
             builder.Register<WorldPassBarrier>(Lifetime.Scoped).As<IWorldGenerationPass>();

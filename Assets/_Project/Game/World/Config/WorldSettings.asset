@@ -15,11 +15,13 @@ MonoBehaviour:
   Width: 1280
   Height: 704
   OverworldStartHeight: 400
-  Seed: 0
+  Seed: 752028
   ChunkSize: 32
   CollisionLayer: 3
   RenderingBatchSize: 10
-  MinimumLight: 5
+  MinimumLight: 10
+  Brightness: 0.119
+  FullBright: 0
   BiomeConfig: {fileID: 11400000, guid: 5e6a8626d9243413ba49514ea508d59f, type: 2}
   BiomeNoiseFrequency: 0.003
   HeightMultiplier: 400
@@ -48,6 +50,7 @@ MonoBehaviour:
   DirtStoneScale: 0.06
   DirtStoneThreshold: 0.35
   StructureConfig: {fileID: 11400000, guid: 19b2629894314c49997cd629ee04307a, type: 2}
+  CastleConfig: {fileID: 11400000, guid: d8b98ffd71832411ca92aac78e5e659e, type: 2}
   MainLayerName: Main
   BackgroundLayerName: Background
   DamageLayerName: Damage

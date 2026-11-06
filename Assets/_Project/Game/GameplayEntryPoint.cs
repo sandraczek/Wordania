@@ -151,7 +151,7 @@ namespace Wordania
             Vector2 bossAnchor = _entities.Players.Count > 0
                 ? (Vector2)_entities.Players[0].transform.position
                 : _spawnPoints.GetWorldSpawn();
-            _bossSpawner.SpawnBoss(_bossToSpawn, bossAnchor + new Vector2(5f, 5f));
+            //_bossSpawner.SpawnBoss(_bossToSpawn, bossAnchor + new Vector2(5f, 5f));
         }
     }
 }

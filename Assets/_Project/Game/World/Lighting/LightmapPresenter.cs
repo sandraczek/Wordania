@@ -2,6 +2,7 @@
 using System;
 using VContainer.Unity;
 using Wordania.Events;
+using Wordania.World.Config;
 
 namespace Wordania.World.Lighting // lub Wordania.World.Presentation
 {
@@ -16,16 +17,22 @@ namespace Wordania.World.Lighting // lub Wordania.World.Presentation
 
         private readonly IEventBus _eventBus;
 
+        private readonly WorldSettings _settings;
+
         private bool _isDirty = false;
+        private float _appliedBrightness;
+        private bool _appliedFullBright;
 
         public LightmapPresenter
             (
             IWorldService world,
             IStaticLightingService lightingService,
             ILightmapRenderer lightmapRenderer,
-            IEventBus eventBus
+            IEventBus eventBus,
+            WorldSettings settings
             )
         {
+            _settings = settings;
             _world = world;
             _lightingService = lightingService;
             _lightmapRenderer = lightmapRenderer;
@@ -45,6 +52,13 @@ namespace Wordania.World.Lighting // lub Wordania.World.Presentation
 
         public void LateTick()
         {
+            if (_settings.Brightness != _appliedBrightness || _settings.FullBright != _appliedFullBright)
+            {
+                _appliedBrightness = _settings.Brightness;
+                _appliedFullBright = _settings.FullBright;
+                _isDirty = true;
+            }
+
             if (!_isDirty) return;
             if (_world.Data == null) return;
 

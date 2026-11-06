@@ -17,6 +17,8 @@ namespace Wordania.World.Data
         public readonly TileData[] Tiles;
         /// <summary>Structures stamped into this world (gameplay state: cleared, defeated enemies).</summary>
         public readonly List<PlacedStructure> Structures = new();
+        /// <summary>Great wall shape (generation only), null when the world has no castle.</summary>
+        public CastleLayout Castle;
         public WorldData(int width, int height)
         {
             Tiles = new TileData[width * height];

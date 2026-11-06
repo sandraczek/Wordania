@@ -24,6 +24,10 @@ namespace Wordania.World.Config
         [Header("Rendering")]
         [Min(1)] public int RenderingBatchSize = 10;
         public byte MinimumLight = 15;
+        [Tooltip("Minimum light level of every tile (0 = normal lighting, 1 = everything fully lit). Applies live in play mode.")]
+        [Range(0f, 1f)] public float Brightness = 0f;
+        [Tooltip("No shadows at all: every tile fully lit. Applies live in play mode.")]
+        public bool FullBright = false;
 
         [Header("Biomes")]
         public WorldBiomeConfiguration BiomeConfig;
@@ -64,6 +68,10 @@ namespace Wordania.World.Config
 
         [Header("Structures")]
         public WorldStructureConfiguration StructureConfig;
+
+        [Header("Castle")]
+        [Tooltip("Empty = no great wall / castle biomes.")]
+        public WorldCastleConfiguration CastleConfig;
 
         [Header("Other")]
         public string MainLayerName = "Main";

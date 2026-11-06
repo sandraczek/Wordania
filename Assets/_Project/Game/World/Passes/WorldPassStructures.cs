@@ -34,6 +34,10 @@ namespace Wordania.World.Passes
             {
                 var occupied = new List<RectInt>();
 
+                // Wall + castle biomes are off-limits for the regular structures.
+                if (data.Castle != null)
+                    occupied.Add(new RectInt(data.Castle.MinLeft, 0, data.Width - data.Castle.MinLeft, data.Height));
+
                 if (config.StartingStructure != null)
                     PlaceStartingStructure(data, config, occupied);
 

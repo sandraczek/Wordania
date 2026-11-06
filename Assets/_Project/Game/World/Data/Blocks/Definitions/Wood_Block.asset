@@ -18,7 +18,7 @@ MonoBehaviour:
   Tile: {fileID: 11400000, guid: 5edba5870e4904abe8931415546b47c5, type: 2}
   MapColor:
     serializedVersion: 2
-    rgba: 4283190351
+    rgba: 4279978377
   Hardness: 4
   _lightEmission: 0
   _lightOpacity: 31

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.World.BlockDatabase
   _assets:
   - {fileID: 11400000, guid: 03949464310c74b2abb9910d4d1e237d, type: 2}
+  - {fileID: 11400000, guid: 08cfd70f3748748bc836123fcf93a220, type: 2}
   - {fileID: 11400000, guid: 5d154869ac4e94c23997e3d3d5cfbe3f, type: 2}
   - {fileID: 11400000, guid: c8d9887c8a618481093519ec5709ed59, type: 2}
   - {fileID: 11400000, guid: 2c8c6a670e61a4dbb882e00f461fb8b9, type: 2}

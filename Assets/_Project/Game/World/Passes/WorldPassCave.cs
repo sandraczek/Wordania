@@ -29,6 +29,9 @@ namespace Wordania.World.Passes
             float caveFullDensityDepth = _settings.CaveFullDensityDepth;
             float globalCaveDensity = _settings.GlobalCaveDensity;
 
+            CastleLayout castle = data.Castle;
+            int castleFade = castle != null ? _settings.CastleConfig.CaveFadeDistance : 0;
+
             var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 
             for (int x = 0; x < width; x++)
@@ -36,6 +39,10 @@ namespace Wordania.World.Passes
                 for (int y = 0; y < height; y++)
                 {
                     if (data.GetTile(x, y).Main.Hash == 0) continue;
+
+                    // No caves behind the wall (castle interior pass), fading out before it.
+                    int wallDistance = castle != null ? castle.DistanceOutside(x, y) : int.MaxValue;
+                    if (wallDistance <= 0) continue;
 
                     float currentDepth = (float)y / height;
                     float depthMask = Mathf.InverseLerp(caveStartDepth, caveFullDensityDepth, currentDepth);
@@ -45,6 +52,8 @@ namespace Wordania.World.Passes
 
                     float combinedNoise = (macroNoise * macroWeight) + (microNoise * microWeight);
                     combinedNoise *= depthMask;
+
+                    if (wallDistance < castleFade) combinedNoise *= (float)wallDistance / castleFade;
 
                     if (combinedNoise > globalCaveDensity)
                     {
