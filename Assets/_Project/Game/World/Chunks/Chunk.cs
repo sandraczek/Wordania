@@ -79,6 +79,8 @@ namespace Wordania.World.Chunks
             }
 
             _mainMap.gameObject.layer = _settings.CollisionLayer;
+            float shade = WorldSettings.BackgroundBrightness;
+            _backgroundMap.color = new Color(shade, shade, shade, 1f);
             _debugBorder?.SetSize(_settings.ChunkSize);
         }
         private void UpdateLayer(Tilemap targetMap, WorldLayer layerType)

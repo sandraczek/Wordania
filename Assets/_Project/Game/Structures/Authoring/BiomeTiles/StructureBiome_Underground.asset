@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eef8473145784036b236370c544605e, type: 3}
   m_Name: StructureBiome_Underground
   m_EditorClassIdentifier: Wordania::Wordania.Structures.Authoring.StructureBiomeTile
-  _slot: 4
+  _slot: 2
   _previewBiome: {fileID: 11400000, guid: ba8a3ac9e611d4972abe25f11e26e89d, type: 2}
   _tint: {r: 1, g: 0.4, b: 1, a: 1}
   _tintStrength: 0.122

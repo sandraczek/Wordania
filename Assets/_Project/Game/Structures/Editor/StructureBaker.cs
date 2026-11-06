@@ -210,6 +210,8 @@ namespace Wordania.Structures.Editor
             try
             {
                 Tilemap background = CreateTilemap(root.transform, "Background", 0);
+                float shade = WorldSettings.BackgroundBrightness;
+                background.color = new Color(shade, shade, shade, 1f);
                 Tilemap main = CreateTilemap(root.transform, "Main", 1);
 
                 for (int y = 0; y < template.Height; y++)

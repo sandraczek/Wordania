@@ -11,6 +11,8 @@ namespace Wordania.World.Config
     public sealed class WorldSettings : ScriptableObject
     {
         public const float TileSize = 1f;
+        /// <summary>Background blocks are the regular blocks drawn (and shown on the map) this much darker.</summary>
+        public const float BackgroundBrightness = 0.5f;
         [Delayed][Min(1)] public int Width;
         [Delayed][Min(1)] public int Height;
         public int OverworldStartHeight;

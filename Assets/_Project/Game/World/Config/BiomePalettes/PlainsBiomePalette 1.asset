@@ -13,9 +13,6 @@ MonoBehaviour:
   m_Name: PlainsBiomePalette 1
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.World.Config.BiomePalette
   <SurfaceBlock>k__BackingField: {fileID: 11400000, guid: 28948730022624828ac5373b290d985d, type: 2}
-  <SurfaceWall>k__BackingField: {fileID: 11400000, guid: a88a74e71c89c409e9726a50c901820b, type: 2}
   <SubSurfaceBlock>k__BackingField: {fileID: 11400000, guid: 28948730022624828ac5373b290d985d, type: 2}
-  <SubSurfaceWall>k__BackingField: {fileID: 11400000, guid: a88a74e71c89c409e9726a50c901820b, type: 2}
   <UndergroundBlock>k__BackingField: {fileID: 11400000, guid: 28948730022624828ac5373b290d985d, type: 2}
-  <UndergroundWall>k__BackingField: {fileID: 11400000, guid: a88a74e71c89c409e9726a50c901820b, type: 2}
   <BarrierBlock>k__BackingField: {fileID: 11400000, guid: 03949464310c74b2abb9910d4d1e237d, type: 2}

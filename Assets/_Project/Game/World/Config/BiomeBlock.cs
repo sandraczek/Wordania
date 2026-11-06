@@ -4,10 +4,7 @@ namespace Wordania.World.Config
     public enum BiomeBlock
     {
         Surface,
-        SurfaceWall,
         SubSurface,
-        SubSurfaceWall,
         Underground,
-        UndergroundWall,
     }
 }

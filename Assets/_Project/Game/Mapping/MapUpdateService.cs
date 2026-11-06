@@ -78,7 +78,9 @@ namespace Wordania.Mapping
             var bgColor = _world.GetTileColor(x, y, WorldLayer.Background);
             if (bgColor.HasValue)
             {
-                _map.UpdatePixel(x, y, bgColor.Value);
+                Color32 c = bgColor.Value;
+                float shade = WorldSettings.BackgroundBrightness;
+                _map.UpdatePixel(x, y, new Color32((byte)(c.r * shade), (byte)(c.g * shade), (byte)(c.b * shade), c.a));
                 return;
             }
 

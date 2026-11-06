@@ -13,15 +13,12 @@ namespace Wordania.World.Config
 
         [field: Tooltip("The top-most layer block exposed to the air (e.g., Grass, Sand, Corrupted Grass).")]
         [field: SerializeField] public BlockData SurfaceBlock { get; private set; }
-        [field: SerializeField] public BlockData SurfaceWall { get; private set; }
 
         [field: Tooltip("The layer directly beneath the surface (e.g., Dirt, Sand, Corrupted Dirt).")]
         [field: SerializeField] public BlockData SubSurfaceBlock { get; private set; }
-        [field: SerializeField] public BlockData SubSurfaceWall { get; private set; }
 
         [field: Tooltip("The primary filler block for deep underground (e.g., Stone, Hardened Sand, Ebonstone).")]
         [field: SerializeField] public BlockData UndergroundBlock { get; private set; }
-        [field: SerializeField] public BlockData UndergroundWall { get; private set; }
 
         [field: Header("Structural Boundaries")]
 
@@ -31,18 +28,15 @@ namespace Wordania.World.Config
         public BlockData Get(BiomeBlock slot) => slot switch
         {
             BiomeBlock.Surface => SurfaceBlock,
-            BiomeBlock.SurfaceWall => SurfaceWall,
             BiomeBlock.SubSurface => SubSurfaceBlock,
-            BiomeBlock.SubSurfaceWall => SubSurfaceWall,
             BiomeBlock.Underground => UndergroundBlock,
-            BiomeBlock.UndergroundWall => UndergroundWall,
             _ => null,
         };
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if (SurfaceBlock == null || SubSurfaceBlock == null || UndergroundBlock == null || SurfaceWall == null || SubSurfaceWall == null || UndergroundWall == null)
+            if (SurfaceBlock == null || SubSurfaceBlock == null || UndergroundBlock == null)
             {
                 Debug.LogWarning($"[{nameof(BiomePalette)}] The palette '{name}' is missing essential terrain blocks. World generation will be incomplete.");
             }

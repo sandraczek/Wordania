@@ -19,9 +19,7 @@ namespace Wordania.World.Passes
         {
             BiomePalette currentPalette = _settings.BiomeConfig.DefaultFallbackBiome;
             AssetId subSurfaceBlockId = currentPalette.SubSurfaceBlock.Id;
-            AssetId subSurfaceWallId = currentPalette.SubSurfaceBlock.Id;
             AssetId undergroundBlockId = currentPalette.SubSurfaceBlock.Id;
-            AssetId undergroundWallId = currentPalette.SubSurfaceBlock.Id;
 
             int width = _settings.Width;
 
@@ -36,9 +34,7 @@ namespace Wordania.World.Passes
                     {
                         currentPalette = localPalette;
                         subSurfaceBlockId = currentPalette.SubSurfaceBlock.Id;
-                        subSurfaceWallId = currentPalette.SubSurfaceWall.Id;
                         undergroundBlockId = currentPalette.UndergroundBlock.Id;
-                        undergroundWallId = currentPalette.UndergroundWall.Id;
                     }
                     float stoneNoise = GetNoise(x, y, _settings.Seed + 2, _settings.DirtStoneScale);
                     float stoneValue = Mathf.Abs(stoneNoise - 0.5f);

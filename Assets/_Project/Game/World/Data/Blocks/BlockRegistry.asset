@@ -15,17 +15,12 @@ MonoBehaviour:
   _assets:
   - {fileID: 11400000, guid: 03949464310c74b2abb9910d4d1e237d, type: 2}
   - {fileID: 11400000, guid: 5d154869ac4e94c23997e3d3d5cfbe3f, type: 2}
-  - {fileID: 11400000, guid: 1ecdcbddd74fc4a418dd65c9462987c2, type: 2}
   - {fileID: 11400000, guid: c8d9887c8a618481093519ec5709ed59, type: 2}
   - {fileID: 11400000, guid: 2c8c6a670e61a4dbb882e00f461fb8b9, type: 2}
-  - {fileID: 11400000, guid: 4e5be0d21a36b430aa237d04ae3b75fd, type: 2}
   - {fileID: 11400000, guid: a88a74e71c89c409e9726a50c901820b, type: 2}
   - {fileID: 11400000, guid: a15f13d08cbc44381b286379ca46a9a5, type: 2}
-  - {fileID: 11400000, guid: 6d9262ab4bfae4bfeabbe093808be178, type: 2}
   - {fileID: 11400000, guid: ac2e6dc4b81884de1bec820e48ea8cf3, type: 2}
-  - {fileID: 11400000, guid: 8c0f76d7db33746ce978ed1c0004c8f0, type: 2}
   - {fileID: 11400000, guid: 28948730022624828ac5373b290d985d, type: 2}
-  - {fileID: 11400000, guid: 415dd3c6a0d774725b9cadcddcb9a2f5, type: 2}
   - {fileID: 11400000, guid: 6212ae7a98df54df7bd842f90d3082d6, type: 2}
   _crackTiles:
   - {fileID: 11400000, guid: b3a3d2ce4e4414cc99833c1c4b698bd1, type: 2}

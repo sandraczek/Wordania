@@ -154,8 +154,8 @@ namespace Wordania.Structures
                     else if (tile.Background.IsEmpty)
                     {
                         BiomePalette palette = data.BiomeMap[x + y * data.Width];
-                        bool surfaceWall = y >= wallTop - 1; // like WorldPassTerrain
-                        tile.Background = surfaceWall ? palette.SurfaceWall.Id : palette.SubSurfaceWall.Id;
+                        bool top = y >= wallTop - 1; // like WorldPassTerrain
+                        tile.Background = top ? palette.SurfaceBlock.Id : palette.SubSurfaceBlock.Id;
                     }
                     else if (y < origin.y)
                     {
@@ -219,7 +219,7 @@ namespace Wordania.Structures
             {
                 ref TileData tile = ref data.GetTile(x, y);
                 if (!tile.Background.IsEmpty) continue;
-                tile.Background = data.BiomeMap[x + y * data.Width].SurfaceWall.Id;
+                tile.Background = data.BiomeMap[x + y * data.Width].SurfaceBlock.Id;
             }
         }
 
@@ -241,7 +241,7 @@ namespace Wordania.Structures
                 ref TileData tile = ref data.GetTile(x, y);
                 tile.Main = top ? palette.SurfaceBlock.Id : palette.SubSurfaceBlock.Id;
                 if (tile.Background.IsEmpty)
-                    tile.Background = top ? palette.SurfaceWall.Id : palette.SubSurfaceWall.Id;
+                    tile.Background = top ? palette.SurfaceBlock.Id : palette.SubSurfaceBlock.Id;
             }
         }
 

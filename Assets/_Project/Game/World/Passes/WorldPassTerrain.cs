@@ -40,11 +40,8 @@ namespace Wordania.World.Passes
 
             AssetId airId = new(0);
             AssetId surfaceBlockId = currentPalette.SurfaceBlock.Id;
-            AssetId surfaceWallId = currentPalette.SurfaceWall.Id;
             AssetId subSurfaceBlockId = currentPalette.SubSurfaceBlock.Id;
-            AssetId subSurfaceWallId = currentPalette.SubSurfaceWall.Id;
             AssetId undergroundBlockId = currentPalette.UndergroundBlock.Id;
-            AssetId undergroundWallId = currentPalette.UndergroundWall.Id;
 
             int width = _settings.Width;
             int height = _settings.Height;
@@ -82,11 +79,8 @@ namespace Wordania.World.Passes
                     {
                         currentPalette = localPalette;
                         surfaceBlockId = currentPalette.SurfaceBlock.Id;
-                        surfaceWallId = currentPalette.SurfaceWall.Id;
                         subSurfaceBlockId = currentPalette.SubSurfaceBlock.Id;
-                        subSurfaceWallId = currentPalette.SubSurfaceWall.Id;
                         undergroundBlockId = currentPalette.UndergroundBlock.Id;
-                        undergroundWallId = currentPalette.UndergroundWall.Id;
                     }
 
                     if (y > terrainHeight)
@@ -117,20 +111,20 @@ namespace Wordania.World.Passes
                     }
                     else if (y >= wallTerrainHeight - 1 || y > terrainHeight)
                     {
-                        data.GetTile(x, y).Background = surfaceWallId;
+                        data.GetTile(x, y).Background = surfaceBlockId;
                     }
                     else if (y < stoneHeight - dirtStoneTransitionMargin)
                     {
-                        data.GetTile(x, y).Background = undergroundWallId;
+                        data.GetTile(x, y).Background = undergroundBlockId;
                     }
                     else if (y > stoneHeight + dirtStoneTransitionMargin)
                     {
-                        data.GetTile(x, y).Background = subSurfaceWallId;
+                        data.GetTile(x, y).Background = subSurfaceBlockId;
                     }
                     else
                     {
                         float stoneChance = Mathf.InverseLerp(stoneHeight + dirtStoneTransitionMargin, stoneHeight - dirtStoneTransitionMargin, y);
-                        data.GetTile(x, y).Background = (Random.value < stoneChance) ? undergroundWallId : subSurfaceWallId;
+                        data.GetTile(x, y).Background = (Random.value < stoneChance) ? undergroundBlockId : subSurfaceBlockId;
                     }
                 }
 
