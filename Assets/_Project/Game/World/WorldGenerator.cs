@@ -31,5 +31,14 @@ namespace Wordania.World
 
             return worldData;
         }
+
+        public async UniTask RebuildBiomeMapAsync(WorldData data, CancellationToken token)
+        {
+            foreach (var pass in _generationPipeline)
+            {
+                if (pass is WorldPassCastleLayout or WorldPassBiomeMap)
+                    await pass.Execute(token, data);
+            }
+        }
     }
 }

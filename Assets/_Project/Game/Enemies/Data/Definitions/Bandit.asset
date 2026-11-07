@@ -67,6 +67,8 @@ MonoBehaviour:
     MaxDistanceToGround: 1.5
     RequiredClearanceSize: {x: 1.973877, y: 4.8129272}
     RequiredGroundSize: 2
+    Biomes:
+    - {fileID: 11400000, guid: ba8a3ac9e611d4972abe25f11e26e89d, type: 2}
   <Reward>k__BackingField:
     _skillPoints:
     - Type: 0

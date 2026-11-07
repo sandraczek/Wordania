@@ -72,6 +72,18 @@ namespace Wordania.World
             Debug.Assert(_settings.Width % _settings.ChunkSize == 0 && _settings.Height % _settings.ChunkSize == 0);
             Data = await _generator.GenerateWorldAsync(token);
         }
+        public async UniTask RebuildBiomeMapAsync(CancellationToken token)
+        {
+            if (Data == null) return;
+            await _generator.RebuildBiomeMapAsync(Data, token);
+        }
+        public BiomePalette GetBiome(Vector2 worldPosition)
+        {
+            if (Data == null) return null;
+            Vector2Int pos = _settings.WorldToGrid(worldPosition);
+            if (pos.x < 0 || pos.x >= Data.Width || pos.y < 0 || pos.y >= Data.Height) return null;
+            return Data.BiomeMap[pos.x + pos.y * Data.Width];
+        }
         public void ApplyChanges(IReadOnlyList<TileChange> changes)
         {
             _changedChunks.Clear();

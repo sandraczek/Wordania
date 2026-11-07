@@ -65,8 +65,16 @@ MonoBehaviour:
   <Spawn>k__BackingField:
     RequiresGround: 1
     MaxDistanceToGround: 1.5
-    RequiredClearanceSize: {x: 1.973877, y: 3.6}
+    RequiredClearanceSize: {x: 4, y: 7.1}
     RequiredGroundSize: 2
+    Biomes:
+    - {fileID: 11400000, guid: 92f619b9bec02494c84f38ccf443d1b4, type: 2}
+    - {fileID: 11400000, guid: 00b5c9a5aa6a4332bed393df7b4d356f, type: 2}
+    - {fileID: 11400000, guid: 091eb037ed4d47d1910c4adc63acc408, type: 2}
+    - {fileID: 11400000, guid: a64775037e0d495bb3adc5580a0dfa66, type: 2}
+    - {fileID: 11400000, guid: 64a506e0f6cb4a54b38a2591e1a8a2ab, type: 2}
+    - {fileID: 11400000, guid: 1b73ef07ff164fd0a025342d135dba1d, type: 2}
+    SpawnWeight: 0.4
   <Reward>k__BackingField:
     _skillPoints:
     - Type: 0

@@ -113,6 +113,7 @@ namespace Wordania
             {
                 _loadingScreen.UpdateProgress(0.1f, "Loading Save");
                 await _save.LoadGameAsync(_save.DefaultPrefix + _sessionConfig.SaveSlot.ToString());
+                await _world.RebuildBiomeMapAsync(cancellation);
             }
             _loadingScreen.UpdateProgress(0.3f, "Lighting the World up");
             await _skyLightService.InitializeSkyLightAsync(cancellation, 5000);

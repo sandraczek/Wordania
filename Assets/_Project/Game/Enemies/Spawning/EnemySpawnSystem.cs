@@ -9,6 +9,8 @@ using Wordania.Enemies.Config;
 using Wordania.Enemies.Core;
 using Wordania.Enemies.Data;
 using Wordania.Data;
+using Wordania.World;
+using Wordania.World.Config;
 
 namespace Wordania.Enemies.Spawning
 {
@@ -18,19 +20,19 @@ namespace Wordania.Enemies.Spawning
         private readonly IEnemyFactory _factory;
         private readonly IEntityRegistry _entities;
         private readonly IReadOnlyList<ISpawnValidator> _validators;
+        private readonly IWorldService _world;
+        private readonly IAssetRegistry<EnemyTemplate> _enemyRegistry;
+        private readonly List<EnemyTemplate> _candidates = new();
 
         private float _timeSinceLastSpawn;
 
-        //DEBUG
-        private readonly IAssetRegistry<EnemyTemplate> _enemyRegistry;
-
-        public EnemySpawnSystem(EnemySystemSettings settings, IEnemyFactory enemyFactory, IEntityRegistry entities, IReadOnlyList<ISpawnValidator> validators, /*DEBUG*/IAssetRegistry<EnemyTemplate> enemyRegistry)
+        public EnemySpawnSystem(EnemySystemSettings settings, IEnemyFactory enemyFactory, IEntityRegistry entities, IReadOnlyList<ISpawnValidator> validators, IWorldService world, IAssetRegistry<EnemyTemplate> enemyRegistry)
         {
             _settings = settings;
             _factory = enemyFactory;
             _entities = entities;
             _validators = validators;
-
+            _world = world;
             _enemyRegistry = enemyRegistry;
         }
         public void Tick()
@@ -49,9 +51,6 @@ namespace Wordania.Enemies.Spawning
         }
         private bool AttemptSpawn()
         {
-            /*DEBUG*/
-            EnemyTemplate _enemyToSpawn = _enemyRegistry.Assets[UnityEngine.Random.Range(0, _enemyRegistry.Assets.Count)];
-
             int playerCount = _entities.Players.Count;
             if (playerCount == 0) return false;
 
@@ -64,6 +63,30 @@ namespace Wordania.Enemies.Spawning
 
                 if ((playerPos - candidatePosition).SqrMagnitude() < _settings.InnerViewportRadius * _settings.InnerViewportRadius) return false;
             }
+
+            BiomePalette biome = _world.GetBiome(candidatePosition);
+            _candidates.Clear();
+            float totalWeight = 0f;
+            foreach (EnemyTemplate template in _enemyRegistry.Assets)
+            {
+                if (template.Spawn == null || template.Spawn.SpawnWeight <= 0f || !template.Spawn.CanSpawnIn(biome)) continue;
+                _candidates.Add(template);
+                totalWeight += template.Spawn.SpawnWeight;
+            }
+            if (_candidates.Count == 0) return false;
+
+            EnemyTemplate _enemyToSpawn = _candidates[_candidates.Count - 1];
+            float roll = UnityEngine.Random.Range(0f, totalWeight);
+            for (int i = 0; i < _candidates.Count; i++)
+            {
+                roll -= _candidates[i].Spawn.SpawnWeight;
+                if (roll < 0f)
+                {
+                    _enemyToSpawn = _candidates[i];
+                    break;
+                }
+            }
+
             foreach (var validator in _validators)
             {
                 if (!validator.IsValid(_enemyToSpawn, candidatePosition))

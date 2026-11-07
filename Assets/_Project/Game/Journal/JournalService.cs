@@ -29,6 +29,8 @@ namespace Wordania.Journal
         private readonly IJournalMilestoneService _milestones;
         private readonly IEntityRegistry _entities;
 
+        private static readonly IReadOnlyDictionary<AssetId, int> _emptyDictionary = new Dictionary<AssetId, int>();
+
         private readonly Dictionary<PersistentId, IPlayerJournal> _journals = new();
 
         private readonly List<BlockMineRecordedRecord> _cashedMinedBlocksRecords = new();
@@ -158,7 +160,10 @@ namespace Wordania.Journal
 
         public IReadOnlyDictionary<AssetId, int> GetDictionary(PersistentId persistentId, JournalCategory category)
         {
-            return _journals[persistentId].GetDictionary(category);
+            // Player has no journal until the first kill/mined block -> treat as empty instead of throwing.
+            return _journals.TryGetValue(persistentId, out IPlayerJournal journal)
+                ? journal.GetDictionary(category)
+                : _emptyDictionary;
         }
         public int GetKilled(PersistentId persistentId, JournalCategory category, AssetId id)
         {

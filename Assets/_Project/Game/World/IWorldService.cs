@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using Wordania.World.Config;
 using Wordania.World.Data;
 using Wordania.World.Editing;
 
@@ -17,6 +18,10 @@ namespace Wordania.World
 
         public void RandomizeSeed();
         public UniTask GenerateWorldAsync(CancellationToken token);
+        /// <summary>Call after loading a save; the biome map is derived from the seed, not saved.</summary>
+        public UniTask RebuildBiomeMapAsync(CancellationToken token);
+        /// <summary>Biome at a world position, null outside the world or before generation.</summary>
+        public BiomePalette GetBiome(Vector2 worldPosition);
 
         /// <summary>Applies an authoritative batch of tile changes. Contains no game rules.</summary>
         public void ApplyChanges(IReadOnlyList<TileChange> changes);

@@ -26,8 +26,8 @@ Transform:
   m_GameObject: {fileID: 1471777760100056451}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.29, y: -0.04, z: 0}
-  m_LocalScale: {x: 14, y: 14, z: 1}
+  m_LocalPosition: {x: 0, y: -0.01, z: 0}
+  m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1622198956295790087}
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -7385789195546760866, guid: 4a381cb6cfb964935a86115993a180fe, type: 3}
+  m_Sprite: {fileID: 429302120272074284, guid: 9bbebf58a9b9b4399882e068dfe24ca7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 5242667942773926767}
   - component: {fileID: 6305666754112742109}
   m_Layer: 7
-  m_Name: SkeletonPrefab
+  m_Name: Bandit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -204,7 +204,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 4, y: 7.1}
+  m_Size: {x: 1.973877, y: 4.8129272}
   m_EdgeRadius: 0
 --- !u!114 &8479643594168300415
 MonoBehaviour:
@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 672ea8d6cbc7a4946b9619550f0c98ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Enemies.Core.EnemyController
-  Data: {fileID: 11400000, guid: c8c52ea3f62624679a7ba14201d95af5, type: 2}
+  Data: {fileID: 11400000, guid: 49940fc1a5a5c4046afdbcc7af2ce320, type: 2}
   Entity: {fileID: 0}
   <IsGrounded>k__BackingField: 0
 --- !u!114 &7718802555013657188

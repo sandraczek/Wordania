@@ -24,6 +24,7 @@ MonoBehaviour:
     Acceleration: 50
     Deceleration: 30
     PatrolIntervalTime: 5
+    ChaseSpeed: 5
     GroundLayer:
       serializedVersion: 2
       m_Bits: 8
@@ -52,11 +53,22 @@ MonoBehaviour:
     MagicalResistance: 0
     EnvironmentalResistance: 0
     FallResistance: 0
+    Melee:
+      Damage: 20
+      Knockback: {x: 12, y: 6}
+      DamageType: 0
+      DamageSource: 0
+      WindupDuration: 0.35
+      RecoveryDuration: 0.5
+      HitboxOffset: {x: 0.9, y: 0}
+      HitboxSize: {x: 1.4, y: 1.6}
   <Spawn>k__BackingField:
     RequiresGround: 1
     MaxDistanceToGround: 1.5
     RequiredClearanceSize: {x: 1.973877, y: 4.8129272}
     RequiredGroundSize: 2
+    Biomes:
+    - {fileID: 11400000, guid: c1c7603fb3ae545e0a45e18a321aa4b9, type: 2}
   <Reward>k__BackingField:
     _skillPoints:
     - Type: 0
@@ -66,3 +78,4 @@ MonoBehaviour:
       Multiplier: 0.5
     - KillsBefore: 10
       Multiplier: 0.2
+  <Behaviour>k__BackingField: {fileID: 0}

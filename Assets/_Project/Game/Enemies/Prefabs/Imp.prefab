@@ -26,8 +26,8 @@ Transform:
   m_GameObject: {fileID: 1471777760100056451}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.01, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalPosition: {x: -0.5, y: 0.06, z: 0}
+  m_LocalScale: {x: 12, y: 12, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1622198956295790087}
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 429302120272074284, guid: 9bbebf58a9b9b4399882e068dfe24ca7, type: 3}
+  m_Sprite: {fileID: 8231932596680892034, guid: 11f07232351fc44729a915f5a427c11e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -107,11 +107,8 @@ GameObject:
   - component: {fileID: 143140278234262053}
   - component: {fileID: 7750491922127938250}
   - component: {fileID: 991204108839865479}
-  - component: {fileID: 6403709814293097357}
-  - component: {fileID: 5242667942773926767}
-  - component: {fileID: 6305666754112742109}
   m_Layer: 7
-  m_Name: BanditPrefab
+  m_Name: Imp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -218,7 +215,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 299285e968ca74972904d6423d2c707d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Core::Wordania.Core.Combat.HealthComponent
+  _stats: {fileID: 0}
   _currentHealth: 0
+  LastAttackerId: 0
 --- !u!114 &6478214868119159596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,8 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 672ea8d6cbc7a4946b9619550f0c98ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Enemies.Core.EnemyController
-  Data: {fileID: 11400000, guid: 49940fc1a5a5c4046afdbcc7af2ce320, type: 2}
-  Entity: {fileID: 0}
+  Data: {fileID: 11400000, guid: be9d00363c98b41c7a6385c591833b64, type: 2}
   <IsGrounded>k__BackingField: 0
 --- !u!114 &7718802555013657188
 MonoBehaviour:
@@ -283,39 +281,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c10e544f7a404a9bb1efd5ed63d4702, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wordania.Core::Wordania.Core.Gameplay.EntityContext
---- !u!114 &6403709814293097357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5270062275625357747}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5663b4c40f9d549ad80a4dfcbf3b8707, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Wordania::Wordania.Mechanics.MechanicsComponent
---- !u!114 &5242667942773926767
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5270062275625357747}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 408a24d8dc99e4406aa53577cfc1176b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Wordania::Wordania.Combat.DamageMitigator
---- !u!114 &6305666754112742109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5270062275625357747}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfbb7bfdb3e4e4566949daebe51df720, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Wordania::Wordania.Combat.InvincibilityController
