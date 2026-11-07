@@ -17,35 +17,37 @@ MonoBehaviour:
   WallOctaves: 4
   WallPersistence: 0.5
   WallLacunarity: 2
-  WallAmplitude: 60
-  WallMinThickness: 8
-  WallMaxThickness: 14
+  WallAmplitude: 80
+  WallMinThickness: 18
+  WallMaxThickness: 28
   WallThicknessFrequency: 0.03
-  WallHeightAboveSurface: 40
-  CrenelWidth: 3
-  CrenelHeight: 3
+  WallHeightAboveSurface: 80
+  CrenelWidth: 7
+  CrenelHeight: 6
   WallBlock: {fileID: 11400000, guid: 6212ae7a98df54df7bd842f90d3082d6, type: 2}
-  CaveFadeDistance: 15
-  BiomeFrequencyMultiplier: 2.2
+  CaveFadeDistance: 30
+  BiomeFrequencyMultiplier: 1.6
   BiomeWarpFrequency: 0.02
-  BiomeWarpAmplitude: 25
+  BiomeWarpAmplitude: 40
   FallbackBiome: {fileID: 11400000, guid: 92f619b9bec02494c84f38ccf443d1b4, type: 2}
   FallbackInterior:
-    SlabThickness: 3
+    SlabThickness: 4
     SlabCoverage: 0.7
     Erosion: 0.1
-    HoleSpacing: 32
-    HoleMinWidth: 3
-    HoleMaxWidth: 7
+    HoleSpacing: 50
+    HoleMinWidth: 6
+    HoleMaxWidth: 10
     HoleChance: 0.85
     PillarSpacing: 0
     PillarWidth: 2
     PillarChance: 0.6
     PillarMinHallHeight: 10
-    DoorChance: 0
-    DoorHeight: 5
+    DoorChance: 0.7
+    DoorHeight: 7
     LedgeChance: 0.4
     LedgeMinHallHeight: 12
+    LedgeSpacing: 7
+    LedgeTopOffset: 5
   Biomes:
   - Name: Barracks
     Palette: {fileID: 11400000, guid: 92f619b9bec02494c84f38ccf443d1b4, type: 2}
@@ -54,21 +56,23 @@ MonoBehaviour:
     MinDepth: 0
     MaxDepth: 0.5
     Interior:
-      SlabThickness: 4
-      SlabCoverage: 0.95
-      Erosion: 0.12
-      HoleSpacing: 24
-      HoleMinWidth: 2
-      HoleMaxWidth: 4
+      SlabThickness: 5
+      SlabCoverage: 1
+      Erosion: 0.1
+      HoleSpacing: 44
+      HoleMinWidth: 5
+      HoleMaxWidth: 8
       HoleChance: 0.9
-      PillarSpacing: 20
-      PillarWidth: 3
-      PillarChance: 0.75
-      PillarMinHallHeight: 8
-      DoorChance: 0.8
-      DoorHeight: 5
-      LedgeChance: 0
+      PillarSpacing: 40
+      PillarWidth: 4
+      PillarChance: 0.9
+      PillarMinHallHeight: 12
+      DoorChance: 0.75
+      DoorHeight: 7
+      LedgeChance: 0.35
       LedgeMinHallHeight: 12
+      LedgeSpacing: 7
+      LedgeTopOffset: 5
   - Name: Library
     Palette: {fileID: 11400000, guid: 1b73ef07ff164fd0a025342d135dba1d, type: 2}
     MinTemperature: 0.5
@@ -76,21 +80,23 @@ MonoBehaviour:
     MinDepth: 0
     MaxDepth: 0.5
     Interior:
-      SlabThickness: 2
-      SlabCoverage: 0.55
-      Erosion: 0.2
-      HoleSpacing: 26
-      HoleMinWidth: 4
-      HoleMaxWidth: 8
-      HoleChance: 0.8
-      PillarSpacing: 16
-      PillarWidth: 2
-      PillarChance: 0.4
-      PillarMinHallHeight: 8
-      DoorChance: 0
-      DoorHeight: 5
-      LedgeChance: 0.45
-      LedgeMinHallHeight: 10
+      SlabThickness: 3
+      SlabCoverage: 0.7
+      Erosion: 0.15
+      HoleSpacing: 50
+      HoleMinWidth: 6
+      HoleMaxWidth: 10
+      HoleChance: 0.85
+      PillarSpacing: 30
+      PillarWidth: 3
+      PillarChance: 0.55
+      PillarMinHallHeight: 12
+      DoorChance: 0.8
+      DoorHeight: 8
+      LedgeChance: 0.5
+      LedgeMinHallHeight: 12
+      LedgeSpacing: 7
+      LedgeTopOffset: 5
   - Name: GreatHall
     Palette: {fileID: 11400000, guid: a64775037e0d495bb3adc5580a0dfa66, type: 2}
     MinTemperature: 0
@@ -98,21 +104,23 @@ MonoBehaviour:
     MinDepth: 0.5
     MaxDepth: 0.8
     Interior:
-      SlabThickness: 3
-      SlabCoverage: 0.4
+      SlabThickness: 4
+      SlabCoverage: 0.5
       Erosion: 0.2
-      HoleSpacing: 34
-      HoleMinWidth: 5
-      HoleMaxWidth: 9
-      HoleChance: 0.85
-      PillarSpacing: 14
-      PillarWidth: 2
-      PillarChance: 0.7
-      PillarMinHallHeight: 8
-      DoorChance: 0
-      DoorHeight: 5
-      LedgeChance: 0.4
-      LedgeMinHallHeight: 10
+      HoleSpacing: 60
+      HoleMinWidth: 8
+      HoleMaxWidth: 14
+      HoleChance: 0.9
+      PillarSpacing: 28
+      PillarWidth: 3
+      PillarChance: 0.8
+      PillarMinHallHeight: 12
+      DoorChance: 1
+      DoorHeight: 9
+      LedgeChance: 0.45
+      LedgeMinHallHeight: 12
+      LedgeSpacing: 7
+      LedgeTopOffset: 5
   - Name: Keep
     Palette: {fileID: 11400000, guid: 64a506e0f6cb4a54b38a2591e1a8a2ab, type: 2}
     MinTemperature: 0.5
@@ -121,20 +129,22 @@ MonoBehaviour:
     MaxDepth: 0.8
     Interior:
       SlabThickness: 5
-      SlabCoverage: 0.9
-      Erosion: 0.08
-      HoleSpacing: 24
-      HoleMinWidth: 3
-      HoleMaxWidth: 4
-      HoleChance: 0.85
-      PillarSpacing: 26
-      PillarWidth: 4
-      PillarChance: 0.85
-      PillarMinHallHeight: 8
+      SlabCoverage: 1
+      Erosion: 0.06
+      HoleSpacing: 46
+      HoleMinWidth: 5
+      HoleMaxWidth: 7
+      HoleChance: 0.9
+      PillarSpacing: 50
+      PillarWidth: 6
+      PillarChance: 0.9
+      PillarMinHallHeight: 12
       DoorChance: 0.7
-      DoorHeight: 5
-      LedgeChance: 0
+      DoorHeight: 7
+      LedgeChance: 0.3
       LedgeMinHallHeight: 12
+      LedgeSpacing: 7
+      LedgeTopOffset: 5
   - Name: Crypt
     Palette: {fileID: 11400000, guid: 00b5c9a5aa6a4332bed393df7b4d356f, type: 2}
     MinTemperature: 0
@@ -143,20 +153,22 @@ MonoBehaviour:
     MaxDepth: 1
     Interior:
       SlabThickness: 4
-      SlabCoverage: 0.75
-      Erosion: 0.3
-      HoleSpacing: 30
-      HoleMinWidth: 3
-      HoleMaxWidth: 6
-      HoleChance: 0.7
-      PillarSpacing: 18
-      PillarWidth: 3
-      PillarChance: 0.6
-      PillarMinHallHeight: 8
-      DoorChance: 0.5
-      DoorHeight: 5
-      LedgeChance: 0.35
-      LedgeMinHallHeight: 10
+      SlabCoverage: 0.85
+      Erosion: 0.25
+      HoleSpacing: 50
+      HoleMinWidth: 6
+      HoleMaxWidth: 10
+      HoleChance: 0.8
+      PillarSpacing: 32
+      PillarWidth: 4
+      PillarChance: 0.7
+      PillarMinHallHeight: 12
+      DoorChance: 0.75
+      DoorHeight: 8
+      LedgeChance: 0.4
+      LedgeMinHallHeight: 12
+      LedgeSpacing: 7
+      LedgeTopOffset: 5
   - Name: Dungeon
     Palette: {fileID: 11400000, guid: 091eb037ed4d47d1910c4adc63acc408, type: 2}
     MinTemperature: 0.5
@@ -164,28 +176,31 @@ MonoBehaviour:
     MinDepth: 0.8
     MaxDepth: 1
     Interior:
-      SlabThickness: 6
+      SlabThickness: 5
       SlabCoverage: 1
       Erosion: 0.05
-      HoleSpacing: 30
-      HoleMinWidth: 2
-      HoleMaxWidth: 3
-      HoleChance: 0.8
-      PillarSpacing: 22
-      PillarWidth: 5
-      PillarChance: 0.85
-      PillarMinHallHeight: 8
-      DoorChance: 0.6
-      DoorHeight: 4
-      LedgeChance: 0
+      HoleSpacing: 52
+      HoleMinWidth: 5
+      HoleMaxWidth: 7
+      HoleChance: 0.85
+      PillarSpacing: 36
+      PillarWidth: 8
+      PillarChance: 0.9
+      PillarMinHallHeight: 12
+      DoorChance: 0.65
+      DoorHeight: 7
+      LedgeChance: 0.3
       LedgeMinHallHeight: 12
-  FloorPitch: 14
+      LedgeSpacing: 7
+      LedgeTopOffset: 5
+  FloorPitch: 20
   FloorBottomMargin: 6
-  FloorWaveFrequency: 0.02
-  FloorWaveAmplitude: 2
-  SlabSegmentFrequency: 0.03
-  ErosionScale: 0.08
-  LedgeFrequency: 0.08
-  CourtyardCrustDepth: 5
-  CourtyardEntranceSpacing: 60
-  CourtyardEntranceWidth: 4
+  FloorWaveFrequency: 0.012
+  FloorWaveAmplitude: 3
+  SlabSegmentFrequency: 0.015
+  ErosionScale: 0.045
+  LedgeFrequency: 0.04
+  CourtyardCrustDepth: 6
+  CourtyardMinHallHeight: 14
+  CourtyardEntranceSpacing: 90
+  CourtyardEntranceWidth: 8

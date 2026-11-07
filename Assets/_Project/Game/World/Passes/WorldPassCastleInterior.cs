@@ -25,7 +25,6 @@ namespace Wordania.World.Passes
         private const int HoleChanceSalt = 0x51A3;
         private const int PillarSalt = 0x7E21;
         private const int DoorSalt = 0x4F13;
-        private const int LedgeSalt = 0x1D55;
         private const int EntranceSalt = 0x2B9F;
         private const int EntranceLine = -1;
 
@@ -82,6 +81,8 @@ namespace Wordania.World.Passes
 
                     CastleInteriorStyle slabStyle = StyleAt(data, x, lineY, styles, fallbackStyle);
                     int slabEnd = Mathf.Min(lineY + slabStyle.SlabThickness, crustBottom);
+                    // The topmost floor would leave a hall too low to walk in -> leave it out (hall below merges up).
+                    if (crustBottom - slabEnd < config.CourtyardMinHallHeight) break;
                     if (IsSlabPresent(x, j, seed, config, slabStyle))
                     {
                         for (int y = Mathf.Max(lineY, 0); y < slabEnd; y++)
@@ -89,7 +90,14 @@ namespace Wordania.World.Passes
                     }
 
                     int hallBottom = Mathf.Max(slabEnd, 0);
-                    int hallTop = j + 1 < lineCount ? Mathf.Min(lines[j + 1], crustBottom) : crustBottom;
+                    int hallTop = crustBottom;
+                    if (j + 1 < lineCount && lines[j + 1] < crustBottom)
+                    {
+                        // The next floor is skipped when its own hall would be too low (see the check above).
+                        CastleInteriorStyle nextStyle = StyleAt(data, x, lines[j + 1], styles, fallbackStyle);
+                        int nextSlabEnd = Mathf.Min(lines[j + 1] + nextStyle.SlabThickness, crustBottom);
+                        if (crustBottom - nextSlabEnd >= config.CourtyardMinHallHeight) hallTop = lines[j + 1];
+                    }
                     int hallHeight = hallTop - hallBottom;
                     if (hallHeight <= 0) continue;
 
@@ -100,9 +108,9 @@ namespace Wordania.World.Passes
                         int wallBottom = hasDoor ? hallBottom + Mathf.Min(hallStyle.DoorHeight, hallHeight - 1) : hallBottom;
                         for (int y = wallBottom; y < hallTop; y++) solid[y] = true;
                     }
-                    else if (TryGetLedge(x, j, hallBottom, hallHeight, seed, config, hallStyle, out int ledgeY))
+                    else
                     {
-                        solid[ledgeY] = true;
+                        AddLedges(solid, x, j, hallBottom, hallTop, seed, config, hallStyle);
                     }
                 }
 
@@ -196,17 +204,23 @@ namespace Wordania.World.Passes
             return true;
         }
 
-        /// <summary>Thin platform around the middle of a tall hall, in noise-driven runs.</summary>
-        private static bool TryGetLedge(int x, int line, int hallBottom, int hallHeight, int seed,
-            WorldCastleConfiguration config, CastleInteriorStyle style, out int ledgeY)
+        /// <summary>
+        /// Thin platforms in noise-driven runs, one tier every <see cref="CastleInteriorStyle.LedgeSpacing"/> rows,
+        /// counted down from just below the hall ceiling (so the top tier is within jump range of the shafts above).
+        /// Tiers use different noise offsets, so runs of neighbouring tiers rarely stack into a solid wall.
+        /// </summary>
+        private static void AddLedges(bool[] solid, int x, int line, int hallBottom, int hallTop, int seed,
+            WorldCastleConfiguration config, CastleInteriorStyle style)
         {
-            ledgeY = -1;
-            if (style.LedgeChance <= 0f || hallHeight < style.LedgeMinHallHeight) return false;
-            if (Mathf.PerlinNoise((x + seed) * config.LedgeFrequency, line * 5.17f + 77.7f) >= style.LedgeChance) return false;
+            if (style.LedgeChance <= 0f || hallTop - hallBottom < style.LedgeMinHallHeight) return;
 
-            int jitter = (int)(GenerationNoise.Hash(line, 2, seed ^ LedgeSalt) % 5) - 2;
-            ledgeY = Mathf.Clamp(hallBottom + hallHeight / 2 + jitter, hallBottom, hallBottom + hallHeight - 1);
-            return true;
+            int spacing = Mathf.Max(2, style.LedgeSpacing);
+            int tier = 0;
+            for (int y = hallTop - style.LedgeTopOffset; y >= hallBottom + 2; y -= spacing, tier++)
+            {
+                float noise = Mathf.PerlinNoise((x + seed) * config.LedgeFrequency, line * 5.17f + tier * 13.9f + 77.7f);
+                if (noise < style.LedgeChance) solid[y] = true;
+            }
         }
     }
 }

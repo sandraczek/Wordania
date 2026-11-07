@@ -60,6 +60,8 @@ namespace Wordania.World.Config
         [Header("Courtyard (open roof)")]
         [Tooltip("Ground layer kept under the courtyard above the first hall.")]
         [Min(1)] public int CourtyardCrustDepth = 5;
+        [Tooltip("A floor is skipped if the hall above it (under the courtyard crust) would be lower than this. Keep >= 2x player height.")]
+        [Min(1)] public int CourtyardMinHallHeight = 14;
         [Tooltip("0 = no entrances from the courtyard into the halls.")]
         [Min(0)] public int CourtyardEntranceSpacing = 60;
         [Min(1)] public int CourtyardEntranceWidth = 4;
@@ -119,5 +121,9 @@ namespace Wordania.World.Config
         [Tooltip("Noise threshold (Perlin, mostly 0.3-0.7): 0 = none, 0.5 = about half of the hall length.")]
         [Range(0f, 1f)] public float LedgeChance = 0.4f;
         [Min(1)] public int LedgeMinHallHeight = 12;
+        [Tooltip("Rows between ledge tiers. Keep >= player height + 1 (head room) and well under the jump height.")]
+        [Min(2)] public int LedgeSpacing = 7;
+        [Tooltip("Top ledge tier sits this many rows below the hall ceiling (top tier + SlabThickness should stay within jump height).")]
+        [Min(1)] public int LedgeTopOffset = 5;
     }
 }

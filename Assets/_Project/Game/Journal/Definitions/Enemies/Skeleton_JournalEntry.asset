@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0b3ae2e171f24013a2187284f3637bb, type: 3}
+  m_Name: Skeleton_JournalEntry
+  m_EditorClassIdentifier: Wordania::Wordania.Journal.Entries.JournalEnemyEntry
+  _id:
+    _editorId: skeleton_enemy_journal_entry
+    _hash: -49559754
+  Milestones: []
+  DisplayName: skeleton
+  SortOrder: 2147483647
+  Icon: {fileID: 4723107735738678597, guid: 4a381cb6cfb964935a86115993a180fe, type: 3}
+  _source: {fileID: 11400000, guid: c8c52ea3f62624679a7ba14201d95af5, type: 2}

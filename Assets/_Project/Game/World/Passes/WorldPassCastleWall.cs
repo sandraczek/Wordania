@@ -36,9 +36,23 @@ namespace Wordania.World.Passes
             }
             AssetId wallId = wallBlock.Id;
 
+            int minSurface = int.MaxValue;
             int maxSurface = 0;
             for (int x = castle.MinLeft; x <= castle.MaxRight; x++)
-                maxSurface = Mathf.Max(maxSurface, StructureStamper.FindSurface(data, x));
+            {
+                int surface = StructureStamper.FindSurface(data, x);
+                minSurface = Mathf.Min(minSurface, surface);
+                maxSurface = Mathf.Max(maxSurface, surface);
+            }
+
+            // Above the lowest ground under the wall every row copies the span at that height, so the exposed
+            // part of the wall runs straight up. Underground it keeps its winding shape.
+            int straightFrom = Mathf.Clamp(minSurface, 0, data.Height - 1);
+            for (int y = straightFrom + 1; y < data.Height; y++)
+            {
+                castle.WallLeft[y] = castle.WallLeft[straightFrom];
+                castle.WallRight[y] = castle.WallRight[straightFrom];
+            }
 
             int top = Mathf.Min(maxSurface + config.WallHeightAboveSurface, data.Height - 2);
             castle.WallTop = top;

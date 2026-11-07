@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b49493b7ffcd44c0f8b3d3e295b654f3, type: 3}
+  m_Name: Skeleton
+  m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Gameplay.Enemies.Data.EnemyData
+  _id:
+    _editorId: skeleton_enemy
+    _hash: 1252353609
+  Prefab: {fileID: 6478214868119159596, guid: 4d3021d72bbc54723b4d7c08bce18933, type: 3}
+  <DisplayName>k__BackingField: Skeleton
+  <Stats>k__BackingField:
+    <MaxHealth>k__BackingField: 300
+  <Movement>k__BackingField:
+    GravityScale: 5
+    Acceleration: 50
+    Deceleration: 30
+    PatrolIntervalTime: 5
+    ChaseSpeed: 10
+    GroundLayer:
+      serializedVersion: 2
+      m_Bits: 8
+    GroundCheckSizeY: 0.1
+    GroundCheckDistance: 0.2
+    MaxStepHeight: 1.1
+    StepLookMargin: 0.01
+    StepPerformMargin: 0.05
+    SkinWidth: 0.02
+    FallDamageThreshold: 35
+    FallDamageMultiplier: 3
+    EnableCliffAvoidance: 1
+    CliffDetectionOffset: 0.1
+    CliffDetectionDepth: 4
+  <Combat>k__BackingField:
+    <DetectionRadius>k__BackingField: 25
+    <LoseTargetRadius>k__BackingField: 40
+    ContactDamage: 40
+    Knockback: {x: 15, y: 7}
+    DamageType: 0
+    DamageSource: 0
+    HitStunDuration: 0.2
+    InvincibilityDuration: 0.2
+    GeneralResistance: 0.1
+    PhysicalResistance: 0
+    MagicalResistance: 0.2
+    EnvironmentalResistance: 0
+    FallResistance: 0.5
+    Melee:
+      Damage: 70
+      Knockback: {x: 14, y: 6}
+      DamageType: 0
+      DamageSource: 0
+      WindupDuration: 0.7
+      RecoveryDuration: 2
+      HitboxOffset: {x: 0.9, y: 0}
+      HitboxSize: {x: 1.4, y: 1.6}
+  <Spawn>k__BackingField:
+    RequiresGround: 1
+    MaxDistanceToGround: 1.5
+    RequiredClearanceSize: {x: 1.973877, y: 3.6}
+    RequiredGroundSize: 2
+  <Reward>k__BackingField:
+    _skillPoints:
+    - Type: 0
+      Value: 200
+    _skillPointsThresholds:
+    - KillsBefore: 5
+      Multiplier: 0.5
+    - KillsBefore: 10
+      Multiplier: 0.2
+  <Behaviour>k__BackingField: {fileID: 11400000, guid: 8964e5a1f79984923b90e949539f6c52, type: 2}

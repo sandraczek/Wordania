@@ -1,0 +1,413 @@
+fileFormatVersion: 2
+guid: 9e75698eccd9b49619b3b8c1301890c2
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6460408979914238366
+    second: more rpg enemies_0
+  - first:
+      213: -6029938184265257897
+    second: more rpg enemies_1
+  - first:
+      213: 7317934268515842037
+    second: more rpg enemies_2
+  - first:
+      213: 4157443420479551813
+    second: more rpg enemies_3
+  - first:
+      213: 3051879813964607640
+    second: more rpg enemies_4
+  - first:
+      213: 2586871357906803141
+    second: more rpg enemies_5
+  - first:
+      213: -4764070880535187388
+    second: more rpg enemies_6
+  - first:
+      213: 8341423966241334344
+    second: more rpg enemies_7
+  - first:
+      213: -5380715752924392390
+    second: more rpg enemies_8
+  - first:
+      213: 7931958628582049591
+    second: more rpg enemies_9
+  - first:
+      213: 4046355585420852428
+    second: more rpg enemies_10
+  - first:
+      213: 1888502804682106044
+    second: more rpg enemies_11
+  - first:
+      213: -3408643656998473518
+    second: more rpg enemies_12
+  - first:
+      213: -689065234264209653
+    second: more rpg enemies_13
+  - first:
+      213: 1417476139357529871
+    second: more rpg enemies_14
+  - first:
+      213: 7622951369404410407
+    second: more rpg enemies_15
+  - first:
+      213: 7102448435147172350
+    second: more rpg enemies_16
+  - first:
+      213: -3279770300764669143
+    second: more rpg enemies_17
+  - first:
+      213: -1160153010120082073
+    second: more rpg enemies_18
+  - first:
+      213: 3446516920864011093
+    second: more rpg enemies_19
+  - first:
+      213: -3582423957335064491
+    second: more rpg enemies_20
+  - first:
+      213: 8579565055083622588
+    second: more rpg enemies_21
+  - first:
+      213: -6333398370499568667
+    second: more rpg enemies_22
+  - first:
+      213: 8401327407204501017
+    second: more rpg enemies_23
+  - first:
+      213: 2694768721318063432
+    second: more rpg enemies_24
+  - first:
+      213: -6595736237380597621
+    second: more rpg enemies_25
+  - first:
+      213: 1978191933438644752
+    second: more rpg enemies_26
+  - first:
+      213: -2711623290546577401
+    second: more rpg enemies_27
+  - first:
+      213: 5949018386358349968
+    second: more rpg enemies_28
+  - first:
+      213: -2245251095196772243
+    second: more rpg enemies_29
+  - first:
+      213: 5880406547910446636
+    second: more rpg enemies_30
+  - first:
+      213: -4937304347131428835
+    second: more rpg enemies_31
+  - first:
+      213: 3315300353754687255
+    second: more rpg enemies_32
+  - first:
+      213: -9221790364814536228
+    second: more rpg enemies_33
+  - first:
+      213: 130175748563941049
+    second: more rpg enemies_34
+  - first:
+      213: 7064755903678691271
+    second: more rpg enemies_35
+  - first:
+      213: 8565919919706117498
+    second: more rpg enemies_36
+  - first:
+      213: -6280365955956011222
+    second: more rpg enemies_37
+  - first:
+      213: 2708627019657677433
+    second: more rpg enemies_38
+  - first:
+      213: 3191610439905039860
+    second: more rpg enemies_39
+  - first:
+      213: 6382818594709167062
+    second: more rpg enemies_40
+  - first:
+      213: 9055835642974499801
+    second: more rpg enemies_41
+  - first:
+      213: 3075163471093641606
+    second: more rpg enemies_42
+  - first:
+      213: -9178768176463188314
+    second: more rpg enemies_43
+  - first:
+      213: -5332886960631139634
+    second: more rpg enemies_44
+  - first:
+      213: 739336610912190249
+    second: more rpg enemies_45
+  - first:
+      213: -4424873760722585220
+    second: more rpg enemies_46
+  - first:
+      213: -243135257051768609
+    second: more rpg enemies_47
+  - first:
+      213: 1722108213441272613
+    second: more rpg enemies_48
+  - first:
+      213: 6581577200805273186
+    second: more rpg enemies_49
+  - first:
+      213: -4008236332296534387
+    second: more rpg enemies_50
+  - first:
+      213: -3769282821735500402
+    second: more rpg enemies_51
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: more rpg enemies_0
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 193
+        width: 56
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e99288f0dbbf7a950800000000000000
+      internalID: 6460408979914238366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: more rpg enemies_1
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 190
+        width: 62
+        height: 92
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ca40cf9ff2df49f5931a0a0a9d01918
+      internalID: -6029938184265257897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: more rpg enemies_2
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 110
+        width: 66
+        height: 65
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85b6200d1683e47b69d2cc836d01cdf2
+      internalID: 7317934268515842037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: more rpg enemies_3
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 30
+        width: 45
+        height: 65
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83f20ac1fd37b4d969cb3e1dece1af7a
+      internalID: 4157443420479551813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: more rpg enemies_4
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 18
+        width: 54
+        height: 89
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86d0a5f8f51294bf9874be951f43e034
+      internalID: 3051879813964607640
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: more rpg enemies_5
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 22
+        width: 101
+        height: 89
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 976c0edec766447248366ad53e6a8786
+      internalID: 2586871357906803141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: bd11d0035e80e4aa3a39d525fc2bc88d
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":365.0,"y":300.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":1,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      more rpg enemies_0: 6460408979914238366
+      more rpg enemies_1: -6029938184265257897
+      more rpg enemies_2: 7317934268515842037
+      more rpg enemies_3: 4157443420479551813
+      more rpg enemies_4: 3051879813964607640
+      more rpg enemies_5: 2586871357906803141
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
