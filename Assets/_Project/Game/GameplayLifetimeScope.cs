@@ -106,6 +106,8 @@ namespace Wordania
         [Header("Save Slot 0 For a New Game")]
         [Range(0, 9)]
         [SerializeField] private int _saveSlot = 0;
+        [Header("Seed 0 to randomize")]
+        [SerializeField] private int _seed = 0;
         [SerializeField] private EnemyTemplate _enemyToPrewarm;
         [SerializeField] private BossTemplate _bossToSpawn;
 
@@ -321,7 +323,8 @@ namespace Wordania
             {
                 builder.RegisterEntryPoint<GameplayEntryPoint>(Lifetime.Scoped)
                 .WithParameter(_enemyToPrewarm) //
-                .WithParameter(_bossToSpawn);
+                .WithParameter(_bossToSpawn)
+                .WithParameter(_seed);
             }
             else
             {

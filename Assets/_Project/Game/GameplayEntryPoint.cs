@@ -20,6 +20,7 @@ using Wordania.World.Lighting;
 using Wordania.HUD.Journal;
 using Wordania.HUD.WeaponStore;
 using Wordania.Session;
+using Wordania.World.Config;
 
 namespace Wordania
 {
@@ -47,6 +48,7 @@ namespace Wordania
         private readonly AssetId _bossToSpawn; // for testing
         private readonly SessionConfig _sessionConfig;
         private readonly Networking.IHostSession _hostSession;
+        private readonly int _seed;
         public GameplayEntryPoint(
             ISaveService saveService,
             IWorldService worldService,
@@ -69,7 +71,8 @@ namespace Wordania
             ISkyLightService skyLightService,
             IStaticLightingService staticLightingService,
             SessionConfig sessionConfig,
-            Networking.IHostSession hostSession
+            Networking.IHostSession hostSession,
+            int seed
             )
         {
             _save = saveService;
@@ -94,6 +97,7 @@ namespace Wordania
             _staticLightingService = staticLightingService;
             _sessionConfig = sessionConfig;
             _hostSession = hostSession;
+            _seed = seed;
         }
         public async UniTask StartAsync(System.Threading.CancellationToken cancellation)
         {
@@ -106,8 +110,10 @@ namespace Wordania
             if (_sessionConfig.SaveSlot == 0)
             {
                 _loadingScreen.UpdateProgress(0.1f, "Generating World");
-                //_world.RandomizeSeed();
-                _world.SetSeed(978800);
+                if (_seed > 0 && _seed <= WorldSettings.MaxSeed)
+                    _world.SetSeed(_seed);
+                else
+                    _world.RandomizeSeed();
                 await _world.GenerateWorldAsync(cancellation);
             }
             else

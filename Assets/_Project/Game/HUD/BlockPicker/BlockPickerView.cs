@@ -28,9 +28,19 @@ namespace Wordania.HUD.BlockPicker
 
         public event Action<AssetId> BlockClicked;
 
-        public static BlockPickerView Create()
+        public static BlockPickerView Create(Transform parent)
         {
-            var go = new GameObject("BlockPicker");
+            var go = new GameObject("BlockPicker", typeof(RectTransform));
+            go.layer = LayerMask.NameToLayer("UI");
+            go.transform.SetParent(parent, false);
+
+            // Fill the parent canvas so the centered panel is positioned relative to the whole screen.
+            var rect = (RectTransform)go.transform;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
+
             return go.AddComponent<BlockPickerView>();
         }
 
@@ -66,14 +76,10 @@ namespace Wordania.HUD.BlockPicker
 
         private void Build()
         {
+            // Nested canvas: scaling comes from the parent HUD canvas, this only draws the picker on top of it.
             var canvas = gameObject.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.overrideSorting = true;
             canvas.sortingOrder = 100;
-
-            var scaler = gameObject.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920f, 1080f);
-            scaler.matchWidthOrHeight = 0.5f;
 
             gameObject.AddComponent<GraphicRaycaster>();
 

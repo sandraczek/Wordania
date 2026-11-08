@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+using UnityEngine;
 using VContainer.Unity;
 using Wordania.Identifiers;
+using Wordania.HUD.Inventory;
 using Wordania.Inputs;
 using Wordania.Player;
 using Wordania.Player.Loadout;
@@ -19,21 +21,24 @@ namespace Wordania.HUD.BlockPicker
         private readonly IHUDStateManager _hud;
         private readonly IBlockRegistry _blocks;
         private readonly ILocalPlayer _local;
+        private readonly InventoryDisplay _hudAnchor; // sits on the HUD canvas; only used to find it
 
         private BlockPickerView _view;
         private bool _isOpen;
 
-        public BlockPickerPresenter(IUIInput inputs, IHUDStateManager hud, IBlockRegistry blocks, ILocalPlayer local)
+        public BlockPickerPresenter(IUIInput inputs, IHUDStateManager hud, IBlockRegistry blocks, ILocalPlayer local, InventoryDisplay hudAnchor)
         {
             _inputs = inputs;
             _hud = hud;
             _blocks = blocks;
             _local = local;
+            _hudAnchor = hudAnchor;
         }
 
         public void Start()
         {
-            _view = BlockPickerView.Create();
+            Canvas hudCanvas = _hudAnchor.GetComponentInParent<Canvas>().rootCanvas;
+            _view = BlockPickerView.Create(hudCanvas.transform);
             _view.Populate(_blocks.Assets.Where(b => b != null && b.Placeable && b.Tile != null));
             _view.BlockClicked += HandleBlockClicked;
 

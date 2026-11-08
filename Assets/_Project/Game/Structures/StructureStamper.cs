@@ -76,26 +76,57 @@ namespace Wordania.Structures
             return placed;
         }
 
+        /// <summary>
+        /// Per column: fills the gap from under the structure's lowest painted cell (block or air) down to the
+        /// ground, so it never floats on a slope. The ground's old top layer (grass) ends up buried and turns into
+        /// the subsurface block.
+        /// </summary>
         private static void StampFoundation(WorldData data, StructureTemplate template, Vector2Int origin)
         {
             if (!template.HasFoundation) return;
 
             for (int x = 0; x < template.Width; x++)
             {
-                if (template.GetCell(x, 0).Kind != StructureTemplate.CellKind.Block) continue;
+                int bottom = FindLowestPaintedCell(template, x);
+                if (bottom < 0) continue; // nothing painted: the column keeps the terrain as it is
 
                 int wx = origin.x + x;
-                for (int depth = 1; depth <= template.MaxFoundationDepth; depth++)
+                int wy = origin.y + bottom - 1;
+                for (int depth = 0; depth < template.MaxFoundationDepth; depth++, wy--)
                 {
-                    int wy = origin.y - depth;
                     if (!IsInterior(data, wx, wy)) break;
 
                     ref TileData tile = ref data.GetTile(wx, wy);
-                    if (tile.Main.Hash != 0) break; // reached the ground
+                    if (tile.Main.Hash != 0)
+                    {
+                        BuryTopLayer(data, wx, wy);
+                        break;
+                    }
 
                     // Biome of the cell itself, like the structure's own biome blocks.
                     tile.Main = template.GetFoundation(data.BiomeMap[wx + wy * data.Width]);
                 }
+            }
+        }
+
+        /// <summary>Local y of the lowest cell in the column the structure sets (block or air); -1 if all keep.</summary>
+        private static int FindLowestPaintedCell(StructureTemplate template, int x)
+        {
+            for (int y = 0; y < template.Height; y++)
+                if (template.GetCell(x, y).Kind != StructureTemplate.CellKind.Keep) return y;
+            return -1;
+        }
+
+        /// <summary>Ground top at <paramref name="groundY"/> got covered: its surface blocks become subsurface ones.</summary>
+        private static void BuryTopLayer(WorldData data, int x, int groundY)
+        {
+            if (data.GetTile(x, groundY + 1).Main.Hash == 0) return; // still open to the air
+
+            for (int y = groundY; y >= Mathf.Max(1, groundY - 1); y--)
+            {
+                BiomePalette palette = data.BiomeMap[x + y * data.Width];
+                ref TileData tile = ref data.GetTile(x, y);
+                if (tile.Main == palette.SurfaceBlock.Id) tile.Main = palette.SubSurfaceBlock.Id;
             }
         }
 
