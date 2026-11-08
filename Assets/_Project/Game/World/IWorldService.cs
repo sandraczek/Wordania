@@ -17,6 +17,7 @@ namespace Wordania.World
         public WorldData Data { get; }
 
         public void RandomizeSeed();
+        public void SetSeed(int seed);
         public UniTask GenerateWorldAsync(CancellationToken token);
         /// <summary>Call after loading a save; the biome map is derived from the seed, not saved.</summary>
         public UniTask RebuildBiomeMapAsync(CancellationToken token);

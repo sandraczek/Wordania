@@ -106,7 +106,8 @@ namespace Wordania
             if (_sessionConfig.SaveSlot == 0)
             {
                 _loadingScreen.UpdateProgress(0.1f, "Generating World");
-                _world.RandomizeSeed();
+                //_world.RandomizeSeed();
+                _world.SetSeed(978800);
                 await _world.GenerateWorldAsync(cancellation);
             }
             else

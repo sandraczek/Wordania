@@ -91,9 +91,7 @@ namespace Wordania.World.Editing
             BlockData block = _blocks.Get(request.Block);
             if (block == null || !block.Placeable) return;
 
-            Ingredient[] requirements = block.recipe != null && block.recipe.Requirements != null
-                ? block.recipe.Requirements
-                : System.Array.Empty<Ingredient>();
+            IReadOnlyList<Ingredient> requirements = block.Requirements;
             foreach (Ingredient ingredient in requirements)
             {
                 if (ingredient.item == null) continue;

@@ -20,8 +20,8 @@ MonoBehaviour:
     MaxTemperature: 0.4
     MinDepth: 0
     MaxDepth: 1
-  - Name: Stone Lands
-    Palette: {fileID: 11400000, guid: c1c7603fb3ae545e0a45e18a321aa4b9, type: 2}
+  - Name: Waste Lands
+    Palette: {fileID: 11400000, guid: 41347bd64e4904bd09c16fe48bab9f24, type: 2}
     MinTemperature: 0.4
     MaxTemperature: 0.55
     MinDepth: 0

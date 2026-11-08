@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: JournalEntryRegistry
   m_EditorClassIdentifier: Wordania.Gameplay::Wordania.Features.Journal.Entries.JournalEntryRegistry
   _assets:
+  - {fileID: 11400000, guid: 56cbb529c044541f69ada10f678a439a, type: 2}
+  - {fileID: 11400000, guid: ac25449d8e2b6406bab1f70994b627fe, type: 2}
   - {fileID: 11400000, guid: 986b8ec40a9da4e32ac1a702b0f5835d, type: 2}
   - {fileID: 11400000, guid: 46988b5452d9e4663898eeee064465b2, type: 2}
   - {fileID: 11400000, guid: 53fe8598a9d77488892df38523539941, type: 2}

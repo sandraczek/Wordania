@@ -18,7 +18,7 @@ MonoBehaviour:
   _foundationMode: 1
   _foundationSlot: 1
   _foundation: {fileID: 11400000, guid: 5d154869ac4e94c23997e3d3d5cfbe3f, type: 2}
-  _maxFoundationDepth: 12
+  _maxFoundationDepth: 20
   _terrainBlendWidth: 16
   _activationRadius: 50
   _width: 62

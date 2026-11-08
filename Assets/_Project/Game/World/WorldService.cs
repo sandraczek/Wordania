@@ -66,6 +66,10 @@ namespace Wordania.World
         {
             _settings.Seed = Mathf.Abs(Guid.NewGuid().GetHashCode()) % WorldSettings.MaxSeed;
         }
+        public void SetSeed(int seed)
+        {
+            _settings.Seed = seed;
+        }
         public async UniTask GenerateWorldAsync(CancellationToken token)
         {
             Debug.Assert(Data == null);

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Wordania.Data;
@@ -29,7 +30,8 @@ namespace Wordania.World.Data
         [SerializeField] private bool _placeable = true;
         public bool Placeable => _placeable;
         [Tooltip("Ingredients consumed on placement. Empty = free.")]
-        public Recipe recipe;
+        [SerializeField] private List<Ingredient> _requirements = new();
+        public IReadOnlyList<Ingredient> Requirements => _requirements;
         public ItemData loot;
         public int lootAmount;
     }
