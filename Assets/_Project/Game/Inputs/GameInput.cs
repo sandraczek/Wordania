@@ -17,76 +17,76 @@ using UnityEngine.InputSystem.Utilities;
 
 namespace Wordania.Inputs
 {
-/// <summary>
-/// Provides programmatic access to <see cref="InputActionAsset" />, <see cref="InputActionMap" />, <see cref="InputAction" /> and <see cref="InputControlScheme" /> instances defined in asset "Assets/_Project/Game/Inputs/GameInput.inputactions".
-/// </summary>
-/// <remarks>
-/// This class is source generated and any manual edits will be discarded if the associated asset is reimported or modified.
-/// </remarks>
-/// <example>
-/// <code>
-/// using namespace UnityEngine;
-/// using UnityEngine.InputSystem;
-///
-/// // Example of using an InputActionMap named "Player" from a UnityEngine.MonoBehaviour implementing callback interface.
-/// public class Example : MonoBehaviour, MyActions.IPlayerActions
-/// {
-///     private MyActions_Actions m_Actions;                  // Source code representation of asset.
-///     private MyActions_Actions.PlayerActions m_Player;     // Source code representation of action map.
-///
-///     void Awake()
-///     {
-///         m_Actions = new MyActions_Actions();              // Create asset object.
-///         m_Player = m_Actions.Player;                      // Extract action map object.
-///         m_Player.AddCallbacks(this);                      // Register callback interface IPlayerActions.
-///     }
-///
-///     void OnDestroy()
-///     {
-///         m_Actions.Dispose();                              // Destroy asset object.
-///     }
-///
-///     void OnEnable()
-///     {
-///         m_Player.Enable();                                // Enable all actions within map.
-///     }
-///
-///     void OnDisable()
-///     {
-///         m_Player.Disable();                               // Disable all actions within map.
-///     }
-///
-///     #region Interface implementation of MyActions.IPlayerActions
-///
-///     // Invoked when "Move" action is either started, performed or canceled.
-///     public void OnMove(InputAction.CallbackContext context)
-///     {
-///         Debug.Log($"OnMove: {context.ReadValue&lt;Vector2&gt;()}");
-///     }
-///
-///     // Invoked when "Attack" action is either started, performed or canceled.
-///     public void OnAttack(InputAction.CallbackContext context)
-///     {
-///         Debug.Log($"OnAttack: {context.ReadValue&lt;float&gt;()}");
-///     }
-///
-///     #endregion
-/// }
-/// </code>
-/// </example>
-public partial class @GameInput: IInputActionCollection2, IDisposable
-{
     /// <summary>
-    /// Provides access to the underlying asset instance.
+    /// Provides programmatic access to <see cref="InputActionAsset" />, <see cref="InputActionMap" />, <see cref="InputAction" /> and <see cref="InputControlScheme" /> instances defined in asset "Assets/_Project/Game/Inputs/GameInput.inputactions".
     /// </summary>
-    public InputActionAsset asset { get; }
-
-    /// <summary>
-    /// Constructs a new instance.
-    /// </summary>
-    public @GameInput()
+    /// <remarks>
+    /// This class is source generated and any manual edits will be discarded if the associated asset is reimported or modified.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// using namespace UnityEngine;
+    /// using UnityEngine.InputSystem;
+    ///
+    /// // Example of using an InputActionMap named "Player" from a UnityEngine.MonoBehaviour implementing callback interface.
+    /// public class Example : MonoBehaviour, MyActions.IPlayerActions
+    /// {
+    ///     private MyActions_Actions m_Actions;                  // Source code representation of asset.
+    ///     private MyActions_Actions.PlayerActions m_Player;     // Source code representation of action map.
+    ///
+    ///     void Awake()
+    ///     {
+    ///         m_Actions = new MyActions_Actions();              // Create asset object.
+    ///         m_Player = m_Actions.Player;                      // Extract action map object.
+    ///         m_Player.AddCallbacks(this);                      // Register callback interface IPlayerActions.
+    ///     }
+    ///
+    ///     void OnDestroy()
+    ///     {
+    ///         m_Actions.Dispose();                              // Destroy asset object.
+    ///     }
+    ///
+    ///     void OnEnable()
+    ///     {
+    ///         m_Player.Enable();                                // Enable all actions within map.
+    ///     }
+    ///
+    ///     void OnDisable()
+    ///     {
+    ///         m_Player.Disable();                               // Disable all actions within map.
+    ///     }
+    ///
+    ///     #region Interface implementation of MyActions.IPlayerActions
+    ///
+    ///     // Invoked when "Move" action is either started, performed or canceled.
+    ///     public void OnMove(InputAction.CallbackContext context)
+    ///     {
+    ///         Debug.Log($"OnMove: {context.ReadValue&lt;Vector2&gt;()}");
+    ///     }
+    ///
+    ///     // Invoked when "Attack" action is either started, performed or canceled.
+    ///     public void OnAttack(InputAction.CallbackContext context)
+    ///     {
+    ///         Debug.Log($"OnAttack: {context.ReadValue&lt;float&gt;()}");
+    ///     }
+    ///
+    ///     #endregion
+    /// }
+    /// </code>
+    /// </example>
+    public partial class @GameInput : IInputActionCollection2, IDisposable
     {
-        asset = InputActionAsset.FromJson(@"{
+        /// <summary>
+        /// Provides access to the underlying asset instance.
+        /// </summary>
+        public InputActionAsset asset { get; }
+
+        /// <summary>
+        /// Constructs a new instance.
+        /// </summary>
+        public @GameInput()
+        {
+            asset = InputActionAsset.FromJson(@"{
     ""version"": 1,
     ""name"": ""GameInput"",
     ""maps"": [
@@ -1160,6 +1160,15 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""ShowBlockPicker"",
+                    ""type"": ""Button"",
+                    ""id"": ""3c1f6a2e-8b4d-4e7a-9f15-2d6b8c9e0a41"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Exit"",
                     ""type"": ""Button"",
                     ""id"": ""2fd0abbc-284f-46ac-8376-de46ce6964ea"",
@@ -1222,6 +1231,17 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ShowSkillTree"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9e2d4b7c-1a3f-4c58-8d6e-5f0a7b2c4e93"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShowBlockPicker"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1372,1175 +1392,1194 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         }
     ]
 }");
+            // Player
+            m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
+            m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
+            m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+            m_Player_Point = m_Player.FindAction("Point", throwIfNotFound: true);
+            m_Player_PrimaryAction = m_Player.FindAction("PrimaryAction", throwIfNotFound: true);
+            m_Player_SecondaryAction = m_Player.FindAction("SecondaryAction", throwIfNotFound: true);
+            m_Player_CycleActionSetting = m_Player.FindAction("CycleActionSetting", throwIfNotFound: true);
+            m_Player_Slot1 = m_Player.FindAction("Slot1", throwIfNotFound: true);
+            m_Player_Slot2 = m_Player.FindAction("Slot2", throwIfNotFound: true);
+            m_Player_Slot3 = m_Player.FindAction("Slot3", throwIfNotFound: true);
+            m_Player_Slot4 = m_Player.FindAction("Slot4", throwIfNotFound: true);
+            m_Player_Slot5 = m_Player.FindAction("Slot5", throwIfNotFound: true);
+            m_Player_Slot6 = m_Player.FindAction("Slot6", throwIfNotFound: true);
+            m_Player_Slot7 = m_Player.FindAction("Slot7", throwIfNotFound: true);
+            m_Player_Slot8 = m_Player.FindAction("Slot8", throwIfNotFound: true);
+            m_Player_Slot9 = m_Player.FindAction("Slot9", throwIfNotFound: true);
+            m_Player_Slot0 = m_Player.FindAction("Slot0", throwIfNotFound: true);
+            // UI
+            m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+            m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
+            m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
+            m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
+            m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
+            m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
+            m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
+            m_UI_MiddleClick = m_UI.FindAction("MiddleClick", throwIfNotFound: true);
+            m_UI_ScrollWheel = m_UI.FindAction("ScrollWheel", throwIfNotFound: true);
+            m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
+            m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+            // HUD
+            m_HUD = asset.FindActionMap("HUD", throwIfNotFound: true);
+            m_HUD_ShowInventory = m_HUD.FindAction("ShowInventory", throwIfNotFound: true);
+            m_HUD_ShowWeaponStore = m_HUD.FindAction("ShowWeaponStore", throwIfNotFound: true);
+            m_HUD_ShowJournal = m_HUD.FindAction("ShowJournal", throwIfNotFound: true);
+            m_HUD_ShowMap = m_HUD.FindAction("ShowMap", throwIfNotFound: true);
+            m_HUD_ShowSkillTree = m_HUD.FindAction("ShowSkillTree", throwIfNotFound: true);
+            m_HUD_ShowBlockPicker = m_HUD.FindAction("ShowBlockPicker", throwIfNotFound: true);
+            m_HUD_Exit = m_HUD.FindAction("Exit", throwIfNotFound: true);
+            // Debug
+            m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
+            m_Debug_ShowChunks = m_Debug.FindAction("ShowChunks", throwIfNotFound: true);
+            m_Debug_SetGodMode = m_Debug.FindAction("SetGodMode", throwIfNotFound: true);
+        }
+
+        ~@GameInput()
+        {
+            UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, GameInput.Player.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, GameInput.UI.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_HUD.enabled, "This will cause a leak and performance issues, GameInput.HUD.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_Debug.enabled, "This will cause a leak and performance issues, GameInput.Debug.Disable() has not been called.");
+        }
+
+        /// <summary>
+        /// Destroys this asset and all associated <see cref="InputAction"/> instances.
+        /// </summary>
+        public void Dispose()
+        {
+            UnityEngine.Object.Destroy(asset);
+        }
+
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.bindingMask" />
+        public InputBinding? bindingMask
+        {
+            get => asset.bindingMask;
+            set => asset.bindingMask = value;
+        }
+
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.devices" />
+        public ReadOnlyArray<InputDevice>? devices
+        {
+            get => asset.devices;
+            set => asset.devices = value;
+        }
+
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.controlSchemes" />
+        public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
+
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.Contains(InputAction)" />
+        public bool Contains(InputAction action)
+        {
+            return asset.Contains(action);
+        }
+
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.GetEnumerator()" />
+        public IEnumerator<InputAction> GetEnumerator()
+        {
+            return asset.GetEnumerator();
+        }
+
+        /// <inheritdoc cref="IEnumerable.GetEnumerator()" />
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.Enable()" />
+        public void Enable()
+        {
+            asset.Enable();
+        }
+
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.Disable()" />
+        public void Disable()
+        {
+            asset.Disable();
+        }
+
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.bindings" />
+        public IEnumerable<InputBinding> bindings => asset.bindings;
+
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.FindAction(string, bool)" />
+        public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
+        {
+            return asset.FindAction(actionNameOrId, throwIfNotFound);
+        }
+
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.FindBinding(InputBinding, out InputAction)" />
+        public int FindBinding(InputBinding bindingMask, out InputAction action)
+        {
+            return asset.FindBinding(bindingMask, out action);
+        }
+
         // Player
-        m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_Point = m_Player.FindAction("Point", throwIfNotFound: true);
-        m_Player_PrimaryAction = m_Player.FindAction("PrimaryAction", throwIfNotFound: true);
-        m_Player_SecondaryAction = m_Player.FindAction("SecondaryAction", throwIfNotFound: true);
-        m_Player_CycleActionSetting = m_Player.FindAction("CycleActionSetting", throwIfNotFound: true);
-        m_Player_Slot1 = m_Player.FindAction("Slot1", throwIfNotFound: true);
-        m_Player_Slot2 = m_Player.FindAction("Slot2", throwIfNotFound: true);
-        m_Player_Slot3 = m_Player.FindAction("Slot3", throwIfNotFound: true);
-        m_Player_Slot4 = m_Player.FindAction("Slot4", throwIfNotFound: true);
-        m_Player_Slot5 = m_Player.FindAction("Slot5", throwIfNotFound: true);
-        m_Player_Slot6 = m_Player.FindAction("Slot6", throwIfNotFound: true);
-        m_Player_Slot7 = m_Player.FindAction("Slot7", throwIfNotFound: true);
-        m_Player_Slot8 = m_Player.FindAction("Slot8", throwIfNotFound: true);
-        m_Player_Slot9 = m_Player.FindAction("Slot9", throwIfNotFound: true);
-        m_Player_Slot0 = m_Player.FindAction("Slot0", throwIfNotFound: true);
+        private readonly InputActionMap m_Player;
+        private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
+        private readonly InputAction m_Player_Move;
+        private readonly InputAction m_Player_Jump;
+        private readonly InputAction m_Player_Point;
+        private readonly InputAction m_Player_PrimaryAction;
+        private readonly InputAction m_Player_SecondaryAction;
+        private readonly InputAction m_Player_CycleActionSetting;
+        private readonly InputAction m_Player_Slot1;
+        private readonly InputAction m_Player_Slot2;
+        private readonly InputAction m_Player_Slot3;
+        private readonly InputAction m_Player_Slot4;
+        private readonly InputAction m_Player_Slot5;
+        private readonly InputAction m_Player_Slot6;
+        private readonly InputAction m_Player_Slot7;
+        private readonly InputAction m_Player_Slot8;
+        private readonly InputAction m_Player_Slot9;
+        private readonly InputAction m_Player_Slot0;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "Player".
+        /// </summary>
+        public struct PlayerActions
+        {
+            private @GameInput m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public PlayerActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Move".
+            /// </summary>
+            public InputAction @Move => m_Wrapper.m_Player_Move;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Jump".
+            /// </summary>
+            public InputAction @Jump => m_Wrapper.m_Player_Jump;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Point".
+            /// </summary>
+            public InputAction @Point => m_Wrapper.m_Player_Point;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/PrimaryAction".
+            /// </summary>
+            public InputAction @PrimaryAction => m_Wrapper.m_Player_PrimaryAction;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/SecondaryAction".
+            /// </summary>
+            public InputAction @SecondaryAction => m_Wrapper.m_Player_SecondaryAction;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/CycleActionSetting".
+            /// </summary>
+            public InputAction @CycleActionSetting => m_Wrapper.m_Player_CycleActionSetting;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Slot1".
+            /// </summary>
+            public InputAction @Slot1 => m_Wrapper.m_Player_Slot1;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Slot2".
+            /// </summary>
+            public InputAction @Slot2 => m_Wrapper.m_Player_Slot2;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Slot3".
+            /// </summary>
+            public InputAction @Slot3 => m_Wrapper.m_Player_Slot3;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Slot4".
+            /// </summary>
+            public InputAction @Slot4 => m_Wrapper.m_Player_Slot4;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Slot5".
+            /// </summary>
+            public InputAction @Slot5 => m_Wrapper.m_Player_Slot5;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Slot6".
+            /// </summary>
+            public InputAction @Slot6 => m_Wrapper.m_Player_Slot6;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Slot7".
+            /// </summary>
+            public InputAction @Slot7 => m_Wrapper.m_Player_Slot7;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Slot8".
+            /// </summary>
+            public InputAction @Slot8 => m_Wrapper.m_Player_Slot8;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Slot9".
+            /// </summary>
+            public InputAction @Slot9 => m_Wrapper.m_Player_Slot9;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Slot0".
+            /// </summary>
+            public InputAction @Slot0 => m_Wrapper.m_Player_Slot0;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_Player; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="PlayerActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="PlayerActions" />
+            public void AddCallbacks(IPlayerActions instance)
+            {
+                if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
+                @Move.started += instance.OnMove;
+                @Move.performed += instance.OnMove;
+                @Move.canceled += instance.OnMove;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
+                @Point.started += instance.OnPoint;
+                @Point.performed += instance.OnPoint;
+                @Point.canceled += instance.OnPoint;
+                @PrimaryAction.started += instance.OnPrimaryAction;
+                @PrimaryAction.performed += instance.OnPrimaryAction;
+                @PrimaryAction.canceled += instance.OnPrimaryAction;
+                @SecondaryAction.started += instance.OnSecondaryAction;
+                @SecondaryAction.performed += instance.OnSecondaryAction;
+                @SecondaryAction.canceled += instance.OnSecondaryAction;
+                @CycleActionSetting.started += instance.OnCycleActionSetting;
+                @CycleActionSetting.performed += instance.OnCycleActionSetting;
+                @CycleActionSetting.canceled += instance.OnCycleActionSetting;
+                @Slot1.started += instance.OnSlot1;
+                @Slot1.performed += instance.OnSlot1;
+                @Slot1.canceled += instance.OnSlot1;
+                @Slot2.started += instance.OnSlot2;
+                @Slot2.performed += instance.OnSlot2;
+                @Slot2.canceled += instance.OnSlot2;
+                @Slot3.started += instance.OnSlot3;
+                @Slot3.performed += instance.OnSlot3;
+                @Slot3.canceled += instance.OnSlot3;
+                @Slot4.started += instance.OnSlot4;
+                @Slot4.performed += instance.OnSlot4;
+                @Slot4.canceled += instance.OnSlot4;
+                @Slot5.started += instance.OnSlot5;
+                @Slot5.performed += instance.OnSlot5;
+                @Slot5.canceled += instance.OnSlot5;
+                @Slot6.started += instance.OnSlot6;
+                @Slot6.performed += instance.OnSlot6;
+                @Slot6.canceled += instance.OnSlot6;
+                @Slot7.started += instance.OnSlot7;
+                @Slot7.performed += instance.OnSlot7;
+                @Slot7.canceled += instance.OnSlot7;
+                @Slot8.started += instance.OnSlot8;
+                @Slot8.performed += instance.OnSlot8;
+                @Slot8.canceled += instance.OnSlot8;
+                @Slot9.started += instance.OnSlot9;
+                @Slot9.performed += instance.OnSlot9;
+                @Slot9.canceled += instance.OnSlot9;
+                @Slot0.started += instance.OnSlot0;
+                @Slot0.performed += instance.OnSlot0;
+                @Slot0.canceled += instance.OnSlot0;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="PlayerActions" />
+            private void UnregisterCallbacks(IPlayerActions instance)
+            {
+                @Move.started -= instance.OnMove;
+                @Move.performed -= instance.OnMove;
+                @Move.canceled -= instance.OnMove;
+                @Jump.started -= instance.OnJump;
+                @Jump.performed -= instance.OnJump;
+                @Jump.canceled -= instance.OnJump;
+                @Point.started -= instance.OnPoint;
+                @Point.performed -= instance.OnPoint;
+                @Point.canceled -= instance.OnPoint;
+                @PrimaryAction.started -= instance.OnPrimaryAction;
+                @PrimaryAction.performed -= instance.OnPrimaryAction;
+                @PrimaryAction.canceled -= instance.OnPrimaryAction;
+                @SecondaryAction.started -= instance.OnSecondaryAction;
+                @SecondaryAction.performed -= instance.OnSecondaryAction;
+                @SecondaryAction.canceled -= instance.OnSecondaryAction;
+                @CycleActionSetting.started -= instance.OnCycleActionSetting;
+                @CycleActionSetting.performed -= instance.OnCycleActionSetting;
+                @CycleActionSetting.canceled -= instance.OnCycleActionSetting;
+                @Slot1.started -= instance.OnSlot1;
+                @Slot1.performed -= instance.OnSlot1;
+                @Slot1.canceled -= instance.OnSlot1;
+                @Slot2.started -= instance.OnSlot2;
+                @Slot2.performed -= instance.OnSlot2;
+                @Slot2.canceled -= instance.OnSlot2;
+                @Slot3.started -= instance.OnSlot3;
+                @Slot3.performed -= instance.OnSlot3;
+                @Slot3.canceled -= instance.OnSlot3;
+                @Slot4.started -= instance.OnSlot4;
+                @Slot4.performed -= instance.OnSlot4;
+                @Slot4.canceled -= instance.OnSlot4;
+                @Slot5.started -= instance.OnSlot5;
+                @Slot5.performed -= instance.OnSlot5;
+                @Slot5.canceled -= instance.OnSlot5;
+                @Slot6.started -= instance.OnSlot6;
+                @Slot6.performed -= instance.OnSlot6;
+                @Slot6.canceled -= instance.OnSlot6;
+                @Slot7.started -= instance.OnSlot7;
+                @Slot7.performed -= instance.OnSlot7;
+                @Slot7.canceled -= instance.OnSlot7;
+                @Slot8.started -= instance.OnSlot8;
+                @Slot8.performed -= instance.OnSlot8;
+                @Slot8.canceled -= instance.OnSlot8;
+                @Slot9.started -= instance.OnSlot9;
+                @Slot9.performed -= instance.OnSlot9;
+                @Slot9.canceled -= instance.OnSlot9;
+                @Slot0.started -= instance.OnSlot0;
+                @Slot0.performed -= instance.OnSlot0;
+                @Slot0.canceled -= instance.OnSlot0;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />.
+            /// </summary>
+            /// <seealso cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />
+            public void RemoveCallbacks(IPlayerActions instance)
+            {
+                if (m_Wrapper.m_PlayerActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="PlayerActions.AddCallbacks(IPlayerActions)" />
+            /// <seealso cref="PlayerActions.RemoveCallbacks(IPlayerActions)" />
+            /// <seealso cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />
+            public void SetCallbacks(IPlayerActions instance)
+            {
+                foreach (var item in m_Wrapper.m_PlayerActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_PlayerActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="PlayerActions" /> instance referencing this action map.
+        /// </summary>
+        public PlayerActions @Player => new PlayerActions(this);
+
         // UI
-        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
-        m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
-        m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
-        m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
-        m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
-        m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
-        m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
-        m_UI_MiddleClick = m_UI.FindAction("MiddleClick", throwIfNotFound: true);
-        m_UI_ScrollWheel = m_UI.FindAction("ScrollWheel", throwIfNotFound: true);
-        m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
-        m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        private readonly InputActionMap m_UI;
+        private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
+        private readonly InputAction m_UI_Navigate;
+        private readonly InputAction m_UI_Submit;
+        private readonly InputAction m_UI_Cancel;
+        private readonly InputAction m_UI_Point;
+        private readonly InputAction m_UI_Click;
+        private readonly InputAction m_UI_RightClick;
+        private readonly InputAction m_UI_MiddleClick;
+        private readonly InputAction m_UI_ScrollWheel;
+        private readonly InputAction m_UI_TrackedDevicePosition;
+        private readonly InputAction m_UI_TrackedDeviceOrientation;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "UI".
+        /// </summary>
+        public struct UIActions
+        {
+            private @GameInput m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public UIActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "UI/Navigate".
+            /// </summary>
+            public InputAction @Navigate => m_Wrapper.m_UI_Navigate;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/Submit".
+            /// </summary>
+            public InputAction @Submit => m_Wrapper.m_UI_Submit;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/Cancel".
+            /// </summary>
+            public InputAction @Cancel => m_Wrapper.m_UI_Cancel;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/Point".
+            /// </summary>
+            public InputAction @Point => m_Wrapper.m_UI_Point;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/Click".
+            /// </summary>
+            public InputAction @Click => m_Wrapper.m_UI_Click;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/RightClick".
+            /// </summary>
+            public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/MiddleClick".
+            /// </summary>
+            public InputAction @MiddleClick => m_Wrapper.m_UI_MiddleClick;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/ScrollWheel".
+            /// </summary>
+            public InputAction @ScrollWheel => m_Wrapper.m_UI_ScrollWheel;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/TrackedDevicePosition".
+            /// </summary>
+            public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/TrackedDeviceOrientation".
+            /// </summary>
+            public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_UI; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="UIActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="UIActions" />
+            public void AddCallbacks(IUIActions instance)
+            {
+                if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
+                @Navigate.started += instance.OnNavigate;
+                @Navigate.performed += instance.OnNavigate;
+                @Navigate.canceled += instance.OnNavigate;
+                @Submit.started += instance.OnSubmit;
+                @Submit.performed += instance.OnSubmit;
+                @Submit.canceled += instance.OnSubmit;
+                @Cancel.started += instance.OnCancel;
+                @Cancel.performed += instance.OnCancel;
+                @Cancel.canceled += instance.OnCancel;
+                @Point.started += instance.OnPoint;
+                @Point.performed += instance.OnPoint;
+                @Point.canceled += instance.OnPoint;
+                @Click.started += instance.OnClick;
+                @Click.performed += instance.OnClick;
+                @Click.canceled += instance.OnClick;
+                @RightClick.started += instance.OnRightClick;
+                @RightClick.performed += instance.OnRightClick;
+                @RightClick.canceled += instance.OnRightClick;
+                @MiddleClick.started += instance.OnMiddleClick;
+                @MiddleClick.performed += instance.OnMiddleClick;
+                @MiddleClick.canceled += instance.OnMiddleClick;
+                @ScrollWheel.started += instance.OnScrollWheel;
+                @ScrollWheel.performed += instance.OnScrollWheel;
+                @ScrollWheel.canceled += instance.OnScrollWheel;
+                @TrackedDevicePosition.started += instance.OnTrackedDevicePosition;
+                @TrackedDevicePosition.performed += instance.OnTrackedDevicePosition;
+                @TrackedDevicePosition.canceled += instance.OnTrackedDevicePosition;
+                @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
+                @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
+                @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="UIActions" />
+            private void UnregisterCallbacks(IUIActions instance)
+            {
+                @Navigate.started -= instance.OnNavigate;
+                @Navigate.performed -= instance.OnNavigate;
+                @Navigate.canceled -= instance.OnNavigate;
+                @Submit.started -= instance.OnSubmit;
+                @Submit.performed -= instance.OnSubmit;
+                @Submit.canceled -= instance.OnSubmit;
+                @Cancel.started -= instance.OnCancel;
+                @Cancel.performed -= instance.OnCancel;
+                @Cancel.canceled -= instance.OnCancel;
+                @Point.started -= instance.OnPoint;
+                @Point.performed -= instance.OnPoint;
+                @Point.canceled -= instance.OnPoint;
+                @Click.started -= instance.OnClick;
+                @Click.performed -= instance.OnClick;
+                @Click.canceled -= instance.OnClick;
+                @RightClick.started -= instance.OnRightClick;
+                @RightClick.performed -= instance.OnRightClick;
+                @RightClick.canceled -= instance.OnRightClick;
+                @MiddleClick.started -= instance.OnMiddleClick;
+                @MiddleClick.performed -= instance.OnMiddleClick;
+                @MiddleClick.canceled -= instance.OnMiddleClick;
+                @ScrollWheel.started -= instance.OnScrollWheel;
+                @ScrollWheel.performed -= instance.OnScrollWheel;
+                @ScrollWheel.canceled -= instance.OnScrollWheel;
+                @TrackedDevicePosition.started -= instance.OnTrackedDevicePosition;
+                @TrackedDevicePosition.performed -= instance.OnTrackedDevicePosition;
+                @TrackedDevicePosition.canceled -= instance.OnTrackedDevicePosition;
+                @TrackedDeviceOrientation.started -= instance.OnTrackedDeviceOrientation;
+                @TrackedDeviceOrientation.performed -= instance.OnTrackedDeviceOrientation;
+                @TrackedDeviceOrientation.canceled -= instance.OnTrackedDeviceOrientation;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="UIActions.UnregisterCallbacks(IUIActions)" />.
+            /// </summary>
+            /// <seealso cref="UIActions.UnregisterCallbacks(IUIActions)" />
+            public void RemoveCallbacks(IUIActions instance)
+            {
+                if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="UIActions.AddCallbacks(IUIActions)" />
+            /// <seealso cref="UIActions.RemoveCallbacks(IUIActions)" />
+            /// <seealso cref="UIActions.UnregisterCallbacks(IUIActions)" />
+            public void SetCallbacks(IUIActions instance)
+            {
+                foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="UIActions" /> instance referencing this action map.
+        /// </summary>
+        public UIActions @UI => new UIActions(this);
+
         // HUD
-        m_HUD = asset.FindActionMap("HUD", throwIfNotFound: true);
-        m_HUD_ShowInventory = m_HUD.FindAction("ShowInventory", throwIfNotFound: true);
-        m_HUD_ShowWeaponStore = m_HUD.FindAction("ShowWeaponStore", throwIfNotFound: true);
-        m_HUD_ShowJournal = m_HUD.FindAction("ShowJournal", throwIfNotFound: true);
-        m_HUD_ShowMap = m_HUD.FindAction("ShowMap", throwIfNotFound: true);
-        m_HUD_ShowSkillTree = m_HUD.FindAction("ShowSkillTree", throwIfNotFound: true);
-        m_HUD_Exit = m_HUD.FindAction("Exit", throwIfNotFound: true);
+        private readonly InputActionMap m_HUD;
+        private List<IHUDActions> m_HUDActionsCallbackInterfaces = new List<IHUDActions>();
+        private readonly InputAction m_HUD_ShowInventory;
+        private readonly InputAction m_HUD_ShowWeaponStore;
+        private readonly InputAction m_HUD_ShowJournal;
+        private readonly InputAction m_HUD_ShowMap;
+        private readonly InputAction m_HUD_ShowSkillTree;
+        private readonly InputAction m_HUD_ShowBlockPicker;
+        private readonly InputAction m_HUD_Exit;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "HUD".
+        /// </summary>
+        public struct HUDActions
+        {
+            private @GameInput m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public HUDActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "HUD/ShowInventory".
+            /// </summary>
+            public InputAction @ShowInventory => m_Wrapper.m_HUD_ShowInventory;
+            /// <summary>
+            /// Provides access to the underlying input action "HUD/ShowWeaponStore".
+            /// </summary>
+            public InputAction @ShowWeaponStore => m_Wrapper.m_HUD_ShowWeaponStore;
+            /// <summary>
+            /// Provides access to the underlying input action "HUD/ShowJournal".
+            /// </summary>
+            public InputAction @ShowJournal => m_Wrapper.m_HUD_ShowJournal;
+            /// <summary>
+            /// Provides access to the underlying input action "HUD/ShowMap".
+            /// </summary>
+            public InputAction @ShowMap => m_Wrapper.m_HUD_ShowMap;
+            /// <summary>
+            /// Provides access to the underlying input action "HUD/ShowSkillTree".
+            /// </summary>
+            public InputAction @ShowSkillTree => m_Wrapper.m_HUD_ShowSkillTree;
+            /// <summary>
+            /// Provides access to the underlying input action "HUD/ShowBlockPicker".
+            /// </summary>
+            public InputAction @ShowBlockPicker => m_Wrapper.m_HUD_ShowBlockPicker;
+            /// <summary>
+            /// Provides access to the underlying input action "HUD/Exit".
+            /// </summary>
+            public InputAction @Exit => m_Wrapper.m_HUD_Exit;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_HUD; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="HUDActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(HUDActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="HUDActions" />
+            public void AddCallbacks(IHUDActions instance)
+            {
+                if (instance == null || m_Wrapper.m_HUDActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_HUDActionsCallbackInterfaces.Add(instance);
+                @ShowInventory.started += instance.OnShowInventory;
+                @ShowInventory.performed += instance.OnShowInventory;
+                @ShowInventory.canceled += instance.OnShowInventory;
+                @ShowWeaponStore.started += instance.OnShowWeaponStore;
+                @ShowWeaponStore.performed += instance.OnShowWeaponStore;
+                @ShowWeaponStore.canceled += instance.OnShowWeaponStore;
+                @ShowJournal.started += instance.OnShowJournal;
+                @ShowJournal.performed += instance.OnShowJournal;
+                @ShowJournal.canceled += instance.OnShowJournal;
+                @ShowMap.started += instance.OnShowMap;
+                @ShowMap.performed += instance.OnShowMap;
+                @ShowMap.canceled += instance.OnShowMap;
+                @ShowSkillTree.started += instance.OnShowSkillTree;
+                @ShowSkillTree.performed += instance.OnShowSkillTree;
+                @ShowSkillTree.canceled += instance.OnShowSkillTree;
+                @ShowBlockPicker.started += instance.OnShowBlockPicker;
+                @ShowBlockPicker.performed += instance.OnShowBlockPicker;
+                @ShowBlockPicker.canceled += instance.OnShowBlockPicker;
+                @Exit.started += instance.OnExit;
+                @Exit.performed += instance.OnExit;
+                @Exit.canceled += instance.OnExit;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="HUDActions" />
+            private void UnregisterCallbacks(IHUDActions instance)
+            {
+                @ShowInventory.started -= instance.OnShowInventory;
+                @ShowInventory.performed -= instance.OnShowInventory;
+                @ShowInventory.canceled -= instance.OnShowInventory;
+                @ShowWeaponStore.started -= instance.OnShowWeaponStore;
+                @ShowWeaponStore.performed -= instance.OnShowWeaponStore;
+                @ShowWeaponStore.canceled -= instance.OnShowWeaponStore;
+                @ShowJournal.started -= instance.OnShowJournal;
+                @ShowJournal.performed -= instance.OnShowJournal;
+                @ShowJournal.canceled -= instance.OnShowJournal;
+                @ShowMap.started -= instance.OnShowMap;
+                @ShowMap.performed -= instance.OnShowMap;
+                @ShowMap.canceled -= instance.OnShowMap;
+                @ShowSkillTree.started -= instance.OnShowSkillTree;
+                @ShowSkillTree.performed -= instance.OnShowSkillTree;
+                @ShowSkillTree.canceled -= instance.OnShowSkillTree;
+                @ShowBlockPicker.started -= instance.OnShowBlockPicker;
+                @ShowBlockPicker.performed -= instance.OnShowBlockPicker;
+                @ShowBlockPicker.canceled -= instance.OnShowBlockPicker;
+                @Exit.started -= instance.OnExit;
+                @Exit.performed -= instance.OnExit;
+                @Exit.canceled -= instance.OnExit;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="HUDActions.UnregisterCallbacks(IHUDActions)" />.
+            /// </summary>
+            /// <seealso cref="HUDActions.UnregisterCallbacks(IHUDActions)" />
+            public void RemoveCallbacks(IHUDActions instance)
+            {
+                if (m_Wrapper.m_HUDActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="HUDActions.AddCallbacks(IHUDActions)" />
+            /// <seealso cref="HUDActions.RemoveCallbacks(IHUDActions)" />
+            /// <seealso cref="HUDActions.UnregisterCallbacks(IHUDActions)" />
+            public void SetCallbacks(IHUDActions instance)
+            {
+                foreach (var item in m_Wrapper.m_HUDActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_HUDActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="HUDActions" /> instance referencing this action map.
+        /// </summary>
+        public HUDActions @HUD => new HUDActions(this);
+
         // Debug
-        m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
-        m_Debug_ShowChunks = m_Debug.FindAction("ShowChunks", throwIfNotFound: true);
-        m_Debug_SetGodMode = m_Debug.FindAction("SetGodMode", throwIfNotFound: true);
-    }
-
-    ~@GameInput()
-    {
-        UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, GameInput.Player.Disable() has not been called.");
-        UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, GameInput.UI.Disable() has not been called.");
-        UnityEngine.Debug.Assert(!m_HUD.enabled, "This will cause a leak and performance issues, GameInput.HUD.Disable() has not been called.");
-        UnityEngine.Debug.Assert(!m_Debug.enabled, "This will cause a leak and performance issues, GameInput.Debug.Disable() has not been called.");
-    }
-
-    /// <summary>
-    /// Destroys this asset and all associated <see cref="InputAction"/> instances.
-    /// </summary>
-    public void Dispose()
-    {
-        UnityEngine.Object.Destroy(asset);
-    }
-
-    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.bindingMask" />
-    public InputBinding? bindingMask
-    {
-        get => asset.bindingMask;
-        set => asset.bindingMask = value;
-    }
-
-    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.devices" />
-    public ReadOnlyArray<InputDevice>? devices
-    {
-        get => asset.devices;
-        set => asset.devices = value;
-    }
-
-    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.controlSchemes" />
-    public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
-
-    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.Contains(InputAction)" />
-    public bool Contains(InputAction action)
-    {
-        return asset.Contains(action);
-    }
-
-    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.GetEnumerator()" />
-    public IEnumerator<InputAction> GetEnumerator()
-    {
-        return asset.GetEnumerator();
-    }
-
-    /// <inheritdoc cref="IEnumerable.GetEnumerator()" />
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
-    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.Enable()" />
-    public void Enable()
-    {
-        asset.Enable();
-    }
-
-    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.Disable()" />
-    public void Disable()
-    {
-        asset.Disable();
-    }
-
-    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.bindings" />
-    public IEnumerable<InputBinding> bindings => asset.bindings;
-
-    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.FindAction(string, bool)" />
-    public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
-    {
-        return asset.FindAction(actionNameOrId, throwIfNotFound);
-    }
-
-    /// <inheritdoc cref="UnityEngine.InputSystem.InputActionAsset.FindBinding(InputBinding, out InputAction)" />
-    public int FindBinding(InputBinding bindingMask, out InputAction action)
-    {
-        return asset.FindBinding(bindingMask, out action);
-    }
-
-    // Player
-    private readonly InputActionMap m_Player;
-    private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_Point;
-    private readonly InputAction m_Player_PrimaryAction;
-    private readonly InputAction m_Player_SecondaryAction;
-    private readonly InputAction m_Player_CycleActionSetting;
-    private readonly InputAction m_Player_Slot1;
-    private readonly InputAction m_Player_Slot2;
-    private readonly InputAction m_Player_Slot3;
-    private readonly InputAction m_Player_Slot4;
-    private readonly InputAction m_Player_Slot5;
-    private readonly InputAction m_Player_Slot6;
-    private readonly InputAction m_Player_Slot7;
-    private readonly InputAction m_Player_Slot8;
-    private readonly InputAction m_Player_Slot9;
-    private readonly InputAction m_Player_Slot0;
-    /// <summary>
-    /// Provides access to input actions defined in input action map "Player".
-    /// </summary>
-    public struct PlayerActions
-    {
-        private @GameInput m_Wrapper;
-
+        private readonly InputActionMap m_Debug;
+        private List<IDebugActions> m_DebugActionsCallbackInterfaces = new List<IDebugActions>();
+        private readonly InputAction m_Debug_ShowChunks;
+        private readonly InputAction m_Debug_SetGodMode;
         /// <summary>
-        /// Construct a new instance of the input action map wrapper class.
+        /// Provides access to input actions defined in input action map "Debug".
         /// </summary>
-        public PlayerActions(@GameInput wrapper) { m_Wrapper = wrapper; }
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Move".
-        /// </summary>
-        public InputAction @Move => m_Wrapper.m_Player_Move;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Jump".
-        /// </summary>
-        public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Point".
-        /// </summary>
-        public InputAction @Point => m_Wrapper.m_Player_Point;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/PrimaryAction".
-        /// </summary>
-        public InputAction @PrimaryAction => m_Wrapper.m_Player_PrimaryAction;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/SecondaryAction".
-        /// </summary>
-        public InputAction @SecondaryAction => m_Wrapper.m_Player_SecondaryAction;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/CycleActionSetting".
-        /// </summary>
-        public InputAction @CycleActionSetting => m_Wrapper.m_Player_CycleActionSetting;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Slot1".
-        /// </summary>
-        public InputAction @Slot1 => m_Wrapper.m_Player_Slot1;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Slot2".
-        /// </summary>
-        public InputAction @Slot2 => m_Wrapper.m_Player_Slot2;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Slot3".
-        /// </summary>
-        public InputAction @Slot3 => m_Wrapper.m_Player_Slot3;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Slot4".
-        /// </summary>
-        public InputAction @Slot4 => m_Wrapper.m_Player_Slot4;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Slot5".
-        /// </summary>
-        public InputAction @Slot5 => m_Wrapper.m_Player_Slot5;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Slot6".
-        /// </summary>
-        public InputAction @Slot6 => m_Wrapper.m_Player_Slot6;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Slot7".
-        /// </summary>
-        public InputAction @Slot7 => m_Wrapper.m_Player_Slot7;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Slot8".
-        /// </summary>
-        public InputAction @Slot8 => m_Wrapper.m_Player_Slot8;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Slot9".
-        /// </summary>
-        public InputAction @Slot9 => m_Wrapper.m_Player_Slot9;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Slot0".
-        /// </summary>
-        public InputAction @Slot0 => m_Wrapper.m_Player_Slot0;
-        /// <summary>
-        /// Provides access to the underlying input action map instance.
-        /// </summary>
-        public InputActionMap Get() { return m_Wrapper.m_Player; }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
-        public void Enable() { Get().Enable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
-        public void Disable() { Get().Disable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
-        public bool enabled => Get().enabled;
-        /// <summary>
-        /// Implicitly converts an <see ref="PlayerActions" /> to an <see ref="InputActionMap" /> instance.
-        /// </summary>
-        public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
-        /// <summary>
-        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-        /// </summary>
-        /// <param name="instance">Callback instance.</param>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
-        /// </remarks>
-        /// <seealso cref="PlayerActions" />
-        public void AddCallbacks(IPlayerActions instance)
+        public struct DebugActions
         {
-            if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
-            @Move.started += instance.OnMove;
-            @Move.performed += instance.OnMove;
-            @Move.canceled += instance.OnMove;
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
-            @Point.started += instance.OnPoint;
-            @Point.performed += instance.OnPoint;
-            @Point.canceled += instance.OnPoint;
-            @PrimaryAction.started += instance.OnPrimaryAction;
-            @PrimaryAction.performed += instance.OnPrimaryAction;
-            @PrimaryAction.canceled += instance.OnPrimaryAction;
-            @SecondaryAction.started += instance.OnSecondaryAction;
-            @SecondaryAction.performed += instance.OnSecondaryAction;
-            @SecondaryAction.canceled += instance.OnSecondaryAction;
-            @CycleActionSetting.started += instance.OnCycleActionSetting;
-            @CycleActionSetting.performed += instance.OnCycleActionSetting;
-            @CycleActionSetting.canceled += instance.OnCycleActionSetting;
-            @Slot1.started += instance.OnSlot1;
-            @Slot1.performed += instance.OnSlot1;
-            @Slot1.canceled += instance.OnSlot1;
-            @Slot2.started += instance.OnSlot2;
-            @Slot2.performed += instance.OnSlot2;
-            @Slot2.canceled += instance.OnSlot2;
-            @Slot3.started += instance.OnSlot3;
-            @Slot3.performed += instance.OnSlot3;
-            @Slot3.canceled += instance.OnSlot3;
-            @Slot4.started += instance.OnSlot4;
-            @Slot4.performed += instance.OnSlot4;
-            @Slot4.canceled += instance.OnSlot4;
-            @Slot5.started += instance.OnSlot5;
-            @Slot5.performed += instance.OnSlot5;
-            @Slot5.canceled += instance.OnSlot5;
-            @Slot6.started += instance.OnSlot6;
-            @Slot6.performed += instance.OnSlot6;
-            @Slot6.canceled += instance.OnSlot6;
-            @Slot7.started += instance.OnSlot7;
-            @Slot7.performed += instance.OnSlot7;
-            @Slot7.canceled += instance.OnSlot7;
-            @Slot8.started += instance.OnSlot8;
-            @Slot8.performed += instance.OnSlot8;
-            @Slot8.canceled += instance.OnSlot8;
-            @Slot9.started += instance.OnSlot9;
-            @Slot9.performed += instance.OnSlot9;
-            @Slot9.canceled += instance.OnSlot9;
-            @Slot0.started += instance.OnSlot0;
-            @Slot0.performed += instance.OnSlot0;
-            @Slot0.canceled += instance.OnSlot0;
-        }
+            private @GameInput m_Wrapper;
 
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public DebugActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "Debug/ShowChunks".
+            /// </summary>
+            public InputAction @ShowChunks => m_Wrapper.m_Debug_ShowChunks;
+            /// <summary>
+            /// Provides access to the underlying input action "Debug/SetGodMode".
+            /// </summary>
+            public InputAction @SetGodMode => m_Wrapper.m_Debug_SetGodMode;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_Debug; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="DebugActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(DebugActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="DebugActions" />
+            public void AddCallbacks(IDebugActions instance)
+            {
+                if (instance == null || m_Wrapper.m_DebugActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_DebugActionsCallbackInterfaces.Add(instance);
+                @ShowChunks.started += instance.OnShowChunks;
+                @ShowChunks.performed += instance.OnShowChunks;
+                @ShowChunks.canceled += instance.OnShowChunks;
+                @SetGodMode.started += instance.OnSetGodMode;
+                @SetGodMode.performed += instance.OnSetGodMode;
+                @SetGodMode.canceled += instance.OnSetGodMode;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="DebugActions" />
+            private void UnregisterCallbacks(IDebugActions instance)
+            {
+                @ShowChunks.started -= instance.OnShowChunks;
+                @ShowChunks.performed -= instance.OnShowChunks;
+                @ShowChunks.canceled -= instance.OnShowChunks;
+                @SetGodMode.started -= instance.OnSetGodMode;
+                @SetGodMode.performed -= instance.OnSetGodMode;
+                @SetGodMode.canceled -= instance.OnSetGodMode;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="DebugActions.UnregisterCallbacks(IDebugActions)" />.
+            /// </summary>
+            /// <seealso cref="DebugActions.UnregisterCallbacks(IDebugActions)" />
+            public void RemoveCallbacks(IDebugActions instance)
+            {
+                if (m_Wrapper.m_DebugActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="DebugActions.AddCallbacks(IDebugActions)" />
+            /// <seealso cref="DebugActions.RemoveCallbacks(IDebugActions)" />
+            /// <seealso cref="DebugActions.UnregisterCallbacks(IDebugActions)" />
+            public void SetCallbacks(IDebugActions instance)
+            {
+                foreach (var item in m_Wrapper.m_DebugActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_DebugActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
         /// <summary>
-        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// Provides a new <see cref="DebugActions" /> instance referencing this action map.
         /// </summary>
-        /// <remarks>
-        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
-        /// </remarks>
-        /// <seealso cref="PlayerActions" />
-        private void UnregisterCallbacks(IPlayerActions instance)
+        public DebugActions @Debug => new DebugActions(this);
+        private int m_KeyboardMouseSchemeIndex = -1;
+        /// <summary>
+        /// Provides access to the input control scheme.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
+        public InputControlScheme KeyboardMouseScheme
         {
-            @Move.started -= instance.OnMove;
-            @Move.performed -= instance.OnMove;
-            @Move.canceled -= instance.OnMove;
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
-            @Point.started -= instance.OnPoint;
-            @Point.performed -= instance.OnPoint;
-            @Point.canceled -= instance.OnPoint;
-            @PrimaryAction.started -= instance.OnPrimaryAction;
-            @PrimaryAction.performed -= instance.OnPrimaryAction;
-            @PrimaryAction.canceled -= instance.OnPrimaryAction;
-            @SecondaryAction.started -= instance.OnSecondaryAction;
-            @SecondaryAction.performed -= instance.OnSecondaryAction;
-            @SecondaryAction.canceled -= instance.OnSecondaryAction;
-            @CycleActionSetting.started -= instance.OnCycleActionSetting;
-            @CycleActionSetting.performed -= instance.OnCycleActionSetting;
-            @CycleActionSetting.canceled -= instance.OnCycleActionSetting;
-            @Slot1.started -= instance.OnSlot1;
-            @Slot1.performed -= instance.OnSlot1;
-            @Slot1.canceled -= instance.OnSlot1;
-            @Slot2.started -= instance.OnSlot2;
-            @Slot2.performed -= instance.OnSlot2;
-            @Slot2.canceled -= instance.OnSlot2;
-            @Slot3.started -= instance.OnSlot3;
-            @Slot3.performed -= instance.OnSlot3;
-            @Slot3.canceled -= instance.OnSlot3;
-            @Slot4.started -= instance.OnSlot4;
-            @Slot4.performed -= instance.OnSlot4;
-            @Slot4.canceled -= instance.OnSlot4;
-            @Slot5.started -= instance.OnSlot5;
-            @Slot5.performed -= instance.OnSlot5;
-            @Slot5.canceled -= instance.OnSlot5;
-            @Slot6.started -= instance.OnSlot6;
-            @Slot6.performed -= instance.OnSlot6;
-            @Slot6.canceled -= instance.OnSlot6;
-            @Slot7.started -= instance.OnSlot7;
-            @Slot7.performed -= instance.OnSlot7;
-            @Slot7.canceled -= instance.OnSlot7;
-            @Slot8.started -= instance.OnSlot8;
-            @Slot8.performed -= instance.OnSlot8;
-            @Slot8.canceled -= instance.OnSlot8;
-            @Slot9.started -= instance.OnSlot9;
-            @Slot9.performed -= instance.OnSlot9;
-            @Slot9.canceled -= instance.OnSlot9;
-            @Slot0.started -= instance.OnSlot0;
-            @Slot0.performed -= instance.OnSlot0;
-            @Slot0.canceled -= instance.OnSlot0;
+            get
+            {
+                if (m_KeyboardMouseSchemeIndex == -1) m_KeyboardMouseSchemeIndex = asset.FindControlSchemeIndex("Keyboard&Mouse");
+                return asset.controlSchemes[m_KeyboardMouseSchemeIndex];
+            }
         }
-
+        private int m_GamepadSchemeIndex = -1;
         /// <summary>
-        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />.
+        /// Provides access to the input control scheme.
         /// </summary>
-        /// <seealso cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />
-        public void RemoveCallbacks(IPlayerActions instance)
+        /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
+        public InputControlScheme GamepadScheme
         {
-            if (m_Wrapper.m_PlayerActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
+            get
+            {
+                if (m_GamepadSchemeIndex == -1) m_GamepadSchemeIndex = asset.FindControlSchemeIndex("Gamepad");
+                return asset.controlSchemes[m_GamepadSchemeIndex];
+            }
         }
-
+        private int m_TouchSchemeIndex = -1;
         /// <summary>
-        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// Provides access to the input control scheme.
         /// </summary>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
-        /// </remarks>
+        /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
+        public InputControlScheme TouchScheme
+        {
+            get
+            {
+                if (m_TouchSchemeIndex == -1) m_TouchSchemeIndex = asset.FindControlSchemeIndex("Touch");
+                return asset.controlSchemes[m_TouchSchemeIndex];
+            }
+        }
+        private int m_JoystickSchemeIndex = -1;
+        /// <summary>
+        /// Provides access to the input control scheme.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
+        public InputControlScheme JoystickScheme
+        {
+            get
+            {
+                if (m_JoystickSchemeIndex == -1) m_JoystickSchemeIndex = asset.FindControlSchemeIndex("Joystick");
+                return asset.controlSchemes[m_JoystickSchemeIndex];
+            }
+        }
+        private int m_XRSchemeIndex = -1;
+        /// <summary>
+        /// Provides access to the input control scheme.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
+        public InputControlScheme XRScheme
+        {
+            get
+            {
+                if (m_XRSchemeIndex == -1) m_XRSchemeIndex = asset.FindControlSchemeIndex("XR");
+                return asset.controlSchemes[m_XRSchemeIndex];
+            }
+        }
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player" which allows adding and removing callbacks.
+        /// </summary>
         /// <seealso cref="PlayerActions.AddCallbacks(IPlayerActions)" />
         /// <seealso cref="PlayerActions.RemoveCallbacks(IPlayerActions)" />
-        /// <seealso cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />
-        public void SetCallbacks(IPlayerActions instance)
+        public interface IPlayerActions
         {
-            foreach (var item in m_Wrapper.m_PlayerActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_PlayerActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
+            /// <summary>
+            /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnMove(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnJump(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Point" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnPoint(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "PrimaryAction" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnPrimaryAction(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "SecondaryAction" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSecondaryAction(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "CycleActionSetting" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnCycleActionSetting(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Slot1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSlot1(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Slot2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSlot2(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Slot3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSlot3(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Slot4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSlot4(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Slot5" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSlot5(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Slot6" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSlot6(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Slot7" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSlot7(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Slot8" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSlot8(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Slot9" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSlot9(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Slot0" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSlot0(InputAction.CallbackContext context);
         }
-    }
-    /// <summary>
-    /// Provides a new <see cref="PlayerActions" /> instance referencing this action map.
-    /// </summary>
-    public PlayerActions @Player => new PlayerActions(this);
-
-    // UI
-    private readonly InputActionMap m_UI;
-    private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
-    private readonly InputAction m_UI_Navigate;
-    private readonly InputAction m_UI_Submit;
-    private readonly InputAction m_UI_Cancel;
-    private readonly InputAction m_UI_Point;
-    private readonly InputAction m_UI_Click;
-    private readonly InputAction m_UI_RightClick;
-    private readonly InputAction m_UI_MiddleClick;
-    private readonly InputAction m_UI_ScrollWheel;
-    private readonly InputAction m_UI_TrackedDevicePosition;
-    private readonly InputAction m_UI_TrackedDeviceOrientation;
-    /// <summary>
-    /// Provides access to input actions defined in input action map "UI".
-    /// </summary>
-    public struct UIActions
-    {
-        private @GameInput m_Wrapper;
-
         /// <summary>
-        /// Construct a new instance of the input action map wrapper class.
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
         /// </summary>
-        public UIActions(@GameInput wrapper) { m_Wrapper = wrapper; }
-        /// <summary>
-        /// Provides access to the underlying input action "UI/Navigate".
-        /// </summary>
-        public InputAction @Navigate => m_Wrapper.m_UI_Navigate;
-        /// <summary>
-        /// Provides access to the underlying input action "UI/Submit".
-        /// </summary>
-        public InputAction @Submit => m_Wrapper.m_UI_Submit;
-        /// <summary>
-        /// Provides access to the underlying input action "UI/Cancel".
-        /// </summary>
-        public InputAction @Cancel => m_Wrapper.m_UI_Cancel;
-        /// <summary>
-        /// Provides access to the underlying input action "UI/Point".
-        /// </summary>
-        public InputAction @Point => m_Wrapper.m_UI_Point;
-        /// <summary>
-        /// Provides access to the underlying input action "UI/Click".
-        /// </summary>
-        public InputAction @Click => m_Wrapper.m_UI_Click;
-        /// <summary>
-        /// Provides access to the underlying input action "UI/RightClick".
-        /// </summary>
-        public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
-        /// <summary>
-        /// Provides access to the underlying input action "UI/MiddleClick".
-        /// </summary>
-        public InputAction @MiddleClick => m_Wrapper.m_UI_MiddleClick;
-        /// <summary>
-        /// Provides access to the underlying input action "UI/ScrollWheel".
-        /// </summary>
-        public InputAction @ScrollWheel => m_Wrapper.m_UI_ScrollWheel;
-        /// <summary>
-        /// Provides access to the underlying input action "UI/TrackedDevicePosition".
-        /// </summary>
-        public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
-        /// <summary>
-        /// Provides access to the underlying input action "UI/TrackedDeviceOrientation".
-        /// </summary>
-        public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
-        /// <summary>
-        /// Provides access to the underlying input action map instance.
-        /// </summary>
-        public InputActionMap Get() { return m_Wrapper.m_UI; }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
-        public void Enable() { Get().Enable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
-        public void Disable() { Get().Disable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
-        public bool enabled => Get().enabled;
-        /// <summary>
-        /// Implicitly converts an <see ref="UIActions" /> to an <see ref="InputActionMap" /> instance.
-        /// </summary>
-        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
-        /// <summary>
-        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-        /// </summary>
-        /// <param name="instance">Callback instance.</param>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
-        /// </remarks>
-        /// <seealso cref="UIActions" />
-        public void AddCallbacks(IUIActions instance)
-        {
-            if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
-            @Navigate.started += instance.OnNavigate;
-            @Navigate.performed += instance.OnNavigate;
-            @Navigate.canceled += instance.OnNavigate;
-            @Submit.started += instance.OnSubmit;
-            @Submit.performed += instance.OnSubmit;
-            @Submit.canceled += instance.OnSubmit;
-            @Cancel.started += instance.OnCancel;
-            @Cancel.performed += instance.OnCancel;
-            @Cancel.canceled += instance.OnCancel;
-            @Point.started += instance.OnPoint;
-            @Point.performed += instance.OnPoint;
-            @Point.canceled += instance.OnPoint;
-            @Click.started += instance.OnClick;
-            @Click.performed += instance.OnClick;
-            @Click.canceled += instance.OnClick;
-            @RightClick.started += instance.OnRightClick;
-            @RightClick.performed += instance.OnRightClick;
-            @RightClick.canceled += instance.OnRightClick;
-            @MiddleClick.started += instance.OnMiddleClick;
-            @MiddleClick.performed += instance.OnMiddleClick;
-            @MiddleClick.canceled += instance.OnMiddleClick;
-            @ScrollWheel.started += instance.OnScrollWheel;
-            @ScrollWheel.performed += instance.OnScrollWheel;
-            @ScrollWheel.canceled += instance.OnScrollWheel;
-            @TrackedDevicePosition.started += instance.OnTrackedDevicePosition;
-            @TrackedDevicePosition.performed += instance.OnTrackedDevicePosition;
-            @TrackedDevicePosition.canceled += instance.OnTrackedDevicePosition;
-            @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
-            @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
-            @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
-        }
-
-        /// <summary>
-        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-        /// </summary>
-        /// <remarks>
-        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
-        /// </remarks>
-        /// <seealso cref="UIActions" />
-        private void UnregisterCallbacks(IUIActions instance)
-        {
-            @Navigate.started -= instance.OnNavigate;
-            @Navigate.performed -= instance.OnNavigate;
-            @Navigate.canceled -= instance.OnNavigate;
-            @Submit.started -= instance.OnSubmit;
-            @Submit.performed -= instance.OnSubmit;
-            @Submit.canceled -= instance.OnSubmit;
-            @Cancel.started -= instance.OnCancel;
-            @Cancel.performed -= instance.OnCancel;
-            @Cancel.canceled -= instance.OnCancel;
-            @Point.started -= instance.OnPoint;
-            @Point.performed -= instance.OnPoint;
-            @Point.canceled -= instance.OnPoint;
-            @Click.started -= instance.OnClick;
-            @Click.performed -= instance.OnClick;
-            @Click.canceled -= instance.OnClick;
-            @RightClick.started -= instance.OnRightClick;
-            @RightClick.performed -= instance.OnRightClick;
-            @RightClick.canceled -= instance.OnRightClick;
-            @MiddleClick.started -= instance.OnMiddleClick;
-            @MiddleClick.performed -= instance.OnMiddleClick;
-            @MiddleClick.canceled -= instance.OnMiddleClick;
-            @ScrollWheel.started -= instance.OnScrollWheel;
-            @ScrollWheel.performed -= instance.OnScrollWheel;
-            @ScrollWheel.canceled -= instance.OnScrollWheel;
-            @TrackedDevicePosition.started -= instance.OnTrackedDevicePosition;
-            @TrackedDevicePosition.performed -= instance.OnTrackedDevicePosition;
-            @TrackedDevicePosition.canceled -= instance.OnTrackedDevicePosition;
-            @TrackedDeviceOrientation.started -= instance.OnTrackedDeviceOrientation;
-            @TrackedDeviceOrientation.performed -= instance.OnTrackedDeviceOrientation;
-            @TrackedDeviceOrientation.canceled -= instance.OnTrackedDeviceOrientation;
-        }
-
-        /// <summary>
-        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="UIActions.UnregisterCallbacks(IUIActions)" />.
-        /// </summary>
-        /// <seealso cref="UIActions.UnregisterCallbacks(IUIActions)" />
-        public void RemoveCallbacks(IUIActions instance)
-        {
-            if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        /// <summary>
-        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
-        /// </summary>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
-        /// </remarks>
         /// <seealso cref="UIActions.AddCallbacks(IUIActions)" />
         /// <seealso cref="UIActions.RemoveCallbacks(IUIActions)" />
-        /// <seealso cref="UIActions.UnregisterCallbacks(IUIActions)" />
-        public void SetCallbacks(IUIActions instance)
+        public interface IUIActions
         {
-            foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
+            /// <summary>
+            /// Method invoked when associated input action "Navigate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnNavigate(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Submit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSubmit(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Cancel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnCancel(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Point" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnPoint(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Click" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnClick(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "RightClick" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnRightClick(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "MiddleClick" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnMiddleClick(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ScrollWheel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnScrollWheel(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "TrackedDevicePosition" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnTrackedDevicePosition(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "TrackedDeviceOrientation" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
         }
-    }
-    /// <summary>
-    /// Provides a new <see cref="UIActions" /> instance referencing this action map.
-    /// </summary>
-    public UIActions @UI => new UIActions(this);
-
-    // HUD
-    private readonly InputActionMap m_HUD;
-    private List<IHUDActions> m_HUDActionsCallbackInterfaces = new List<IHUDActions>();
-    private readonly InputAction m_HUD_ShowInventory;
-    private readonly InputAction m_HUD_ShowWeaponStore;
-    private readonly InputAction m_HUD_ShowJournal;
-    private readonly InputAction m_HUD_ShowMap;
-    private readonly InputAction m_HUD_ShowSkillTree;
-    private readonly InputAction m_HUD_Exit;
-    /// <summary>
-    /// Provides access to input actions defined in input action map "HUD".
-    /// </summary>
-    public struct HUDActions
-    {
-        private @GameInput m_Wrapper;
-
         /// <summary>
-        /// Construct a new instance of the input action map wrapper class.
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "HUD" which allows adding and removing callbacks.
         /// </summary>
-        public HUDActions(@GameInput wrapper) { m_Wrapper = wrapper; }
-        /// <summary>
-        /// Provides access to the underlying input action "HUD/ShowInventory".
-        /// </summary>
-        public InputAction @ShowInventory => m_Wrapper.m_HUD_ShowInventory;
-        /// <summary>
-        /// Provides access to the underlying input action "HUD/ShowWeaponStore".
-        /// </summary>
-        public InputAction @ShowWeaponStore => m_Wrapper.m_HUD_ShowWeaponStore;
-        /// <summary>
-        /// Provides access to the underlying input action "HUD/ShowJournal".
-        /// </summary>
-        public InputAction @ShowJournal => m_Wrapper.m_HUD_ShowJournal;
-        /// <summary>
-        /// Provides access to the underlying input action "HUD/ShowMap".
-        /// </summary>
-        public InputAction @ShowMap => m_Wrapper.m_HUD_ShowMap;
-        /// <summary>
-        /// Provides access to the underlying input action "HUD/ShowSkillTree".
-        /// </summary>
-        public InputAction @ShowSkillTree => m_Wrapper.m_HUD_ShowSkillTree;
-        /// <summary>
-        /// Provides access to the underlying input action "HUD/Exit".
-        /// </summary>
-        public InputAction @Exit => m_Wrapper.m_HUD_Exit;
-        /// <summary>
-        /// Provides access to the underlying input action map instance.
-        /// </summary>
-        public InputActionMap Get() { return m_Wrapper.m_HUD; }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
-        public void Enable() { Get().Enable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
-        public void Disable() { Get().Disable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
-        public bool enabled => Get().enabled;
-        /// <summary>
-        /// Implicitly converts an <see ref="HUDActions" /> to an <see ref="InputActionMap" /> instance.
-        /// </summary>
-        public static implicit operator InputActionMap(HUDActions set) { return set.Get(); }
-        /// <summary>
-        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-        /// </summary>
-        /// <param name="instance">Callback instance.</param>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
-        /// </remarks>
-        /// <seealso cref="HUDActions" />
-        public void AddCallbacks(IHUDActions instance)
-        {
-            if (instance == null || m_Wrapper.m_HUDActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_HUDActionsCallbackInterfaces.Add(instance);
-            @ShowInventory.started += instance.OnShowInventory;
-            @ShowInventory.performed += instance.OnShowInventory;
-            @ShowInventory.canceled += instance.OnShowInventory;
-            @ShowWeaponStore.started += instance.OnShowWeaponStore;
-            @ShowWeaponStore.performed += instance.OnShowWeaponStore;
-            @ShowWeaponStore.canceled += instance.OnShowWeaponStore;
-            @ShowJournal.started += instance.OnShowJournal;
-            @ShowJournal.performed += instance.OnShowJournal;
-            @ShowJournal.canceled += instance.OnShowJournal;
-            @ShowMap.started += instance.OnShowMap;
-            @ShowMap.performed += instance.OnShowMap;
-            @ShowMap.canceled += instance.OnShowMap;
-            @ShowSkillTree.started += instance.OnShowSkillTree;
-            @ShowSkillTree.performed += instance.OnShowSkillTree;
-            @ShowSkillTree.canceled += instance.OnShowSkillTree;
-            @Exit.started += instance.OnExit;
-            @Exit.performed += instance.OnExit;
-            @Exit.canceled += instance.OnExit;
-        }
-
-        /// <summary>
-        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-        /// </summary>
-        /// <remarks>
-        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
-        /// </remarks>
-        /// <seealso cref="HUDActions" />
-        private void UnregisterCallbacks(IHUDActions instance)
-        {
-            @ShowInventory.started -= instance.OnShowInventory;
-            @ShowInventory.performed -= instance.OnShowInventory;
-            @ShowInventory.canceled -= instance.OnShowInventory;
-            @ShowWeaponStore.started -= instance.OnShowWeaponStore;
-            @ShowWeaponStore.performed -= instance.OnShowWeaponStore;
-            @ShowWeaponStore.canceled -= instance.OnShowWeaponStore;
-            @ShowJournal.started -= instance.OnShowJournal;
-            @ShowJournal.performed -= instance.OnShowJournal;
-            @ShowJournal.canceled -= instance.OnShowJournal;
-            @ShowMap.started -= instance.OnShowMap;
-            @ShowMap.performed -= instance.OnShowMap;
-            @ShowMap.canceled -= instance.OnShowMap;
-            @ShowSkillTree.started -= instance.OnShowSkillTree;
-            @ShowSkillTree.performed -= instance.OnShowSkillTree;
-            @ShowSkillTree.canceled -= instance.OnShowSkillTree;
-            @Exit.started -= instance.OnExit;
-            @Exit.performed -= instance.OnExit;
-            @Exit.canceled -= instance.OnExit;
-        }
-
-        /// <summary>
-        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="HUDActions.UnregisterCallbacks(IHUDActions)" />.
-        /// </summary>
-        /// <seealso cref="HUDActions.UnregisterCallbacks(IHUDActions)" />
-        public void RemoveCallbacks(IHUDActions instance)
-        {
-            if (m_Wrapper.m_HUDActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        /// <summary>
-        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
-        /// </summary>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
-        /// </remarks>
         /// <seealso cref="HUDActions.AddCallbacks(IHUDActions)" />
         /// <seealso cref="HUDActions.RemoveCallbacks(IHUDActions)" />
-        /// <seealso cref="HUDActions.UnregisterCallbacks(IHUDActions)" />
-        public void SetCallbacks(IHUDActions instance)
+        public interface IHUDActions
         {
-            foreach (var item in m_Wrapper.m_HUDActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_HUDActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
+            /// <summary>
+            /// Method invoked when associated input action "ShowInventory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnShowInventory(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ShowWeaponStore" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnShowWeaponStore(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ShowJournal" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnShowJournal(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ShowMap" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnShowMap(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ShowSkillTree" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnShowSkillTree(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ShowBlockPicker" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnShowBlockPicker(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Exit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnExit(InputAction.CallbackContext context);
         }
-    }
-    /// <summary>
-    /// Provides a new <see cref="HUDActions" /> instance referencing this action map.
-    /// </summary>
-    public HUDActions @HUD => new HUDActions(this);
-
-    // Debug
-    private readonly InputActionMap m_Debug;
-    private List<IDebugActions> m_DebugActionsCallbackInterfaces = new List<IDebugActions>();
-    private readonly InputAction m_Debug_ShowChunks;
-    private readonly InputAction m_Debug_SetGodMode;
-    /// <summary>
-    /// Provides access to input actions defined in input action map "Debug".
-    /// </summary>
-    public struct DebugActions
-    {
-        private @GameInput m_Wrapper;
-
         /// <summary>
-        /// Construct a new instance of the input action map wrapper class.
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Debug" which allows adding and removing callbacks.
         /// </summary>
-        public DebugActions(@GameInput wrapper) { m_Wrapper = wrapper; }
-        /// <summary>
-        /// Provides access to the underlying input action "Debug/ShowChunks".
-        /// </summary>
-        public InputAction @ShowChunks => m_Wrapper.m_Debug_ShowChunks;
-        /// <summary>
-        /// Provides access to the underlying input action "Debug/SetGodMode".
-        /// </summary>
-        public InputAction @SetGodMode => m_Wrapper.m_Debug_SetGodMode;
-        /// <summary>
-        /// Provides access to the underlying input action map instance.
-        /// </summary>
-        public InputActionMap Get() { return m_Wrapper.m_Debug; }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
-        public void Enable() { Get().Enable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
-        public void Disable() { Get().Disable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
-        public bool enabled => Get().enabled;
-        /// <summary>
-        /// Implicitly converts an <see ref="DebugActions" /> to an <see ref="InputActionMap" /> instance.
-        /// </summary>
-        public static implicit operator InputActionMap(DebugActions set) { return set.Get(); }
-        /// <summary>
-        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-        /// </summary>
-        /// <param name="instance">Callback instance.</param>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
-        /// </remarks>
-        /// <seealso cref="DebugActions" />
-        public void AddCallbacks(IDebugActions instance)
-        {
-            if (instance == null || m_Wrapper.m_DebugActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_DebugActionsCallbackInterfaces.Add(instance);
-            @ShowChunks.started += instance.OnShowChunks;
-            @ShowChunks.performed += instance.OnShowChunks;
-            @ShowChunks.canceled += instance.OnShowChunks;
-            @SetGodMode.started += instance.OnSetGodMode;
-            @SetGodMode.performed += instance.OnSetGodMode;
-            @SetGodMode.canceled += instance.OnSetGodMode;
-        }
-
-        /// <summary>
-        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-        /// </summary>
-        /// <remarks>
-        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
-        /// </remarks>
-        /// <seealso cref="DebugActions" />
-        private void UnregisterCallbacks(IDebugActions instance)
-        {
-            @ShowChunks.started -= instance.OnShowChunks;
-            @ShowChunks.performed -= instance.OnShowChunks;
-            @ShowChunks.canceled -= instance.OnShowChunks;
-            @SetGodMode.started -= instance.OnSetGodMode;
-            @SetGodMode.performed -= instance.OnSetGodMode;
-            @SetGodMode.canceled -= instance.OnSetGodMode;
-        }
-
-        /// <summary>
-        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="DebugActions.UnregisterCallbacks(IDebugActions)" />.
-        /// </summary>
-        /// <seealso cref="DebugActions.UnregisterCallbacks(IDebugActions)" />
-        public void RemoveCallbacks(IDebugActions instance)
-        {
-            if (m_Wrapper.m_DebugActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        /// <summary>
-        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
-        /// </summary>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
-        /// </remarks>
         /// <seealso cref="DebugActions.AddCallbacks(IDebugActions)" />
         /// <seealso cref="DebugActions.RemoveCallbacks(IDebugActions)" />
-        /// <seealso cref="DebugActions.UnregisterCallbacks(IDebugActions)" />
-        public void SetCallbacks(IDebugActions instance)
+        public interface IDebugActions
         {
-            foreach (var item in m_Wrapper.m_DebugActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_DebugActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
+            /// <summary>
+            /// Method invoked when associated input action "ShowChunks" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnShowChunks(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "SetGodMode" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSetGodMode(InputAction.CallbackContext context);
         }
     }
-    /// <summary>
-    /// Provides a new <see cref="DebugActions" /> instance referencing this action map.
-    /// </summary>
-    public DebugActions @Debug => new DebugActions(this);
-    private int m_KeyboardMouseSchemeIndex = -1;
-    /// <summary>
-    /// Provides access to the input control scheme.
-    /// </summary>
-    /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
-    public InputControlScheme KeyboardMouseScheme
-    {
-        get
-        {
-            if (m_KeyboardMouseSchemeIndex == -1) m_KeyboardMouseSchemeIndex = asset.FindControlSchemeIndex("Keyboard&Mouse");
-            return asset.controlSchemes[m_KeyboardMouseSchemeIndex];
-        }
-    }
-    private int m_GamepadSchemeIndex = -1;
-    /// <summary>
-    /// Provides access to the input control scheme.
-    /// </summary>
-    /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
-    public InputControlScheme GamepadScheme
-    {
-        get
-        {
-            if (m_GamepadSchemeIndex == -1) m_GamepadSchemeIndex = asset.FindControlSchemeIndex("Gamepad");
-            return asset.controlSchemes[m_GamepadSchemeIndex];
-        }
-    }
-    private int m_TouchSchemeIndex = -1;
-    /// <summary>
-    /// Provides access to the input control scheme.
-    /// </summary>
-    /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
-    public InputControlScheme TouchScheme
-    {
-        get
-        {
-            if (m_TouchSchemeIndex == -1) m_TouchSchemeIndex = asset.FindControlSchemeIndex("Touch");
-            return asset.controlSchemes[m_TouchSchemeIndex];
-        }
-    }
-    private int m_JoystickSchemeIndex = -1;
-    /// <summary>
-    /// Provides access to the input control scheme.
-    /// </summary>
-    /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
-    public InputControlScheme JoystickScheme
-    {
-        get
-        {
-            if (m_JoystickSchemeIndex == -1) m_JoystickSchemeIndex = asset.FindControlSchemeIndex("Joystick");
-            return asset.controlSchemes[m_JoystickSchemeIndex];
-        }
-    }
-    private int m_XRSchemeIndex = -1;
-    /// <summary>
-    /// Provides access to the input control scheme.
-    /// </summary>
-    /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
-    public InputControlScheme XRScheme
-    {
-        get
-        {
-            if (m_XRSchemeIndex == -1) m_XRSchemeIndex = asset.FindControlSchemeIndex("XR");
-            return asset.controlSchemes[m_XRSchemeIndex];
-        }
-    }
-    /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player" which allows adding and removing callbacks.
-    /// </summary>
-    /// <seealso cref="PlayerActions.AddCallbacks(IPlayerActions)" />
-    /// <seealso cref="PlayerActions.RemoveCallbacks(IPlayerActions)" />
-    public interface IPlayerActions
-    {
-        /// <summary>
-        /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnMove(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnJump(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Point" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnPoint(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "PrimaryAction" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnPrimaryAction(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "SecondaryAction" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSecondaryAction(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "CycleActionSetting" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnCycleActionSetting(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Slot1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSlot1(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Slot2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSlot2(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Slot3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSlot3(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Slot4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSlot4(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Slot5" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSlot5(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Slot6" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSlot6(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Slot7" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSlot7(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Slot8" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSlot8(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Slot9" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSlot9(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Slot0" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSlot0(InputAction.CallbackContext context);
-    }
-    /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
-    /// </summary>
-    /// <seealso cref="UIActions.AddCallbacks(IUIActions)" />
-    /// <seealso cref="UIActions.RemoveCallbacks(IUIActions)" />
-    public interface IUIActions
-    {
-        /// <summary>
-        /// Method invoked when associated input action "Navigate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnNavigate(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Submit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSubmit(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Cancel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnCancel(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Point" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnPoint(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Click" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnClick(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "RightClick" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnRightClick(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "MiddleClick" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnMiddleClick(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "ScrollWheel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnScrollWheel(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "TrackedDevicePosition" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnTrackedDevicePosition(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "TrackedDeviceOrientation" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
-    }
-    /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "HUD" which allows adding and removing callbacks.
-    /// </summary>
-    /// <seealso cref="HUDActions.AddCallbacks(IHUDActions)" />
-    /// <seealso cref="HUDActions.RemoveCallbacks(IHUDActions)" />
-    public interface IHUDActions
-    {
-        /// <summary>
-        /// Method invoked when associated input action "ShowInventory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnShowInventory(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "ShowWeaponStore" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnShowWeaponStore(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "ShowJournal" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnShowJournal(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "ShowMap" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnShowMap(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "ShowSkillTree" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnShowSkillTree(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Exit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnExit(InputAction.CallbackContext context);
-    }
-    /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Debug" which allows adding and removing callbacks.
-    /// </summary>
-    /// <seealso cref="DebugActions.AddCallbacks(IDebugActions)" />
-    /// <seealso cref="DebugActions.RemoveCallbacks(IDebugActions)" />
-    public interface IDebugActions
-    {
-        /// <summary>
-        /// Method invoked when associated input action "ShowChunks" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnShowChunks(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "SetGodMode" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSetGodMode(InputAction.CallbackContext context);
-    }
-}
 }

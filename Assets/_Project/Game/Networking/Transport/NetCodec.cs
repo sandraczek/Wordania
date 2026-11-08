@@ -36,7 +36,7 @@ namespace Wordania.Networking.Transport
     /// </summary>
     public static class NetCodec
     {
-        public const int ProtocolVersion = 5;
+        public const int ProtocolVersion = 6;
 
         private static readonly Dictionary<Type, (ushort Id, Delegate Write)> Writers = new();
         private static readonly Dictionary<ushort, Action<BinaryReader, IEventBus>> Readers = new();
@@ -131,6 +131,7 @@ namespace Wordania.Networking.Transport
             Write(w, f.Velocity);
             w.Write(f.FacingRight);
             Write(w, f.MuzzlePosition);
+            Write(w, f.SelectedBlock);
         }
 
         public static PlayerInputFrame ReadInput(BinaryReader r) => new(
@@ -147,7 +148,8 @@ namespace Wordania.Networking.Transport
             ReadVector2(r),
             ReadVector2(r),
             r.ReadBoolean(),
-            ReadVector2(r));
+            ReadVector2(r),
+            ReadAssetId(r));
 
         public static void WriteCommand(BinaryWriter w, in PlayerCommand c)
         {

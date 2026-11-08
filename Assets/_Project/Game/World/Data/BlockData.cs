@@ -25,6 +25,10 @@ namespace Wordania.World.Data
         public byte LightOpacity => _lightOpacity;
 
         [Header("Item Info")]
+        [Tooltip("Players can place this block (shown in the block picker). Host rejects placing non-placeable blocks.")]
+        [SerializeField] private bool _placeable = true;
+        public bool Placeable => _placeable;
+        [Tooltip("Ingredients consumed on placement. Empty = free.")]
         public Recipe recipe;
         public ItemData loot;
         public int lootAmount;

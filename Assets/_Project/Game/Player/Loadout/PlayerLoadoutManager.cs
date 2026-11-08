@@ -27,6 +27,8 @@ namespace Wordania.Player.Loadout
         private PlayerBuildingTool _builderTool;
         private PlayerMiningTool _minerTool;
 
+        public bool IsBuildingToolActive => _activeSlot != null && ReferenceEquals(_activeSlot.Executor, _builderTool);
+
         [Inject]
         public void Construct(IEventBus bus, IAssetRegistry<WeaponData> weaponRegistry)
         {

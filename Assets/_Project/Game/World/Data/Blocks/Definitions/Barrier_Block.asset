@@ -22,6 +22,7 @@ MonoBehaviour:
   Hardness: 1e+9
   _lightEmission: 0
   _lightOpacity: 31
+  _placeable: 0
   recipe: {fileID: 0}
   loot: {fileID: 0}
   lootAmount: 0

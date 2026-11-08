@@ -50,6 +50,7 @@ using Wordania.HUD.Journal;
 using Wordania.WeaponStore;
 using Wordania.HUD.WeaponStore;
 using Wordania.HUD.DeathScreen;
+using Wordania.HUD.BlockPicker;
 using Wordania.Session;
 using Wordania.Identifiers;
 using Wordania.World.Chunks;
@@ -288,6 +289,8 @@ namespace Wordania
             builder.RegisterComponent(_deathScreenView);
             builder.RegisterEntryPoint<DeathScreenPresenter>(Lifetime.Scoped);
 
+            builder.RegisterEntryPoint<BlockPickerPresenter>(Lifetime.Scoped);
+
             //networking
             if (isHost)
             {
@@ -339,7 +342,6 @@ TODOS:
 - prewarming
 - refactor inventory. Why does players - factory need it?
 - inventoryDisplay component is on Canvas.
-- test targetting
 
 large TODOS:
 
@@ -348,7 +350,6 @@ somehow make projectiles hitbox not a point ?
 FEATURES:
 
 boss spawning
-block builder picker soon? later?
 pause menu
 binary world saving
 nature (trees, water)       --- fuck this for now, lets make it playable

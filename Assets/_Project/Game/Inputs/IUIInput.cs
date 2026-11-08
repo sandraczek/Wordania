@@ -13,6 +13,7 @@ namespace Wordania.Inputs
         event Action OnToggleJournal;
         event Action OnToggleWeaponStore;
         event Action OnToggleSkillTree;
+        event Action OnToggleBlockPicker;
 
         void SetGameplayMode();
         void SetHUDMode();

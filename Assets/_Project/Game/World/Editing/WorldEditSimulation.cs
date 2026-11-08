@@ -89,11 +89,14 @@ namespace Wordania.World.Editing
             if (_blocks.Get(currentMain) != null) return;
 
             BlockData block = _blocks.Get(request.Block);
-            if (block == null) return;
+            if (block == null || !block.Placeable) return;
 
-            Ingredient[] requirements = block.recipe.Requirements;
+            Ingredient[] requirements = block.recipe != null && block.recipe.Requirements != null
+                ? block.recipe.Requirements
+                : System.Array.Empty<Ingredient>();
             foreach (Ingredient ingredient in requirements)
             {
+                if (ingredient.item == null) continue;
                 if (!_inventory.HasItems(request.Owner, ingredient.item.Id, ingredient.amount)) return;
             }
 
@@ -102,6 +105,7 @@ namespace Wordania.World.Editing
 
             foreach (Ingredient ingredient in requirements)
             {
+                if (ingredient.item == null) continue;
                 _inventory.RemoveItem(request.Owner, ingredient.item.Id, ingredient.amount);
             }
 

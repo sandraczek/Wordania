@@ -130,6 +130,7 @@ namespace Wordania.Networking
             _input.SecondaryActionHeld = frame.SecondaryHeld;
             _input.HasMuzzleOverride = true;
             _input.MuzzlePosition = frame.MuzzlePosition;
+            _input.SelectedBlock = frame.SelectedBlock;
 
             if (frame.JumpPressCount != _jump)
                 _input.PressJump(_clock.Now);

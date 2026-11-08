@@ -35,6 +35,7 @@ namespace Wordania.Inputs
         public event Action OnToggleJournal;
         public event Action OnToggleWeaponStore;
         public event Action OnToggleSkillTree;
+        public event Action OnToggleBlockPicker;
 
         // debug service
         public event Action OnToggleChunks;
@@ -144,6 +145,10 @@ namespace Wordania.Inputs
         public void OnShowWeaponStore(InputAction.CallbackContext context)
         {
             if (context.performed) OnToggleWeaponStore?.Invoke();
+        }
+        public void OnShowBlockPicker(InputAction.CallbackContext context)
+        {
+            if (context.performed) OnToggleBlockPicker?.Invoke();
         }
 
         public void OnShowChunks(InputAction.CallbackContext context)

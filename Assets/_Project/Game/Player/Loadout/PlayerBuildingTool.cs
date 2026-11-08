@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 using VContainer;
@@ -13,10 +12,10 @@ namespace Wordania.Player.Loadout
     public class PlayerBuildingTool : MonoBehaviour, IToolActionExecutor // on player's hand. Later - POCO
     {
         private IWorldEditAuthority _world;
+        private Player _owner;
         private PlayerContext _player;
         private MechanicIds _mechanicIds;
-        [SerializeField] private int _currentBlockIndex;
-        [SerializeField] private BlockData[] _buildingBlocks; //temporary solution
+        [SerializeField] private BlockData[] _buildingBlocks; //temporary solution: TAB cycles through these
 
         [SerializeField] private float _actionRange = 8f;
         [SerializeField] private float _actionRate = 0.05f;
@@ -31,7 +30,11 @@ namespace Wordania.Player.Loadout
         }
         private void Awake()
         {
-            _player = GetComponent<Player>().Context;
+            _owner = GetComponent<Player>();
+            _player = _owner.Context;
+
+            if (_buildingBlocks != null && _buildingBlocks.Length > 0 && _buildingBlocks[0] != null)
+                _player.Input.SelectedBlock = _buildingBlocks[0].Id;
         }
         public bool ExecutePrimaryAction(Vector2 targetWorldPos, InstanceId instigatorId)
         {
@@ -51,8 +54,12 @@ namespace Wordania.Player.Loadout
         public void ReleasePrimaryAction() { }
         public void ExecuteCycle()
         {
-            _currentBlockIndex += 1;
-            _currentBlockIndex %= _buildingBlocks.Count();
+            // The selection is owner input (replicated in the input frame); the host's replayed presses must not change it.
+            if (!_owner.IsLocal || _buildingBlocks == null || _buildingBlocks.Length == 0) return;
+
+            int current = System.Array.FindIndex(_buildingBlocks, b => b != null && b.Id == _player.Input.SelectedBlock);
+            BlockData next = _buildingBlocks[(current + 1) % _buildingBlocks.Length];
+            if (next != null) _player.Input.SelectedBlock = next.Id;
         }
         public void OnEquip()
         {
@@ -67,10 +74,11 @@ namespace Wordania.Player.Loadout
         {
             if (!_player.Mechanics.HasMechanic(_mechanicIds.Building)) return false;
 
-            if (_buildingBlocks[_currentBlockIndex] == null) return false;
+            AssetId block = _player.Input.SelectedBlock;
+            if (block.IsEmpty) return false;
 
-            // Placement rules (free cell, ingredients, no overlapping entities) are validated by the authority.
-            _world.RequestPlace(new PlaceRequest(_player.InstanceId, _player.PersistentId, targetWorldPos, _buildingBlocks[_currentBlockIndex].Id));
+            // Placement rules (block exists, free cell, ingredients, no overlapping entities) are validated by the authority.
+            _world.RequestPlace(new PlaceRequest(_player.InstanceId, _player.PersistentId, targetWorldPos, block));
             return true;
         }
     }

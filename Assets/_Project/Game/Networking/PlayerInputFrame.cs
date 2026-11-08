@@ -1,4 +1,5 @@
 using UnityEngine;
+using Wordania.Identifiers;
 using Wordania.Player;
 
 namespace Wordania.Networking
@@ -25,6 +26,7 @@ namespace Wordania.Networking
         public readonly bool FacingRight;
         /// <summary>The owner's weapon muzzle; the host fires from here instead of its (delayed) copy of the body.</summary>
         public readonly Vector2 MuzzlePosition;
+        public readonly AssetId SelectedBlock;
 
         public PlayerInputFrame(
             uint sequence,
@@ -40,7 +42,8 @@ namespace Wordania.Networking
             Vector2 position,
             Vector2 velocity,
             bool facingRight,
-            Vector2 muzzlePosition)
+            Vector2 muzzlePosition,
+            AssetId selectedBlock)
         {
             Sequence = sequence;
             Movement = movement;
@@ -56,6 +59,7 @@ namespace Wordania.Networking
             Velocity = velocity;
             FacingRight = facingRight;
             MuzzlePosition = muzzlePosition;
+            SelectedBlock = selectedBlock;
         }
 
         public static PlayerInputFrame Capture(uint sequence, PlayerInputState state, PlayerController body, Vector2 muzzlePosition) => new(
@@ -72,6 +76,7 @@ namespace Wordania.Networking
             body.Position,
             new Vector2(body.VelocityX, body.VelocityY),
             body.IsFacingRight,
-            muzzlePosition);
+            muzzlePosition,
+            state.SelectedBlock);
     }
 }
